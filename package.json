@@ -1,0 +1,22 @@
+{
+  "name": "spinalgraph",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d build -s inline"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0"
+  }
+}
