@@ -5,7 +5,7 @@ import {
     SPINAL_RELATION_PTR_LST_TYPE,
     SpinalRelationFactory
 } from "../Relations/SpinalRelationFactory"
-import {guid} from "../Utilities";
+import { guid } from "../Utilities";
 
 
 const relationFactory = new SpinalRelationFactory();
@@ -29,7 +29,7 @@ class SpinalContext extends SpinalNode {
      * @param relationName {string} name of the relation
      * @return {string}
      */
-    createRealtion(parent, child, relationName) {
+    createRelation(parent, child, relationName) {
         if ((child instanceof SpinalNode) || (child instanceof globalType.Model)) {
             const relation = SpinalRelationFactory.getNewRelation(relationName, SPINAL_RELATION_PTR_LST_TYPE);
             relation.setParent(parent);
@@ -57,14 +57,14 @@ class SpinalContext extends SpinalNode {
     }
 
     /**
-     * add Child to the to the context with a spinalRelationLstPtrType
+     * Add Child to the to the context with a spinalRelationLstPtrType
      * @param child {SpinalNode| Model} to be added as child
      * @param relationName {string} name of the relation
      * @param relationType {int} this parameter is here only to properly override the parent method.
      */
-    addChild(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE){
+    addChild(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE) {
         super.addChild(child, relationName, SPINAL_RELATION_PTR_LST_TYPE);
     }
 }
 
-export  default SpinalContext;
+export default SpinalContext;

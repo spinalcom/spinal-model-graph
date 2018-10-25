@@ -1,5 +1,5 @@
 import "spinal-core-connectorjs";
-import {promiseLoad, guid} from "../Utilities";
+import { promiseLoad, guid } from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer"
 
 const globalType = typeof window === "undefined" ? global : window;
@@ -45,10 +45,10 @@ class SpinalNode extends globalType.Model {
 
 
     /**
-     * Short cut to info.id
+     * Shortcut to info.id
      * @return {string}
      */
-    getId(){
+    getId() {
         return this.info.id;
     }
 
@@ -95,7 +95,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     *  Add the @param as child of the relation
+     * Add the @param as child of the relation
      * @param child {SpinalNode | Model} element to add as child
      * @param relationName {string} name of the relation
      * @param relationType {int} type of the relation
@@ -114,7 +114,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * remove the node from the relation children.
+     * Remove the node from the relation children.
      * @param node
      * @param relationName
      * @param relationType
@@ -157,7 +157,7 @@ class SpinalNode extends globalType.Model {
                     }
                 }
             }
-           return Promise.all(promises).then(childrenLst => {
+            return Promise.all(promises).then(childrenLst => {
                 const res = [];
 
                 for (let i = 0; i < childrenLst.length; i++) {
@@ -192,7 +192,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * this function tranforme the relation type lst into an array.
+     * This function tranforms the relation type lst into an array.
      * @private
      */
     _getRelationTypeArray() {
@@ -303,7 +303,7 @@ class SpinalNode extends globalType.Model {
 
 
     /**
-     * create a new relation for this node
+     * Create a new relation for this node
      * @param relationName
      * @param relationType
      * @private
@@ -341,11 +341,11 @@ class SpinalNode extends globalType.Model {
      */
     _addParent(node) {
         if (typeof this.parent !== "undefined" && node instanceof SpinalNode)
-            this.parent.push(new SpinalNodePointer());
+            this.parent.push(new SpinalNodePointer(node));
     }
 
     /**
-     * return all children
+     * Return all children
      * @return {Array}
      * @private
      */
