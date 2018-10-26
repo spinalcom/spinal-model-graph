@@ -3,7 +3,7 @@ import "spinal-core-connectorjs";
 import {
     SPINAL_RELATION_LST_PTR_TYPE, SPINAL_RELATION_TYPE,
 } from "../Relations/SpinalRelationFactory"
-import {guid} from "../Utilities";
+import { guid } from "../Utilities";
 import SpinalContext from "./SpinalContext";
 
 const globalType = typeof window === "undefined" ? global : window;
@@ -37,18 +37,15 @@ class SpinalGraph extends SpinalNode {
             throw new Error("Cannot add an element which is not a context");
     }
 
-
+    /**
+     * Searches for a context using its name
+     * @param name {string} Name of the context
+     * @return {SpinalContext|undefined} The wanted context or undefined
+     */
     async getContext(name) {
         let children = await this.getChildren([HAS_CONTEXT_RELATION_NAME]);
-        let res;
 
-        for (let i = 0; i < children.length; i++) {
-
-            if (children[i].info.name === name)
-                return children[i];
-        }
-
-        return "undefined";
+        return children.find(child => child.info.name.get() === name);
     }
 
 }
