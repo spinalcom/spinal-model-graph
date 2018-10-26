@@ -265,9 +265,10 @@ class SpinalNode extends globalType.Model {
 
         const removeFromParentBinded = removeFromParent.bind(this);
         this.parents.forEach((parent) => {
-            promiseLoad(parent).then(removeFromParentBinded)
-        })
-
+            for (let i = 0; i < parent.length; i++) {
+                promiseLoad(parent[i]).then(removeFromParentBinded);
+            }
+        });
     }
 
 
