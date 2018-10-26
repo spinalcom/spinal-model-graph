@@ -27,7 +27,7 @@ class SpinalRelationFactory {
             case SPINAL_RELATION_LST_PTR_TYPE:
                 relation = new SpinalRelationLstPtr(relationName);
                 break;
-            case  SPINAL_RELATION_PTR_LST_TYPE:
+            case SPINAL_RELATION_PTR_LST_TYPE:
                 relation = new SpinalRelationPtrLst(relationName);
                 break;
             default:
@@ -38,11 +38,10 @@ class SpinalRelationFactory {
     }
 }
 
-
+spinalCore.register_models([SpinalRelationFactory]);
 export {
     SPINAL_RELATION_TYPE,
     SPINAL_RELATION_LST_PTR_TYPE,
     SPINAL_RELATION_PTR_LST_TYPE,
     SpinalRelationFactory
 }
-

@@ -67,4 +67,5 @@ class SpinalContext extends SpinalNode {
     }
 }
 
+spinalCore.register_models([SpinalContext]);
 export default SpinalContext;

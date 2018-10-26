@@ -1,6 +1,6 @@
 import BaseSpinalRelation from "./BaseSpinalRelation"
 import SpinalNode from "../Nodes/SpinalNode"
-import {promiseLoad, guid} from "../Utilities";
+import { promiseLoad, guid } from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer";
 
 const globalType = typeof window === "undefined" ? global : window;
@@ -12,7 +12,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
             children: new SpinalNodePointer(new globalType.Lst())
         })
 
-        this.children.info.ids = [];
+        this.children.info.add_attr("ids", []);
     }
 
 
@@ -37,7 +37,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
      * @param node {SpinalNode | globalType.Model}
      */
     addChild(node) {
-        if (node instanceof SpinalNode && !this.children.info.ids.includes(node.getId())) {
+        if (node instanceof SpinalNode && !this.children.info.ids.contains(node.getId())) {
             this.children.info.ids.push(node.getId());
             promiseLoad(this.children).then((children) => {
                 children.push(node);
@@ -66,4 +66,5 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     }
 }
 
+spinalCore.register_models([SpinalRelationPtrLst]);
 export default SpinalRelationPtrLst;
