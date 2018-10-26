@@ -3,7 +3,7 @@ import "spinal-core-connectorjs";
 import {
     SPINAL_RELATION_LST_PTR_TYPE, SPINAL_RELATION_TYPE,
 } from "../Relations/SpinalRelationFactory"
-import { guid} from "../Utilities";
+import { guid } from "../Utilities";
 import SpinalContext from "./SpinalContext";
 
 const globalType = typeof window === "undefined" ? global : window;
@@ -34,4 +34,5 @@ class SpinalGraph extends SpinalNode {
 
 }
 
+spinalCore.register_models([SpinalGraph]);
 export default SpinalGraph;

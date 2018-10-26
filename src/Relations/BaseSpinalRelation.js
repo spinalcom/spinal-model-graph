@@ -1,5 +1,5 @@
 import "spinal-core-connectorjs";
-import {promiseLoad, guid} from "../Utilities";
+import { promiseLoad, guid } from "../Utilities";
 import SpinalNode from "../Nodes/SpinalNode";
 import SpinalNodePointer from "../SpinalNodePointer"
 const globalType = typeof window === "undefined" ? global : window;
@@ -36,4 +36,5 @@ class BaseSpinalRelation extends globalType.Model {
     }
 }
 
+spinalCore.register_models([BaseSpinalRelation]);
 export default BaseSpinalRelation;

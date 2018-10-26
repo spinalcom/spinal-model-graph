@@ -1,6 +1,6 @@
 import BaseSpinalRelation from "./BaseSpinalRelation"
 import SpinalNode from "../Nodes/SpinalNode"
-import {promiseLoad, guid} from "../Utilities";
+import { promiseLoad, guid } from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer";
 
 const globalType = typeof window === "undefined" ? global : window;
@@ -66,4 +66,5 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     }
 }
 
+spinalCore.register_models([SpinalRelationPtrLst]);
 export default SpinalRelationPtrLst;

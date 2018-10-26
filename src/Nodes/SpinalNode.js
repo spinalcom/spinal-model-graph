@@ -375,4 +375,5 @@ class SpinalNode extends globalType.Model {
 
 }
 
+spinalCore.register_models([SpinalNode]);
 export default SpinalNode;

@@ -17,6 +17,7 @@ class SpinalNodePointer extends globalType.Model {
             ptr: new globalType.Ptr(),
             info: {
                 pointed_id: "undefined",
+                pointed_type: "undefined"
             }
         });
 
@@ -31,7 +32,7 @@ class SpinalNodePointer extends globalType.Model {
      * @param element {*}
      */
     set(element) {
-        if (element instanceof SpinalNode){
+        if (element instanceof SpinalNode) {
             this.info.pointed_id = element.id;
             this.info.pointed_type = element.getType();
         }
@@ -42,11 +43,12 @@ class SpinalNodePointer extends globalType.Model {
      * This function return the id of the pointed element
      * @return {string}
      */
-    getId(){
+    getId() {
         return this.info.pointed_id;
     }
 
 
 }
 
+spinalCore.register_models([SpinalNodePointer]);
 export default SpinalNodePointer

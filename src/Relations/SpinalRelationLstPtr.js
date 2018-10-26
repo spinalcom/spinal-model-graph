@@ -1,6 +1,6 @@
 import BaseSpinalRelation from "./BaseSpinalRelation"
 import SpinalNode from "../Nodes/SpinalNode"
-import {promiseLoad} from "../Utilities";
+import { promiseLoad } from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer";
 
 const globalType = typeof window === "undefined" ? global : window;
@@ -56,7 +56,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
      * This function retrieve all the id from children of the relation and return them inside an array.
      * @return {Array} containing all the children Id of the relation
      */
-    getChildrenIds(){
+    getChildrenIds() {
         const res = [];
         for (let i = 0; i < this.children.length; i++) {
             res.push(this.children[i].getId());
@@ -76,4 +76,5 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
     }
 }
 
+spinalCore.register_models([SpinalRelationLstPtr]);
 export default SpinalRelationLstPtr;

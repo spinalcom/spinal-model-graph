@@ -37,4 +37,5 @@ class SpinalMap extends globalType.Model {
     }
 }
 
+spinalCore.register_models([SpinalMap]);
 export default SpinalMap;
