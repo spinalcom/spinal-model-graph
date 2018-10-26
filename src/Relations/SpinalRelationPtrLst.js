@@ -12,7 +12,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
             children: new SpinalNodePointer(new globalType.Lst())
         })
 
-        this.children.info.ids = [];
+        this.children.info.add_attr("ids", []);
     }
 
 
@@ -37,7 +37,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
      * @param node {SpinalNode | globalType.Model}
      */
     addChild(node) {
-        if (node instanceof SpinalNode && !this.children.info.ids.includes(node.getId())) {
+        if (node instanceof SpinalNode && !this.children.info.ids.contains(node.getId())) {
             this.children.info.ids.push(node.getId());
             promiseLoad(this.children).then((children) => {
                 children.push(node);
