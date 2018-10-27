@@ -19,7 +19,7 @@ class SpinalContext extends SpinalNode {
             relationIds: new globalType.Lst()
 
         });
-        this.info.mod_attr("id", guid(this.constructor.name));
+        this.info.id.set(guid(this.constructor.name));
         if (typeof name === "undefined")
             this.info.add_attr("name", this.info.id.get());
         else

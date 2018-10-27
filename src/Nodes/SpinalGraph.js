@@ -23,7 +23,7 @@ class SpinalGraph extends SpinalNode {
         });
 
         this._createRelation(HAS_CONTEXT_RELATION_NAME, SPINAL_RELATION_TYPE);
-        this.info.mod_attr("id", guid(this.constructor.name));
+        this.info.id.set(guid(this.constructor.name));
     }
 
     /**
