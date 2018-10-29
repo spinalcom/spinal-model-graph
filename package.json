@@ -1,6 +1,6 @@
 {
   "name": "spinalgraph",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "repository": "https://github.com/spinalcom/spinal-model-graph.git",
   "main": "index.js",
