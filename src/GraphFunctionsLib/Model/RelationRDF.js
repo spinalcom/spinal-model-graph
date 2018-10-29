@@ -1,7 +1,5 @@
-/**
- * Todo ask for the name of this kind of relation
- */
-class Relation {
+
+class RelationRDF {
     constructor(from, relationName, to){
         this.from = from;
         this.relationName = relationName;
