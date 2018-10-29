@@ -12,12 +12,12 @@
   "author": "ciprin loris",
   "license": "ISIC",
   "dependencies": {
-    "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git"
-  },
-  "devDependencies": {
+    "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git",
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-env": "^7.1.0"
+  },
+  "devDependencies": {
     "mocha": "^5.2.0",
     "nyc": "^13.1.0"
   }
