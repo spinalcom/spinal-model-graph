@@ -123,7 +123,7 @@ class SpinalNode extends globalType.Model {
      */
     removeChild(node, relationName, relationType) {
         if (this._getRelationListType(relationType).has(relationName)) {
-            let rel = this._getRelationListType(relationType).get(relationName);
+            let rel = this._getRelationListType(relationType).getElement(relationName);
             return rel.removeChild(node);
         }
 
@@ -154,7 +154,7 @@ class SpinalNode extends globalType.Model {
                 const relationMap = this._getRelationListType(this._relationTypesLst[i].get());
                 for (let j = 0; j < relationNames.length; j++) {
                     if (relationMap.has(relationNames[j])) {
-                        const relation = relationMap.get(relationNames[j]);
+                        const relation = relationMap.getElement(relationNames[j]);
                         promises.push(relation.getChildren());
                     }
                 }
@@ -241,10 +241,10 @@ class SpinalNode extends globalType.Model {
     _addToRelation(node, relationName, relationType) {
         const addToRelation = (spinalNode) => {
             const relationLst = spinalNode._getRelationListType(relationType);
-            const relation = relationLst.get(relationName);
+            const relation = relationLst.getElement(relationName);
             relation.addChild(node);
-            node._addAsParent(this._getRelationListType(relationType).get(relationName));
-            return this._getRelationListType(relationType).get(relationName).id;
+            node._addAsParent(this._getRelationListType(relationType).getElement(relationName));
+            return this._getRelationListType(relationType).getElement(relationName).id;
         };
 
         if (this.hasRelation(relationName, relationType)) {
@@ -327,7 +327,7 @@ class SpinalNode extends globalType.Model {
         //setElement the node as parent of the relation
         relation.setParent(this);
 
-        this._getRelationListType(relationType).set(relationName, relation)
+        this._getRelationListType(relationType).setElement(relationName, relation)
     }
 
     /**
