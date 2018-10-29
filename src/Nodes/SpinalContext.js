@@ -1,5 +1,5 @@
 import SpinalNode from "./SpinalNode"
-import "spinal-core-connectorjs";
+import spinalCore from "spinal-core-connectorjs";
 import {
     SPINAL_RELATION_LST_PTR_TYPE,
     SPINAL_RELATION_PTR_LST_TYPE,

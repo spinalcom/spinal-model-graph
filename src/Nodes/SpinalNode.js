@@ -1,4 +1,4 @@
-import "spinal-core-connectorjs";
+import spinalCore from "spinal-core-connectorjs";
 import { promiseLoad, guid } from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer"
 
@@ -16,7 +16,7 @@ class SpinalNode extends globalType.Model {
     /**
      *
      * @param type of the spinalNode default SpinalNode
-     * @param element optional element pointed by the node by default set to a new empty new Model
+     * @param element optional element pointed by the node by default setElement to a new empty new Model
      */
     constructor(type = "SpinalNode", element = new globalType.Model) {
         super();
@@ -282,12 +282,12 @@ class SpinalNode extends globalType.Model {
     _addAsParent(relation) {
         const relationName = relation.getName();
         if (this.parents.has(relationName)) {
-            this.parents.get(relationName).push(new SpinalNodePointer(relation));
+            this.parents.getElement(relationName).push(new SpinalNodePointer(relation));
         }
         else {
             const list = new globalType.Lst();
             list.push(new SpinalNodePointer(relation));
-            this.parents.set(relationName, list);
+            this.parents.setElement(relationName, list);
         }
     }
 
@@ -323,7 +323,7 @@ class SpinalNode extends globalType.Model {
      */
     _createRelation(relationName, relationType) {
         const relation = SpinalRelationFactory.getNewRelation(relationName, relationType);
-        //set the node as parent of the relation
+        //setElement the node as parent of the relation
         relation.setParent(this);
 
         this._getRelationListType(relationType).set(relationName, relation)
