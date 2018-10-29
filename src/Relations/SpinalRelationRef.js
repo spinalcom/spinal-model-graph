@@ -58,4 +58,4 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
 }
 
-export default SpinalRelation;
+export default SpinalRelationRef;
