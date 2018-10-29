@@ -21,18 +21,12 @@ class SpinalContext extends SpinalNode {
      */
     constructor(type = "SpinalContext", name = "undefined" , element = new globalType.Model) {
         super(type, element);
-
         this.add_attr({
-            relationIds: new globalType.Lst()
-
+            relationIds: new globalType.Lst(),
+            relationsNames: new globalType.Lst()
         });
-
         this.info.id.set(guid(this.constructor.name));
-
-        if (typeof name === "undefined")
-            this.info.add_attr("name", this.info.id.get());
-        else
-            this.info.add_attr("name", name);
+        this.info.add_attr({name: typeof name === "undefined" ? this.info.id.get(): name});
     }
 
     /**
