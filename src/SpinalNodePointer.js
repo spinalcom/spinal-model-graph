@@ -1,4 +1,4 @@
-import "spinal-core-connectorjs"
+import spinalCore from "spinal-core-connectorjs"
 import SpinalNode from "./Nodes/SpinalNode";
 
 const globalType = typeof window === "undefined" ? global : window;
@@ -22,7 +22,7 @@ class SpinalNodePointer extends globalType.Model {
         });
 
         if ((typeof element !== "undefined")) {
-            this.set(element);
+            this.setElement(element);
         }
 
     }
@@ -31,7 +31,7 @@ class SpinalNodePointer extends globalType.Model {
      * Set pointer to point this element
      * @param element {*}
      */
-    set(element) {
+    setElement(element) {
         if (element instanceof SpinalNode) {
             this.info.mod_attr("pointed_id", element.id);
             this.info.mod_attr("pointed_type", element.getType());

@@ -1,11 +1,11 @@
-import "spinal-core-connectorjs"
+import spinalCore from "spinal-core-connectorjs"
 const globalType = typeof window === "undefined" ? global : window;
 class SpinalMap extends globalType.Model {
     constructor() {
         super();
     }
 
-    set(key, value) {
+    setElement(key, value) {
         this.rem_attr(key);
         const attribute = {};
         attribute[key] = value;
@@ -13,7 +13,7 @@ class SpinalMap extends globalType.Model {
         this.add_attr(attribute);
     }
 
-    get(key) {
+    getElement(key) {
         return this[key];
     }
 
