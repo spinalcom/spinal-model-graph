@@ -24,10 +24,10 @@ describe("SpinalGraph", function () {
             assert.equal(graph instanceof lib.SpinalGraph, true);
             //check if the newly created graph is an instance of SpinalNode.
             assert.equal(graph instanceof lib.SpinalNode, true);
-            //check if the relationListsTypeSpinalRelationLstPtr has at least one relation.
-            assert.equal(graph.relationListsTypeSpinalRelationLstPtr.hasKey(), true);
-            //check if the relationListsTypeSpinalRelationLstPtr has the default relation.
-            assert.equal(graph.relationListsTypeSpinalRelationLstPtr.has(DEFAULT_RELATION_NAME), true)
+            //check if the relationListTypeSpinalRelationLstPtr has at least one relation.
+            assert.equal(graph.relationListTypeSpinalRelation.hasKey(), true);
+            //check if the relationListTypeSpinalRelationLstPtr has the default relation.
+            assert.equal(graph.relationListTypeSpinalRelation.has(DEFAULT_RELATION_NAME), true)
         })
     });
     describe("how to add a context to a graph", function () {
@@ -38,7 +38,7 @@ describe("SpinalGraph", function () {
             const context = new lib.SpinalContext();
             //add the context as child of the graph
             graph.addContext(context);
-
+            done();
             /*
             graph.getChildren([DEFAULT_RELATION_NAME]).then(children => {
                 console.log(children);

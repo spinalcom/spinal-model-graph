@@ -35,28 +35,30 @@ describe("SpinalNode", function () {
                 );
 
             });
+
             it('should create spinal a new spinal node, with a specific type.', function () {
                 const node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_TYPE);
 
                 assert.equal(
                     node.getType(),
                     CUSTOM_SPINAL_NODE_TYPE,
-                    "By setting the first argument of the construct the type should be set."
+                    "By setting the first argument of the construct the type should be setElement."
                 );
 
             });
+
             it('should create a new node with custom type as type and a element', function (done) {
                 const node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_TYPE, new lib.SpinalNode());
                 assert.equal(
                     node.getType(),
                     CUSTOM_SPINAL_NODE_TYPE,
-                    "By setting the first argument of the construct the type should be set.");
+                    "By setting the first argument of the construct the type should be setElement.");
                 node.getElement().then(
                     elt => {
                         assert.notEqual(
                             elt instanceof lib.SpinalNode,
                             false,
-                            "By setting the second argument of the construct the element should be set."
+                            "By setting the second argument of the construct the element should be setElement."
                         );
                         done();
                     }
@@ -65,27 +67,35 @@ describe("SpinalNode", function () {
         });
 
         describe("How to use hasRelation", function () {
+
             it('should return true', function () {
+
                 //Create a new node
                 let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
                 //Add a child to the node with the default relation name
                 node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
                 //Ask the node if it has a relation name $DEFAULT_RELATION_NAME
                 assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
+
             });
 
             it('should return false', function () {
+
                 //Create a new node
                 let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
                 //Add a child to the node with the default relation name
                 node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
                 //Ask the node if it has a relation name $CUSTOM_RELATION_NAME1
                 assert.equal(node.hasRelation(CUSTOM_RELATION_NAME1, lib.SPINAL_RELATION_TYPE), false);
+
             })
+
         });
 
         describe("How to use hasRelations", function () {
+
             it("should return true", function () {
+
                 //Create a new node
                 let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
                 //Add a child to the node with the default relation name
@@ -94,6 +104,7 @@ describe("SpinalNode", function () {
                 node.addChild(DEFAULT_NODE, CUSTOM_RELATION_NAME1, lib.SPINAL_RELATION_TYPE);
                 //Ask the node if it has a relation name $DEFAULT_RELATION and CUSTOM_RELATION_NAME!
                 assert.equal(node.hasRelations([DEFAULT_RELATION_NAME, CUSTOM_RELATION_NAME1], lib.SPINAL_RELATION_TYPE), true);
+
             });
 
             it("should return false", function () {
@@ -118,35 +129,30 @@ describe("SpinalNode", function () {
                 //remove the child previously added. Should return true
                 node.removeChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE).then(res => {
                     assert.equal(res, true);
-                    /* node.getChildren([]).then(children => {
-                         assert.equal(children.length, 0, "after removing the unique child getChildren should return an empty array");
-                         done();
-                     })*/
-                    //TODO
                     done();
                 })
             });
         });
 
-        describe("How to get the type of a spinal node", function () {
+        describe("How to getElement the type of a spinal node", function () {
             it('should return the type CUSTOM_SPINAL_NODE_TYPE', function () {
                 let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_TYPE);
                 assert.equal(
                     node.getType(),
                     CUSTOM_SPINAL_NODE_TYPE,
-                    "By setting the first argument of the construct the type should be set."
+                    "By setting the first argument of the construct the type should be setElement."
                 );
             });
         });
 
-        describe("How to get the element of a spinal node", function () {
+        describe("How to getElement the element of a spinal node", function () {
             it('should return the DEFAULT_ELEMENT', function (done) {
                 let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
                 node.getElement().then(elt => {
                     assert.equal(
                         elt,
                         DEFAULT_ELEMENT,
-                        "By setting the second argument of the construct the element should be set."
+                        "By setting the second argument of the construct the element should be setElement."
                     );
                     done()
                 })
@@ -155,9 +161,9 @@ describe("SpinalNode", function () {
 
     });
 
-    describe("How to use a Spinal Node with SpinalRelation", function () {
+    describe("How to use a Spinal Node with SpinalRelationRef", function () {
 
-        describe("How to add child with a SpinalRelation", function () {
+        describe("How to add child with a SpinalRelationRef", function () {
             it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', function (done) {
                 let node = new lib.SpinalNode();
                 node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
