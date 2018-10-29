@@ -13,14 +13,22 @@ const relationFactory = new SpinalRelationFactory();
 const globalType = typeof window === "undefined" ? global : window;
 
 class SpinalContext extends SpinalNode {
-    constructor(type = "SpinalContext", element = new globalType.Model) {
+    /**
+     *
+     * @param type of the context
+     * @param name of the context
+     * @param element of the node
+     */
+    constructor(type = "SpinalContext", name = "undefined" , element = new globalType.Model) {
         super(type, element);
 
         this.add_attr({
             relationIds: new globalType.Lst()
 
         });
+
         this.info.id.set(guid(this.constructor.name));
+
         if (typeof name === "undefined")
             this.info.add_attr("name", this.info.id.get());
         else
