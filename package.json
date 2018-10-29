@@ -2,6 +2,7 @@
   "name": "spinalgraph",
   "version": "0.0.4",
   "description": "",
+  "repository": "https://github.com/spinalcom/spinal-model-graph.git",
   "main": "index.js",
   "scripts": {
     "test": "mocha --recursive test",
