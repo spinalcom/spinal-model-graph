@@ -1,4 +1,4 @@
-import "spinal-core-connectorjs";
+import spinalCore from "spinal-core-connectorjs";
 import { promiseLoad, guid } from "../Utilities";
 import SpinalNode from "../Nodes/SpinalNode";
 import SpinalNodePointer from "../SpinalNodePointer"
@@ -23,12 +23,12 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
-     * set the parent of the relation. If a parent was already set the parent relation is remove
+     * setElement the parent of the relation. If a parent was already setElement the parent relation is remove
      * @param parent {SpinalNode}
      */
     setParent(parent) {
         if (typeof parent !== "undefined" && parent instanceof SpinalNode)
-            this.parent.set(parent);
+            this.parent.setElement(parent);
     }
 
     getName() {
