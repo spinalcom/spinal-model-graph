@@ -1,4 +1,4 @@
-import SpinalRelation from "./SpinalRelation";
+import SpinalRelationRef from "./SpinalRelationRef";
 import SpinalRelationLstPtr from "./SpinalRelationLstPtr"
 import SpinalRelationPtrLst from "./SpinalRelationPtrLst"
 
@@ -15,14 +15,14 @@ class SpinalRelationFactory {
      * Create a new relation of relationType with the relationName
      * @param relationName {string} name of the relation
      * @param relationType {string} type of the relation
-     * @return {SpinalRelation|SpinalRelationLstPtr|SpinalRelationPtrLst}
+     * @return {SpinalRelationRef|SpinalRelationLstPtr|SpinalRelationPtrLst}
      */
     static getNewRelation(relationName, relationType) {
 
         let relation;
         switch (relationType) {
             case SPINAL_RELATION_TYPE:
-                relation = new SpinalRelation(relationName);
+                relation = new SpinalRelationRef(relationName);
                 break;
             case SPINAL_RELATION_LST_PTR_TYPE:
                 relation = new SpinalRelationLstPtr(relationName);

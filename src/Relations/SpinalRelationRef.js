@@ -3,7 +3,7 @@ import SpinalNode from "../Nodes/SpinalNode"
 
 const globalType = typeof window === "undefined" ? global : window;
 
-class SpinalRelation extends BaseSpinalRelation {
+class SpinalRelationRef extends BaseSpinalRelation {
 
     constructor(name) {
         super(name);
@@ -43,7 +43,7 @@ class SpinalRelation extends BaseSpinalRelation {
      * This function retrieve all the id from children of the relation and return them inside an array.
      * @return {Array} containing all the children Id of the relation
      */
-    getChildrenIds() {
+    getChildrenIds(){
         const res = [];
         for (let i = 0; i < this.children.length; i++) {
             res.push(this.children[i].getId());
@@ -58,5 +58,4 @@ class SpinalRelation extends BaseSpinalRelation {
 
 }
 
-spinalCore.register_models([SpinalRelation]);
 export default SpinalRelation;
