@@ -2,8 +2,8 @@ const lib = require("../../build/index");
 const spinalCore = require('spinal-core-connectorjs');
 const connection = require("../config");
 const globalType = typeof window === "undefined" ? global : window;
-
 const assert = require("assert");
+
 
 const DEFAULT_SPINAL_NODE_TYPE = "SpinalNode";
 const CUSTOM_SPINAL_NODE_TYPE = "SpinalNodeTest";
@@ -11,9 +11,10 @@ const DEFAULT_RELATION_NAME = "hasContext";
 const DEFAULT_ELEMENT_NAME = "Default Name";
 const CUSTOM_RELATION_NAME1 = "custom relation";
 const CUSTOM_RELATION_NAME2 = "custom relation 2";
+const DEFAULT_NODE = new lib.SpinalNode(CUSTOM_SPINAL_NODE_TYPE);
 const DEFAULT_ELEMENT = new globalType.Model();
 DEFAULT_ELEMENT.add_attr({ name: DEFAULT_ELEMENT_NAME });
-const DEFAULT_NODE = new lib.SpinalNode(CUSTOM_SPINAL_NODE_TYPE);
+
 
 describe("SpinalGraph", function () {
     describe("how to create a graph and its default configuration", function () {
