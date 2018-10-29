@@ -15,7 +15,7 @@ import SpinalMap from "../SpinalMap"
 class SpinalNode extends globalType.Model {
     /**
      *
-     * @param type of the spinalNode
+     * @param type of the spinalNode default SpinalNode
      * @param element optional element pointed by the node by default set to a new empty new Model
      */
     constructor(type = "SpinalNode", element = new globalType.Model) {
@@ -25,12 +25,14 @@ class SpinalNode extends globalType.Model {
                 id: guid(this.constructor.name),
                 type: type,
             },
-            //contain a list of SpinalRelation {relationName: Lst}
+            //contain a list of SpinalRelationRef {relationName: Lst}
             relationListTypeSpinalRelation: new SpinalMap(),
             //contain a list of SpinalRelationLstPtr {relationName: Lst}
             relationListTypeSpinalRelationLstPtr: new SpinalMap(),
+
             //contain a list of SpinalRelationPtrLst {relationName: Lst}
             relationListTypeSpinalRelationPtrLst: new SpinalMap(),
+
             //SpinalMap<String, Pointer>
             parents: new SpinalMap(),
             //
@@ -289,6 +291,17 @@ class SpinalNode extends globalType.Model {
         }
     }
 
+
+    /**
+     * Add the node as parent
+     * @param node {SpinalNode}
+     * @private
+     */
+    _addParent(node) {
+        if (typeof this.parent !== "undefined" && node instanceof SpinalNode)
+            this.parent.push(new SpinalNodePointer());
+    }
+
     /**
      * Create a node which point to the element and add it to the corresponding relation
      * @param element
@@ -303,7 +316,7 @@ class SpinalNode extends globalType.Model {
 
 
     /**
-     * Create a new relation for this node
+     * create a new relation for this node
      * @param relationName
      * @param relationType
      * @private
@@ -333,16 +346,6 @@ class SpinalNode extends globalType.Model {
         });
     }
 
-
-    /**
-     * Add the node as parent
-     * @param node {SpinalNode}
-     * @private
-     */
-    _addParent(node) {
-        if (typeof this.parent !== "undefined" && node instanceof SpinalNode)
-            this.parent.push(new SpinalNodePointer(node));
-    }
 
     /**
      * Return all children

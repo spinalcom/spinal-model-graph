@@ -15,11 +15,15 @@ const globalType = typeof window === "undefined" ? global : window;
 class SpinalContext extends SpinalNode {
     constructor(type = "SpinalContext", element = new globalType.Model) {
         super(type, element);
+
         this.add_attr({
             relationIds: new globalType.Lst()
-
         });
-        this.id = guid(this.constructor.name);
+
+        const info = this.info;
+        info.id = guid(this.constructor.name);
+        //TODO check syntaxe
+        //this.mod_attr(info)
     }
 
     /**
