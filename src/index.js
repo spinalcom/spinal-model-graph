@@ -1,7 +1,7 @@
 import SpinalGraph from "./Nodes/SpinalGraph"
 import SpinalNode from "./Nodes/SpinalNode"
 import SpinalContext from "./Nodes/SpinalContext"
-import SpinalRelation from "./Relations/SpinalRelation"
+import SpinalRelationRef from "./Relations/SpinalRelationRef"
 import SpinalRelationLstPtr from "./Relations/SpinalRelationLstPtr"
 import SpinalRelationPtrLst from "./Relations/SpinalRelationPtrLst"
 import * as GraphFunction from "./GraphFunctionsLib/GraphFunctions"
@@ -14,7 +14,7 @@ export {
     SpinalGraph,
     SpinalNode,
     SpinalContext,
-    SpinalRelation,
+    SpinalRelationRef,
     SpinalRelationLstPtr,
     SpinalRelationPtrLst,
     SpinalRelationFactory,
