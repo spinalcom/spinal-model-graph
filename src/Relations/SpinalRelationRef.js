@@ -1,5 +1,6 @@
 import BaseSpinalRelation from "./BaseSpinalRelation"
 import SpinalNode from "../Nodes/SpinalNode"
+import spinalCore from "spinal-core-connectorjs";
 
 const globalType = typeof window === "undefined" ? global : window;
 
@@ -10,6 +11,19 @@ class SpinalRelationRef extends BaseSpinalRelation {
         this.add_attr({
             children: new globalType.Lst()
         });
+    }
+
+
+    /**
+     * This function retrieve all the id from children of the relation and return them inside an array.
+     * @return {Array} containing all the children Id of the relation
+     */
+    getChildrenIds(){
+        const res = [];
+        for (let i = 0; i < this.children.length; i++) {
+            res.push(this.children[i].getId());
+        }
+        return res;
     }
 
     /**
@@ -40,17 +54,10 @@ class SpinalRelationRef extends BaseSpinalRelation {
     }
 
     /**
-     * This function retrieve all the id from children of the relation and return them inside an array.
-     * @return {Array} containing all the children Id of the relation
+     * remove the child from the relation
+     * @param node {SpinalNode} child of the relation
+     * @return {Promise<boolean>}
      */
-    getChildrenIds(){
-        const res = [];
-        for (let i = 0; i < this.children.length; i++) {
-            res.push(this.children[i].getId());
-        }
-        return res;
-    }
-
     async removeChild(node) {
         this.children.remove(node);
         return this.children.indexOf(node) === -1;
@@ -58,4 +65,5 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
 }
 
+spinalCore.register_models([SpinalRelationRef]);
 export default SpinalRelationRef;
