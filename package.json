@@ -9,8 +9,8 @@
     "test": "mocha --recursive test",
     "build": "babel src -d build -s inline"
   },
-  "author": "ciprin loris",
-  "license": "ISIC",
+  "author": "SpinalCom",
+  "license": "SpinalCom Free Software License Agreement",
   "dependencies": {
     "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git",
     "@babel/cli": "^7.1.2",
