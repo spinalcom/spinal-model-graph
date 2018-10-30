@@ -1,7 +1,8 @@
 import BaseSpinalRelation from "./BaseSpinalRelation"
 import SpinalNode from "../Nodes/SpinalNode"
-import { promiseLoad, guid } from "../Utilities";
+import {promiseLoad} from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer";
+import spinalCore from "spinal-core-connectorjs";
 
 const globalType = typeof window === "undefined" ? global : window;
 
@@ -10,7 +11,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
         super(name);
         this.add_attr({
             children: new SpinalNodePointer(new globalType.Lst())
-        })
+        });
 
         this.children.info.add_attr("ids", []);
     }

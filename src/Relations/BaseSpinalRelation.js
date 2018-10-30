@@ -34,6 +34,35 @@ class BaseSpinalRelation extends globalType.Model {
     getName() {
         return this.name;
     }
+
+    /**
+     * Return all the children of the relation
+     * @return {Promise<globalType.Lst>}
+     */
+    getChildren() {
+        // noinspection JSValidateTypes
+        return Promise.resolve();
+    }
+
+    /**
+     * Add node as child of the relation if node is a model create a node
+     * @param node {SpinalNode | globalType.Model}
+     */
+    addChild(node) {
+
+    }
+
+    /**
+     * This function retrieve all the id from children of the relation and return them inside an array.
+     * @return {Array} containing all the children Id of the relation
+     */
+    getChildrenIds(){
+
+    }
+
+    async removeChild(node) {
+
+    }
 }
 
 spinalCore.register_models([BaseSpinalRelation]);

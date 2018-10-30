@@ -2,6 +2,7 @@ import BaseSpinalRelation from "./BaseSpinalRelation"
 import SpinalNode from "../Nodes/SpinalNode"
 import { promiseLoad } from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer";
+import spinalCore from "spinal-core-connectorjs";
 
 const globalType = typeof window === "undefined" ? global : window;
 
