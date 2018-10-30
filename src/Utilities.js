@@ -2,6 +2,11 @@ import "spinal-core-connectorjs";
 
 const globalType = typeof window === "undefined" ? global : window;
 
+/**
+ * Load the element pointed by the pointer
+ * @param SpinalNodePointer
+ * @returns {Promise<any>}
+ */
 function promiseLoad(SpinalNodePointer) {
     if (
         SpinalNodePointer.ptr instanceof globalType.Ptr &&
@@ -15,15 +20,25 @@ function promiseLoad(SpinalNodePointer) {
         });
 }
 
+
+/**
+ * Generate a random number
+ * @returns {string}
+ */
 function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)
         .toString(16)
         .substring(1);
 }
 
-function guid(constructor) {
+/**
+ * Create a unique id based on the name
+ * @param name
+ * @returns {string}
+ */
+function guid(name) {
     return (
-        constructor + "-" + s4() + s4() + "-" + s4() + "-" + s4() + "-" +
+        name + "-" + s4() + s4() + "-" + s4() + "-" + s4() + "-" +
         s4() + "-" + s4() + s4() + s4() + "-" + Date.now().toString(16)
     );
 }
