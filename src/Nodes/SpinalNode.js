@@ -1,5 +1,5 @@
 import spinalCore from "spinal-core-connectorjs";
-import { promiseLoad, guid } from "../Utilities";
+import {promiseLoad, guid} from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer"
 
 const globalType = typeof window === "undefined" ? global : window;
@@ -155,7 +155,11 @@ class SpinalNode extends globalType.Model {
                 for (let j = 0; j < relationNames.length; j++) {
                     if (relationMap.has(relationNames[j])) {
                         const relation = relationMap.getElement(relationNames[j]);
-                        promises.push(relation.getChildren());
+                        if (typeof relation.getChildren === 'function')
+                            promises.push(relation.getChildren());
+                        else
+                            //TODO implement SpinalError
+                            console.error(relation);
                     }
                 }
             }
@@ -242,6 +246,7 @@ class SpinalNode extends globalType.Model {
         const addToRelation = (spinalNode) => {
             const relationLst = spinalNode._getRelationListType(relationType);
             const relation = relationLst.getElement(relationName);
+            console.log(relation.addChild);
             relation.addChild(node);
             node._addAsParent(this._getRelationListType(relationType).getElement(relationName));
             return this._getRelationListType(relationType).getElement(relationName).id;
@@ -320,7 +325,7 @@ class SpinalNode extends globalType.Model {
      * create a new relation for this node
      * @param relationName
      * @param relationType
-     * @private
+     * @protected
      */
     _createRelation(relationName, relationType) {
         const relation = SpinalRelationFactory.getNewRelation(relationName, relationType);
