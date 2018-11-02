@@ -1,6 +1,7 @@
 import BaseSpinalRelation from "./BaseSpinalRelation"
+import { SPINAL_RELATION_PTR_LST_TYPE } from "./SpinalRelationFactory"
 import SpinalNode from "../Nodes/SpinalNode"
-import {promiseLoad} from "../Utilities";
+import { promiseLoad } from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer";
 import spinalCore from "spinal-core-connectorjs";
 
@@ -34,6 +35,14 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     }
 
     /**
+     * Returns the type of the relation
+     * @return {Number} Type of the relation
+     */
+    getType() {
+        return SPINAL_RELATION_PTR_LST_TYPE;
+    }
+
+    /**
      * Add node as child of the relation if node is a model create a node
      * @param node {SpinalNode | globalType.Model}
      */
@@ -54,7 +63,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     }
 
     /**
-     * remove the child from the relation
+     * Remove the child from the relation
      * @param node {SpinalNode} child of the relation
      * @return {Promise<boolean>}
      */

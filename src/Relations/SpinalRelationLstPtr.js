@@ -1,4 +1,5 @@
 import BaseSpinalRelation from "./BaseSpinalRelation"
+import { SPINAL_RELATION_LST_PTR_TYPE } from "./SpinalRelationFactory"
 import SpinalNode from "../Nodes/SpinalNode"
 import { promiseLoad } from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer";
@@ -12,6 +13,18 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
         this.add_attr({
             children: new globalType.Lst()
         })
+    }
+
+    /**
+     * This function retrieve all the id from children of the relation and return them inside an array.
+     * @return {Array} containing all the children Id of the relation
+     */
+    getChildrenIds() {
+        const res = [];
+        for (let i = 0; i < this.children.length; i++) {
+            res.push(this.children[i].getId());
+        }
+        return res;
     }
 
     /**
@@ -34,6 +47,13 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
         return Promise.resolve(children)
     }
 
+    /**
+     * Returns the type of the relation
+     * @return {Number} Type of the relation
+     */
+    getType() {
+        return SPINAL_RELATION_LST_PTR_TYPE;
+    }
 
     /**
      * Add node as child of the relation if node is a model create a node
@@ -54,17 +74,10 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
     }
 
     /**
-     * This function retrieve all the id from children of the relation and return them inside an array.
-     * @return {Array} containing all the children Id of the relation
+     * Removes a child from the relation
+     * @param {SpinalNode | Model} node Node to be removed 
+     * @return {Boolean} true if the child has been successfully removed, false otherwise
      */
-    getChildrenIds() {
-        const res = [];
-        for (let i = 0; i < this.children.length; i++) {
-            res.push(this.children[i].getId());
-        }
-        return res;
-    }
-
     async removeChild(node) {
         for (let i = 0; i < this.children.length; i++) {
 

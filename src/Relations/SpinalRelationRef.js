@@ -1,4 +1,5 @@
 import BaseSpinalRelation from "./BaseSpinalRelation"
+import { SPINAL_RELATION_TYPE } from "./SpinalRelationFactory"
 import SpinalNode from "../Nodes/SpinalNode"
 import spinalCore from "spinal-core-connectorjs";
 
@@ -18,7 +19,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
      * This function retrieve all the id from children of the relation and return them inside an array.
      * @return {Array} containing all the children Id of the relation
      */
-    getChildrenIds(){
+    getChildrenIds() {
         const res = [];
         for (let i = 0; i < this.children.length; i++) {
             res.push(this.children[i].getId());
@@ -33,6 +34,14 @@ class SpinalRelationRef extends BaseSpinalRelation {
     getChildren() {
         // noinspection JSValidateTypes
         return Promise.resolve(this.children);
+    }
+
+    /**
+     * Returns the type of the relation
+     * @return {Number} Type of the relation
+     */
+    getType() {
+        return SPINAL_RELATION_TYPE;
     }
 
     /**
@@ -54,7 +63,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
     }
 
     /**
-     * remove the child from the relation
+     * Remove the child from the relation
      * @param node {SpinalNode} child of the relation
      * @return {Promise<boolean>}
      */

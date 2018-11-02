@@ -1,7 +1,7 @@
 import SpinalNode from "./SpinalNode"
 import spinalCore from "spinal-core-connectorjs";
-import {SPINAL_RELATION_TYPE} from "../Relations/SpinalRelationFactory"
-import {guid} from "../Utilities";
+import { SPINAL_RELATION_TYPE } from "../Relations/SpinalRelationFactory"
+import { guid } from "../Utilities";
 import SpinalContext from "./SpinalContext";
 
 const globalType = typeof window === "undefined" ? global : window;

@@ -1,5 +1,5 @@
 import spinalCore from "spinal-core-connectorjs";
-import {promiseLoad, guid} from "../Utilities";
+import { promiseLoad, guid } from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer"
 
 const globalType = typeof window === "undefined" ? global : window;

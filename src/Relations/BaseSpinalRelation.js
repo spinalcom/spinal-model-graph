@@ -23,7 +23,7 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
-     * setElement the parent of the relation. If a parent was already setElement the parent relation is remove
+     * setElement the parent of the relation. If a parent was already setElement the parent relation is removed.
      * @param parent {SpinalNode}
      */
     setParent(parent) {
@@ -31,8 +31,20 @@ class BaseSpinalRelation extends globalType.Model {
             this.parent.setElement(parent);
     }
 
+    /**
+     * Returns the name of the relation
+     * @return {Str} Name of the relation
+     */
     getName() {
         return this.name;
+    }
+
+    /**
+     * Returns the type of the relation
+     * @return {Number} Type of the relation
+     */
+    getType() {
+        return -1;
     }
 
     /**
@@ -45,7 +57,7 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
-     * Add node as child of the relation if node is a model create a node
+     * Add node as child of the relation if node is a model create a node.
      * @param node {SpinalNode | globalType.Model}
      */
     addChild(node) {
@@ -56,7 +68,7 @@ class BaseSpinalRelation extends globalType.Model {
      * This function retrieve all the id from children of the relation and return them inside an array.
      * @return {Array} containing all the children Id of the relation
      */
-    getChildrenIds(){
+    getChildrenIds() {
 
     }
 
