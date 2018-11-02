@@ -72,8 +72,44 @@ class BaseSpinalRelation extends globalType.Model {
 
     }
 
+    /**
+     * Remove the child from the relation
+     * @param node {SpinalNode} child of the relation
+     * @return {Promise<boolean>}
+     */
     async removeChild(node) {
 
+    }
+
+    /**
+     * Removes all children from the relation
+     */
+    removeChildren() {
+        this.getChildren((children) => {
+            children.forEach((child) => {
+                this.removeChild(child);
+            });
+        });
+    }
+
+    /**
+     * Removes the relation from the graph
+     */
+    removeFromGraph() {
+        this._removeFromParent();
+        this.removeChildren();
+    }
+
+    /**
+     * Removes the relation from the parent
+     * @private
+     */
+    _removeFromParent() {
+        this.getParent().then((parentNode) => {
+            let relationMap = parentNode._getRelationListType(this.getType());
+
+            relationMap.delete(this.name.get());
+        });
     }
 }
 
