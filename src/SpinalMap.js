@@ -56,11 +56,30 @@ class SpinalMap extends globalType.Model {
     }
 
     /**
-     * Returns a array  that contains the keys for each element in the Map object in insertion order.
-     * @returns {*}
+     * Returns an array that contains the keys for each element in the Map object in insertion order.
+     * @returns {Array}
      */
     keys() {
         return this._attribute_names;
+    }
+
+    /**
+     * Deletes an element
+     * @param {*} key
+     */
+    delete(key) {
+        this.rem_attr(key);
+    }
+
+    /**
+     * Deletes all elements
+     */
+    clear() {
+        let keys = this.keys();
+
+        while (keys[0]) {
+            this.delete(keys[0]);
+        }
     }
 }
 
