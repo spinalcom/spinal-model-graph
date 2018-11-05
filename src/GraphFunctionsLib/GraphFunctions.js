@@ -78,7 +78,7 @@ async function exportGraph(startingNode, json) {
 };
 
 
-const importGraph = (json) => {
+const importGraph = (json, graph) => {
 
     const nodes = new Map();
     if (!json.hasOwnProperty(JSON_NODES_INFO_NAME) || !json.hasOwnProperty(JSON_RELATIONS_NAME) || !json.hasOwnProperty(JSON_STARTING_NODE_NAME)) {
@@ -146,7 +146,7 @@ const importGraph = (json) => {
 
     });
     addChildrenToNode(json);
-
+    graph.addContext(nodes.get(json[JSON_STARTING_NODE_NAME]));
     return nodes;
 };
 
