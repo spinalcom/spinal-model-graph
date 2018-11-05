@@ -14,9 +14,9 @@
   "license": "SpinalCom Free Software License Agreement",
   "dependencies": {
     "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git",
-    "@babel/cli": "^7.1.2",
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0"
+    "@babel/cli": "^6.26.3",
+    "@babel/core": "^6.26.3",
+    "@babel/preset-env": "^6.26.3"
   },
   "devDependencies": {
     "jsdoc-to-markdown": "^4.0.1",
