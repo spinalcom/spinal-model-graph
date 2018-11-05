@@ -32,25 +32,25 @@ const childPromise = spinalGraph.getContext(contextName);
 childPromise.then(child => {
 
     if (!child.info.hasOwnProperty("name") || child.info.name.get() !== contextName) {
-        console.error("error")
+        console.error("hum something is wrong please notify this problem to the maintainer of the graph.")
     }
     else {
         console.log("ok we have our context");
+        //Do something meaningful with your context
     }
 
     const childElementPromise = child.getElement();
 
     childElementPromise.then(el => {
         if (el.name.get() !== elementName) {
-            console.error("error")
+            console.error("hum something is wrong please notify this problem to the maintainer of the graph.")
         }
         else {
             console.log("ok we have our element")
+            //Do something meaningful with your element
         }
     }).catch(() => {
         console.error("hum something is wrong please notify this problem to the maintainer of the graph.")
     });
-
-
 
 });

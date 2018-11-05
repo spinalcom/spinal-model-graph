@@ -36,10 +36,18 @@ describe("SpinalGraph", function () {
             //Create a new graph
             const graph = new lib.SpinalGraph();
             //Create a new Context
-            const context = new lib.SpinalContext();
+            const context = new lib.SpinalContext("context type", "context name");
             //add the context as child of the graph
             graph.addContext(context);
-            done();
+            graph.getContext("context name")
+                .then(child => {
+                    assert.equal(child, context);
+                    done();
+                })
+                .catch(e => {
+                    console.error(e);
+                    done(e);
+                });
             /*
             graph.getChildren([DEFAULT_RELATION_NAME]).then(children => {
                 console.log(children);

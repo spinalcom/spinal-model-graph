@@ -6,7 +6,7 @@ describe("How to use the function dedicated to the graph", function () {
         const json = lib.GraphFunction['initDummyJsonGraph']();
         const startingNode = new lib.SpinalNode();
         const graph = lib.GraphFunction['importGraph'](json);
-        //console.log(graph.get('1').relationListTypeSpinalRelation.get("hasContext").getChildrenIds())
+        //console.log(graph.getElement('1').relationListTypeSpinalRelation.getElement("hasContext").getChildrenIds())
         const js = await lib.GraphFunction['exportGraph'](graph.get('1'), {});
 
         for (let key in js) {
