@@ -13,8 +13,8 @@ class SpinalRelationFactory {
 
     /**
      * Create a new relation of relationType with the relationName
-     * @param relationName {string} name of the relation
-     * @param relationType {string} type of the relation
+     * @param relationName {String} name of the relation
+     * @param relationType {String} type of the relation
      * @return {SpinalRelationRef|SpinalRelationLstPtr|SpinalRelationPtrLst}
      */
     static getNewRelation(relationName, relationType) {

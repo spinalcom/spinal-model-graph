@@ -64,7 +64,7 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Shortcut to info.type
-     * @return {string} type of the node.
+     * @return {Str} type of the node.
      */
     getType() {
         return this.info.type;
@@ -101,7 +101,7 @@ class SpinalNode extends globalType.Model {
      * @param child {SpinalNode | Model} element to add as child
      * @param relationName {string} name of the relation
      * @param relationType {int} type of the relation
-     * @return {*}
+     * @return {Str}
      */
     addChild(child, relationName, relationType) {
 
@@ -146,8 +146,6 @@ class SpinalNode extends globalType.Model {
      * @return {Promise<Array | never | void>} containing all children for the relation name. The array might be empty
      */
     getChildren(relationNames) {
-
-
         if (relationNames.length > 0) {
             const promises = [];
             for (let i = 0; i < this._relationTypesLst.length; i++) {
@@ -199,6 +197,7 @@ class SpinalNode extends globalType.Model {
 
     /**
      * This function tranforms the relation type lst into an array.
+     * @return {Array}
      * @private
      */
     _getRelationTypeArray() {
@@ -214,7 +213,8 @@ class SpinalNode extends globalType.Model {
     /**
      * Return the relation list corresponding to the relation type
      * @param relationType Type of the relation
-     * @private {SpinalMap} Return the relation list corresponding to the relation type
+     * @return {SpinalMap} Return the relation list corresponding to the relation type
+     * @private
      */
     _getRelationListType(relationType) {
         switch (relationType) {
@@ -237,9 +237,9 @@ class SpinalNode extends globalType.Model {
      * Add a node as child.
      * If this node doesn't have a relation name relationName with the type relationType this method will create it.
      * @param node {SpinalNode} to add as child.
-     * @param relationName {string} name of the relation
+     * @param relationName {String} name of the relation
      * @param relationType {int} type of the relation
-     * @return {string} id of the relation where the node was added as child
+     * @return {Str} id of the relation where the node was added as child
      * @private
      */
     _addToRelation(node, relationName, relationType) {
@@ -309,7 +309,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Create a node which point to the element and add it to the corresponding relation
+     * Create a node which points to the element and add it to the corresponding relation
      * @param element
      * @param relationName
      * @param relationType
@@ -317,7 +317,7 @@ class SpinalNode extends globalType.Model {
      */
     _createNodeAndAddChildToRelation(element, relationName, relationType) {
         const node = new SpinalNode(element);
-        this._addToRelation(node, relationName, relationType);
+        return this._addToRelation(node, relationName, relationType);
     }
 
 
@@ -325,7 +325,7 @@ class SpinalNode extends globalType.Model {
      * create a new relation for this node
      * @param relationName
      * @param relationType
-     * @protected
+     * @private
      */
     _createRelation(relationName, relationType) {
         const relation = SpinalRelationFactory.getNewRelation(relationName, relationType);
@@ -376,7 +376,6 @@ class SpinalNode extends globalType.Model {
                 await getChildren(childrenRelationMap[keys[j]]);
             }
         }
-
 
         return res;
     }

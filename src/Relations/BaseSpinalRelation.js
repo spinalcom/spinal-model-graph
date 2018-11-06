@@ -65,7 +65,7 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
-     * This function retrieve all the id from children of the relation and return them inside an array.
+     * This function retrieves all the id from children of the relation and return them inside an array.
      * @return {Array} containing all the children Id of the relation
      */
     getChildrenIds() {

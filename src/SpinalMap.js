@@ -8,7 +8,7 @@ class SpinalMap extends globalType.Model {
     /**
      * Sets the value for the key in the Map object. Returns the Map object
      * @param key
-     * @param value
+     * @param {*} value
      */
     setElement(key, value) {
         this.rem_attr(key);
@@ -28,8 +28,8 @@ class SpinalMap extends globalType.Model {
     }
 
     /**
-     *
-     * @param fun
+     * Applies a function to each of the values in the map.
+     * @param {Function} fun
      */
     forEach(fun) {
         for (let i = 0; i < this._attribute_names.length; i++) {
@@ -41,7 +41,7 @@ class SpinalMap extends globalType.Model {
     /**
      * Returns a boolean asserting whether a value has been associated to the key in the Map object or not.
      * @param key
-     * @returns {*|boolean}
+     * @returns {boolean}
      */
     has(key) {
         return this._attribute_names.includes(key)
@@ -65,7 +65,7 @@ class SpinalMap extends globalType.Model {
 
     /**
      * Deletes an element
-     * @param {*} key
+     * @param key
      */
     delete(key) {
         this.rem_attr(key);

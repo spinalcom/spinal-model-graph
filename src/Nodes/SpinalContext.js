@@ -19,14 +19,14 @@ class SpinalContext extends SpinalNode {
      * @param name of the context
      * @param element of the node
      */
-    constructor(type = "SpinalContext", name = "undefined" , element = new globalType.Model) {
+    constructor(type = "SpinalContext", name = "undefined", element = new globalType.Model) {
         super(type, element);
         this.add_attr({
             relationIds: new globalType.Lst(),
             relationsNames: new globalType.Lst()
         });
         this.info.id.set(guid(this.constructor.name));
-        this.info.add_attr({name: typeof name === "undefined" ? this.info.id.get(): name});
+        this.info.add_attr({ name: typeof name === "undefined" ? this.info.id.get() : name });
     }
 
     /**
@@ -34,7 +34,7 @@ class SpinalContext extends SpinalNode {
      * @param parent {SpinalNode} parent of the relation
      * @param child {SpinalNode | Model} child of the relation
      * @param relationName {string} name of the relation
-     * @return {string}
+     * @return {Str}
      */
     createRelation(parent, child, relationName) {
         if ((child instanceof SpinalNode) || (child instanceof globalType.Model)) {
@@ -49,7 +49,7 @@ class SpinalContext extends SpinalNode {
     }
 
     /**
-     * Add the relation id to the relation id displayable by this context
+     * Add the relation id to the relation ids displayable by this context
      * @param relationId {string}
      */
     addRelationId(relationId) {
@@ -57,14 +57,14 @@ class SpinalContext extends SpinalNode {
     }
 
     /**
-     * Remove all the node associate to this context from the graph
+     * Remove all the nodes associated to this context from the graph
      */
     removeFromGraph() {
         //Todo use DFS to remove all the context from the graph
     }
 
     /**
-     * Add Child to the to the context with a spinalRelationLstPtrType
+     * Add Child to the context with a spinalRelationLstPtrType
      * @param child {SpinalNode| Model} to be added as child
      * @param relationName {string} name of the relation
      * @param relationType {int} this parameter is here only to properly override the parent method.

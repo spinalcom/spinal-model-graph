@@ -28,20 +28,20 @@ class SpinalNodePointer extends globalType.Model {
     }
 
     /**
-     * Set pointer to point this element
+     * Set pointer to point to this element
      * @param element {*}
      */
     setElement(element) {
         if (element instanceof SpinalNode) {
-            this.info.pointed_id.set(element.id);
+            this.info.pointed_id.set(element.getId());
             this.info.pointed_type.set(element.getType());
         }
         this.ptr.set(element);
     }
 
     /**
-     * This function return the id of the pointed element
-     * @return {string}
+     * This function returns the id of the pointed element
+     * @return {Str}
      */
     getId() {
         return this.info.pointed_id;

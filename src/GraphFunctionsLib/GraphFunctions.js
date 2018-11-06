@@ -1,6 +1,6 @@
 /**
  *
- * This file contain useful function that help manipulate the graph structure
+ * This file contain useful functions that help manipulate the graph structure
  * such as an generic implementation of the Deep First Search and Breadth First Search algorithm.
  *
  */
@@ -30,7 +30,7 @@ async function exportGraph(startingNode, json) {
             const childrenIds = relation.getChildrenIds();
 
             for (let i = 0; i < childrenIds.length; i++) {
-                json[relationType].push({from: startingNodeId, relationName: relation.name, to: childrenIds[i]})
+                json[relationType].push({ from: startingNodeId, relationName: relation.name, to: childrenIds[i] })
             }
 
         });
@@ -156,8 +156,8 @@ const initDummyJsonGraph = () => {
     const jsonGraph = {};
     const relation = {};
     const floorsChildren = {
-        7: {rooms: [11, 12], equipment: [5, 6]},
-        8: {rooms: [13, 14], equipment: [9, 10]}
+        7: { rooms: [11, 12], equipment: [5, 6] },
+        8: { rooms: [13, 14], equipment: [9, 10] }
     };
 
     const roomChildren = {
@@ -165,9 +165,9 @@ const initDummyJsonGraph = () => {
             ref: 15,
             equipment: [16]
         },
-        12: {equipment: [17]},
-        13: {equipment: [18]},
-        14: {equipment: [19]}
+        12: { equipment: [17] },
+        13: { equipment: [18] },
+        14: { equipment: [19] }
     };
 
     const initJSON = () => {
@@ -183,17 +183,17 @@ const initDummyJsonGraph = () => {
     };
 
     const initGraphRelation = () => {
-        relation[SPINAL_RELATION_LST_PTR_TYPE].push({from: 1, relationName: "hasContext", to: 2});
+        relation[SPINAL_RELATION_LST_PTR_TYPE].push({ from: 1, relationName: "hasContext", to: 2 });
     };
 
     const initContextRelation = () => {
-        relation[SPINAL_RELATION_TYPE].push({fom: 2, relationName: "hasBuilding", to: 3});
+        relation[SPINAL_RELATION_TYPE].push({ fom: 2, relationName: "hasBuilding", to: 3 });
     };
 
     const initBuildingRelation = () => {
-        relation[SPINAL_RELATION_TYPE].push({from: 3, relationName: "buildingHasFloor", to: 7,});
-        relation[SPINAL_RELATION_TYPE].push({from: 3, relationName: "buildingHasFloor", to: 7,});
-        relation[SPINAL_RELATION_LST_PTR_TYPE].push({from: 3, relationName: "buildingHasEquipment", to: 4});
+        relation[SPINAL_RELATION_TYPE].push({ from: 3, relationName: "buildingHasFloor", to: 7, });
+        relation[SPINAL_RELATION_TYPE].push({ from: 3, relationName: "buildingHasFloor", to: 7, });
+        relation[SPINAL_RELATION_LST_PTR_TYPE].push({ from: 3, relationName: "buildingHasEquipment", to: 4 });
     };
 
     const initFloorRelation = (id) => {
@@ -234,10 +234,10 @@ const initDummyJsonGraph = () => {
 
     const createNodes = () => {
         jsonGraph[JSON_STARTING_NODE_NAME] = 1;
-        jsonGraph[JSON_NODES_INFO_NAME].push({type: "SpinalGraph", id: 1});
-        jsonGraph[JSON_NODES_INFO_NAME].push({type: "SpinalContext", id: 2});
+        jsonGraph[JSON_NODES_INFO_NAME].push({ type: "SpinalGraph", id: 1 });
+        jsonGraph[JSON_NODES_INFO_NAME].push({ type: "SpinalContext", id: 2 });
         for (let i = 3; i < 20; i++) {
-            jsonGraph[JSON_NODES_INFO_NAME].push({type: "SpinalNode", id: i});
+            jsonGraph[JSON_NODES_INFO_NAME].push({ type: "SpinalNode", id: i });
         }
     };
 
