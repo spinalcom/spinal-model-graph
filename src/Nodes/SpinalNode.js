@@ -349,6 +349,16 @@ class SpinalNode extends globalType.Model {
         });
     }
 
+
+    async  _childrenToList(relation) {
+        const lst = [];
+        let childrenLst = await relation.getChildren();
+        for (let i = 0; i < childrenLst.length; i++) {
+            lst.push(childrenLst[i]);
+        }
+        return lst;
+    }
+
     /**
      * Return all children
      * @return {Array}
@@ -357,20 +367,14 @@ class SpinalNode extends globalType.Model {
     async _getAllChildren() {
         let res = [];
 
-        async function getChildren(relation) {
-            let childrenLst = await relation.getChildren();
-            for (let i = 0; i < childrenLst.length; i++) {
-                res.push(childrenLst[i]);
-            }
-        }
-
         try {
             for (let i = 0; i < this._relationTypesLst.length; i++) {
                 let type = this._relationTypesLst[i].get();
                 let childrenRelationMap = this._getRelationListType(type);
                 let keys = childrenRelationMap.keys();
                 for (let j = 0; j < keys.length; j++) {
-                    await getChildren(childrenRelationMap[keys[j]]);
+                    let children = await this._childrenToList(childrenRelationMap[keys[j]]);
+                    res.push(...children);
                 }
             }
         }
