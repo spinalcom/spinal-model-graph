@@ -196,7 +196,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * This function tranforms the relation type lst into an array.
+     * This function transforms the relation type lst into an array.
      * @return {Array}
      * @private
      */
@@ -359,28 +359,33 @@ class SpinalNode extends globalType.Model {
      * @private
      */
     async _getAllChildren() {
-        const res = [];
+        let res = [];
 
         async function getChildren(relation) {
-            const childrenLst = await relation.getChildren();
+            let childrenLst = await relation.getChildren();
             for (let i = 0; i < childrenLst.length; i++) {
                 res.push(childrenLst[i]);
             }
         }
 
-        for (let i = 0; i < this._relationTypesLst.length; i++) {
-            const type = this._relationTypesLst[i].get();
-            const childrenRelationMap = this._getRelationListType(type);
-            const keys = childrenRelationMap.keys();
-            for (let j = 0; j < keys.length; j++) {
-                await getChildren(childrenRelationMap[keys[j]]);
+        try {
+
+            for (let i = 0; i < this._relationTypesLst.length; i++) {
+                let type = this._relationTypesLst[i].get();
+                let childrenRelationMap = this._getRelationListType(type);
+                let keys = childrenRelationMap.keys();
+                for (let j = 0; j < keys.length; j++) {
+                    await getChildren(childrenRelationMap[keys[j]]);
+                }
             }
+        }
+
+        catch (e) {
+            console.error(e);
         }
 
         return res;
     }
-
-
 }
 
 spinalCore.register_models([SpinalNode]);
