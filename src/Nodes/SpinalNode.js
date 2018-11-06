@@ -359,7 +359,7 @@ class SpinalNode extends globalType.Model {
      * @private
      */
     async _getAllChildren() {
-        const res = [];
+        let res = [];
 
         async function getChildren(relation) {
             let childrenLst = await relation.getChildren();
