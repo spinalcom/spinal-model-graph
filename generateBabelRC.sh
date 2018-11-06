@@ -1,10 +1,11 @@
+#!/usr/bin/env bash
 echo "{
-        "presets": [
+        \"presets\": [
           [
-            "@babel/preset-env",
+            \"@babel/preset-env\",
             {
-              "targets": {
-                "node": "6"
+              \"targets\": {
+                \"node\": \"6\"
               }
             }
           ]
