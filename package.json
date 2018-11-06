@@ -1,22 +1,22 @@
 {
   "name": "spinalgraph",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "The spinal graph is a data structure",
   "repository": "https://github.com/spinalcom/spinal-model-graph.git",
   "main": "build/index.js",
   "scripts": {
     "postinstall": "npm run build",
     "test": "mocha --recursive test",
-    "build": "babel src -d build -s inline",
+    "build": "chmod +x generateBabelRC.sh && babel src -d build -s inline && rm .babelrc",
     "docs": "rm ./Docs/markdown/api.md && touch ./Docs/markdown/api.md && find ./src -name \"*.js\" -exec jsdoc2md {} >> ./Docs/markdown/api.md ';'"
   },
   "author": "SpinalCom",
   "license": "SpinalCom Free Software License Agreement",
   "dependencies": {
-    "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git",
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0"
+    "@babel/preset-env": "^7.1.0",
+    "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git"
   },
   "devDependencies": {
     "jsdoc-to-markdown": "^4.0.1",
