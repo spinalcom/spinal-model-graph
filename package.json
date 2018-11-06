@@ -22,5 +22,8 @@
     "jsdoc-to-markdown": "^4.0.1",
     "mocha": "^5.2.0",
     "nyc": "^13.1.0"
+  },
+  "peerDependencies": {
+    "@babel/core": "6 | ^7.0.0-0"
   }
 }
