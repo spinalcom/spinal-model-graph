@@ -12,7 +12,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
         super(name);
         this.add_attr({
             children: new globalType.Lst()
-        })
+        });
     }
 
     /**
@@ -56,7 +56,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
     }
 
     /**
-     * Add node as child of the relation if node is a model create a node
+     * Adds node as child of the relation. If the node is a model, creates a node.
      * @param node {SpinalNode | globalType.Model}
      */
     addChild(node) {
@@ -74,7 +74,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
     }
 
     /**
-     * Removes a child from the relation
+     * Removes a child from the relation.
      * @param {SpinalNode | Model} node Node to be removed 
      * @return {Boolean} true if the child has been successfully removed, false otherwise
      */

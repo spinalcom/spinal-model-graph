@@ -45,10 +45,9 @@ class SpinalNode extends globalType.Model {
         });
     }
 
-
     /**
      * Shortcut to info.id
-     * @return {string}
+     * @return {Str}
      */
     getId() {
         return this.info.id;
@@ -64,7 +63,7 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Shortcut to info.type
-     * @return {string} type of the node.
+     * @return {Str} type of the node.
      */
     getType() {
         return this.info.type;
@@ -74,7 +73,7 @@ class SpinalNode extends globalType.Model {
      * Verify if the node contain the relation name @param relationName
      * @param relationName {string} name of the relation.
      * @param relationType {int} relation type
-     * @return {boolean} return true is the relation is contain in the node false otherwise.
+     * @return {Boolean} return true is the relation is contain in the node false otherwise.
      */
     hasRelation(relationName, relationType) {
         return this._getRelationListType(relationType).has(relationName);
@@ -84,7 +83,7 @@ class SpinalNode extends globalType.Model {
      * Verify if the node contain all the relation name contain @param relationName
      * @param relationNames {array} Array containing all the relation name
      * @param relationType {int} relation type
-     * @return {boolean} return true if the node contain all the relations contain in relationNames false otherwise.
+     * @return {Boolean} return true if the node contain all the relations contain in relationNames false otherwise.
      */
     hasRelations(relationNames, relationType) {
         let res = true;
@@ -101,7 +100,7 @@ class SpinalNode extends globalType.Model {
      * @param child {SpinalNode | Model} element to add as child
      * @param relationName {string} name of the relation
      * @param relationType {int} type of the relation
-     * @return {*}
+     * @return {Str}
      */
     addChild(child, relationName, relationType) {
 
@@ -117,9 +116,9 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Remove the node from the relation children.
-     * @param node
-     * @param relationName
-     * @param relationType
+     * @param {SpinalNode} node
+     * @param {String} relationName
+     * @param {Number} relationType
      */
     removeChild(node, relationName, relationType) {
         if (this._getRelationListType(relationType).has(relationName)) {
@@ -146,8 +145,6 @@ class SpinalNode extends globalType.Model {
      * @return {Promise<Array | never | void>} containing all children for the relation name. The array might be empty
      */
     getChildren(relationNames) {
-
-
         if (relationNames.length > 0) {
             const promises = [];
             for (let i = 0; i < this._relationTypesLst.length; i++) {
@@ -199,6 +196,7 @@ class SpinalNode extends globalType.Model {
 
     /**
      * This function transforms the relation type lst into an array.
+     * @return {Array}
      * @private
      */
     _getRelationTypeArray() {
@@ -214,7 +212,8 @@ class SpinalNode extends globalType.Model {
     /**
      * Return the relation list corresponding to the relation type
      * @param relationType Type of the relation
-     * @private {SpinalMap} Return the relation list corresponding to the relation type
+     * @return {SpinalMap} Return the relation list corresponding to the relation type
+     * @private
      */
     _getRelationListType(relationType) {
         switch (relationType) {
@@ -237,9 +236,9 @@ class SpinalNode extends globalType.Model {
      * Add a node as child.
      * If this node doesn't have a relation name relationName with the type relationType this method will create it.
      * @param node {SpinalNode} to add as child.
-     * @param relationName {string} name of the relation
+     * @param relationName {String} name of the relation
      * @param relationType {int} type of the relation
-     * @return {string} id of the relation where the node was added as child
+     * @return {Str} id of the relation where the node was added as child
      * @private
      */
     _addToRelation(node, relationName, relationType) {
@@ -278,7 +277,6 @@ class SpinalNode extends globalType.Model {
         });
     }
 
-
     /**
      * Add the relation as parent of the node.
      * If the node doesn't contain a parents named liked relation Name create a parent and push the relation.
@@ -297,7 +295,6 @@ class SpinalNode extends globalType.Model {
         }
     }
 
-
     /**
      * Add the node as parent
      * @param node {SpinalNode}
@@ -309,23 +306,23 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Create a node which point to the element and add it to the corresponding relation
-     * @param element
-     * @param relationName
-     * @param relationType
+     * Create a node which points to the element and add it to the corresponding relation
+     * @param {*} element
+     * @param {String} relationName
+     * @param {Number} relationType
      * @private
      */
     _createNodeAndAddChildToRelation(element, relationName, relationType) {
         const node = new SpinalNode(element);
-        this._addToRelation(node, relationName, relationType);
+        return this._addToRelation(node, relationName, relationType);
     }
 
 
     /**
-     * create a new relation for this node
-     * @param relationName
-     * @param relationType
-     * @protected
+     * Create a new relation for this node
+     * @param {String} relationName
+     * @param {Number} relationType
+     * @private
      */
     _createRelation(relationName, relationType) {
         const relation = SpinalRelationFactory.getNewRelation(relationName, relationType);
@@ -336,8 +333,8 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Remove all children relation from the graph
-     * this operation might also delete all the sub-graph under this node.
+     * Remove all children relation from the graph.
+     * This operation might also delete all the sub-graph under this node.
      * @private
      */
     _removeFromChildren() {
@@ -389,8 +386,6 @@ class SpinalNode extends globalType.Model {
 
         return res;
     }
-
-
 }
 
 spinalCore.register_models([SpinalNode]);

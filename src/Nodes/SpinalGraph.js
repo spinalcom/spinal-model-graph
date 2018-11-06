@@ -25,8 +25,8 @@ class SpinalGraph extends SpinalNode {
     }
 
     /**
-     * this function add context to the graph
-     * @param context
+     * Adds a function to the graph
+     * @param {SpinalContext} context
      */
     addContext(context) {
         if (context instanceof SpinalContext)
@@ -45,7 +45,6 @@ class SpinalGraph extends SpinalNode {
 
         return children.find(child => child.info.name.get() === name);
     }
-
 }
 
 spinalCore.register_models([SpinalGraph]);

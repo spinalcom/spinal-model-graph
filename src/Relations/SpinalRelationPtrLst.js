@@ -17,10 +17,9 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
         this.children.info.add_attr("ids", []);
     }
 
-
     /**
      * This function retrieve all the id from children of the relation and return them inside an array.
-     * @return {Array} containing all the children Id of the relation
+     * @return {Array} containing all the children ids of the relation
      */
     getChildrenIds() {
         return this.children.ids;
