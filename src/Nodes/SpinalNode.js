@@ -45,10 +45,9 @@ class SpinalNode extends globalType.Model {
         });
     }
 
-
     /**
      * Shortcut to info.id
-     * @return {string}
+     * @return {Str}
      */
     getId() {
         return this.info.id;
@@ -74,7 +73,7 @@ class SpinalNode extends globalType.Model {
      * Verify if the node contain the relation name @param relationName
      * @param relationName {string} name of the relation.
      * @param relationType {int} relation type
-     * @return {boolean} return true is the relation is contain in the node false otherwise.
+     * @return {Boolean} return true is the relation is contain in the node false otherwise.
      */
     hasRelation(relationName, relationType) {
         return this._getRelationListType(relationType).has(relationName);
@@ -84,7 +83,7 @@ class SpinalNode extends globalType.Model {
      * Verify if the node contain all the relation name contain @param relationName
      * @param relationNames {array} Array containing all the relation name
      * @param relationType {int} relation type
-     * @return {boolean} return true if the node contain all the relations contain in relationNames false otherwise.
+     * @return {Boolean} return true if the node contain all the relations contain in relationNames false otherwise.
      */
     hasRelations(relationNames, relationType) {
         let res = true;
@@ -117,9 +116,9 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Remove the node from the relation children.
-     * @param node
-     * @param relationName
-     * @param relationType
+     * @param {SpinalNode} node
+     * @param {String} relationName
+     * @param {Number} relationType
      */
     removeChild(node, relationName, relationType) {
         if (this._getRelationListType(relationType).has(relationName)) {
@@ -278,7 +277,6 @@ class SpinalNode extends globalType.Model {
         });
     }
 
-
     /**
      * Add the relation as parent of the node.
      * If the node doesn't contain a parents named liked relation Name create a parent and push the relation.
@@ -297,7 +295,6 @@ class SpinalNode extends globalType.Model {
         }
     }
 
-
     /**
      * Add the node as parent
      * @param node {SpinalNode}
@@ -310,9 +307,9 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Create a node which points to the element and add it to the corresponding relation
-     * @param element
-     * @param relationName
-     * @param relationType
+     * @param {*} element
+     * @param {String} relationName
+     * @param {Number} relationType
      * @private
      */
     _createNodeAndAddChildToRelation(element, relationName, relationType) {
@@ -322,9 +319,9 @@ class SpinalNode extends globalType.Model {
 
 
     /**
-     * create a new relation for this node
-     * @param relationName
-     * @param relationType
+     * Create a new relation for this node
+     * @param {String} relationName
+     * @param {Number} relationType
      * @private
      */
     _createRelation(relationName, relationType) {
@@ -336,8 +333,8 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Remove all children relation from the graph
-     * this operation might also delete all the sub-graph under this node.
+     * Remove all children relation from the graph.
+     * This operation might also delete all the sub-graph under this node.
      * @private
      */
     _removeFromChildren() {
@@ -351,7 +348,6 @@ class SpinalNode extends globalType.Model {
             relation.removeFromGraph();
         });
     }
-
 
     /**
      * Return all children

@@ -6,14 +6,12 @@ import spinalCore from "spinal-core-connectorjs";
 const globalType = typeof window === "undefined" ? global : window;
 
 class SpinalRelationRef extends BaseSpinalRelation {
-
     constructor(name) {
         super(name);
         this.add_attr({
             children: new globalType.Lst()
         });
     }
-
 
     /**
      * This function retrieves all the id from children of the relation and return them inside an array.
@@ -71,7 +69,6 @@ class SpinalRelationRef extends BaseSpinalRelation {
         this.children.remove(node);
         return this.children.indexOf(node) === -1;
     }
-
 }
 
 spinalCore.register_models([SpinalRelationRef]);

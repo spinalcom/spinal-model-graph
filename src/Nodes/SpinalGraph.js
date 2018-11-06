@@ -45,7 +45,6 @@ class SpinalGraph extends SpinalNode {
 
         return children.find(child => child.info.name.get() === name);
     }
-
 }
 
 spinalCore.register_models([SpinalGraph]);

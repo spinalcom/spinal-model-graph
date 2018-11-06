@@ -1,5 +1,7 @@
-import spinalCore from "spinal-core-connectorjs"
+import spinalCore from "spinal-core-connectorjs";
+
 const globalType = typeof window === "undefined" ? global : window;
+
 class SpinalMap extends globalType.Model {
     constructor() {
         super();

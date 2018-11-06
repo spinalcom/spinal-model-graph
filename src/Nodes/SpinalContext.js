@@ -1,14 +1,11 @@
 import SpinalNode from "./SpinalNode"
 import spinalCore from "spinal-core-connectorjs";
 import {
-    SPINAL_RELATION_LST_PTR_TYPE,
     SPINAL_RELATION_PTR_LST_TYPE,
     SpinalRelationFactory
 } from "../Relations/SpinalRelationFactory"
 import { guid } from "../Utilities";
 
-
-const relationFactory = new SpinalRelationFactory();
 
 const globalType = typeof window === "undefined" ? global : window;
 
@@ -69,7 +66,7 @@ class SpinalContext extends SpinalNode {
      * @param relationName {string} name of the relation
      * @param relationType {int} this parameter is here only to properly override the parent method.
      */
-    addChild(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE) {
+    addChild(child, relationName) {
         super.addChild(child, relationName, SPINAL_RELATION_PTR_LST_TYPE);
     }
 }
