@@ -370,8 +370,6 @@ class SpinalNode extends globalType.Model {
 
         try {
 
-
-
             for (let i = 0; i < this._relationTypesLst.length; i++) {
                 let type = this._relationTypesLst[i].get();
                 let childrenRelationMap = this._getRelationListType(type);
