@@ -9,10 +9,7 @@ const globalType = typeof window === "undefined" ? global : window;
 class SpinalNodePointer extends globalType.Model {
     constructor(element) {
         super();
-        this.setUp(element);
-    }
 
-    setUp(element) {
         this.add_attr({
             ptr: new globalType.Ptr(),
             info: {
@@ -21,10 +18,9 @@ class SpinalNodePointer extends globalType.Model {
             }
         });
 
-        if ((typeof element !== "undefined")) {
+        if (typeof element !== "undefined") {
             this.setElement(element);
         }
-
     }
 
     /**

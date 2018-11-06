@@ -6,7 +6,6 @@ import {
 } from "../Relations/SpinalRelationFactory"
 import { guid } from "../Utilities";
 
-
 const globalType = typeof window === "undefined" ? global : window;
 
 class SpinalContext extends SpinalNode {
@@ -30,7 +29,7 @@ class SpinalContext extends SpinalNode {
      * Create a relation between a node and another node/model. this function can be used to linked two context
      * @param parent {SpinalNode} parent of the relation
      * @param child {SpinalNode | Model} child of the relation
-     * @param relationName {string} name of the relation
+     * @param relationName {String} name of the relation
      * @return {Str}
      */
     createRelation(parent, child, relationName) {
@@ -47,7 +46,7 @@ class SpinalContext extends SpinalNode {
 
     /**
      * Add the relation id to the relation ids displayable by this context
-     * @param relationId {string}
+     * @param relationId {String}
      */
     addRelationId(relationId) {
         this.relationIds.push(relationId);
@@ -63,7 +62,7 @@ class SpinalContext extends SpinalNode {
     /**
      * Add Child to the context with a spinalRelationLstPtrType
      * @param child {SpinalNode| Model} to be added as child
-     * @param relationName {string} name of the relation
+     * @param relationName {String} name of the relation
      * @param relationType {int} this parameter is here only to properly override the parent method.
      */
     addChild(child, relationName) {

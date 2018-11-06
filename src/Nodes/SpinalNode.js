@@ -178,7 +178,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Return all parents for the relation name no matter the type of relation
+     * Return all parents for the relation names no matter the type of relation
      * @param relationNames {Array} containing the relation name of the desired parents
      * @return {Array} containing all parents for the relation name. The array might be empty
      */
@@ -365,7 +365,6 @@ class SpinalNode extends globalType.Model {
         }
 
         try {
-
             for (let i = 0; i < this._relationTypesLst.length; i++) {
                 let type = this._relationTypesLst[i].get();
                 let childrenRelationMap = this._getRelationListType(type);
