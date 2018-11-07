@@ -57,7 +57,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
             });
         }
         else if (node instanceof globalType.Model) {
-            const tmpNode = new SpinalNode(this.name, node);
+            const tmpNode = new SpinalNode(undefined, this.name, node);
             this.addChild(tmpNode);
         }
         else {

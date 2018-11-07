@@ -16,14 +16,16 @@ import SpinalMap from "../SpinalMap"
 class SpinalNode extends globalType.Model {
     /**
      *
-     * @param {String} type Type of the spinalNode default SpinalNode
+     * @param {String} name Name of the node
+     * @param {String} type Type of the node
      * @param {SpinalNode | Model} element Optional element pointed by the node, by default it points to a empty new Model
      */
-    constructor(type = "SpinalNode", element = new globalType.Model) {
+    constructor(name = "undefined", type = "SpinalNode", element = new globalType.Model) {
         super();
         this.add_attr({
             info: {
                 id: guid(this.constructor.name),
+                name: name,
                 type: type,
             },
             //contain a list of SpinalRelationRef {relationName: Lst}
@@ -284,7 +286,7 @@ class SpinalNode extends globalType.Model {
      * @private
      */
     _createNodeAndAddChildToRelation(element, relationName, relationType) {
-        const node = new SpinalNode(element);
+        const node = new SpinalNode(undefined, undefined, element);
         return this._addToRelation(node, relationName, relationType);
     }
 

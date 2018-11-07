@@ -15,14 +15,14 @@ class SpinalContext extends SpinalNode {
      * @param {String} name Name of the context
      * @param {SpinalNode | Model} element Element of the node
      */
-    constructor(type = "SpinalContext", name = "undefined", element = new globalType.Model) {
-        super(type, element);
+    constructor(name = "undefined", type = "SpinalContext", element = new globalType.Model) {
+        super(name, type, element);
         this.add_attr({
             relationIds: new globalType.Lst(),
             relationsNames: new globalType.Lst()
         });
+
         this.info.id.set(guid(this.constructor.name));
-        this.info.add_attr({ name: typeof name === "undefined" ? this.info.id.get() : name });
     }
 
     /**

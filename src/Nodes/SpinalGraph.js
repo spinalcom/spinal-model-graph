@@ -10,11 +10,12 @@ const HAS_CONTEXT_RELATION_NAME = "hasContext";
 class SpinalGraph extends SpinalNode {
     /**
      *
-     * @param {String} type default "SpinalGraph"
+     * @param {String} name Name of the graph
+     * @param {String} type Type of the graph
      * @param {SpinalNode | Model} element Element of the node
      */
-    constructor(type = "SpinalGraph", element = new globalType.Model) {
-        super(type, element);
+    constructor(name = "undefined", type = "SpinalGraph", element = new globalType.Model) {
+        super(name, type, element);
         this.add_attr({
             BIMObjects: new globalType.Lst()
         });

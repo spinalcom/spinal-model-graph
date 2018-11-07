@@ -55,7 +55,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
             this.children.push(node);
         }
         else if (node instanceof globalType.Model) {
-            const tmpNode = new SpinalNode(this.name, node);
+            const tmpNode = new SpinalNode(undefined, this.name, node);
             this.addChild(tmpNode);
         }
         else {
