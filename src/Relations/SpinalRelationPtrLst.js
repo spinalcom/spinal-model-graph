@@ -51,14 +51,13 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
             promiseLoad(this.children).then((children) => {
                 children.push(node);
             });
-            this.getParent().then(parent => {
-                node._addParent(parent)
-            })
         }
         else if (node instanceof globalType.Model) {
             const tmpNode = new SpinalNode(this.name, node);
             this.addChild(tmpNode);
         }
+
+        throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
     }
 
     /**

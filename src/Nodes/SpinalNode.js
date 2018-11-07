@@ -96,7 +96,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Add the @param as child of the relation
+     * Add the node as child of the relation
      * @param child {SpinalNode | Model} element to add as child
      * @param relationName {string} name of the relation
      * @param relationType {int} type of the relation
@@ -115,9 +115,9 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Remove the node from the relation children.
-     * @param {SpinalNode} node
-     * @param {String} relationName
-     * @param {Number} relationType
+     * @param {SpinalNode} node Node to remove
+     * @param {String} relationName Name of the relation to wich the node belongs
+     * @param {Number} relationType Type of the relation to wich the node belongs
      */
     removeChild(node, relationName, relationType) {
         if (this._getRelationListType(relationType).has(relationName)) {
@@ -246,7 +246,7 @@ class SpinalNode extends globalType.Model {
             const relation = relationLst.getElement(relationName);
 
             relation.addChild(node);
-            node._addAsParent(relation);
+            node._addParent(relation);
         };
 
         if (!this.hasRelation(relationName, relationType))
@@ -273,11 +273,10 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Add the relation as parent of the node.
-     * If the node doesn't contain a parents named liked relation Name create a parent and push the relation.
-     * @param relation
+     * @param {SpinalRelation} relation Parent relation
      * @private
      */
-    _addAsParent(relation) {
+    _addParent(relation) {
         const relationName = relation.getName();
         if (this.parents.has(relationName)) {
             this.parents.getElement(relationName).push(new SpinalNodePointer(relation));
@@ -287,16 +286,6 @@ class SpinalNode extends globalType.Model {
             list.push(new SpinalNodePointer(relation));
             this.parents.setElement(relationName, list);
         }
-    }
-
-    /**
-     * Add the node as parent
-     * @param node {SpinalNode}
-     * @private
-     */
-    _addParent(node) {
-        if (typeof this.parent !== "undefined" && node instanceof SpinalNode)
-            this.parent.push(new SpinalNodePointer(node));
     }
 
     /**
@@ -343,7 +332,7 @@ class SpinalNode extends globalType.Model {
         });
     }
 
-    async  _childrenToList(relation) {
+    async _childrenToList(relation) {
         const lst = [];
         let childrenLst = await relation.getChildren();
         for (let i = 0; i < childrenLst.length; i++) {

@@ -49,14 +49,13 @@ class SpinalRelationRef extends BaseSpinalRelation {
     addChild(node) {
         if (node instanceof SpinalNode) {
             this.children.push(node);
-            this.getParent().then(parent => {// noinspection JSAccessibilityCheck
-                node._addParent(parent)
-            });
         }
         else if (node instanceof globalType.Model) {
             const tmpNode = new SpinalNode(this.name, node);
             this.addChild(tmpNode);
         }
+
+        throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
     }
 
     /**
