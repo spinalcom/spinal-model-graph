@@ -181,16 +181,22 @@ class SpinalNode extends globalType.Model {
      * @param relationNames {Array} containing the relation name of the desired parents
      * @return {Array} containing all parents for the relation name. The array might be empty
      */
-    getParent(relationNames) {
+    async getParent(relationNames) {
         const parents = [];
 
-        this.parents.forEach(parent => {
-            promiseLoad(parent).then(relation => {
-                parents.push(relation.getParent());
-            });
-        });
+        if (typeof relationNames === "undefined" || relationNames.length === 0)
+            relationNames = this.parents.keys();
+        for (let name of relationNames) {
+            const list = this.parents.getElement(name);
 
-        return parents;
+            for (let i = 0; i < list.length; i++) {
+                await promiseLoad(list[i]).then(relation => {
+                    relation.getParent().then(parent => parents.push(parent));
+                });
+            };
+        }
+
+        return Promise.resolve(parents);
     }
 
     /**
