@@ -16,8 +16,8 @@ import SpinalMap from "../SpinalMap"
 class SpinalNode extends globalType.Model {
     /**
      *
-     * @param type Type of the spinalNode default SpinalNode
-     * @param element Optional element pointed by the node, by default it points to a empty new Model
+     * @param {String} type Type of the spinalNode default SpinalNode
+     * @param {SpinalNode | Model} element Optional element pointed by the node, by default it points to a empty new Model
      */
     constructor(type = "SpinalNode", element = new globalType.Model) {
         super();
@@ -105,8 +105,9 @@ class SpinalNode extends globalType.Model {
         else if (child instanceof globalType.Model) {
             this._createNodeAndAddChildToRelation(child, relationName, relationType);
         }
-
-        throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
+        else {
+            throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
+        }
     }
 
     /**
