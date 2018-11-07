@@ -1,7 +1,7 @@
 /**
  *
- * This file contain useful functions that help manipulate the graph structure
- * such as an generic implementation of the Deep First Search and Breadth First Search algorithm.
+ * This file contains useful functions that help manipulate the graph structure
+ * such as an generic implementation of the Deep First Search and Breadth First Search algorithms.
  *
  */
 
@@ -11,7 +11,7 @@ import {
     SPINAL_RELATION_TYPE,
     SPINAL_RELATION_LST_PTR_TYPE,
     SPINAL_RELATION_PTR_LST_TYPE,
-} from "../Relations/SpinalRelationFactory"
+} from "../Relations/SpinalRelationFactory";
 import SpinalNode from "../Nodes/SpinalNode";
 import SpinalGraph from "../Nodes/SpinalGraph";
 import SpinalContext from "../Nodes/SpinalContext";

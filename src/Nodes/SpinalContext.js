@@ -11,9 +11,9 @@ const globalType = typeof window === "undefined" ? global : window;
 class SpinalContext extends SpinalNode {
     /**
      *
-     * @param type of the context
-     * @param name of the context
-     * @param element of the node
+     * @param {String} type Type of the context
+     * @param {String} name Name of the context
+     * @param {SpinalNode | Model} element Element of the node
      */
     constructor(type = "SpinalContext", name = "undefined", element = new globalType.Model) {
         super(type, element);
@@ -26,10 +26,10 @@ class SpinalContext extends SpinalNode {
     }
 
     /**
-     * Create a relation between a node and another node/model. this function can be used to linked two context
-     * @param parent {SpinalNode} parent of the relation
-     * @param child {SpinalNode | Model} child of the relation
-     * @param relationName {String} name of the relation
+     * Create a relation between a node and another node/model. this function can be used to link two context.
+     * @param {SpinalNode} parent Parent of the relation
+     * @param {SpinalNode | Model} child Child of the relation
+     * @param {String} relationName Name of the relation
      * @return {Str}
      */
     createRelation(parent, child, relationName) {
@@ -45,25 +45,25 @@ class SpinalContext extends SpinalNode {
     }
 
     /**
-     * Add the relation id to the relation ids displayable by this context
-     * @param relationId {String}
+     * Add the relation id to the relation ids displayable by this context.
+     * @param {String} relationId Id of the rlation
      */
     addRelationId(relationId) {
         this.relationIds.push(relationId);
     }
 
     /**
-     * Remove all the nodes associated to this context from the graph
+     * Remove all the nodes associated to this context from the graph.
      */
     removeFromGraph() {
         //Todo use DFS to remove all the context from the graph
     }
 
     /**
-     * Add Child to the context with a spinalRelationLstPtrType
-     * @param child {SpinalNode| Model} to be added as child
-     * @param relationName {String} name of the relation
-     * @param relationType {int} this parameter is here only to properly override the parent method.
+     * Add Child to the context with a spinalRelationLstPtrType.
+     * @param {SpinalNode | Model} child Node to be added as child
+     * @param {String} relationName Name of the relation
+     * @param {Number} relationType This parameter is here only to properly override the parent method
      */
     addChild(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE) {
         super.addChild(child, relationName, relationType);

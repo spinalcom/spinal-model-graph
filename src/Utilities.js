@@ -3,27 +3,26 @@ import "spinal-core-connectorjs";
 const globalType = typeof window === "undefined" ? global : window;
 
 /**
- * Load the element pointed by the pointer
- * @param SpinalNodePointer
- * @returns {Promise<any>}
+ * Loads the element pointed by the pointer.
+ * @param {SpinalNodePointer} nodePointer SpinalNodePointer to load
+ * @returns {Promise<*>} Element to wich the pointer pointed
  */
-function promiseLoad(SpinalNodePointer) {
+function promiseLoad(nodePointer) {
     if (
-        SpinalNodePointer.ptr instanceof globalType.Ptr &&
-        SpinalNodePointer.ptr.data.value !== 0 &&
-        typeof FileSystem._objects[SpinalNodePointer.ptr.data.value] !== "undefined"
+        nodePointer.ptr instanceof globalType.Ptr &&
+        nodePointer.ptr.data.value !== 0 &&
+        typeof FileSystem._objects[nodePointer.ptr.data.value] !== "undefined"
     )
-        return Promise.resolve(FileSystem._objects[SpinalNodePointer.ptr.data.value]);
+        return Promise.resolve(FileSystem._objects[nodePointer.ptr.data.value]);
     else
         return new Promise(resolve => {
-            SpinalNodePointer.ptr.load(resolve);
+            nodePointer.ptr.load(resolve);
         });
 }
 
-
 /**
- * Generate a random number
- * @returns {string}
+ * Generates a random number and returns in a string.
+ * @returns {String} Random number in a string
  */
 function s4() {
     return Math.floor((1 + Math.random()) * 0x10000)
@@ -32,9 +31,9 @@ function s4() {
 }
 
 /**
- * Create a unique id based on the name
- * @param name
- * @returns {string}
+ * Creates a unique id based on a name.
+ * @param {String} name Name from wich the id is generated
+ * @returns {String} Generated id
  */
 function guid(name) {
     return (

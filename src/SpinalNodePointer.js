@@ -7,6 +7,10 @@ const globalType = typeof window === "undefined" ? global : window;
  * Wrapper over SpinalNodePointer containing some information about the pointed element
  */
 class SpinalNodePointer extends globalType.Model {
+    /**
+     * 
+     * @param {SpinalNode | Model} element Element to wich the SpinalNodePointer will point
+     */
     constructor(element) {
         super();
 
@@ -24,8 +28,8 @@ class SpinalNodePointer extends globalType.Model {
     }
 
     /**
-     * Set pointer to point to this element
-     * @param element {*}
+     * Sets pointer to point to an element.
+     * @param {SpinalNode | Model} element
      */
     setElement(element) {
         if (element instanceof SpinalNode) {
@@ -36,14 +40,20 @@ class SpinalNodePointer extends globalType.Model {
     }
 
     /**
-     * This function returns the id of the pointed element
-     * @return {Str}
+     * Returns the id of the pointed element.
+     * @return {Str} Id of the pointed element
      */
     getId() {
         return this.info.pointed_id;
     }
 
-
+    /**
+     * This function returns the type of the pointed element.
+     * @return {Str} Type of the pointed element
+     */
+    getId() {
+        return this.info.pointed_type;
+    }
 }
 
 spinalCore.register_models([SpinalNodePointer]);

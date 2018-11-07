@@ -6,6 +6,10 @@ import spinalCore from "spinal-core-connectorjs";
 const globalType = typeof window === "undefined" ? global : window;
 
 class SpinalRelationRef extends BaseSpinalRelation {
+    /**
+     * 
+     * @param {String} name Name of the relation 
+     */
     constructor(name) {
         super(name);
         this.add_attr({
@@ -14,8 +18,8 @@ class SpinalRelationRef extends BaseSpinalRelation {
     }
 
     /**
-     * This function retrieves all the id from children of the relation and return them inside an array.
-     * @return {Array} containing all the children Id of the relation
+     * Retrieves all the ids of the children of the relation and return them inside an array.
+     * @return {Array} Array containing all the children Id of the relation
      */
     getChildrenIds() {
         const res = [];
@@ -26,8 +30,8 @@ class SpinalRelationRef extends BaseSpinalRelation {
     }
 
     /**
-     * Return all the children of the relation
-     * @return {Promise<globalType.Lst>}
+     * Return all the children of the relation.
+     * @return {Promise<Lst>} Promise  containing a list of all the children of the relation
      */
     getChildren() {
         // noinspection JSValidateTypes
@@ -35,7 +39,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
     }
 
     /**
-     * Returns the type of the relation
+     * Returns the type of the relation.
      * @return {Number} Type of the relation
      */
     getType() {
@@ -43,8 +47,8 @@ class SpinalRelationRef extends BaseSpinalRelation {
     }
 
     /**
-     * Add node as child of the relation if node is a model create a node
-     * @param node {SpinalNode | globalType.Model}
+     * Adds a child to the relation.
+     * @param {SpinalNode | Model} node Node to be added
      */
     addChild(node) {
         if (node instanceof SpinalNode) {
@@ -60,13 +64,13 @@ class SpinalRelationRef extends BaseSpinalRelation {
     }
 
     /**
-     * Remove the child from the relation
-     * @param node {SpinalNode} child of the relation
-     * @return {Promise<boolean>}
+     * Removes a child from the relation.
+     * @param {SpinalNode} node Child to remove
+     * @return {Promise<Boolean>} Promise containing a boolean which is true if the node was successfuly removed
      */
     async removeChild(node) {
         this.children.remove(node);
-        return this.children.indexOf(node) === -1;
+        return Promise.resolve(this.children.indexOf(node) === -1);
     }
 }
 

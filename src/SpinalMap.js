@@ -8,9 +8,9 @@ class SpinalMap extends globalType.Model {
     }
 
     /**
-     * Sets the value for the key in the Map object. Returns the Map object
-     * @param key
-     * @param {*} value
+     * Sets the value corresponding to the key.
+     * @param {String} key Key to the value
+     * @param {*} value New value
      */
     setElement(key, value) {
         this.rem_attr(key);
@@ -22,8 +22,8 @@ class SpinalMap extends globalType.Model {
 
     /**
      * Returns the value associated to the key, or undefined if there is none.
-     * @param key
-     * @returns {*}
+     * @param {String} key Key to the value
+     * @returns {*} Value corresponding to the key
      */
     getElement(key) {
         return this[key];
@@ -31,7 +31,7 @@ class SpinalMap extends globalType.Model {
 
     /**
      * Applies a function to each of the values in the map.
-     * @param {Function} fun
+     * @param {Function} fun Funcion to apply
      */
     forEach(fun) {
         for (let i = 0; i < this._attribute_names.length; i++) {
@@ -41,40 +41,40 @@ class SpinalMap extends globalType.Model {
     }
 
     /**
-     * Returns a boolean asserting whether a value has been associated to the key in the Map object or not.
-     * @param key
-     * @returns {boolean}
+     * Returns a boolean asserting whether a value has been associated to the key or not.
+     * @param key Key
+     * @returns {Boolean} Return true if the key exists
      */
     has(key) {
         return this._attribute_names.includes(key)
     }
 
     /**
-     * Returns a boolean asserting whether the map contain any key
-     * @returns {boolean}
+     * Returns a boolean asserting whether the map contains any key.
+     * @returns {Boolean} Return true if the map contains at least one key
      */
     hasKey() {
         return this._attribute_names.length > 0;
     }
 
     /**
-     * Returns an array that contains the keys for each element in the Map object in insertion order.
-     * @returns {Array}
+     * Returns an array that contains the keys for each element in the map in insertion order.
+     * @returns {Array} Array containing all the keys in the map
      */
     keys() {
         return this._attribute_names;
     }
 
     /**
-     * Deletes an element
-     * @param key
+     * Deletes an element.
+     * @param key Key of the element
      */
     delete(key) {
         this.rem_attr(key);
     }
 
     /**
-     * Deletes all elements
+     * Deletes all elements.
      */
     clear() {
         let keys = this.keys();

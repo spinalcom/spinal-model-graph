@@ -8,6 +8,10 @@ import spinalCore from "spinal-core-connectorjs";
 const globalType = typeof window === "undefined" ? global : window;
 
 class SpinalRelationPtrLst extends BaseSpinalRelation {
+    /**
+     * 
+     * @param {String} name Name of the relation 
+     */
     constructor(name) {
         super(name);
         this.add_attr({
@@ -18,23 +22,23 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     }
 
     /**
-     * This function retrieve all the id from children of the relation and return them inside an array.
-     * @return {Array} containing all the children ids of the relation
+     * Retrieves all the ids of the children of the relation and return them inside an array.
+     * @return {Array} Array containing all the children Id of the relation
      */
     getChildrenIds() {
         return this.children.ids;
     }
 
     /**
-     * Return all the children of the relation
-     * @return {Promise<globalType.Lst>}
+     * Return all the children of the relation.
+     * @return {Promise<Lst>} Promise  containing a list of all the children of the relation
      */
     getChildren() {
         return promiseLoad(this.children);
     }
 
     /**
-     * Returns the type of the relation
+     * Returns the type of the relation.
      * @return {Number} Type of the relation
      */
     getType() {
@@ -42,8 +46,8 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     }
 
     /**
-     * Add node as child of the relation if node is a model create a node
-     * @param node {SpinalNode | globalType.Model}
+     * Adds a child to the relation.
+     * @param {SpinalNode | Model} node Node to be added
      */
     addChild(node) {
         if (node instanceof SpinalNode && !this.children.info.ids.contains(node.getId())) {
@@ -62,9 +66,9 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     }
 
     /**
-     * Remove the child from the relation
-     * @param node {SpinalNode} child of the relation
-     * @return {Promise<boolean>}
+     * Removes a child from the relation.
+     * @param {SpinalNode} node Child to remove
+     * @return {Promise<Boolean>} Promise containing a boolean which is true if the node was successfuly removed
      */
     async removeChild(node) {
         const childrenLst = await promiseLoad(this.children);

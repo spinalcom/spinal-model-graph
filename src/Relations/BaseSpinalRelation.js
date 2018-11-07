@@ -6,6 +6,10 @@ import SpinalNodePointer from "../SpinalNodePointer"
 const globalType = typeof window === "undefined" ? global : window;
 
 class BaseSpinalRelation extends globalType.Model {
+    /**
+     * 
+     * @param {String} name Name of the relation
+     */
     constructor(name) {
         super();
         this.add_attr({
@@ -16,16 +20,16 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
-     * Return the parent of the relation.
-     * @return {Promise} return a promise where the resolve function parameter is the parent
+     * Returns the parent of the relation.
+     * @return {Promise<SpinalNode>} returns a promise where the resolve is the parent
      */
     getParent() {
         return promiseLoad(this.parent);
     }
 
     /**
-     * setElement the parent of the relation. If a parent was already setElement the parent relation is removed.
-     * @param parent {SpinalNode}
+     * Sets the parent of the relation. If a parent was already set, the parent relation is removed.
+     * @param {SpinalNode} parent New parent of the relation
      */
     setParent(parent) {
         if (typeof parent !== "undefined" && parent instanceof SpinalNode)
@@ -33,7 +37,7 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
-     * Returns the name of the relation
+     * Returns the name of the relation.
      * @return {Str} Name of the relation
      */
     getName() {
@@ -41,7 +45,7 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
-     * Returns the type of the relation
+     * Returns the type of the relation.
      * @return {Number} Type of the relation
      */
     getType() {
@@ -49,8 +53,16 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
-     * Return all the children of the relation
-     * @return {Promise<globalType.Lst>}
+     * Retrieves all the ids of the children of the relation and return them inside an array.
+     * @return {Array} Array containing all the children ids of the relation
+     */
+    getChildrenIds() {
+
+    }
+
+    /**
+     * Return all the children of the relation.
+     * @return {Promise<Lst>} Promise containing a list of the children of the relation
      */
     getChildren() {
         // noinspection JSValidateTypes
@@ -58,32 +70,24 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
-     * Add node as child of the relation if node is a model create a node.
-     * @param node {SpinalNode | globalType.Model}
+     * Adds a node to the relation.
+     * @param {SpinalNode | Model} node Node to be added
      */
     addChild(node) {
 
     }
 
     /**
-     * This function retrieves all the id from children of the relation and return them inside an array.
-     * @return {Array} containing all the children Id of the relation
-     */
-    getChildrenIds() {
-
-    }
-
-    /**
-     * Remove the child from the relation
-     * @param node {SpinalNode} child of the relation
-     * @return {Promise<boolean>}
+     * Removes a child from the relation.
+     * @param {SpinalNode} node Child of the relation
+     * @return {Promise<Boolean>} Promise containing a boolean which is true if the node was successfuly removed
      */
     async removeChild(node) {
 
     }
 
     /**
-     * Removes all children from the relation
+     * Removes all children from the relation.
      */
     removeChildren() {
         this.getChildren()
@@ -100,7 +104,7 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
-     * Removes the relation from the graph
+     * Removes the relation from the graph.
      */
     removeFromGraph() {
         this._removeFromParent();
@@ -108,7 +112,7 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
-     * Removes the relation from the parent
+     * Removes the relation from the parent.
      * @private
      */
     _removeFromParent() {

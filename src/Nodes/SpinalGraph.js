@@ -10,8 +10,8 @@ const HAS_CONTEXT_RELATION_NAME = "hasContext";
 class SpinalGraph extends SpinalNode {
     /**
      *
-     * @param type {String} default "SpinalGraph"
-     * @param element {Model}
+     * @param {String} type default "SpinalGraph"
+     * @param {SpinalNode | Model} element Element of the node
      */
     constructor(type = "SpinalGraph", element = new globalType.Model) {
         super(type, element);
@@ -24,8 +24,8 @@ class SpinalGraph extends SpinalNode {
     }
 
     /**
-     * Adds a function to the graph
-     * @param {SpinalContext} context
+     * Adds a context to the graph.
+     * @param {SpinalContext} context Context to be added
      */
     addContext(context) {
         if (context instanceof SpinalContext)
@@ -35,9 +35,9 @@ class SpinalGraph extends SpinalNode {
     }
 
     /**
-     * Searches for a context using its name
-     * @param name {String} Name of the context
-     * @return {SpinalContext|undefined} The wanted context or undefined
+     * Searches for a context using its name.
+     * @param {String} name Name of the context
+     * @return {SpinalContext | undefined} The wanted context or undefined if the context wasn't found
      */
     async getContext(name) {
         let children = await this.getChildren([HAS_CONTEXT_RELATION_NAME]);

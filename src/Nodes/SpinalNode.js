@@ -16,8 +16,8 @@ import SpinalMap from "../SpinalMap"
 class SpinalNode extends globalType.Model {
     /**
      *
-     * @param type of the spinalNode default SpinalNode
-     * @param element optional element pointed by the node by default setElement to a new empty new Model
+     * @param type Type of the spinalNode default SpinalNode
+     * @param element Optional element pointed by the node, by default it points to a empty new Model
      */
     constructor(type = "SpinalNode", element = new globalType.Model) {
         super();
@@ -43,7 +43,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Shortcut to info.id
+     * Shortcut to info.id.
      * @return {Str}
      */
     getId() {
@@ -51,15 +51,15 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Return the element
-     * @return a promise where the parameter of the resolve method is the element.
+     * Return the element.
+     * @return {Promise<*>} A promise where the parameter of the resolve method is the element
      */
     getElement() {
         return promiseLoad(this.element);
     }
 
     /**
-     * Shortcut to info.type
+     * Shortcut to info.type.
      * @return {Str} type of the node.
      */
     getType() {
@@ -67,20 +67,20 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Verify if the node contains the relation name @param relationName
-     * @param {String} relationName name of the relation.
-     * @param {Number} relationType relation type
-     * @return {Boolean} return true is the relation is contain in the node false otherwise.
+     * Verify if the node contains the relation name.
+     * @param {String} relationName Name of the relation
+     * @param {Number} relationType Type of the relation
+     * @return {Boolean} Return true is the relation is contained in the node and false otherwise.
      */
     hasRelation(relationName, relationType) {
         return this._getRelationListType(relationType).has(relationName);
     }
 
     /**
-     * Verify if the node contain all the relation name contain @param relationName
+     * Verify if the node contains all the relation names.
      * @param {Array} relationNames Array containing all the relation name
-     * @param {Number} relationType relation type
-     * @return {Boolean} return true if the node contain all the relations contain in relationNames false otherwise.
+     * @param {Number} relationType Type of the relations
+     * @return {Boolean} Return true if the node contains all the relations in relationNames, false otherwise.
      */
     hasRelations(relationNames, relationType) {
         let res = true;
@@ -93,18 +93,17 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Add the node as child of the relation
-     * @param {SpinalNode | Model} child element to add as child
-     * @param {String} relationName name of the relation
-     * @param {Number} relationType type of the relation
-     * @return {Str}
+     * Add the node as child of the relation.
+     * @param {SpinalNode | Model} child Element to add as child
+     * @param {String} relationName Name of the relation
+     * @param {Number} relationType Type of the relation
      */
     addChild(child, relationName, relationType) {
         if (child instanceof SpinalNode) {
-            return this._addToRelation(child, relationName, relationType);
+            this._addToRelation(child, relationName, relationType);
         }
         else if (child instanceof globalType.Model) {
-            return this._createNodeAndAddChildToRelation(child, relationName, relationType);
+            this._createNodeAndAddChildToRelation(child, relationName, relationType);
         }
 
         throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
@@ -126,8 +125,8 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Remove the node from the graph i.e remove the node from all the parent relation and remove all the children relation
-     * this operation might also delete all the sub-graph under this node.
+     * Remove the node from the graph i.e remove the node from all the parent relations and remove all the children relations.
+     * This operation might delete all the sub-graph under this node.
      * After this operation the node can be deleted without fear.
      */
     removeFromGraph() {
@@ -137,8 +136,8 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Return all children for the relation name no matter the type of relation
-     * @param relationNames {Array} containing the relation name of the desired children
-     * @return {Promise<Array | never | void>} containing all children for the relation name. The array might be empty
+     * @param {Array} relationNames Array containing the relation names of the desired children
+     * @return {Promise<Array | never | void>} Promise containing all children for the relation names.
      */
     getChildren(relationNames) {
         if (relationNames.length > 0) {
@@ -175,8 +174,8 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Return all parents for the relation names no matter the type of relation
-     * @param {Array} relationNames containing the relation name of the desired parents
-     * @return {Promise<Array>} containing all parents for the relation name.
+     * @param {Array} relationNames Array containing the relation name of the desired parents
+     * @return {Promise<Array>} Promise containing all parents for the relation names.
      */
     async getParent(relationNames) {
         const parents = [];
@@ -198,7 +197,7 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Return the relation list corresponding to the relation type
-     * @param relationType Type of the relation
+     * @param {Number} relationType Type of the relation
      * @return {SpinalMap} Return the relation list corresponding to the relation type
      * @private
      */

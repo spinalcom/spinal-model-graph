@@ -14,10 +14,11 @@ const RELATION_TYPE_LIST = [
 
 class SpinalRelationFactory {
     /**
-     * Create a new relation of relationType with the relationName
-     * @param relationName {String} name of the relation
-     * @param relationType {String} type of the relation
-     * @return {SpinalRelationRef|SpinalRelationLstPtr|SpinalRelationPtrLst}
+     * Create a new relation of relationType with the relationName.
+     * @param {String} relationName Name of the relation
+     * @param {String} relationType Type of the relation
+     * @return {SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst} A new SpinalRelation
+     * @static
      */
     static getNewRelation(relationName, relationType) {
         let relation;
