@@ -8,6 +8,7 @@ import {
     SPINAL_RELATION_TYPE,
     SPINAL_RELATION_LST_PTR_TYPE,
     SPINAL_RELATION_PTR_LST_TYPE,
+    RELATION_TYPE_LIST,
     SpinalRelationFactory
 } from "../Relations/SpinalRelationFactory"
 import SpinalMap from "../SpinalMap"
@@ -27,21 +28,17 @@ class SpinalNode extends globalType.Model {
             },
             //contain a list of SpinalRelationRef {relationName: Lst}
             relationListTypeSpinalRelation: new SpinalMap(),
+
             //contain a list of SpinalRelationLstPtr {relationName: Lst}
             relationListTypeSpinalRelationLstPtr: new SpinalMap(),
 
             //contain a list of SpinalRelationPtrLst {relationName: Lst}
             relationListTypeSpinalRelationPtrLst: new SpinalMap(),
 
-            //SpinalMap<String, Pointer>
+            //SpinalMap<String, Lst<Pointer<SpinalRelation>>>
             parents: new SpinalMap(),
             //
             element: new SpinalNodePointer(element),
-            _relationTypesLst: [
-                SPINAL_RELATION_TYPE,
-                SPINAL_RELATION_LST_PTR_TYPE,
-                SPINAL_RELATION_PTR_LST_TYPE
-            ]
         });
     }
 
@@ -70,9 +67,9 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Verify if the node contain the relation name @param relationName
-     * @param relationName {string} name of the relation.
-     * @param relationType {int} relation type
+     * Verify if the node contains the relation name @param relationName
+     * @param {String} relationName name of the relation.
+     * @param {Number} relationType relation type
      * @return {Boolean} return true is the relation is contain in the node false otherwise.
      */
     hasRelation(relationName, relationType) {
@@ -81,8 +78,8 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Verify if the node contain all the relation name contain @param relationName
-     * @param relationNames {Array} Array containing all the relation name
-     * @param relationType {int} relation type
+     * @param {Array} relationNames Array containing all the relation name
+     * @param {Number} relationType relation type
      * @return {Boolean} return true if the node contain all the relations contain in relationNames false otherwise.
      */
     hasRelations(relationNames, relationType) {
@@ -97,9 +94,9 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Add the node as child of the relation
-     * @param child {SpinalNode | Model} element to add as child
-     * @param relationName {string} name of the relation
-     * @param relationType {int} type of the relation
+     * @param {SpinalNode | Model} child element to add as child
+     * @param {String} relationName name of the relation
+     * @param {Number} relationType type of the relation
      * @return {Str}
      */
     addChild(child, relationName, relationType) {
@@ -146,8 +143,8 @@ class SpinalNode extends globalType.Model {
     getChildren(relationNames) {
         if (relationNames.length > 0) {
             const promises = [];
-            for (let i = 0; i < this._relationTypesLst.length; i++) {
-                const relationMap = this._getRelationListType(this._relationTypesLst[i].get());
+            for (let i = 0; i < RELATION_TYPE_LIST.length; i++) {
+                const relationMap = this._getRelationListType(RELATION_TYPE_LIST[i]);
                 for (let j = 0; j < relationNames.length; j++) {
                     if (relationMap.has(relationNames[j])) {
                         const relation = relationMap.getElement(relationNames[j]);
@@ -178,8 +175,8 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Return all parents for the relation names no matter the type of relation
-     * @param relationNames {Array} containing the relation name of the desired parents
-     * @return {Array} containing all parents for the relation name. The array might be empty
+     * @param {Array} relationNames containing the relation name of the desired parents
+     * @return {Promise<Array>} containing all parents for the relation name.
      */
     async getParent(relationNames) {
         const parents = [];
@@ -197,21 +194,6 @@ class SpinalNode extends globalType.Model {
         }
 
         return Promise.resolve(parents);
-    }
-
-    /**
-     * This function transforms the relation type lst into an array.
-     * @return {Array}
-     * @private
-     */
-    _getRelationTypeArray() {
-        const res = [];
-
-        for (let i = 0; i < this._relationTypesLst.length; i++) {
-            res.push(this._relationTypesLst[i]);
-        }
-
-        return res;
     }
 
     /**
@@ -240,9 +222,9 @@ class SpinalNode extends globalType.Model {
     /**
      * Add a node as child.
      * If this node doesn't have a relation name relationName with the type relationType this method will create it.
-     * @param node {SpinalNode} to add as child.
-     * @param relationName {String} name of the relation
-     * @param relationType {int} type of the relation
+     * @param {SpinalNode} node Node to add as child.
+     * @param {String} relationName Name of the relation
+     * @param {Number} relationType Type of the relation
      * @return {Str} id of the relation where the node was added as child
      * @private
      */
@@ -338,6 +320,12 @@ class SpinalNode extends globalType.Model {
         });
     }
 
+    /**
+     * Used to get a relation's children in an Array (instead of a Lst)
+     * @param {SpinalRelation} relation Relation from wich the children are taken 
+     * @return {Array} Array containing all of the relation's children
+     * @private
+     */
     async _childrenToList(relation) {
         const lst = [];
         let childrenLst = await relation.getChildren();
@@ -349,15 +337,15 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Return all children
-     * @return {Array}
+     * @return {Array} Array of children from all relations
      * @private
      */
     async _getAllChildren() {
         let res = [];
 
         try {
-            for (let i = 0; i < this._relationTypesLst.length; i++) {
-                let type = this._relationTypesLst[i].get();
+            for (let i = 0; i < RELATION_TYPE_LIST.length; i++) {
+                let type = RELATION_TYPE_LIST[i];
                 let childrenRelationMap = this._getRelationListType(type);
                 let keys = childrenRelationMap.keys();
                 for (let j = 0; j < keys.length; j++) {
