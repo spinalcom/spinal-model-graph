@@ -87,13 +87,13 @@ class BaseSpinalRelation extends globalType.Model {
      */
     removeChildren() {
         this.getChildren()
-            .then( children => {
+            .then(children => {
                 for (let i = 0; i < children.length; i++) {
                     this.removeChild(children[i]).then(
 
                     )
                 }
-        })
+            })
             .catch(e => {
                 console.error("cannot remove child ", e);
             });

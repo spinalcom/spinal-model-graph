@@ -7,11 +7,10 @@ import SpinalContext from "./SpinalContext";
 const globalType = typeof window === "undefined" ? global : window;
 const HAS_CONTEXT_RELATION_NAME = "hasContext";
 
-
 class SpinalGraph extends SpinalNode {
     /**
      *
-     * @param type {string}  default "SpinalGraph"
+     * @param type {String} default "SpinalGraph"
      * @param element {Model}
      */
     constructor(type = "SpinalGraph", element = new globalType.Model) {
@@ -37,7 +36,7 @@ class SpinalGraph extends SpinalNode {
 
     /**
      * Searches for a context using its name
-     * @param name {string} Name of the context
+     * @param name {String} Name of the context
      * @return {SpinalContext|undefined} The wanted context or undefined
      */
     async getContext(name) {

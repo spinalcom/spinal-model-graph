@@ -81,7 +81,7 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Verify if the node contain all the relation name contain @param relationName
-     * @param relationNames {array} Array containing all the relation name
+     * @param relationNames {Array} Array containing all the relation name
      * @param relationType {int} relation type
      * @return {Boolean} return true if the node contain all the relations contain in relationNames false otherwise.
      */
@@ -103,7 +103,6 @@ class SpinalNode extends globalType.Model {
      * @return {Str}
      */
     addChild(child, relationName, relationType) {
-
         if (child instanceof SpinalNode) {
             return this._addToRelation(child, relationName, relationType);
         }
@@ -245,19 +244,14 @@ class SpinalNode extends globalType.Model {
         const addToRelation = (spinalNode) => {
             const relationLst = spinalNode._getRelationListType(relationType);
             const relation = relationLst.getElement(relationName);
-            console.log(relation.addChild);
+
             relation.addChild(node);
-            node._addAsParent(this._getRelationListType(relationType).getElement(relationName));
-            return this._getRelationListType(relationType).getElement(relationName).id;
+            node._addAsParent(relation);
         };
 
-        if (this.hasRelation(relationName, relationType)) {
-            addToRelation(this)
-        }
-        else {
+        if (!this.hasRelation(relationName, relationType))
             this._createRelation(relationName, relationType);
-            addToRelation(this);
-        }
+        addToRelation(this);
     }
 
     /**
@@ -302,7 +296,7 @@ class SpinalNode extends globalType.Model {
      */
     _addParent(node) {
         if (typeof this.parent !== "undefined" && node instanceof SpinalNode)
-            this.parent.push(new SpinalNodePointer());
+            this.parent.push(new SpinalNodePointer(node));
     }
 
     /**
@@ -348,7 +342,6 @@ class SpinalNode extends globalType.Model {
             relation.removeFromGraph();
         });
     }
-
 
     async  _childrenToList(relation) {
         const lst = [];

@@ -47,7 +47,6 @@ class SpinalRelationRef extends BaseSpinalRelation {
      * @param node {SpinalNode | globalType.Model}
      */
     addChild(node) {
-
         if (node instanceof SpinalNode) {
             this.children.push(node);
             this.getParent().then(parent => {// noinspection JSAccessibilityCheck

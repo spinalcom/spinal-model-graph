@@ -65,7 +65,7 @@ class SpinalContext extends SpinalNode {
      * @param relationName {String} name of the relation
      * @param relationType {int} this parameter is here only to properly override the parent method.
      */
-    addChild(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE ) {
+    addChild(child, relationName) {
         super.addChild(child, relationName, SPINAL_RELATION_PTR_LST_TYPE);
     }
 }
