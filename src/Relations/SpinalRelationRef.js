@@ -54,8 +54,9 @@ class SpinalRelationRef extends BaseSpinalRelation {
             const tmpNode = new SpinalNode(this.name, node);
             this.addChild(tmpNode);
         }
-
-        throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
+        else {
+            throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
+        }
     }
 
     /**
