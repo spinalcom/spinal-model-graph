@@ -5,7 +5,6 @@
 
 * [SpinalContext](#SpinalContext)
     * [new SpinalContext(type, name, element)](#new_SpinalContext_new)
-    * [.createRelation(parent, child, relationName)](#SpinalContext+createRelation) ⇒ <code>Str</code>
     * [.addRelationId(relationId)](#SpinalContext+addRelationId)
     * [.removeFromGraph()](#SpinalContext+removeFromGraph)
     * [.addChild(child, relationName, relationType)](#SpinalContext+addChild)
@@ -17,21 +16,8 @@
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | type | <code>String</code> | <code>SpinalContext</code> | Type of the context |
-| name | <code>String</code> | <code>undefined</code> | Name of the context |
+| name | <code>String</code> |  | Name of the context |
 | element | <code>SpinalNode</code> \| <code>Model</code> |  | Element of the node |
-
-<a name="SpinalContext+createRelation"></a>
-
-### spinalContext.createRelation(parent, child, relationName) ⇒ <code>Str</code>
-Create a relation between a node and another node/model. this function can be used to link two context.
-
-**Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| parent | <code>SpinalNode</code> | Parent of the relation |
-| child | <code>SpinalNode</code> \| <code>Model</code> | Child of the relation |
-| relationName | <code>String</code> | Name of the relation |
 
 <a name="SpinalContext+addRelationId"></a>
 
@@ -69,17 +55,18 @@ Add Child to the context with a spinalRelationLstPtrType.
 **Kind**: global class  
 
 * [SpinalGraph](#SpinalGraph)
-    * [new SpinalGraph(type, element)](#new_SpinalGraph_new)
+    * [new SpinalGraph(name, type, element)](#new_SpinalGraph_new)
     * [.addContext(context)](#SpinalGraph+addContext)
     * [.getContext(name)](#SpinalGraph+getContext) ⇒ <code>SpinalContext</code> \| <code>undefined</code>
 
 <a name="new_SpinalGraph_new"></a>
 
-### new SpinalGraph(type, element)
+### new SpinalGraph(name, type, element)
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| type | <code>String</code> | <code>SpinalGraph</code> | default "SpinalGraph" |
+| name | <code>String</code> | <code>undefined</code> | Name of the graph |
+| type | <code>String</code> | <code>SpinalGraph</code> | Type of the graph |
 | element | <code>SpinalNode</code> \| <code>Model</code> |  | Element of the node |
 
 <a name="SpinalGraph+addContext"></a>
@@ -111,7 +98,7 @@ Searches for a context using its name.
 **Kind**: global class  
 
 * [SpinalNode](#SpinalNode)
-    * [new SpinalNode(type, element)](#new_SpinalNode_new)
+    * [new SpinalNode(name, type, element)](#new_SpinalNode_new)
     * [.getId()](#SpinalNode+getId) ⇒ <code>Str</code>
     * [.getElement()](#SpinalNode+getElement) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [.getType()](#SpinalNode+getType) ⇒ <code>Str</code>
@@ -125,12 +112,13 @@ Searches for a context using its name.
 
 <a name="new_SpinalNode_new"></a>
 
-### new SpinalNode(type, element)
+### new SpinalNode(name, type, element)
 
-| Param | Default | Description |
-| --- | --- | --- |
-| type | <code>SpinalNode</code> | Type of the spinalNode default SpinalNode |
-| element |  | Optional element pointed by the node, by default it points to a empty new Model |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| name | <code>String</code> | <code>undefined</code> | Name of the node |
+| type | <code>String</code> | <code>SpinalNode</code> | Type of the node |
+| element | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> |  | Optional element pointed by the node, by default it points to a empty new Model |
 
 <a name="SpinalNode+getId"></a>
 

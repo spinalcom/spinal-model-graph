@@ -26,25 +26,6 @@ class SpinalContext extends SpinalNode {
     }
 
     /**
-     * Create a relation between a node and another node/model. this function can be used to link two context.
-     * @param {SpinalNode} parent Parent of the relation
-     * @param {SpinalNode | Model} child Child of the relation
-     * @param {String} relationName Name of the relation
-     * @return {Str}
-     */
-    createRelation(parent, child, relationName) {
-        if ((child instanceof SpinalNode) || (child instanceof globalType.Model)) {
-            const relation = SpinalRelationFactory.getNewRelation(relationName, SPINAL_RELATION_PTR_LST_TYPE);
-            relation.setParent(parent);
-            relation.addChild(child);
-            this.addRelationId(relation.id);
-            return relation.id;
-        }
-        //Todo create Some Custom Error
-        throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
-    }
-
-    /**
      * Add the relation id to the relation ids displayable by this context.
      * @param {String} relationId Id of the rlation
      */
