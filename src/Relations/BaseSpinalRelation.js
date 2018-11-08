@@ -20,6 +20,14 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
+     * Shortcut to id.
+     * @return {Str} Id of the relation
+     */
+    getId() {
+        return this.id;
+    }
+
+    /**
      * Returns the name of the relation.
      * @return {Str} Name of the relation
      */

@@ -5,7 +5,7 @@ const globalType = typeof window === "undefined" ? global : window;
 /**
  * Loads the element pointed by the pointer.
  * @param {SpinalNodePointer} nodePointer SpinalNodePointer to load
- * @returns {Promise<*>} Element to wich the pointer pointed
+ * @return {Promise<*>} Element to wich the pointer pointed
  */
 function promiseLoad(nodePointer) {
     if (
@@ -33,7 +33,7 @@ function s4() {
 /**
  * Creates a unique id based on a name.
  * @param {String} name Name from wich the id is generated
- * @returns {String} Generated id
+ * @return {String} Generated id
  */
 function guid(name) {
     return (

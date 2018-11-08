@@ -53,6 +53,14 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
+     * Shortcut to info.name.
+     * @return {Str} Name of the node
+     */
+    getName() {
+        return this.info.name;
+    }
+
+    /**
      * Shortcut to info.type.
      * @return {Str} Type of the node
      */
