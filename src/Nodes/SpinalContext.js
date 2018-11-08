@@ -1,8 +1,30 @@
+/*
+ * Copyright 2018 SpinalCom - www.spinalcom.com
+ * 
+ * This file is part of SpinalCore.
+ * 
+ * Please read all of the following terms and conditions
+ * of the Free Software license Agreement ("Agreement")
+ * carefully.
+ * 
+ * This Agreement is a legally binding contract between
+ * the Licensee (as defined below) and SpinalCom that
+ * sets forth the terms and conditions that govern your
+ * use of the Program. By installing and/or using the
+ * Program, you agree to abide by all the terms and
+ * conditions stated or referenced herein.
+ * 
+ * If you do not agree to abide by these terms and
+ * conditions, do not demonstrate your acceptance and do
+ * not install or use the Program.
+ * You should have received a copy of the license along
+ * with this file. If not, see
+ * <http://resources.spinalcom.com/licenses.pdf>.
+ */
 import SpinalNode from "./SpinalNode"
 import spinalCore from "spinal-core-connectorjs";
 import {
-    SPINAL_RELATION_PTR_LST_TYPE,
-    SpinalRelationFactory
+    SPINAL_RELATION_PTR_LST_TYPE
 } from "../Relations/SpinalRelationFactory"
 import { guid } from "../Utilities";
 
@@ -10,10 +32,10 @@ const globalType = typeof window === "undefined" ? global : window;
 
 class SpinalContext extends SpinalNode {
     /**
-     *
-     * @param {String} type Type of the context
+     * Constructor for the SpinalContext class.
      * @param {String} name Name of the context
-     * @param {SpinalNode | Model} element Element of the node
+     * @param {String} type Type of the context, usually unused
+     * @param {SpinalNode | Model} element Element of the context, usually unused
      */
     constructor(name = "undefined", type = "SpinalContext", element = new globalType.Model) {
         super(name, type, element);
@@ -68,8 +90,8 @@ class SpinalContext extends SpinalNode {
     }
 
     /**
-     * Add Child to the context with a spinalRelationLstPtrType.
-     * @param {SpinalNode | Model} child Node to be added as child
+     * Adds a child with a SpinalRelationLstPtrType.
+     * @param {SpinalNode | Model} child Node to add as child
      * @param {String} relationName Name of the relation
      * @param {Number} relationType This parameter is here only to properly override the parent method
      */
@@ -78,11 +100,11 @@ class SpinalContext extends SpinalNode {
     }
 
     /**
-     * Add the node as child of the relation and notice the context if a new relation was created.
-     * @param {SpinalNode | Model} child Element to add as child
+     * Adds a child with a SpinalRelationLstPtrType and notices the context if a new relation was created.
+     * @param {SpinalNode | Model} child Node to add as child
      * @param {String} relationName Name of the relation
-     * @param {Number} relationType Type of the relation
-     * @param {SpinalContext} context Context to update
+     * @param {Number} relationType This parameter is here only to properly override the parent method
+     * @param {SpinalContext} context Context to update, usually unused
      */
     addChildInContext(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE, context = this) {
         super.addChildInContext(child, relationName, SPINAL_RELATION_PTR_LST_TYPE, context);

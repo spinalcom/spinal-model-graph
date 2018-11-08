@@ -1,3 +1,26 @@
+/*
+ * Copyright 2018 SpinalCom - www.spinalcom.com
+ * 
+ * This file is part of SpinalCore.
+ * 
+ * Please read all of the following terms and conditions
+ * of the Free Software license Agreement ("Agreement")
+ * carefully.
+ * 
+ * This Agreement is a legally binding contract between
+ * the Licensee (as defined below) and SpinalCom that
+ * sets forth the terms and conditions that govern your
+ * use of the Program. By installing and/or using the
+ * Program, you agree to abide by all the terms and
+ * conditions stated or referenced herein.
+ * 
+ * If you do not agree to abide by these terms and
+ * conditions, do not demonstrate your acceptance and do
+ * not install or use the Program.
+ * You should have received a copy of the license along
+ * with this file. If not, see
+ * <http://resources.spinalcom.com/licenses.pdf>.
+ */
 import spinalCore from "spinal-core-connectorjs";
 import { promiseLoad, guid } from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer"
@@ -15,10 +38,10 @@ import SpinalMap from "../SpinalMap"
 
 class SpinalNode extends globalType.Model {
     /**
-     *
+     * Constructor for the SpinalNode class.
      * @param {String} name Name of the node
      * @param {String} type Type of the node
-     * @param {SpinalNode | Model} element Optional element pointed by the node, by default it points to a empty new Model
+     * @param {SpinalNode | Model} element Element of the node
      */
     constructor(name = "undefined", type = "SpinalNode", element = new globalType.Model) {
         super();
@@ -45,7 +68,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Shortcut to info.id.
+     * Returns the id.
      * @return {Str} Id of the node
      */
     getId() {
@@ -53,7 +76,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Shortcut to info.name.
+     * Returns the name.
      * @return {Str} Name of the node
      */
     getName() {
@@ -61,7 +84,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Shortcut to info.type.
+     * Returns the type.
      * @return {Str} Type of the node
      */
     getType() {
@@ -69,7 +92,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Return the element.
+     * Returns the element.
      * @return {Promise<*>} A promise where the parameter of the resolve method is the element
      */
     getElement() {
@@ -128,8 +151,8 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Add the node as child of the relation and notice the context if a new relation was created.
-     * @param {SpinalNode | Model} child Element to add as child
+     * Adds a child and notices the context if a new relation was created.
+     * @param {SpinalNode | Model} child Node to add as child
      * @param {String} relationName Name of the relation
      * @param {Number} relationType Type of the relation
      * @param {SpinalContext} context Context to update
@@ -181,9 +204,9 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Return all children for the relation name no matter the type of relation
+     * Return all children for the relation names no matter the type of relation
      * @param {Array} relationNames Array containing the relation names of the desired children
-     * @return {Promise<Array | never | void>} Promise containing all children for the relation names.
+     * @return {Promise<Array>} Promise containing the children that were found
      */
     getChildren(relationNames) {
         if (relationNames.length > 0) {
@@ -221,7 +244,7 @@ class SpinalNode extends globalType.Model {
     /**
      * Return all parents for the relation names no matter the type of relation
      * @param {Array} relationNames Array containing the relation name of the desired parents
-     * @return {Promise<Array>} Promise containing all parents for the relation names.
+     * @return {Promise<Array>} Promise containing the parents that were found
      */
     async getParent(relationNames) {
         const parents = [];
