@@ -101,16 +101,22 @@ class SpinalNode extends globalType.Model {
      * @param {Number} relationType Type of the relation
      */
     addChild(child, relationName, relationType) {
-        if (child instanceof SpinalNode) {
-            this._addToRelation(child, relationName, relationType);
-        }
-        else if (child instanceof globalType.Model) {
-            const node = new SpinalNode(undefined, undefined, child);
-            this._addToRelation(node, relationName, relationType);
-        }
-        else {
+        let relation;
+
+        if (!(child instanceof globalType.Model)) {
             throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
         }
+        else if (!(child instanceof SpinalNode)) {
+            child = new SpinalNode(undefined, undefined, child);
+        }
+
+        if (!this.hasRelation(relationName, relationType))
+            relation = this._createRelation(relationName, relationType);
+        else
+            relation = this._getRelationListType(relationType).getElement(relationName);
+
+        relation.addChild(child);
+        child._addParent(relation);
     }
 
     /**
@@ -220,26 +226,6 @@ class SpinalNode extends globalType.Model {
                 throw new Error("Unknown relation type: ".concat(relationType.toString()));
         }
 
-    }
-
-    /**
-     * Add a node as child.
-     * If this node doesn't have a relation name relationName with the type relationType this method will create it.
-     * @param {SpinalNode} node Node to add as child.
-     * @param {String} relationName Name of the relation
-     * @param {Number} relationType Type of the relation
-     * @private
-     */
-    _addToRelation(node, relationName, relationType) {
-        let relation;
-
-        if (!this.hasRelation(relationName, relationType))
-            relation = this._createRelation(relationName, relationType);
-        else
-            relation = this._getRelationListType(relationType).getElement(relationName);
-
-        relation.addChild(node);
-        node._addParent(relation);
     }
 
     /**
