@@ -76,6 +76,17 @@ class SpinalContext extends SpinalNode {
     addChild(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE) {
         super.addChild(child, relationName, SPINAL_RELATION_PTR_LST_TYPE);
     }
+
+    /**
+     * Add the node as child of the relation and notice the context if a new relation was created.
+     * @param {SpinalNode | Model} child Element to add as child
+     * @param {String} relationName Name of the relation
+     * @param {Number} relationType Type of the relation
+     * @param {SpinalContext} context Context to update
+     */
+    addChildInContext(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE, context = this) {
+        super.addChildInContext(child, relationName, SPINAL_RELATION_PTR_LST_TYPE, context);
+    }
 }
 
 spinalCore.register_models([SpinalContext]);

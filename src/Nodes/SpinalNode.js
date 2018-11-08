@@ -128,6 +128,34 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
+     * Add the node as child of the relation and notice the context if a new relation was created.
+     * @param {SpinalNode | Model} child Element to add as child
+     * @param {String} relationName Name of the relation
+     * @param {Number} relationType Type of the relation
+     * @param {SpinalContext} context Context to update
+     */
+    addChildInContext(child, relationName, relationType, context) {
+        let relation;
+
+        if (!(child instanceof globalType.Model)) {
+            throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
+        }
+        else if (!(child instanceof SpinalNode)) {
+            child = new SpinalNode(undefined, undefined, child);
+        }
+
+        if (!this.hasRelation(relationName, relationType)) {
+            relation = this._createRelation(relationName, relationType);
+            context.addRelation(relation);
+        }
+        else
+            relation = this._getRelationListType(relationType).getElement(relationName);
+
+        relation.addChild(child);
+        child._addParent(relation);
+    }
+
+    /**
      * Remove the node from the relation children.
      * @param {SpinalNode} node Node to remove
      * @param {String} relationName Name of the relation to wich the node belongs
