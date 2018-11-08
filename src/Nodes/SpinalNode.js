@@ -280,17 +280,17 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Create a new relation for this node
-     * @param {String} relationName
-     * @param {Number} relationType
+     * Create a new relation for this node.
+     * @param {String} relationName Name of the relation
+     * @param {Number} relationType Type of the relation
      * @private
      */
     _createRelation(relationName, relationType) {
         const relation = SpinalRelationFactory.getNewRelation(relationName, relationType);
-        //setElement the node as parent of the relation
         relation.setParent(this);
 
         this._getRelationListType(relationType).setElement(relationName, relation)
+        return relation;
     }
 
     /**
@@ -311,7 +311,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Used to get a relation's children in an Array (instead of a Lst)
+     * Used to get a relation's children in an Array (instead of a Lst).
      * @param {SpinalRelation} relation Relation from wich the children are taken 
      * @return {Array} Array containing all of the relation's children
      * @private
@@ -326,7 +326,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Return all children
+     * Return all children.
      * @return {Array} Array of children from all relations
      * @private
      */
