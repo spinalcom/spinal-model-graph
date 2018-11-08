@@ -228,21 +228,18 @@ class SpinalNode extends globalType.Model {
      * @param {SpinalNode} node Node to add as child.
      * @param {String} relationName Name of the relation
      * @param {Number} relationType Type of the relation
-     * @return {Str} id of the relation where the node was added as child
      * @private
      */
     _addToRelation(node, relationName, relationType) {
-        const addToRelation = (spinalNode) => {
-            const relationLst = spinalNode._getRelationListType(relationType);
-            const relation = relationLst.getElement(relationName);
-
-            relation.addChild(node);
-            node._addParent(relation);
-        };
+        let relation;
 
         if (!this.hasRelation(relationName, relationType))
-            this._createRelation(relationName, relationType);
-        addToRelation(this);
+            relation = this._createRelation(relationName, relationType);
+        else
+            relation = this._getRelationListType(relationType).getElement(relationName);
+
+        relation.addChild(node);
+        node._addParent(relation);
     }
 
     /**
