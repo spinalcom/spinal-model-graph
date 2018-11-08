@@ -20,6 +20,14 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
+     * Returns the name of the relation.
+     * @return {Str} Name of the relation
+     */
+    getName() {
+        return this.name;
+    }
+
+    /**
      * Returns the parent of the relation.
      * @return {Promise<SpinalNode>} returns a promise where the resolve is the parent
      */
@@ -34,14 +42,6 @@ class BaseSpinalRelation extends globalType.Model {
     setParent(parent) {
         if (typeof parent !== "undefined" && parent instanceof SpinalNode)
             this.parent.setElement(parent);
-    }
-
-    /**
-     * Returns the name of the relation.
-     * @return {Str} Name of the relation
-     */
-    getName() {
-        return this.name;
     }
 
     /**

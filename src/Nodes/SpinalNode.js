@@ -46,10 +46,18 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Shortcut to info.id.
-     * @return {Str}
+     * @return {Str} Id of the node
      */
     getId() {
         return this.info.id;
+    }
+
+    /**
+     * Shortcut to info.type.
+     * @return {Str} Type of the node
+     */
+    getType() {
+        return this.info.type;
     }
 
     /**
@@ -58,14 +66,6 @@ class SpinalNode extends globalType.Model {
      */
     getElement() {
         return promiseLoad(this.element);
-    }
-
-    /**
-     * Shortcut to info.type.
-     * @return {Str} type of the node.
-     */
-    getType() {
-        return this.info.type;
     }
 
     /**
