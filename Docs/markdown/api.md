@@ -5,9 +5,12 @@
 
 * [SpinalContext](#SpinalContext)
     * [new SpinalContext(type, name, element)](#new_SpinalContext_new)
-    * [.addRelationId(relationId)](#SpinalContext+addRelationId)
+    * [.addRelationId(relationId)](#SpinalContext+addRelationId) ⇒ <code>Boolean</code>
+    * [.addRelationName(relationName)](#SpinalContext+addRelationName) ⇒ <code>Boolean</code>
+    * [.addRelation(relation)](#SpinalContext+addRelation)
     * [.removeFromGraph()](#SpinalContext+removeFromGraph)
     * [.addChild(child, relationName, relationType)](#SpinalContext+addChild)
+    * [.addChildInContext(child, relationName, relationType, context)](#SpinalContext+addChildInContext)
 
 <a name="new_SpinalContext_new"></a>
 
@@ -21,14 +24,38 @@
 
 <a name="SpinalContext+addRelationId"></a>
 
-### spinalContext.addRelationId(relationId)
-Add the relation id to the relation ids displayable by this context.
+### spinalContext.addRelationId(relationId) ⇒ <code>Boolean</code>
+Adds a relation id to the relation ids known by the context.
+
+**Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
+**Returns**: <code>Boolean</code> - Return false if the relation id is already known  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| relationId | <code>String</code> | Id of the relation |
+
+<a name="SpinalContext+addRelationName"></a>
+
+### spinalContext.addRelationName(relationName) ⇒ <code>Boolean</code>
+Adds a relation name to the relation names known by the context.
+
+**Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
+**Returns**: <code>Boolean</code> - Return false if the relation name is already known  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| relationName | <code>String</code> | Name of the relation |
+
+<a name="SpinalContext+addRelation"></a>
+
+### spinalContext.addRelation(relation)
+Adds a relation relations known by the context.
 
 **Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| relationId | <code>String</code> | Id of the rlation |
+| relation | <code>SpinalRelation</code> | Relation to add |
 
 <a name="SpinalContext+removeFromGraph"></a>
 
@@ -48,6 +75,20 @@ Add Child to the context with a spinalRelationLstPtrType.
 | child | <code>SpinalNode</code> \| <code>Model</code> | Node to be added as child |
 | relationName | <code>String</code> | Name of the relation |
 | relationType | <code>Number</code> | This parameter is here only to properly override the parent method |
+
+<a name="SpinalContext+addChildInContext"></a>
+
+### spinalContext.addChildInContext(child, relationName, relationType, context)
+Add the node as child of the relation and notice the context if a new relation was created.
+
+**Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| child | <code>SpinalNode</code> \| <code>Model</code> | Element to add as child |
+| relationName | <code>String</code> | Name of the relation |
+| relationType | <code>Number</code> | Type of the relation |
+| context | [<code>SpinalContext</code>](#SpinalContext) | Context to update |
 
 <a name="SpinalGraph"></a>
 
@@ -100,11 +141,13 @@ Searches for a context using its name.
 * [SpinalNode](#SpinalNode)
     * [new SpinalNode(name, type, element)](#new_SpinalNode_new)
     * [.getId()](#SpinalNode+getId) ⇒ <code>Str</code>
-    * [.getElement()](#SpinalNode+getElement) ⇒ <code>Promise.&lt;\*&gt;</code>
+    * [.getName()](#SpinalNode+getName) ⇒ <code>Str</code>
     * [.getType()](#SpinalNode+getType) ⇒ <code>Str</code>
+    * [.getElement()](#SpinalNode+getElement) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [.hasRelation(relationName, relationType)](#SpinalNode+hasRelation) ⇒ <code>Boolean</code>
     * [.hasRelations(relationNames, relationType)](#SpinalNode+hasRelations) ⇒ <code>Boolean</code>
     * [.addChild(child, relationName, relationType)](#SpinalNode+addChild)
+    * [.addChildInContext(child, relationName, relationType, context)](#SpinalNode+addChildInContext)
     * [.removeChild(node, relationName, relationType)](#SpinalNode+removeChild)
     * [.removeFromGraph()](#SpinalNode+removeFromGraph)
     * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;(Array\|never\|void)&gt;</code>
@@ -126,6 +169,21 @@ Searches for a context using its name.
 Shortcut to info.id.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Str</code> - Id of the node  
+<a name="SpinalNode+getName"></a>
+
+### spinalNode.getName() ⇒ <code>Str</code>
+Shortcut to info.name.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Str</code> - Name of the node  
+<a name="SpinalNode+getType"></a>
+
+### spinalNode.getType() ⇒ <code>Str</code>
+Shortcut to info.type.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Str</code> - Type of the node  
 <a name="SpinalNode+getElement"></a>
 
 ### spinalNode.getElement() ⇒ <code>Promise.&lt;\*&gt;</code>
@@ -133,13 +191,6 @@ Return the element.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;\*&gt;</code> - A promise where the parameter of the resolve method is the element  
-<a name="SpinalNode+getType"></a>
-
-### spinalNode.getType() ⇒ <code>Str</code>
-Shortcut to info.type.
-
-**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Str</code> - type of the node.  
 <a name="SpinalNode+hasRelation"></a>
 
 ### spinalNode.hasRelation(relationName, relationType) ⇒ <code>Boolean</code>
@@ -178,6 +229,20 @@ Add the node as child of the relation.
 | child | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> | Element to add as child |
 | relationName | <code>String</code> | Name of the relation |
 | relationType | <code>Number</code> | Type of the relation |
+
+<a name="SpinalNode+addChildInContext"></a>
+
+### spinalNode.addChildInContext(child, relationName, relationType, context)
+Add the node as child of the relation and notice the context if a new relation was created.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| child | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> | Element to add as child |
+| relationName | <code>String</code> | Name of the relation |
+| relationType | <code>Number</code> | Type of the relation |
+| context | <code>SpinalContext</code> | Context to update |
 
 <a name="SpinalNode+removeChild"></a>
 
@@ -322,9 +387,10 @@ This function returns the type of the pointed element.
 
 * [BaseSpinalRelation](#BaseSpinalRelation)
     * [new BaseSpinalRelation(name)](#new_BaseSpinalRelation_new)
+    * [.getId()](#BaseSpinalRelation+getId) ⇒ <code>Str</code>
+    * [.getName()](#BaseSpinalRelation+getName) ⇒ <code>Str</code>
     * [.getParent()](#BaseSpinalRelation+getParent) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
     * [.setParent(parent)](#BaseSpinalRelation+setParent)
-    * [.getName()](#BaseSpinalRelation+getName) ⇒ <code>Str</code>
     * [.getType()](#BaseSpinalRelation+getType) ⇒ <code>Number</code>
     * [.getChildrenIds()](#BaseSpinalRelation+getChildrenIds) ⇒ <code>Array</code>
     * [.getChildren()](#BaseSpinalRelation+getChildren) ⇒ <code>Promise.&lt;Lst&gt;</code>
@@ -341,6 +407,20 @@ This function returns the type of the pointed element.
 | --- | --- | --- |
 | name | <code>String</code> | Name of the relation |
 
+<a name="BaseSpinalRelation+getId"></a>
+
+### baseSpinalRelation.getId() ⇒ <code>Str</code>
+Shortcut to id.
+
+**Kind**: instance method of [<code>BaseSpinalRelation</code>](#BaseSpinalRelation)  
+**Returns**: <code>Str</code> - Id of the relation  
+<a name="BaseSpinalRelation+getName"></a>
+
+### baseSpinalRelation.getName() ⇒ <code>Str</code>
+Returns the name of the relation.
+
+**Kind**: instance method of [<code>BaseSpinalRelation</code>](#BaseSpinalRelation)  
+**Returns**: <code>Str</code> - Name of the relation  
 <a name="BaseSpinalRelation+getParent"></a>
 
 ### baseSpinalRelation.getParent() ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
@@ -359,13 +439,6 @@ Sets the parent of the relation. If a parent was already set, the parent relatio
 | --- | --- | --- |
 | parent | <code>SpinalNode</code> | New parent of the relation |
 
-<a name="BaseSpinalRelation+getName"></a>
-
-### baseSpinalRelation.getName() ⇒ <code>Str</code>
-Returns the name of the relation.
-
-**Kind**: instance method of [<code>BaseSpinalRelation</code>](#BaseSpinalRelation)  
-**Returns**: <code>Str</code> - Name of the relation  
 <a name="BaseSpinalRelation+getType"></a>
 
 ### baseSpinalRelation.getType() ⇒ <code>Number</code>
