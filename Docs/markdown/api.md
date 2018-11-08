@@ -4,7 +4,7 @@
 **Kind**: global class  
 
 * [SpinalContext](#SpinalContext)
-    * [new SpinalContext(type, name, element)](#new_SpinalContext_new)
+    * [new SpinalContext(name, type, element)](#new_SpinalContext_new)
     * [.addRelationId(relationId)](#SpinalContext+addRelationId) ⇒ <code>Boolean</code>
     * [.addRelationName(relationName)](#SpinalContext+addRelationName) ⇒ <code>Boolean</code>
     * [.addRelation(relation)](#SpinalContext+addRelation)
@@ -14,13 +14,15 @@
 
 <a name="new_SpinalContext_new"></a>
 
-### new SpinalContext(type, name, element)
+### new SpinalContext(name, type, element)
+Constructor for the SpinalContext class.
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| type | <code>String</code> | <code>SpinalContext</code> | Type of the context |
-| name | <code>String</code> |  | Name of the context |
-| element | <code>SpinalNode</code> \| <code>Model</code> |  | Element of the node |
+| name | <code>String</code> | <code>undefined</code> | Name of the context |
+| type | <code>String</code> | <code>SpinalContext</code> | Type of the context, usually unused |
+| element | <code>SpinalNode</code> \| <code>Model</code> |  | Element of the context, usually unused |
 
 <a name="SpinalContext+addRelationId"></a>
 
@@ -66,29 +68,29 @@ Remove all the nodes associated to this context from the graph.
 <a name="SpinalContext+addChild"></a>
 
 ### spinalContext.addChild(child, relationName, relationType)
-Add Child to the context with a spinalRelationLstPtrType.
+Adds a child with a SpinalRelationLstPtrType.
 
 **Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| child | <code>SpinalNode</code> \| <code>Model</code> | Node to be added as child |
+| child | <code>SpinalNode</code> \| <code>Model</code> | Node to add as child |
 | relationName | <code>String</code> | Name of the relation |
 | relationType | <code>Number</code> | This parameter is here only to properly override the parent method |
 
 <a name="SpinalContext+addChildInContext"></a>
 
 ### spinalContext.addChildInContext(child, relationName, relationType, context)
-Add the node as child of the relation and notice the context if a new relation was created.
+Adds a child with a SpinalRelationLstPtrType and notices the context if a new relation was created.
 
 **Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| child | <code>SpinalNode</code> \| <code>Model</code> | Element to add as child |
+| child | <code>SpinalNode</code> \| <code>Model</code> | Node to add as child |
 | relationName | <code>String</code> | Name of the relation |
-| relationType | <code>Number</code> | Type of the relation |
-| context | [<code>SpinalContext</code>](#SpinalContext) | Context to update |
+| relationType | <code>Number</code> | This parameter is here only to properly override the parent method |
+| context | [<code>SpinalContext</code>](#SpinalContext) | Context to update, usually unused |
 
 <a name="SpinalGraph"></a>
 
@@ -103,12 +105,14 @@ Add the node as child of the relation and notice the context if a new relation w
 <a name="new_SpinalGraph_new"></a>
 
 ### new SpinalGraph(name, type, element)
+Constructor for the SpinalGraph class.
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| name | <code>String</code> | <code>undefined</code> | Name of the graph |
-| type | <code>String</code> | <code>SpinalGraph</code> | Type of the graph |
-| element | <code>SpinalNode</code> \| <code>Model</code> |  | Element of the node |
+| name | <code>String</code> | <code>undefined</code> | Name of the graph, usually unused |
+| type | <code>String</code> | <code>SpinalGraph</code> | Type of the graph, usually unused |
+| element | <code>SpinalNode</code> \| <code>Model</code> |  | Element of the graph, usually unused |
 
 <a name="SpinalGraph+addContext"></a>
 
@@ -127,7 +131,7 @@ Adds a context to the graph.
 Searches for a context using its name.
 
 **Kind**: instance method of [<code>SpinalGraph</code>](#SpinalGraph)  
-**Returns**: <code>SpinalContext</code> \| <code>undefined</code> - The wanted context or undefined if the context wasn't found  
+**Returns**: <code>SpinalContext</code> \| <code>undefined</code> - The wanted context or undefined  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -150,44 +154,46 @@ Searches for a context using its name.
     * [.addChildInContext(child, relationName, relationType, context)](#SpinalNode+addChildInContext)
     * [.removeChild(node, relationName, relationType)](#SpinalNode+removeChild)
     * [.removeFromGraph()](#SpinalNode+removeFromGraph)
-    * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;(Array\|never\|void)&gt;</code>
+    * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;Array&gt;</code>
     * [.getParent(relationNames)](#SpinalNode+getParent) ⇒ <code>Promise.&lt;Array&gt;</code>
 
 <a name="new_SpinalNode_new"></a>
 
 ### new SpinalNode(name, type, element)
+Constructor for the SpinalNode class.
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | name | <code>String</code> | <code>undefined</code> | Name of the node |
 | type | <code>String</code> | <code>SpinalNode</code> | Type of the node |
-| element | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> |  | Optional element pointed by the node, by default it points to a empty new Model |
+| element | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> |  | Element of the node |
 
 <a name="SpinalNode+getId"></a>
 
 ### spinalNode.getId() ⇒ <code>Str</code>
-Shortcut to info.id.
+Returns the id.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Str</code> - Id of the node  
 <a name="SpinalNode+getName"></a>
 
 ### spinalNode.getName() ⇒ <code>Str</code>
-Shortcut to info.name.
+Returns the name.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Str</code> - Name of the node  
 <a name="SpinalNode+getType"></a>
 
 ### spinalNode.getType() ⇒ <code>Str</code>
-Shortcut to info.type.
+Returns the type.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Str</code> - Type of the node  
 <a name="SpinalNode+getElement"></a>
 
 ### spinalNode.getElement() ⇒ <code>Promise.&lt;\*&gt;</code>
-Return the element.
+Returns the element.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;\*&gt;</code> - A promise where the parameter of the resolve method is the element  
@@ -233,13 +239,13 @@ Add the node as child of the relation.
 <a name="SpinalNode+addChildInContext"></a>
 
 ### spinalNode.addChildInContext(child, relationName, relationType, context)
-Add the node as child of the relation and notice the context if a new relation was created.
+Adds a child and notices the context if a new relation was created.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| child | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> | Element to add as child |
+| child | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> | Node to add as child |
 | relationName | <code>String</code> | Name of the relation |
 | relationType | <code>Number</code> | Type of the relation |
 | context | <code>SpinalContext</code> | Context to update |
@@ -267,11 +273,11 @@ After this operation the node can be deleted without fear.
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 <a name="SpinalNode+getChildren"></a>
 
-### spinalNode.getChildren(relationNames) ⇒ <code>Promise.&lt;(Array\|never\|void)&gt;</code>
-Return all children for the relation name no matter the type of relation
+### spinalNode.getChildren(relationNames) ⇒ <code>Promise.&lt;Array&gt;</code>
+Return all children for the relation names no matter the type of relation
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Promise.&lt;(Array\|never\|void)&gt;</code> - Promise containing all children for the relation names.  
+**Returns**: <code>Promise.&lt;Array&gt;</code> - Promise containing the children that were found  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -283,7 +289,7 @@ Return all children for the relation name no matter the type of relation
 Return all parents for the relation names no matter the type of relation
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Promise.&lt;Array&gt;</code> - Promise containing all parents for the relation names.  
+**Returns**: <code>Promise.&lt;Array&gt;</code> - Promise containing the parents that were found  
 
 | Param | Type | Description |
 | --- | --- | --- |
