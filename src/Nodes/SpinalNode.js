@@ -105,7 +105,8 @@ class SpinalNode extends globalType.Model {
             this._addToRelation(child, relationName, relationType);
         }
         else if (child instanceof globalType.Model) {
-            this._createNodeAndAddChildToRelation(child, relationName, relationType);
+            const node = new SpinalNode(undefined, undefined, child);
+            this._addToRelation(node, relationName, relationType);
         }
         else {
             throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
@@ -277,19 +278,6 @@ class SpinalNode extends globalType.Model {
             this.parents.setElement(relationName, list);
         }
     }
-
-    /**
-     * Create a node which points to the element and add it to the corresponding relation
-     * @param {*} element
-     * @param {String} relationName
-     * @param {Number} relationType
-     * @private
-     */
-    _createNodeAndAddChildToRelation(element, relationName, relationType) {
-        const node = new SpinalNode(undefined, undefined, element);
-        return this._addToRelation(node, relationName, relationType);
-    }
-
 
     /**
      * Create a new relation for this node
