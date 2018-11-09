@@ -152,7 +152,7 @@ Searches for a context using its name.
     * [.hasRelations(relationNames, relationType)](#SpinalNode+hasRelations) ⇒ <code>Boolean</code>
     * [.addChild(child, relationName, relationType)](#SpinalNode+addChild)
     * [.addChildInContext(child, relationName, relationType, context)](#SpinalNode+addChildInContext)
-    * [.removeChild(node, relationName, relationType)](#SpinalNode+removeChild)
+    * [.removeChild(node, relationName, relationType)](#SpinalNode+removeChild) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.removeFromGraph()](#SpinalNode+removeFromGraph)
     * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;Array&gt;</code>
     * [.getParent(relationNames)](#SpinalNode+getParent) ⇒ <code>Promise.&lt;Array&gt;</code>
@@ -252,10 +252,11 @@ Adds a child and notices the context if a new relation was created.
 
 <a name="SpinalNode+removeChild"></a>
 
-### spinalNode.removeChild(node, relationName, relationType)
+### spinalNode.removeChild(node, relationName, relationType) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 Remove the node from the relation children.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - Promise containing true if the child was successfully removed  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -682,7 +683,7 @@ Adds a child to the relation.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| node | <code>SpinalNode</code> \| <code>Model</code> | Node to be added |
+| node | <code>SpinalNode</code> \| <code>Model</code> | Node to add |
 
 <a name="SpinalRelationRef+removeChild"></a>
 
