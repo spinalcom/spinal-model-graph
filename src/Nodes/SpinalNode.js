@@ -243,7 +243,7 @@ class SpinalNode extends globalType.Model {
      * @param {Array} relationNames Array containing the relation name of the desired parents
      * @return {Promise<Array>} Promise containing the parents that were found
      */
-    async getParent(relationNames) {
+    async getParents(relationNames) {
         const parents = [];
 
         if (typeof relationNames === "undefined" || relationNames.length === 0)

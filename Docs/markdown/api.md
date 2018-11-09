@@ -155,7 +155,7 @@ Searches for a context using its name.
     * [.removeChild(node, relationName, relationType)](#SpinalNode+removeChild) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.removeFromGraph()](#SpinalNode+removeFromGraph)
     * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;Array&gt;</code>
-    * [.getParent(relationNames)](#SpinalNode+getParent) ⇒ <code>Promise.&lt;Array&gt;</code>
+    * [.getParents(relationNames)](#SpinalNode+getParents) ⇒ <code>Promise.&lt;Array&gt;</code>
 
 <a name="new_SpinalNode_new"></a>
 
@@ -284,9 +284,9 @@ Return all children for the relation names no matter the type of relation
 | --- | --- | --- |
 | relationNames | <code>Array</code> | Array containing the relation names of the desired children |
 
-<a name="SpinalNode+getParent"></a>
+<a name="SpinalNode+getParents"></a>
 
-### spinalNode.getParent(relationNames) ⇒ <code>Promise.&lt;Array&gt;</code>
+### spinalNode.getParents(relationNames) ⇒ <code>Promise.&lt;Array&gt;</code>
 Return all parents for the relation names no matter the type of relation
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
