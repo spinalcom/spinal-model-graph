@@ -209,37 +209,33 @@ class SpinalNode extends globalType.Model {
      * @param {Array} relationNames Array containing the relation names of the desired children
      * @return {Promise<Array>} Promise containing the children that were found
      */
-    getChildren(relationNames) {
-        if (relationNames.length > 0) {
-            const promises = [];
-            for (let i = 0; i < RELATION_TYPE_LIST.length; i++) {
-                const relationMap = this._getRelationListType(RELATION_TYPE_LIST[i]);
-                for (let j = 0; j < relationNames.length; j++) {
-                    if (relationMap.has(relationNames[j])) {
-                        const relation = relationMap.getElement(relationNames[j]);
-                        if (typeof relation.getChildren === 'function')
-                            promises.push(relation.getChildren());
-                        else
-                            //TODO implement SpinalError
-                            console.error(relation);
-                    }
-                }
-            }
-            return Promise.all(promises).then(childrenLst => {
-                const res = [];
-
-                for (let i = 0; i < childrenLst.length; i++) {
-                    for (let j = 0; j < childrenLst[i].length; j++) {
-                        res.push(childrenLst[i][j]);
-                    }
-                }
-
-                return res;
-            });
-        }
-        else {
+    async getChildren(relationNames) {
+        if (typeof relationNames === "undefined" || relationNames.length === 0) {
             return Promise.resolve(this._getAllChildren());
         }
+
+        const promises = [];
+
+        for (let relationType of RELATION_TYPE_LIST) {
+            const relationMap = this._getRelationListType(relationType);
+
+            for (let j = 0; j < relationNames.length; j++) {
+                if (relationMap.has(relationNames[j])) {
+                    const relation = relationMap.getElement(relationNames[j]);
+                    promises.push(relation.getChildren());
+                }
+            }
+        }
+
+        return Promise.all(promises).then(childrenLst => {
+            const res = [];
+
+            for (let children of childrenLst) {
+                res.push(...children);
+            }
+
+            return res;
+        });
     }
 
     /**
