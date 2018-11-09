@@ -183,6 +183,7 @@ class SpinalNode extends globalType.Model {
      * @param {SpinalNode} node Node to remove
      * @param {String} relationName Name of the relation to wich the node belongs
      * @param {Number} relationType Type of the relation to wich the node belongs
+     * @return {Promise<Boolean>} Promise containing true if the child was successfully removed
      */
     removeChild(node, relationName, relationType) {
         if (this._getRelationListType(relationType).has(relationName)) {
@@ -190,7 +191,7 @@ class SpinalNode extends globalType.Model {
             return rel.removeChild(node);
         }
 
-        return false;
+        return Promise.resolve(false);
     }
 
     /**
@@ -255,13 +256,14 @@ class SpinalNode extends globalType.Model {
             const list = this.parents.getElement(name);
 
             for (let i = 0; i < list.length; i++) {
-                await promiseLoad(list[i]).then(relation => {
-                    relation.getParent().then(parent => parents.push(parent));
-                });
+                let relation = await promiseLoad(list[i]);
+                let parent = await relation.getParent();
+
+                parents.push(parent);
             };
         }
 
-        return Promise.resolve(parents);
+        return parents;
     }
 
     /**

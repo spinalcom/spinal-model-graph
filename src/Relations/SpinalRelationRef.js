@@ -71,7 +71,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
     /**
      * Adds a child to the relation.
-     * @param {SpinalNode | Model} node Node to be added
+     * @param {SpinalNode | Model} node Node to add
      */
     addChild(node) {
         if (node instanceof SpinalNode) {

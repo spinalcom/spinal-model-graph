@@ -98,7 +98,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
         childrenLst.remove(node);
 
-        return Promise.resolve(childrenLst.indexOf(node) === -1);
+        return childrenLst.indexOf(node) === -1;
     }
 }
 

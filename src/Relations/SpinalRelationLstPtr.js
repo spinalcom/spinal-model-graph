@@ -112,7 +112,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
                 this.children.remove(ptr);
             }
         }
-        return this.children.indexOf(node) === -1;
+        return Promise.resolve(this.children.indexOf(node) === -1);
     }
 }
 
