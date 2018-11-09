@@ -130,6 +130,7 @@ class SpinalNode extends globalType.Model {
      * @param {SpinalNode | Model} child Element to add as child
      * @param {String} relationName Name of the relation
      * @param {Number} relationType Type of the relation
+     * @return {SpinalNode} The child node
      */
     addChild(child, relationName, relationType) {
         let relation;
@@ -148,6 +149,7 @@ class SpinalNode extends globalType.Model {
 
         relation.addChild(child);
         child._addParent(relation);
+        return child;
     }
 
     /**
@@ -156,6 +158,7 @@ class SpinalNode extends globalType.Model {
      * @param {String} relationName Name of the relation
      * @param {Number} relationType Type of the relation
      * @param {SpinalContext} context Context to update
+     * @return {SpinalNode} The child node
      */
     addChildInContext(child, relationName, relationType, context) {
         let relation;
@@ -176,6 +179,7 @@ class SpinalNode extends globalType.Model {
 
         relation.addChild(child);
         child._addParent(relation);
+        return child;
     }
 
     /**
