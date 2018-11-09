@@ -111,7 +111,7 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Verify if the node contains all the relation names.
-     * @param {Array} relationNames Array containing all the relation name
+     * @param {Array<String>} relationNames Array containing all the relation name
      * @param {Number} relationType Type of the relations
      * @return {Boolean} Return true if the node contains all the relations in relationNames, false otherwise.
      */
@@ -210,8 +210,8 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Return all children for the relation names no matter the type of relation
-     * @param {Array} relationNames Array containing the relation names of the desired children
-     * @return {Promise<Array>} Promise containing the children that were found
+     * @param {Array<String>} relationNames Array containing the relation names of the desired children
+     * @return {Promise<Array<SpinalNode>>} Promise containing the children that were found
      */
     async getChildren(relationNames) {
         if (typeof relationNames === "undefined" || relationNames.length === 0) {
@@ -246,8 +246,8 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Return all parents for the relation names no matter the type of relation
-     * @param {Array} relationNames Array containing the relation name of the desired parents
-     * @return {Promise<Array>} Promise containing the parents that were found
+     * @param {Array<String>} relationNames Array containing the relation name of the desired parents
+     * @return {Promise<Array<SpinalNode>>} Promise containing the parents that were found
      */
     async getParents(relationNames) {
         const parents = [];
@@ -359,7 +359,7 @@ class SpinalNode extends globalType.Model {
     /**
      * Used to get a relation's children in an Array (instead of a Lst).
      * @param {SpinalRelation} relation Relation from wich the children are taken 
-     * @return {Array} Array containing all of the relation's children
+     * @return {Array<SpinalNode>} Array containing all of the relation's children
      * @private
      */
     async _childrenToList(relation) {
@@ -373,7 +373,7 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Return all children.
-     * @return {Array} Array of children from all relations
+     * @return {Array<SpinalNode>} Array of children from all relations
      * @private
      */
     async _getAllChildren() {

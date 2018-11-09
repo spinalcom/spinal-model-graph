@@ -82,7 +82,7 @@ class SpinalMap extends globalType.Model {
 
     /**
      * Returns an array that contains the keys for each element in the map in insertion order.
-     * @returns {Array} Array containing all the keys in the map
+     * @returns {Array<String>} Array containing all the keys in the map
      */
     keys() {
         return this._attribute_names;

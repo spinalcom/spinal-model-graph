@@ -156,8 +156,8 @@ Searches for a context using its name.
     * [.addChildInContext(child, relationName, relationType, context)](#SpinalNode+addChildInContext) ⇒ [<code>SpinalNode</code>](#SpinalNode)
     * [.removeChild(node, relationName, relationType)](#SpinalNode+removeChild) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.removeFromGraph()](#SpinalNode+removeFromGraph)
-    * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;Array&gt;</code>
-    * [.getParents(relationNames)](#SpinalNode+getParents) ⇒ <code>Promise.&lt;Array&gt;</code>
+    * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+    * [.getParents(relationNames)](#SpinalNode+getParents) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
 
 <a name="new_SpinalNode_new"></a>
 
@@ -222,7 +222,7 @@ Verify if the node contains all the relation names.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| relationNames | <code>Array</code> | Array containing all the relation name |
+| relationNames | <code>Array.&lt;String&gt;</code> | Array containing all the relation name |
 | relationType | <code>Number</code> | Type of the relations |
 
 <a name="SpinalNode+addChild"></a>
@@ -278,27 +278,27 @@ After this operation the node can be deleted without fear.
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 <a name="SpinalNode+getChildren"></a>
 
-### spinalNode.getChildren(relationNames) ⇒ <code>Promise.&lt;Array&gt;</code>
+### spinalNode.getChildren(relationNames) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
 Return all children for the relation names no matter the type of relation
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Promise.&lt;Array&gt;</code> - Promise containing the children that were found  
+**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - Promise containing the children that were found  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| relationNames | <code>Array</code> | Array containing the relation names of the desired children |
+| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names of the desired children |
 
 <a name="SpinalNode+getParents"></a>
 
-### spinalNode.getParents(relationNames) ⇒ <code>Promise.&lt;Array&gt;</code>
+### spinalNode.getParents(relationNames) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
 Return all parents for the relation names no matter the type of relation
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Promise.&lt;Array&gt;</code> - Promise containing the parents that were found  
+**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - Promise containing the parents that were found  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| relationNames | <code>Array</code> | Array containing the relation name of the desired parents |
+| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation name of the desired parents |
 
 ## Functions
 
@@ -403,8 +403,8 @@ This function returns the type of the pointed element.
     * [.getParent()](#BaseSpinalRelation+getParent) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
     * [.setParent(parent)](#BaseSpinalRelation+setParent)
     * [.getType()](#BaseSpinalRelation+getType) ⇒ <code>Number</code>
-    * [.getChildrenIds()](#BaseSpinalRelation+getChildrenIds) ⇒ <code>Array</code>
-    * [.getChildren()](#BaseSpinalRelation+getChildren) ⇒ <code>Promise.&lt;Lst&gt;</code>
+    * [.getChildrenIds()](#BaseSpinalRelation+getChildrenIds) ⇒ <code>Array.&lt;Str&gt;</code>
+    * [.getChildren()](#BaseSpinalRelation+getChildren) ⇒ <code>Promise.&lt;Lst.&lt;SpinalNode&gt;&gt;</code>
     * [.addChild(node)](#BaseSpinalRelation+addChild)
     * [.removeChild(node)](#BaseSpinalRelation+removeChild) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.removeChildren()](#BaseSpinalRelation+removeChildren)
@@ -459,18 +459,18 @@ Returns the type of the relation.
 **Returns**: <code>Number</code> - Type of the relation  
 <a name="BaseSpinalRelation+getChildrenIds"></a>
 
-### baseSpinalRelation.getChildrenIds() ⇒ <code>Array</code>
+### baseSpinalRelation.getChildrenIds() ⇒ <code>Array.&lt;Str&gt;</code>
 Retrieves all the ids of the children of the relation and return them inside an array.
 
 **Kind**: instance method of [<code>BaseSpinalRelation</code>](#BaseSpinalRelation)  
-**Returns**: <code>Array</code> - Array containing all the children ids of the relation  
+**Returns**: <code>Array.&lt;Str&gt;</code> - Array containing all the children ids of the relation  
 <a name="BaseSpinalRelation+getChildren"></a>
 
-### baseSpinalRelation.getChildren() ⇒ <code>Promise.&lt;Lst&gt;</code>
+### baseSpinalRelation.getChildren() ⇒ <code>Promise.&lt;Lst.&lt;SpinalNode&gt;&gt;</code>
 Return all the children of the relation.
 
 **Kind**: instance method of [<code>BaseSpinalRelation</code>](#BaseSpinalRelation)  
-**Returns**: <code>Promise.&lt;Lst&gt;</code> - Promise containing a list of the children of the relation  
+**Returns**: <code>Promise.&lt;Lst.&lt;SpinalNode&gt;&gt;</code> - Promise containing a list of the children of the relation  
 <a name="BaseSpinalRelation+addChild"></a>
 
 ### baseSpinalRelation.addChild(node)
@@ -513,8 +513,8 @@ Removes the relation from the graph.
 
 * [SpinalRelationPtrLst](#SpinalRelationPtrLst)
     * [new SpinalRelationPtrLst(name)](#new_SpinalRelationPtrLst_new)
-    * [.getChildrenIds()](#SpinalRelationPtrLst+getChildrenIds) ⇒ <code>Array</code>
-    * [.getChildren()](#SpinalRelationPtrLst+getChildren) ⇒ <code>Promise.&lt;Lst&gt;</code>
+    * [.getChildrenIds()](#SpinalRelationPtrLst+getChildrenIds) ⇒ <code>Array.&lt;Str&gt;</code>
+    * [.getChildren()](#SpinalRelationPtrLst+getChildren) ⇒ <code>Promise.&lt;Lst.&lt;SpinalNode&gt;&gt;</code>
     * [.getType()](#SpinalRelationPtrLst+getType) ⇒ <code>Number</code>
     * [.addChild(node)](#SpinalRelationPtrLst+addChild)
     * [.removeChild(node)](#SpinalRelationPtrLst+removeChild) ⇒ <code>Promise.&lt;Boolean&gt;</code>
@@ -529,18 +529,18 @@ Removes the relation from the graph.
 
 <a name="SpinalRelationPtrLst+getChildrenIds"></a>
 
-### spinalRelationPtrLst.getChildrenIds() ⇒ <code>Array</code>
+### spinalRelationPtrLst.getChildrenIds() ⇒ <code>Array.&lt;Str&gt;</code>
 Retrieves all the ids of the children of the relation and return them inside an array.
 
 **Kind**: instance method of [<code>SpinalRelationPtrLst</code>](#SpinalRelationPtrLst)  
-**Returns**: <code>Array</code> - Array containing all the children Id of the relation  
+**Returns**: <code>Array.&lt;Str&gt;</code> - Array containing all the children Id of the relation  
 <a name="SpinalRelationPtrLst+getChildren"></a>
 
-### spinalRelationPtrLst.getChildren() ⇒ <code>Promise.&lt;Lst&gt;</code>
+### spinalRelationPtrLst.getChildren() ⇒ <code>Promise.&lt;Lst.&lt;SpinalNode&gt;&gt;</code>
 Return all the children of the relation.
 
 **Kind**: instance method of [<code>SpinalRelationPtrLst</code>](#SpinalRelationPtrLst)  
-**Returns**: <code>Promise.&lt;Lst&gt;</code> - Promise  containing a list of all the children of the relation  
+**Returns**: <code>Promise.&lt;Lst.&lt;SpinalNode&gt;&gt;</code> - Promise containing a list of all the children of the relation  
 <a name="SpinalRelationPtrLst+getType"></a>
 
 ### spinalRelationPtrLst.getType() ⇒ <code>Number</code>
@@ -578,8 +578,8 @@ Removes a child from the relation.
 
 * [SpinalRelationLstPtr](#SpinalRelationLstPtr)
     * [new SpinalRelationLstPtr(name)](#new_SpinalRelationLstPtr_new)
-    * [.getChildrenIds()](#SpinalRelationLstPtr+getChildrenIds) ⇒ <code>Array</code>
-    * [.getChildren()](#SpinalRelationLstPtr+getChildren) ⇒ <code>Promise.&lt;Lst&gt;</code>
+    * [.getChildrenIds()](#SpinalRelationLstPtr+getChildrenIds) ⇒ <code>Array.&lt;Str&gt;</code>
+    * [.getChildren()](#SpinalRelationLstPtr+getChildren) ⇒ <code>Promise.&lt;Lst.&lt;SpinalNode&gt;&gt;</code>
     * [.getType()](#SpinalRelationLstPtr+getType) ⇒ <code>Number</code>
     * [.addChild(node)](#SpinalRelationLstPtr+addChild)
     * [.removeChild(node)](#SpinalRelationLstPtr+removeChild) ⇒ <code>Promise.&lt;Boolean&gt;</code>
@@ -594,18 +594,18 @@ Removes a child from the relation.
 
 <a name="SpinalRelationLstPtr+getChildrenIds"></a>
 
-### spinalRelationLstPtr.getChildrenIds() ⇒ <code>Array</code>
+### spinalRelationLstPtr.getChildrenIds() ⇒ <code>Array.&lt;Str&gt;</code>
 Retrieves all the ids of the children of the relation and return them inside an array.
 
 **Kind**: instance method of [<code>SpinalRelationLstPtr</code>](#SpinalRelationLstPtr)  
-**Returns**: <code>Array</code> - Array containing all the children Id of the relation  
+**Returns**: <code>Array.&lt;Str&gt;</code> - Array containing all the children Id of the relation  
 <a name="SpinalRelationLstPtr+getChildren"></a>
 
-### spinalRelationLstPtr.getChildren() ⇒ <code>Promise.&lt;Lst&gt;</code>
+### spinalRelationLstPtr.getChildren() ⇒ <code>Promise.&lt;Lst.&lt;SpinalNode&gt;&gt;</code>
 Return all the children of the relation.
 
 **Kind**: instance method of [<code>SpinalRelationLstPtr</code>](#SpinalRelationLstPtr)  
-**Returns**: <code>Promise.&lt;Lst&gt;</code> - Promise  containing a list of all the children of the relation  
+**Returns**: <code>Promise.&lt;Lst.&lt;SpinalNode&gt;&gt;</code> - Promise  containing a list of all the children of the relation  
 <a name="SpinalRelationLstPtr+getType"></a>
 
 ### spinalRelationLstPtr.getType() ⇒ <code>Number</code>
@@ -643,8 +643,8 @@ Removes a child from the relation.
 
 * [SpinalRelationRef](#SpinalRelationRef)
     * [new SpinalRelationRef(name)](#new_SpinalRelationRef_new)
-    * [.getChildrenIds()](#SpinalRelationRef+getChildrenIds) ⇒ <code>Array</code>
-    * [.getChildren()](#SpinalRelationRef+getChildren) ⇒ <code>Promise.&lt;Lst&gt;</code>
+    * [.getChildrenIds()](#SpinalRelationRef+getChildrenIds) ⇒ <code>Array.&lt;Str&gt;</code>
+    * [.getChildren()](#SpinalRelationRef+getChildren) ⇒ <code>Promise.&lt;Lst.&lt;SpinalNode&gt;&gt;</code>
     * [.getType()](#SpinalRelationRef+getType) ⇒ <code>Number</code>
     * [.addChild(node)](#SpinalRelationRef+addChild)
     * [.removeChild(node)](#SpinalRelationRef+removeChild) ⇒ <code>Promise.&lt;Boolean&gt;</code>
@@ -659,18 +659,18 @@ Removes a child from the relation.
 
 <a name="SpinalRelationRef+getChildrenIds"></a>
 
-### spinalRelationRef.getChildrenIds() ⇒ <code>Array</code>
+### spinalRelationRef.getChildrenIds() ⇒ <code>Array.&lt;Str&gt;</code>
 Retrieves all the ids of the children of the relation and return them inside an array.
 
 **Kind**: instance method of [<code>SpinalRelationRef</code>](#SpinalRelationRef)  
-**Returns**: <code>Array</code> - Array containing all the children Id of the relation  
+**Returns**: <code>Array.&lt;Str&gt;</code> - Array containing all the children Id of the relation  
 <a name="SpinalRelationRef+getChildren"></a>
 
-### spinalRelationRef.getChildren() ⇒ <code>Promise.&lt;Lst&gt;</code>
+### spinalRelationRef.getChildren() ⇒ <code>Promise.&lt;Lst.&lt;SpinalNode&gt;&gt;</code>
 Return all the children of the relation.
 
 **Kind**: instance method of [<code>SpinalRelationRef</code>](#SpinalRelationRef)  
-**Returns**: <code>Promise.&lt;Lst&gt;</code> - Promise  containing a list of all the children of the relation  
+**Returns**: <code>Promise.&lt;Lst.&lt;SpinalNode&gt;&gt;</code> - Promise  containing a list of all the children of the relation  
 <a name="SpinalRelationRef+getType"></a>
 
 ### spinalRelationRef.getType() ⇒ <code>Number</code>

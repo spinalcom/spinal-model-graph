@@ -42,7 +42,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
     /**
      * Retrieves all the ids of the children of the relation and return them inside an array.
-     * @return {Array} Array containing all the children Id of the relation
+     * @return {Array<Str>} Array containing all the children Id of the relation
      */
     getChildrenIds() {
         const res = [];
@@ -54,7 +54,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
     /**
      * Return all the children of the relation.
-     * @return {Promise<Lst>} Promise  containing a list of all the children of the relation
+     * @return {Promise<Lst<SpinalNode>>} Promise  containing a list of all the children of the relation
      */
     getChildren() {
         // noinspection JSValidateTypes
