@@ -94,9 +94,10 @@ class SpinalContext extends SpinalNode {
      * @param {SpinalNode | Model} child Node to add as child
      * @param {String} relationName Name of the relation
      * @param {Number} relationType This parameter is here only to properly override the parent method
+     * @return {SpinalNode} The child node
      */
     addChild(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE) {
-        super.addChild(child, relationName, SPINAL_RELATION_PTR_LST_TYPE);
+        return super.addChild(child, relationName, SPINAL_RELATION_PTR_LST_TYPE);
     }
 
     /**
@@ -105,9 +106,10 @@ class SpinalContext extends SpinalNode {
      * @param {String} relationName Name of the relation
      * @param {Number} relationType This parameter is here only to properly override the parent method
      * @param {SpinalContext} context Context to update, usually unused
+     * @return {SpinalNode} The child node
      */
     addChildInContext(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE, context = this) {
-        super.addChildInContext(child, relationName, SPINAL_RELATION_PTR_LST_TYPE, context);
+        return super.addChildInContext(child, relationName, SPINAL_RELATION_PTR_LST_TYPE, context);
     }
 }
 
