@@ -231,7 +231,9 @@ class SpinalNode extends globalType.Model {
             const res = [];
 
             for (let children of childrenLst) {
-                res.push(...children);
+                for (let i = 0; i < children.length; i++) {
+                    res.push(children[i]);
+                }
             }
 
             return res;
