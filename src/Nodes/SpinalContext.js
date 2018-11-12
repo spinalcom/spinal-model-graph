@@ -48,6 +48,22 @@ class SpinalContext extends SpinalNode {
     }
 
     /**
+     * Returns the relation ids of the context.
+     * @return {Lst<String>} The relation ids that the context knows
+     */
+    getRelationIds() {
+        return this.relationIds;
+    }
+
+    /**
+     * Returns the relation names of the context.
+     * @return {Lst<String>} The relation names that the context knows
+     */
+    getRelationNames() {
+        return this.relationNames;
+    }
+
+    /**
      * Adds a relation id to the relation ids known by the context.
      * @param {String} relationId Id of the relation
      * @return {Boolean} Return false if the relation id is already known
@@ -78,8 +94,11 @@ class SpinalContext extends SpinalNode {
      * @param {SpinalRelation} relation Relation to add
      */
     addRelation(relation) {
-        this.addRelationId(relation.getId());
-        this.addRelationName(relation.getName());
+        let res = false;
+
+        res = this.addRelationId(relation.getId());
+        res = this.addRelationName(relation.getName()) || res;
+        return res;
     }
 
     /**
