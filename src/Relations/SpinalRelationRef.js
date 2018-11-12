@@ -60,7 +60,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
         let children = [];
 
         for (let i = 0; i < this.children.length; i++) {
-            children.push(this.children[0]);
+            children.push(this.children[i]);
         }
         return Promise.resolve(children);
     }

@@ -67,7 +67,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
         let children = [];
 
         for (let i = 0; i < childrenLst.length; i++) {
-            children.push(childrenLst[0]);
+            children.push(childrenLst[i]);
         }
         return children;
     }
