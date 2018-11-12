@@ -71,7 +71,7 @@ class SpinalNodePointer extends globalType.Model {
      * This function returns the type of the pointed element.
      * @return {Str} Type of the pointed element
      */
-    getId() {
+    getType() {
         return this.info.pointed_type;
     }
 }
