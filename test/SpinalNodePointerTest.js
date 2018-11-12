@@ -26,7 +26,7 @@ describe("SpinalNodePointer", function () {
     });
 
     describe("How to use setElement", function () {
-        it("should set an element and update pointed_id and pointed_type", function (done) {
+        it("should set an element and update pointedId and pointedType", function (done) {
             let ptr = new SpinalNodePointer(DEFAULT_NODE);
 
             assert.equal(ptr.getId(), DEFAULT_NODE.getId());
@@ -37,7 +37,7 @@ describe("SpinalNodePointer", function () {
             });
         });
 
-        it("should set an element but not update pointed_id and pointed_type", function (done) {
+        it("should set an element but not update pointedId and pointedType", function (done) {
             let ptr = new SpinalNodePointer(DEFAULT_MODEL);
 
             assert.equal(typeof ptr.getId(), "undefined");
