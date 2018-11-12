@@ -1,6 +1,4 @@
 const lib = require("../../build/index");
-const spinalCore = require('spinal-core-connectorjs');
-const connection = require("../config");
 const globalType = typeof window === "undefined" ? global : window;
 
 const assert = require("assert");
@@ -189,53 +187,6 @@ describe("SpinalNode", function () {
         });
     });
 
-    describe("How to remove a node", function () {
-        describe("How to use removeChild", function () {
-            it('should return true', function (done) {
-                //Create a node
-                let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
-                //Add a child to the node with the default relation name
-                node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-
-                //remove the child previously added. Should return true
-                node.removeChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE).then(res => {
-                    assert.equal(res, true);
-                    done();
-                });
-            });
-        });
-
-        describe("How to use removeFromGraph", function () {
-            it('should remove the node from its parents', function (done) {
-                let node = new lib.SpinalNode();
-                let parentNode = new lib.SpinalNode();
-
-                parentNode.addChild(node, DEFAULT_NODE, lib.SPINAL_RELATION_TYPE);
-
-                node.removeFromGraph();
-
-                parentNode.getChildren([]).then(children => {
-                    assert.deepEqual(children, []);
-                    done();
-                });
-            });
-
-            it('should remove the node from its children', function () {
-                let node = new lib.SpinalNode();
-                let childNode = new lib.SpinalNode();
-
-                node.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-
-                node.removeFromGraph();
-
-                childNode.getParents([]).then(parents => {
-                    assert.deepEqual(parents, []);
-                    done();
-                });
-            });
-        });
-    });
-
     describe("How to add a child to the node", function () {
         describe("How to use addChild", function () {
             describe("How to add a child with SpinalRelationRef", function () {
@@ -338,6 +289,38 @@ describe("SpinalNode", function () {
                 assert.equal(context.relationNames[0], DEFAULT_RELATION_NAME);
 
                 assert.equal(context.relationIds.length, 2);
+            });
+        });
+    });
+
+    describe("How to remove a node", function () {
+        describe("How to use removeChild", function () {
+            it('should return true', function (done) {
+                let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
+
+                node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                node.removeChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE).then(() => {
+                    node.getChildren([]).then(children => {
+                        assert.deepEqual(children, []);
+                        done();
+                    });
+                });
+            });
+        });
+
+        describe("How to use removeFromGraph", function () {
+            it('should remove the node from its parents', function (done) {
+                let node = new lib.SpinalNode();
+                let parentNode = new lib.SpinalNode();
+
+                parentNode.addChild(node, DEFAULT_NODE, lib.SPINAL_RELATION_TYPE);
+
+                node.removeFromGraph().then(() => {
+                    parentNode.getChildren([]).then(children => {
+                        assert.deepEqual(children, []);
+                        done();
+                    });
+                });
             });
         });
     });
