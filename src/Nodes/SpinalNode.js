@@ -187,15 +187,12 @@ class SpinalNode extends globalType.Model {
      * @param {SpinalNode} node Node to remove
      * @param {String} relationName Name of the relation to wich the node belongs
      * @param {Number} relationType Type of the relation to wich the node belongs
-     * @return {Promise<Boolean>} Promise containing true if the child was successfully removed
      */
-    removeChild(node, relationName, relationType) {
+    async removeChild(node, relationName, relationType) {
         if (this._getRelationListType(relationType).has(relationName)) {
             let rel = this._getRelationListType(relationType).getElement(relationName);
-            return rel.removeChild(node);
+            rel.removeChild(node);
         }
-
-        return Promise.resolve(false);
     }
 
     /**
@@ -203,9 +200,12 @@ class SpinalNode extends globalType.Model {
      * This operation might delete all the sub-graph under this node.
      * After this operation the node can be deleted without fear.
      */
-    removeFromGraph() {
-        this._removeFromParents();
-        this._removeFromChildren();
+    async removeFromGraph() {
+        await Promise.all([
+            this._removeFromParents(),
+            this._removeFromChildren()
+        ]);
+
     }
 
     /**
@@ -249,8 +249,8 @@ class SpinalNode extends globalType.Model {
      * @param {Array<String>} relationNames Array containing the relation name of the desired parents
      * @return {Promise<Array<SpinalNode>>} Promise containing the parents that were found
      */
-    async getParents(relationNames) {
-        const parents = [];
+    getParents(relationNames) {
+        const promises = [];
 
         if (typeof relationNames === "undefined" || relationNames.length === 0)
             relationNames = this.parents.keys();
@@ -258,14 +258,12 @@ class SpinalNode extends globalType.Model {
             const list = this.parents.getElement(name);
 
             for (let i = 0; i < list.length; i++) {
-                let relation = await promiseLoad(list[i]);
-                let parent = await relation.getParent();
-
-                parents.push(parent);
+                promises.push(promiseLoad(list[i]).then(relation => {
+                    return relation.getParent();
+                }));
             };
         }
-
-        return parents;
+        return Promise.all(promises);
     }
 
     /**
@@ -295,17 +293,17 @@ class SpinalNode extends globalType.Model {
      * Remove the node from all parent relation the property parents
      * @private
      */
-    _removeFromParents() {
-        function removeFromParent(parent) {
-            parent.removeChild(this);
-        }
+    async _removeFromParents() {
+        const promises = [];
 
-        const removeFromParentBinded = removeFromParent.bind(this);
         this.parents.forEach((parent) => {
             for (let i = 0; i < parent.length; i++) {
-                promiseLoad(parent[i]).then(removeFromParentBinded);
+                promiseLoad(parent[i]).then(parentRel => {
+                    promises.push(parentRel.removeChild(this));
+                });
             }
         });
+        await Promise.all(promises);
     }
 
     /**
@@ -344,16 +342,19 @@ class SpinalNode extends globalType.Model {
      * This operation might also delete all the sub-graph under this node.
      * @private
      */
-    _removeFromChildren() {
+    async _removeFromChildren() {
+        const promises = [];
+
         this.relationListTypeSpinalRelation.forEach(relation => {
-            relation.removeFromGraph();
+            promises.push(relation.removeFromGraph());
         });
         this.relationListTypeSpinalRelationLstPtr.forEach(relation => {
-            relation.removeFromGraph();
+            promises.push(relation.removeFromGraph());
         });
         this.relationListTypeSpinalRelationPtrLst.forEach(relation => {
-            relation.removeFromGraph();
+            promises.push(relation.removeFromGraph());
         });
+        await Promise.all(promises);
     }
 
     /**
