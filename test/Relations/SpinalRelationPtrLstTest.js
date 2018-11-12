@@ -26,12 +26,36 @@ describe("SpinalRelationPtrLst", function () {
     });
 
     describe("How to use getChildren", function () {
-      it("should return the relation's children", function (done) {
+      it("should return the relation's child", function (done) {
         let rel = new SpinalRelationPtrLst(DEFAULT_RELATION_NAME);
 
         rel.addChild(DEFAULT_NODE);
         rel.getChildren().then(children => {
           assert.deepEqual(children, [DEFAULT_NODE]);
+          done();
+        });
+      });
+
+      it("should return the relation's children", function (done) {
+        let rel = new SpinalRelationPtrLst(DEFAULT_RELATION_NAME);
+        const node1 = new lib.SpinalNode();
+        const node2 = new lib.SpinalNode();
+        const node3 = new lib.SpinalNode();
+
+        rel.addChild(node1);
+        rel.addChild(node2);
+        rel.addChild(node3);
+        rel.getChildren().then(children => {
+          assert.deepEqual(children, [node1, node2, node3]);
+          done();
+        });
+      });
+
+      it("should return an empty array", function (done) {
+        let rel = new SpinalRelationPtrLst(DEFAULT_RELATION_NAME);
+
+        rel.getChildren().then(children => {
+          assert.deepEqual(children, []);
           done();
         });
       });
