@@ -119,39 +119,37 @@ class BaseSpinalRelation extends globalType.Model {
 
     /**
      * Removes all children from the relation.
+     * @return {Promise<Array<Boolean>>} Returns a promise containing an array of the result of each removeChild
      */
-    removeChildren() {
-        this.getChildren()
-            .then(children => {
-                for (let i = 0; i < children.length; i++) {
-                    this.removeChild(children[i]).then(
+    async removeChildren() {
+        const children = await this.getChildren();
+        const promises = [];
 
-                    );
-                }
-            })
-            .catch(e => {
-                console.error("cannot remove child ", e);
-            });
+        for (let i = 0; i < children.length; i++) {
+            promises.push(this.removeChild(children[i]));
+        }
+        await Promise.all(promises);
     }
 
     /**
      * Removes the relation from the graph.
      */
-    removeFromGraph() {
-        this._removeFromParent();
-        this.removeChildren();
+    async removeFromGraph() {
+        await Promise.all([
+            this._removeFromParent(),
+            this.removeChildren()
+        ]);
     }
 
     /**
      * Removes the relation from the parent.
      * @private
      */
-    _removeFromParent() {
-        this.getParent().then((parentNode) => {
-            let relationMap = parentNode._getRelationListType(this.getType());
+    async _removeFromParent() {
+        const parent = await this.getParent();
+        const relationMap = parent._getRelationListType(this.getType());
 
-            relationMap.delete(this.name.get());
-        });
+        relationMap.delete(this.getName());
     }
 }
 
