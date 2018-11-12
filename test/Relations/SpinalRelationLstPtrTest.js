@@ -67,19 +67,11 @@ describe("SpinalNode", function () {
 
         rel.addChild(DEFAULT_NODE);
         rel.removeChild(DEFAULT_NODE).then(() => {
-          // rel.getChildren().then(children => {
-          //   console.log("children: ", children);
-          //   assert.deepEqual(children, []);
-          //   // done();
-          // });
+          rel.getChildren().then(children => {
+            assert.deepEqual(children, []);
+            done();
+          });
         });
-        done();
-        // rel.removeChild(DEFAULT_NODE).then(() => {
-        //   rel.getChildren().then(children => {
-        //     assert.deepEqual(children, []);
-        //     done();
-        //   });
-        // });
       });
     });
   });
