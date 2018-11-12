@@ -49,29 +49,22 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
     getChildrenIds() {
         const res = [];
         for (let i = 0; i < this.children.length; i++) {
-            res.push(this.children[i].getId());
+            res.push(this.children[i].getId().get());
         }
         return res;
     }
 
     /**
      * Return all the children of the relation.
-     * @return {Promise<Lst<SpinalNode>>} Promise  containing a list of all the children of the relation
+     * @return {Promise<Array<SpinalNode>>} Promise containing an array of all the children of the relation
      */
-    async getChildren() {
-        const promiseList = [];
+    getChildren() {
+        const promises = [];
         for (let i = 0; i < this.children.length; i++) {
             let ptr = this.children[i];
-            promiseList.push(promiseLoad(ptr));
+            promises.push(promiseLoad(ptr));
         }
-        const children = new globalType.Lst();
-        await Promise.all(promiseList).then(values => {
-            for (let i = 0; i < values.length; i++) {
-
-                children.push(values[i]);
-            }
-        });
-        return Promise.resolve(children)
+        return Promise.all(promises);
     }
 
     /**
@@ -102,17 +95,14 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
     /**
      * Removes a child from the relation.
      * @param {SpinalNode} node Child to remove
-     * @return {Promise<Boolean>} Promise containing a boolean which is true if the node was successfuly removed
      */
-    async removeChild(node) {
+    removeChild(node) {
         for (let i = 0; i < this.children.length; i++) {
-
-            if (this.children[i].info.pointed_id === node.id) {
-                let ptr = this.children[i];
-                this.children.remove(ptr);
+            if (this.children[i].getId() === node.getId()) {
+                this.children.splice(i, 1);
             }
         }
-        return Promise.resolve(this.children.indexOf(node) === -1);
+        return Promise.resolve();
     }
 }
 
