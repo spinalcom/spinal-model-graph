@@ -1,64 +1,69 @@
 const lib = require("../../build/index");
-const spinalCore = require('spinal-core-connectorjs');
-const connection = require("../config");
 const globalType = typeof window === "undefined" ? global : window;
+
 const assert = require("assert");
 
-
-const DEFAULT_SPINAL_NODE_TYPE = "SpinalNode";
-const CUSTOM_SPINAL_NODE_TYPE = "SpinalNodeTest";
-const DEFAULT_RELATION_NAME = "hasContext";
-const DEFAULT_ELEMENT_NAME = "Default Name";
-const CUSTOM_RELATION_NAME1 = "custom relation";
-const CUSTOM_RELATION_NAME2 = "custom relation 2";
-const DEFAULT_NODE = new lib.SpinalNode(CUSTOM_SPINAL_NODE_TYPE);
-const DEFAULT_ELEMENT = new globalType.Model();
-DEFAULT_ELEMENT.add_attr({ name: DEFAULT_ELEMENT_NAME });
-
+const DEFAULT_SPINAL_GRAPH_NAME = "undefined";
+const DEFAULT_SPINAL_GRAPH_TYPE = "SpinalGraph";
+const DEFAULT_SPINAL_CONTEXT_NAME1 = "SpinalContext1";
+const DEFAULT_SPINAL_CONTEXT_NAME2 = "SpinalContext2";
+const HAS_CONTEXT_RELATION_NAME = "hasContext";
 
 describe("SpinalGraph", function () {
-    describe("how to create a graph and its default configuration", function () {
-        it("should create and setup a new graph", function () {
-            //Create a new graph
-            const graph = new lib.SpinalGraph();
-            //check if the newly created graph is an instance of SpinalGraph.
-            assert.equal(graph instanceof lib.SpinalGraph, true);
-            //check if the newly created graph is an instance of SpinalNode.
-            assert.equal(graph instanceof lib.SpinalNode, true);
-            //check if the relationListTypeSpinalRelationLstPtr has at least one relation.
-            assert.equal(graph.relationListTypeSpinalRelation.hasKey(), true);
-            //check if the relationListTypeSpinalRelationLstPtr has the default relation.
-            assert.equal(graph.relationListTypeSpinalRelation.has(DEFAULT_RELATION_NAME), true)
-        })
-    });
-    describe("how to add a context to a graph", function () {
-        it('should add a context to a graph', function (done) {
-            //Create a new graph
-            const graph = new lib.SpinalGraph();
-            //Create a new Context
-            const context = new lib.SpinalContext("context type", "context name");
-            //add the context as child of the graph
-            graph.addContext(context);
-            graph.getContext("context name")
-                .then(child => {
-                    assert.equal(child, context);
-                    done();
-                })
-                .catch(e => {
-                    console.error(e);
-                    done(e);
-                });
-            /*
-            graph.getChildren([DEFAULT_RELATION_NAME]).then(children => {
-                console.log(children);
-                assert.equal(children.length, 1, "it should have exactly one");
-                assert.equal(children[0], context);
-                done()
-            }).catch(e => {
-                console.log(e);
-                done()
-            });*/
-        });
-    })
-});
+    describe("How to use the constructor", function () {
+        it("should create a graph with default values", function (done) {
+            let context = new lib.SpinalGraph();
 
+            assert.equal(context.getName(), DEFAULT_SPINAL_GRAPH_NAME);
+            assert.equal(context.getType(), DEFAULT_SPINAL_GRAPH_TYPE);
+            context.getElement().then(element => {
+                assert(element instanceof globalType.Model);
+                done();
+            });
+        });
+
+        it("should create a hasContext relation with a SPINAL_RELATION_TYPE TYPE", function () {
+            let context = new lib.SpinalGraph();
+
+            assert(context.hasRelation(HAS_CONTEXT_RELATION_NAME, lib.SPINAL_RELATION_TYPE));
+        });
+    });
+
+    describe("How to add a context to the graph", function () {
+        it("should add a context to the context relation of the graph", function (done) {
+            let graph = new lib.SpinalGraph();
+            let context = new lib.SpinalContext();
+
+            graph.addContext(context);
+            graph.getChildren([HAS_CONTEXT_RELATION_NAME]).then(children => {
+                assert.deepEqual(children, [context]);
+                done();
+            });
+        });
+
+        it("should throw an error if the context to add is not a context", function () {
+            let graph = new lib.SpinalGraph();
+            let context = new lib.SpinalNode();
+
+            try {
+                graph.addContext(context);
+                assert.fail();
+            } catch (e) { }
+        });
+    });
+
+    describe("How to use getContext", function () {
+        it("should get a context using its name", function (done) {
+            let graph = new lib.SpinalGraph();
+            let context1 = new lib.SpinalContext(DEFAULT_SPINAL_CONTEXT_NAME1);
+            let context2 = new lib.SpinalContext(DEFAULT_SPINAL_CONTEXT_NAME2);
+
+            graph.addContext(context1);
+            graph.addContext(context2);
+            graph.getContext(DEFAULT_SPINAL_CONTEXT_NAME2).then(context => {
+                assert.equal(context, context2);
+                done();
+            });
+        });
+    });
+});
