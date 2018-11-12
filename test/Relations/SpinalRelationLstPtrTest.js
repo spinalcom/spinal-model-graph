@@ -6,7 +6,7 @@ const assert = require("assert");
 const DEFAULT_RELATION_NAME = "relationName"
 const DEFAULT_NODE = new lib.SpinalNode();
 
-describe("SpinalNode", function () {
+describe("SpinalRelationLstPtr", function () {
   describe("How to use the constructor", function () {
     it("should create a new relation with a name", function () {
       let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);

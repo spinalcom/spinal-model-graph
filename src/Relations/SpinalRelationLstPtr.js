@@ -44,7 +44,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
 
     /**
      * Retrieves all the ids of the children of the relation and return them inside an array.
-     * @return {Array<Str>} Array containing all the children Id of the relation
+     * @return {Array<String>} Array containing all the children ids of the relation
      */
     getChildrenIds() {
         const res = [];

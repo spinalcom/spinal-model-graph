@@ -46,18 +46,30 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
     /**
      * Retrieves all the ids of the children of the relation and return them inside an array.
-     * @return {Array<Str>} Array containing all the children Id of the relation
+     * @return {Array<String>} Array containing all the children ids of the relation
      */
     getChildrenIds() {
-        return this.children.ids;
+        const idLst = this.children.info.ids;
+        let ids = [];
+
+        for (let i = 0; i < idLst.length; i++) {
+            ids.push(idLst[0].get());
+        }
+        return ids;
     }
 
     /**
      * Return all the children of the relation.
-     * @return {Promise<Lst<SpinalNode>>} Promise containing a list of all the children of the relation
+     * @return {Promise<Array<SpinalNode>>} Promise containing a list of all the children of the relation
      */
-    getChildren() {
-        return promiseLoad(this.children);
+    async getChildren() {
+        const childrenLst = await promiseLoad(this.children);
+        let children = [];
+
+        for (let i = 0; i < childrenLst.length; i++) {
+            children.push(childrenLst[0]);
+        }
+        return children;
     }
 
     /**
@@ -91,14 +103,11 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     /**
      * Removes a child from the relation.
      * @param {SpinalNode} node Child to remove
-     * @return {Promise<Boolean>} Promise containing a boolean which is true if the node was successfuly removed
      */
     async removeChild(node) {
         const childrenLst = await promiseLoad(this.children);
 
         childrenLst.remove(node);
-
-        return childrenLst.indexOf(node) === -1;
     }
 }
 
