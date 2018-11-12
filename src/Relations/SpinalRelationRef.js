@@ -42,23 +42,27 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
     /**
      * Retrieves all the ids of the children of the relation and return them inside an array.
-     * @return {Array<Str>} Array containing all the children Id of the relation
+     * @return {Array<String>} Array containing all the children ids of the relation
      */
     getChildrenIds() {
         const res = [];
         for (let i = 0; i < this.children.length; i++) {
-            res.push(this.children[i].getId());
+            res.push(this.children[i].getId().get());
         }
         return res;
     }
 
     /**
      * Return all the children of the relation.
-     * @return {Promise<Lst<SpinalNode>>} Promise  containing a list of all the children of the relation
+     * @return {Promise<Array<SpinalNode>>} Promise containing a list of all the children of the relation
      */
     getChildren() {
-        // noinspection JSValidateTypes
-        return Promise.resolve(this.children);
+        let children = [];
+
+        for (let i = 0; i < this.children.length; i++) {
+            children.push(this.children[0]);
+        }
+        return Promise.resolve(children);
     }
 
     /**
@@ -89,11 +93,9 @@ class SpinalRelationRef extends BaseSpinalRelation {
     /**
      * Removes a child from the relation.
      * @param {SpinalNode} node Child to remove
-     * @return {Promise<Boolean>} Promise containing a boolean which is true if the node was successfuly removed
      */
     async removeChild(node) {
         this.children.remove(node);
-        return Promise.resolve(this.children.indexOf(node) === -1);
     }
 }
 
