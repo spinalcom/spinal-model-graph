@@ -5,6 +5,8 @@
 
 * [SpinalContext](#SpinalContext)
     * [new SpinalContext(name, type, element)](#new_SpinalContext_new)
+    * [.getRelationIds()](#SpinalContext+getRelationIds) ⇒ <code>Lst.&lt;String&gt;</code>
+    * [.getRelationNames()](#SpinalContext+getRelationNames) ⇒ <code>Lst.&lt;String&gt;</code>
     * [.addRelationId(relationId)](#SpinalContext+addRelationId) ⇒ <code>Boolean</code>
     * [.addRelationName(relationName)](#SpinalContext+addRelationName) ⇒ <code>Boolean</code>
     * [.addRelation(relation)](#SpinalContext+addRelation)
@@ -24,6 +26,20 @@ Constructor for the SpinalContext class.
 | type | <code>String</code> | <code>SpinalContext</code> | Type of the context, usually unused |
 | element | <code>SpinalNode</code> \| <code>Model</code> |  | Element of the context, usually unused |
 
+<a name="SpinalContext+getRelationIds"></a>
+
+### spinalContext.getRelationIds() ⇒ <code>Lst.&lt;String&gt;</code>
+Returns the relation ids of the context.
+
+**Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
+**Returns**: <code>Lst.&lt;String&gt;</code> - The relation ids that the context knows  
+<a name="SpinalContext+getRelationNames"></a>
+
+### spinalContext.getRelationNames() ⇒ <code>Lst.&lt;String&gt;</code>
+Returns the relation names of the context.
+
+**Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
+**Returns**: <code>Lst.&lt;String&gt;</code> - The relation names that the context knows  
 <a name="SpinalContext+addRelationId"></a>
 
 ### spinalContext.addRelationId(relationId) ⇒ <code>Boolean</code>
