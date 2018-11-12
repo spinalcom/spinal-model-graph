@@ -187,6 +187,7 @@ class SpinalNode extends globalType.Model {
      * @param {SpinalNode} node Node to remove
      * @param {String} relationName Name of the relation to wich the node belongs
      * @param {Number} relationType Type of the relation to wich the node belongs
+     * @return {Promise<nothing>} An empty promise
      */
     async removeChild(node, relationName, relationType) {
         if (this._getRelationListType(relationType).has(relationName)) {
@@ -199,6 +200,7 @@ class SpinalNode extends globalType.Model {
      * Remove the node from the graph i.e remove the node from all the parent relations and remove all the children relations.
      * This operation might delete all the sub-graph under this node.
      * After this operation the node can be deleted without fear.
+     * @return {Promise<nothing>} An empty promise
      */
     async removeFromGraph() {
         await Promise.all([
@@ -340,6 +342,7 @@ class SpinalNode extends globalType.Model {
     /**
      * Remove all children relation from the graph.
      * This operation might also delete all the sub-graph under this node.
+     * @return {Promise<nothing>} An empty promise
      * @private
      */
     async _removeFromChildren() {

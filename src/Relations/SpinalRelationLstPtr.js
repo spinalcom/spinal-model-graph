@@ -95,6 +95,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
     /**
      * Removes a child from the relation.
      * @param {SpinalNode} node Child to remove
+     * @return {Promise<nothing>} An empty promise
      */
     removeChild(node) {
         for (let i = 0; i < this.children.length; i++) {

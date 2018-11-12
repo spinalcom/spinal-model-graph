@@ -103,6 +103,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     /**
      * Removes a child from the relation.
      * @param {SpinalNode} node Child to remove
+     * @return {Promise<nothing>} An empty promise
      */
     async removeChild(node) {
         const childrenLst = await promiseLoad(this.children);

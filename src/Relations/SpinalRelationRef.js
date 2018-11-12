@@ -93,6 +93,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
     /**
      * Removes a child from the relation.
      * @param {SpinalNode} node Child to remove
+     * @return {Promise<nothing>} An empty promise
      */
     async removeChild(node) {
         this.children.remove(node);
