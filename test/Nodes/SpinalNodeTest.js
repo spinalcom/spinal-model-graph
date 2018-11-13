@@ -189,60 +189,79 @@ describe("SpinalNode", function () {
 
     describe("How to add a child to the node", function () {
         describe("How to use addChild", function () {
-            describe("How to add a child with SpinalRelationRef", function () {
-                it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', function (done) {
-                    let node = new lib.SpinalNode();
+            it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', function (done) {
+                let node = new lib.SpinalNode();
+                node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                assert.equal(typeof node !== "undefined", true);
+                assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
+
+                //check if the node contain the children
+                const childrenPromise = node.getChildren([DEFAULT_RELATION_NAME]);
+
+                childrenPromise.then(children => {
+                    assert.equal(children.length, 1);
+                    assert.equal(children[0], DEFAULT_NODE);
+                    done();
+                });
+            });
+
+            it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', function (done) {
+                let node = new lib.SpinalNode();
+                node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE);
+                assert.equal(typeof node !== "undefined", true);
+                assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE), true);
+
+                //check if the node contain the children
+                const childrenPromise = node.getChildren([DEFAULT_RELATION_NAME]);
+
+                childrenPromise.then(children => {
+                    assert.equal(children.length, 1);
+                    assert.equal(children[0], DEFAULT_NODE);
+
+                    done();
+                });
+            });
+
+            it('should add a child to the node with a relation type SPINAL_RELATION_LST_PTR_TYPE', function (done) {
+                let node = new lib.SpinalNode();
+                node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE);
+                assert.equal(typeof node !== "undefined", true);
+                assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE), true);
+
+                //check if the node contain the children
+                const childrenPromise = node.getChildren([DEFAULT_RELATION_NAME]);
+
+                childrenPromise.then(children => {
+                    assert.equal(children.length, 1);
+                    assert.equal(children[0], DEFAULT_NODE);
+
+                    done();
+                });
+            });
+
+            it("should throw an error if you try to add the same node twice", function () {
+                let node = new lib.SpinalNode();
+                let error = false;
+
+                node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                try {
                     node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-                    assert.equal(typeof node !== "undefined", true);
-                    assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
-
-                    //check if the node contain the children
-                    const childrenPromise = node.getChildren([DEFAULT_RELATION_NAME]);
-
-                    childrenPromise.then(children => {
-                        assert.equal(children.length, 1);
-                        assert.equal(children[0], DEFAULT_NODE);
-                        done();
-                    });
-                });
+                } catch (e) {
+                    error = true;
+                }
+                assert(error);
             });
 
-            describe("How to add a child with SpinalRelationPtrLst", function () {
-                it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', function (done) {
-                    let node = new lib.SpinalNode();
-                    node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE);
-                    assert.equal(typeof node !== "undefined", true);
-                    assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE), true);
+            it("should throw an error when you pass it something that is not a model", function () {
+                let node = new lib.SpinalNode();
+                let error = false;
 
-                    //check if the node contain the children
-                    const childrenPromise = node.getChildren([DEFAULT_RELATION_NAME]);
-
-                    childrenPromise.then(children => {
-                        assert.equal(children.length, 1);
-                        assert.equal(children[0], DEFAULT_NODE);
-
-                        done();
-                    });
-                });
-            });
-
-            describe("How to add a child with SpinalRelationLstPtr", function () {
-                it('should add a child to the node with a relation type SPINAL_RELATION_LST_PTR_TYPE', function (done) {
-                    let node = new lib.SpinalNode();
-                    node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE);
-                    assert.equal(typeof node !== "undefined", true);
-                    assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE), true);
-
-                    //check if the node contain the children
-                    const childrenPromise = node.getChildren([DEFAULT_RELATION_NAME]);
-
-                    childrenPromise.then(children => {
-                        assert.equal(children.length, 1);
-                        assert.equal(children[0], DEFAULT_NODE);
-
-                        done();
-                    });
-                });
+                try {
+                    node.addChild(new Array(), DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                } catch (e) {
+                    error = true;
+                }
+                assert(error);
             });
         });
 
@@ -293,11 +312,12 @@ describe("SpinalNode", function () {
 
             it("should throw an error if you try to add the same node twice", function () {
                 let node = new lib.SpinalNode();
+                let context = new lib.SpinalContext();
                 let error = false;
 
-                node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                node.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
                 try {
-                    node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                    node.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
                 } catch (e) {
                     error = true;
                 }
@@ -306,10 +326,11 @@ describe("SpinalNode", function () {
 
             it("should throw an error when you pass it something that is not a model", function () {
                 let node = new lib.SpinalNode();
+                let context = new lib.SpinalContext();
                 let error = false;
 
                 try {
-                    node.addChild(new Array(), DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                    node.addChildInContext(new Array(), DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
                 } catch (e) {
                     error = true;
                 }
