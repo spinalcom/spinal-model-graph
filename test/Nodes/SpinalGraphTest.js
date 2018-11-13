@@ -44,11 +44,14 @@ describe("SpinalGraph", function () {
         it("should throw an error if the context to add is not a context", function () {
             let graph = new lib.SpinalGraph();
             let context = new lib.SpinalNode();
+            let error = false;
 
             try {
                 graph.addContext(context);
-                assert.fail();
-            } catch (e) { }
+            } catch (e) {
+                error = true;
+            }
+            assert(error);
         });
     });
 

@@ -290,6 +290,31 @@ describe("SpinalNode", function () {
 
                 assert.equal(context.relationIds.length, 2);
             });
+
+            it("should throw an error if you try to add the same node twice", function () {
+                let node = new lib.SpinalNode();
+                let error = false;
+
+                node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                try {
+                    node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                } catch (e) {
+                    error = true;
+                }
+                assert(error);
+            });
+
+            it("should throw an error when you pass it something that is not a model", function () {
+                let node = new lib.SpinalNode();
+                let error = false;
+
+                try {
+                    node.addChild(new Array(), DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                } catch (e) {
+                    error = true;
+                }
+                assert(error);
+            });
         });
     });
 

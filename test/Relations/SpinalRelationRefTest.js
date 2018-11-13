@@ -81,6 +81,31 @@ describe("SpinalRelationRef", function () {
           done();
         });
       });
+
+      it("should throw an error if you try to add the same node twice", function () {
+        let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
+        let error = false;
+
+        rel.addChild(DEFAULT_NODE);
+        try {
+          rel.addChild(DEFAULT_NODE);
+        } catch (e) {
+          error = true;
+        }
+        assert(error);
+      });
+
+      it("should throw an error when you pass it something that is not a model", function () {
+        let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
+        let error = false;
+
+        try {
+          rel.addChild(new Array());
+        } catch (e) {
+          error = true;
+        }
+        assert(error);
+      });
     });
   });
 
