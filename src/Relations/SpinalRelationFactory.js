@@ -26,9 +26,9 @@ import SpinalRelationLstPtr from "./SpinalRelationLstPtr"
 import SpinalRelationPtrLst from "./SpinalRelationPtrLst"
 import spinalCore from "spinal-core-connectorjs";
 
-const SPINAL_RELATION_TYPE = 0;
-const SPINAL_RELATION_LST_PTR_TYPE = 1;
-const SPINAL_RELATION_PTR_LST_TYPE = 2;
+const SPINAL_RELATION_TYPE = "Ref";
+const SPINAL_RELATION_LST_PTR_TYPE = "LstPtr";
+const SPINAL_RELATION_PTR_LST_TYPE = "PtrLst";
 const RELATION_TYPE_LIST = [
     SPINAL_RELATION_TYPE,
     SPINAL_RELATION_LST_PTR_TYPE,

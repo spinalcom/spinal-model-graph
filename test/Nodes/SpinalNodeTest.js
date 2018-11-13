@@ -229,7 +229,6 @@ describe("SpinalNode", function () {
                 assert.equal(typeof node !== "undefined", true);
                 assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
 
-                //check if the node contain the children
                 const childrenPromise = node.getChildren([DEFAULT_RELATION_NAME]);
 
                 childrenPromise.then(children => {
@@ -245,7 +244,6 @@ describe("SpinalNode", function () {
                 assert.equal(typeof node !== "undefined", true);
                 assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE), true);
 
-                //check if the node contain the children
                 const childrenPromise = node.getChildren([DEFAULT_RELATION_NAME]);
 
                 childrenPromise.then(children => {
@@ -262,7 +260,6 @@ describe("SpinalNode", function () {
                 assert.equal(typeof node !== "undefined", true);
                 assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE), true);
 
-                //check if the node contain the children
                 const childrenPromise = node.getChildren([DEFAULT_RELATION_NAME]);
 
                 childrenPromise.then(children => {

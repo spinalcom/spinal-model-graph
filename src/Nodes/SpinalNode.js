@@ -52,12 +52,9 @@ class SpinalNode extends globalType.Model {
                 type: type,
             },
             parents: new SpinalMap(),
-            children: new Lst(),
+            children: new SpinalMap(),
             element: new SpinalNodePointer(element),
         });
-        for (let i = 0; i < RELATION_TYPE_LIST.length; i++) {
-            this.children.push(new SpinalMap());
-        }
     }
 
     /**
@@ -99,14 +96,12 @@ class SpinalNode extends globalType.Model {
     getNbChildren() {
         let nbChildren = 0;
 
-        for (let relationType of RELATION_TYPE_LIST) {
-            let type = this._getChildrenType(relationType);
-
-            type.forEach(relation => {
+        this.children.forEach(relationMap => {
+            relationMap.forEach(relation => {
                 let childrenIds = relation.getChildrenIds();
                 nbChildren += childrenIds.length;
             });
-        }
+        });
         return nbChildren;
     }
 
@@ -117,7 +112,11 @@ class SpinalNode extends globalType.Model {
      * @return {Boolean} Return true is the relation is contained in the node and false otherwise.
      */
     hasRelation(relationName, relationType) {
-        return this._getChildrenType(relationType).has(relationName);
+        const typeMap = this._getChildrenType(relationType);
+
+        if (typeof typeMap === "undefined")
+            return false;
+        return typeMap.has(relationName);
     }
 
     /**
@@ -233,16 +232,14 @@ class SpinalNode extends globalType.Model {
 
         const promises = [];
 
-        for (let relationType of RELATION_TYPE_LIST) {
-            const relationMap = this._getChildrenType(relationType);
-
+        this.children.forEach(relationMap => {
             for (let j = 0; j < relationNames.length; j++) {
                 if (relationMap.has(relationNames[j])) {
                     const relation = relationMap.getElement(relationNames[j]);
                     promises.push(relation.getChildren());
                 }
             }
-        }
+        });
 
         const childrenLst = await Promise.all(promises);
         let res = [];
@@ -285,7 +282,7 @@ class SpinalNode extends globalType.Model {
      * @private
      */
     _getChildrenType(relationType) {
-        return this.children[relationType];
+        return this.children.getElement(relationType);
     }
 
     /**
@@ -343,24 +340,26 @@ class SpinalNode extends globalType.Model {
         const relation = SpinalRelationFactory.getNewRelation(relationName, relationType);
         relation.setParent(this);
 
-        this._getChildrenType(relationType).setElement(relationName, relation)
+        if (!this.children.has(relationType)) {
+            this.children.setElement(relationType, new SpinalMap());
+        }
+        this._getChildrenType(relationType).setElement(relationName, relation);
         return relation;
     }
 
     /**
      * Remove all children relation from the graph.
-     * This operation might also delete all the sub-graph under this node.
      * @return {Promise<nothing>} An empty promise
      * @private
      */
     async _removeFromChildren() {
         const promises = [];
 
-        for (let relationType of RELATION_TYPE_LIST) {
-            this._getChildrenType(relationType).forEach(relation => {
+        this.children.forEach(relationMap => {
+            relationMap.forEach(relation => {
                 promises.push(relation.removeFromGraph());
             });
-        }
+        });
         await Promise.all(promises);
     }
 
@@ -372,9 +371,9 @@ class SpinalNode extends globalType.Model {
     _getRelationNames() {
         let names = [];
 
-        for (let relationType of RELATION_TYPE_LIST) {
-            names.push(...this._getChildrenType(relationType).keys());
-        }
+        this.children.forEach(relationMap => {
+            names.push(...relationMap.keys());
+        });
         return names;
     }
 }

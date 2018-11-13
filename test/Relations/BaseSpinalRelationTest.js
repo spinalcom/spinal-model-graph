@@ -75,25 +75,7 @@ describe("BaseSpinalRelation", function () {
     });
 
     describe("How to use removeFromGraph", function () {
-      it("should delete the relation's children", function (done) {
-        let rel = new SpinalRelationPtrLst();
-        const parent = new lib.SpinalNode();
-        const child1 = new lib.SpinalNode();
-        const child2 = new lib.SpinalNode();
-        const child3 = new lib.SpinalNode();
 
-        rel.setParent(parent);
-        rel.addChild(child1);
-        rel.addChild(child2);
-        rel.addChild(child3);
-
-        rel.removeFromGraph().then(() => {
-          rel.getChildren().then(children => {
-            assert.deepEqual(children, []);
-            done();
-          });
-        });
-      });
     });
   });
 });
