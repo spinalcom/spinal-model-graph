@@ -166,6 +166,7 @@ Searches for a context using its name.
     * [.getName()](#SpinalNode+getName) ⇒ <code>Str</code>
     * [.getType()](#SpinalNode+getType) ⇒ <code>Str</code>
     * [.getElement()](#SpinalNode+getElement) ⇒ <code>Promise.&lt;\*&gt;</code>
+    * [.getNbChildren()](#SpinalNode+getNbChildren) ⇒ <code>Number</code>
     * [.hasRelation(relationName, relationType)](#SpinalNode+hasRelation) ⇒ <code>Boolean</code>
     * [.hasRelations(relationNames, relationType)](#SpinalNode+hasRelations) ⇒ <code>Boolean</code>
     * [.addChild(child, relationName, relationType)](#SpinalNode+addChild) ⇒ [<code>SpinalNode</code>](#SpinalNode)
@@ -215,6 +216,13 @@ Returns the element.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;\*&gt;</code> - A promise where the parameter of the resolve method is the element  
+<a name="SpinalNode+getNbChildren"></a>
+
+### spinalNode.getNbChildren() ⇒ <code>Number</code>
+Computes and returns the number of children of the node.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Number</code> - The number of children  
 <a name="SpinalNode+hasRelation"></a>
 
 ### spinalNode.hasRelation(relationName, relationType) ⇒ <code>Boolean</code>
