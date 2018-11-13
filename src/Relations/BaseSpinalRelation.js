@@ -149,7 +149,7 @@ class BaseSpinalRelation extends globalType.Model {
      */
     async _removeFromParent() {
         const parent = await this.getParent();
-        const relationMap = parent._getRelationListType(this.getType());
+        const relationMap = parent._getChildrenType(this.getType());
 
         relationMap.delete(this.getName());
     }
