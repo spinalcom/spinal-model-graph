@@ -41,7 +41,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
             children: new SpinalNodePointer(new globalType.Lst())
         });
 
-        this.children.info.add_attr("ids", []);
+        this.children.info.add_attr("ids", new globalType.Lst());
     }
 
     /**
@@ -109,6 +109,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
         const childrenLst = await promiseLoad(this.children);
 
         childrenLst.remove(node);
+        this.children.info.ids.remove(node.getId());
     }
 }
 
