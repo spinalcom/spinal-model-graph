@@ -68,6 +68,14 @@ class SpinalGraph extends SpinalNode {
 
         return children.find(child => child.info.name.get() === name);
     }
+
+    /**
+     * Empty override of the SpinalNode method.
+     * @return {Promise<nothing>} An empty promise
+     */
+    async removeFromGraph() {
+
+    }
 }
 
 spinalCore.register_models([SpinalGraph]);
