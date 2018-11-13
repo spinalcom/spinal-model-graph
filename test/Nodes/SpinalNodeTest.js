@@ -15,12 +15,6 @@ const DEFAULT_ELEMENT = new globalType.Model();
 DEFAULT_ELEMENT.add_attr({ name: DEFAULT_ELEMENT_NAME });
 const DEFAULT_NODE = new lib.SpinalNode(CUSTOM_SPINAL_NODE_TYPE);
 
-describe("Sanity check", function () {
-    it('should return true', function () {
-        assert.equal(0, 0);
-    });
-});
-
 describe("SpinalNode", function () {
     describe("How to use the constructor", function () {
         it('should create a new spinal node.', function (done) {
