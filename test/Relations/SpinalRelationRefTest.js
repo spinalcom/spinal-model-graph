@@ -122,6 +122,17 @@ describe("SpinalRelationRef", function () {
           });
         });
       });
+
+      it("should remove a child and update the children ids of the relation", function (done) {
+        let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
+
+        rel.addChild(DEFAULT_NODE);
+        rel.removeChild(DEFAULT_NODE).then(() => {
+          let ids = rel.getChildrenIds();
+          assert.deepEqual(ids, []);
+          done();
+        });
+      });
     });
   });
 });
