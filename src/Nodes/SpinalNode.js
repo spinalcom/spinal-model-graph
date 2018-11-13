@@ -108,7 +108,7 @@ class SpinalNode extends globalType.Model {
     /**
      * Verify if the node contains the relation name.
      * @param {String} relationName Name of the relation
-     * @param {Number} relationType Type of the relation
+     * @param {String} relationType Type of the relation
      * @return {Boolean} Return true is the relation is contained in the node and false otherwise.
      */
     hasRelation(relationName, relationType) {
@@ -122,7 +122,7 @@ class SpinalNode extends globalType.Model {
     /**
      * Verify if the node contains all the relation names.
      * @param {Array<String>} relationNames Array containing all the relation name
-     * @param {Number} relationType Type of the relations
+     * @param {String} relationType Type of the relations
      * @return {Boolean} Return true if the node contains all the relations in relationNames, false otherwise.
      */
     hasRelations(relationNames, relationType) {
@@ -139,7 +139,7 @@ class SpinalNode extends globalType.Model {
      * Add the node as child of the relation.
      * @param {SpinalNode | Model} child Element to add as child
      * @param {String} relationName Name of the relation
-     * @param {Number} relationType Type of the relation
+     * @param {String} relationType Type of the relation
      * @return {SpinalNode} The child node
      */
     addChild(child, relationName, relationType) {
@@ -166,7 +166,7 @@ class SpinalNode extends globalType.Model {
      * Adds a child and notices the context if a new relation was created.
      * @param {SpinalNode | Model} child Node to add as child
      * @param {String} relationName Name of the relation
-     * @param {Number} relationType Type of the relation
+     * @param {String} relationType Type of the relation
      * @param {SpinalContext} context Context to update
      * @return {SpinalNode} The child node
      */
@@ -196,7 +196,7 @@ class SpinalNode extends globalType.Model {
      * Remove the node from the relation children.
      * @param {SpinalNode} node Node to remove
      * @param {String} relationName Name of the relation to wich the node belongs
-     * @param {Number} relationType Type of the relation to wich the node belongs
+     * @param {String} relationType Type of the relation to wich the node belongs
      * @return {Promise<nothing>} An empty promise
      */
     async removeChild(node, relationName, relationType) {
@@ -277,7 +277,7 @@ class SpinalNode extends globalType.Model {
 
     /**
      * Return the relation list corresponding to the relation type.
-     * @param {Number} relationType Type of the relation
+     * @param {String} relationType Type of the relation
      * @return {SpinalMap} Return the relation list corresponding to the relation type
      * @private
      */
@@ -288,7 +288,7 @@ class SpinalNode extends globalType.Model {
     /**
      * Return the relation corresponding.
      * @param {String} relationName Name of the relation
-     * @param {Number} relationType Type of the relation
+     * @param {String} relationType Type of the relation
      * @return {SpinalRelation} The relation corresponding
      * @private
      */
@@ -333,7 +333,7 @@ class SpinalNode extends globalType.Model {
     /**
      * Create a new relation for this node.
      * @param {String} relationName Name of the relation
-     * @param {Number} relationType Type of the relation
+     * @param {String} relationType Type of the relation
      * @private
      */
     _createRelation(relationName, relationType) {

@@ -10,7 +10,6 @@
     * [.addRelationId(relationId)](#SpinalContext+addRelationId) ⇒ <code>Boolean</code>
     * [.addRelationName(relationName)](#SpinalContext+addRelationName) ⇒ <code>Boolean</code>
     * [.addRelation(relation)](#SpinalContext+addRelation)
-    * [.removeFromGraph()](#SpinalContext+removeFromGraph)
     * [.addChild(child, relationName, relationType)](#SpinalContext+addChild) ⇒ <code>SpinalNode</code>
     * [.addChildInContext(child, relationName, relationType, context)](#SpinalContext+addChildInContext) ⇒ <code>SpinalNode</code>
 
@@ -75,12 +74,6 @@ Adds a relation relations known by the context.
 | --- | --- | --- |
 | relation | <code>SpinalRelation</code> | Relation to add |
 
-<a name="SpinalContext+removeFromGraph"></a>
-
-### spinalContext.removeFromGraph()
-Remove all the nodes associated to this context from the graph.
-
-**Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
 <a name="SpinalContext+addChild"></a>
 
 ### spinalContext.addChild(child, relationName, relationType) ⇒ <code>SpinalNode</code>
@@ -93,7 +86,7 @@ Adds a child with a SpinalRelationLstPtrType.
 | --- | --- | --- |
 | child | <code>SpinalNode</code> \| <code>Model</code> | Node to add as child |
 | relationName | <code>String</code> | Name of the relation |
-| relationType | <code>Number</code> | This parameter is here only to properly override the parent method |
+| relationType | <code>String</code> | This parameter is here only to properly override the parent method |
 
 <a name="SpinalContext+addChildInContext"></a>
 
@@ -107,7 +100,7 @@ Adds a child with a SpinalRelationLstPtrType and notices the context if a new re
 | --- | --- | --- |
 | child | <code>SpinalNode</code> \| <code>Model</code> | Node to add as child |
 | relationName | <code>String</code> | Name of the relation |
-| relationType | <code>Number</code> | This parameter is here only to properly override the parent method |
+| relationType | <code>String</code> | This parameter is here only to properly override the parent method |
 | context | [<code>SpinalContext</code>](#SpinalContext) | Context to update, usually unused |
 
 <a name="SpinalGraph"></a>
@@ -119,6 +112,7 @@ Adds a child with a SpinalRelationLstPtrType and notices the context if a new re
     * [new SpinalGraph(name, type, element)](#new_SpinalGraph_new)
     * [.addContext(context)](#SpinalGraph+addContext)
     * [.getContext(name)](#SpinalGraph+getContext) ⇒ <code>SpinalContext</code> \| <code>undefined</code>
+    * [.removeFromGraph()](#SpinalGraph+removeFromGraph) ⇒ <code>Promise.&lt;nothing&gt;</code>
 
 <a name="new_SpinalGraph_new"></a>
 
@@ -155,6 +149,13 @@ Searches for a context using its name.
 | --- | --- | --- |
 | name | <code>String</code> | Name of the context |
 
+<a name="SpinalGraph+removeFromGraph"></a>
+
+### spinalGraph.removeFromGraph() ⇒ <code>Promise.&lt;nothing&gt;</code>
+Empty override of the SpinalNode method.
+
+**Kind**: instance method of [<code>SpinalGraph</code>](#SpinalGraph)  
+**Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
 <a name="SpinalNode"></a>
 
 ## SpinalNode
@@ -234,7 +235,7 @@ Verify if the node contains the relation name.
 | Param | Type | Description |
 | --- | --- | --- |
 | relationName | <code>String</code> | Name of the relation |
-| relationType | <code>Number</code> | Type of the relation |
+| relationType | <code>String</code> | Type of the relation |
 
 <a name="SpinalNode+hasRelations"></a>
 
@@ -247,7 +248,7 @@ Verify if the node contains all the relation names.
 | Param | Type | Description |
 | --- | --- | --- |
 | relationNames | <code>Array.&lt;String&gt;</code> | Array containing all the relation name |
-| relationType | <code>Number</code> | Type of the relations |
+| relationType | <code>String</code> | Type of the relations |
 
 <a name="SpinalNode+addChild"></a>
 
@@ -261,7 +262,7 @@ Add the node as child of the relation.
 | --- | --- | --- |
 | child | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> | Element to add as child |
 | relationName | <code>String</code> | Name of the relation |
-| relationType | <code>Number</code> | Type of the relation |
+| relationType | <code>String</code> | Type of the relation |
 
 <a name="SpinalNode+addChildInContext"></a>
 
@@ -275,7 +276,7 @@ Adds a child and notices the context if a new relation was created.
 | --- | --- | --- |
 | child | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> | Node to add as child |
 | relationName | <code>String</code> | Name of the relation |
-| relationType | <code>Number</code> | Type of the relation |
+| relationType | <code>String</code> | Type of the relation |
 | context | <code>SpinalContext</code> | Context to update |
 
 <a name="SpinalNode+removeChild"></a>
@@ -290,7 +291,7 @@ Remove the node from the relation children.
 | --- | --- | --- |
 | node | [<code>SpinalNode</code>](#SpinalNode) | Node to remove |
 | relationName | <code>String</code> | Name of the relation to wich the node belongs |
-| relationType | <code>Number</code> | Type of the relation to wich the node belongs |
+| relationType | <code>String</code> | Type of the relation to wich the node belongs |
 
 <a name="SpinalNode+removeFromGraph"></a>
 
