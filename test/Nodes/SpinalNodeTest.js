@@ -121,7 +121,7 @@ describe("SpinalNode", function () {
 
         describe("How to getElement the element of a spinal node", function () {
             it('should return the DEFAULT_ELEMENT', function (done) {
-                let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_TYPE, CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
+                let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
                 node.getElement().then(elt => {
                     assert.equal(
                         elt,
@@ -130,6 +130,46 @@ describe("SpinalNode", function () {
                     );
                     done();
                 })
+            });
+        });
+
+        describe("How to use getNbChildren", function () {
+            it("should return 0", function () {
+                let node = new lib.SpinalNode();
+                let res = node.getNbChildren();
+
+                assert.equal(res, 0);
+            });
+
+            it("should return 3", function () {
+                let node = new lib.SpinalNode();
+                let child1 = new lib.SpinalNode();
+                let child2 = new lib.SpinalNode();
+                let child3 = new lib.SpinalNode();
+                let res;
+
+                node.addChild(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                node.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                node.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                res = node.getNbChildren();
+                assert.equal(res, 3);
+            });
+
+            it("should return 2", function (done) {
+                let node = new lib.SpinalNode();
+                let child1 = new lib.SpinalNode();
+                let child2 = new lib.SpinalNode();
+                let child3 = new lib.SpinalNode();
+                let res;
+
+                node.addChild(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                node.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                node.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                node.removeChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE).then(() => {
+                    res = node.getNbChildren();
+                    assert.equal(res, 2);
+                    done();
+                });
             });
         });
     });

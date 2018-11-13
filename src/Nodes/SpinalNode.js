@@ -93,6 +93,24 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
+     * Computes and returns the number of children of the node.
+     * @return {Number} The number of children
+     */
+    getNbChildren() {
+        let nbChildren = 0;
+
+        for (let relationType of RELATION_TYPE_LIST) {
+            let type = this._getChildrenType(relationType);
+
+            type.forEach(relation => {
+                let childrenIds = relation.getChildrenIds();
+                nbChildren += childrenIds.length;
+            });
+        }
+        return nbChildren;
+    }
+
+    /**
      * Verify if the node contains the relation name.
      * @param {String} relationName Name of the relation
      * @param {Number} relationType Type of the relation
