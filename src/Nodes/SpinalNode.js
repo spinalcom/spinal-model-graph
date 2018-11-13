@@ -217,8 +217,9 @@ class SpinalNode extends globalType.Model {
      */
     async getChildren(relationNames) {
         if (typeof relationNames === "undefined" || relationNames.length === 0) {
-            return Promise.resolve(this._getAllChildren());
-        }
+            relationNames = this._getRelationNames();
+        } else if (typeof relationNames === "string")
+            relationNames = [relationNames];
 
         const promises = [];
 
@@ -361,45 +362,17 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Used to get a relation's children in an Array (instead of a Lst).
-     * @param {SpinalRelation} relation Relation from wich the children are taken 
-     * @return {Array<SpinalNode>} Array containing all of the relation's children
+     * Returns all the relation names of the node.
+     * @return {Array<String>} The names of the relations of the node
      * @private
      */
-    async _childrenToList(relation) {
-        const lst = [];
-        let childrenLst = await relation.getChildren();
-        for (let i = 0; i < childrenLst.length; i++) {
-            lst.push(childrenLst[i]);
+    _getRelationNames() {
+        let names = [];
+
+        for (let relationType of RELATION_TYPE_LIST) {
+            names.push(...this._getRelationListType(relationType).keys());
         }
-        return lst;
-    }
-
-    /**
-     * Return all children.
-     * @return {Array<SpinalNode>} Array of children from all relations
-     * @private
-     */
-    async _getAllChildren() {
-        let res = [];
-
-        try {
-            for (let i = 0; i < RELATION_TYPE_LIST.length; i++) {
-                let type = RELATION_TYPE_LIST[i];
-                let childrenRelationMap = this._getRelationListType(type);
-                let keys = childrenRelationMap.keys();
-                for (let j = 0; j < keys.length; j++) {
-                    let children = await this._childrenToList(childrenRelationMap[keys[j]]);
-                    res.push(...children);
-                }
-            }
-        }
-
-        catch (e) {
-            console.error(e);
-        }
-
-        return res;
+        return names;
     }
 }
 

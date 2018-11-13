@@ -399,6 +399,30 @@ describe("SpinalNode", function () {
                     done();
                 });
             });
+
+            it("should return all children also", function (done) {
+                let node = new lib.SpinalNode();
+
+                node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE);
+
+                node.getChildren().then(children => {
+                    assert.deepEqual(children, [DEFAULT_NODE, DEFAULT_NODE]);
+                    done();
+                });
+            });
+
+            it("should return children for one relation name passed has string", function (done) {
+                let node = new lib.SpinalNode();
+
+                node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE);
+
+                node.getChildren(DEFAULT_RELATION_NAME).then(children => {
+                    assert.deepEqual(children, [DEFAULT_NODE]);
+                    done();
+                });
+            });
         });
 
         describe("How to use getParents", function () {
