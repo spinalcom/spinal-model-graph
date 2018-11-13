@@ -138,7 +138,7 @@ class SpinalNode extends globalType.Model {
         if (!this.hasRelation(relationName, relationType))
             relation = this._createRelation(relationName, relationType);
         else
-            relation = this._getChildrenType(relationType).getElement(relationName);
+            relation = this._getRelation(relationName, relationType);
 
         relation.addChild(child);
         child._addParent(relation);
@@ -168,7 +168,7 @@ class SpinalNode extends globalType.Model {
             context.addRelation(relation);
         }
         else
-            relation = this._getChildrenType(relationType).getElement(relationName);
+            relation = this._getRelation(relationName, relationType);
 
         relation.addChild(child);
         child._addParent(relation);
@@ -183,8 +183,8 @@ class SpinalNode extends globalType.Model {
      * @return {Promise<nothing>} An empty promise
      */
     async removeChild(node, relationName, relationType) {
-        if (this._getChildrenType(relationType).has(relationName)) {
-            let rel = this._getChildrenType(relationType).getElement(relationName);
+        if (this.hasRelation(relationName, relationType)) {
+            let rel = this._getRelation(relationName, relationType);
             rel.removeChild(node);
         }
     }
@@ -263,7 +263,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Return the relation list corresponding to the relation type
+     * Return the relation list corresponding to the relation type.
      * @param {Number} relationType Type of the relation
      * @return {SpinalMap} Return the relation list corresponding to the relation type
      * @private
@@ -273,7 +273,18 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Remove the node from all parent relation the property parents
+     * Return the relation corresponding.
+     * @param {String} relationName Name of the relation
+     * @param {Number} relationType Type of the relation
+     * @return {SpinalRelation} The relation corresponding
+     * @private
+     */
+    _getRelation(relationName, relationType) {
+        return this._getChildrenType(relationType).getElement(relationName);
+    }
+
+    /**
+     * Remove the node from all parent relation the property parents.
      * @private
      */
     async _removeFromParents() {
