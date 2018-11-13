@@ -200,7 +200,6 @@ class SpinalNode extends globalType.Model {
             this._removeFromParents(),
             this._removeFromChildren()
         ]);
-
     }
 
     /**
@@ -227,17 +226,16 @@ class SpinalNode extends globalType.Model {
             }
         }
 
-        return Promise.all(promises).then(childrenLst => {
-            const res = [];
+        const childrenLst = await Promise.all(promises);
+        let res = [];
 
-            for (let children of childrenLst) {
-                for (let i = 0; i < children.length; i++) {
-                    res.push(children[i]);
-                }
+        for (let children of childrenLst) {
+            for (let i = 0; i < children.length; i++) {
+                res.push(children[i]);
             }
+        }
 
-            return res;
-        });
+        return res;
     }
 
     /**
