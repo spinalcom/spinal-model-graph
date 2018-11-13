@@ -102,13 +102,6 @@ class SpinalContext extends SpinalNode {
     }
 
     /**
-     * Remove all the nodes associated to this context from the graph.
-     */
-    removeFromGraph() {
-        //Todo use DFS to remove all the context from the graph
-    }
-
-    /**
      * Adds a child with a SpinalRelationLstPtrType.
      * @param {SpinalNode | Model} child Node to add as child
      * @param {String} relationName Name of the relation
