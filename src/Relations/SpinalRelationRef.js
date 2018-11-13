@@ -78,16 +78,16 @@ class SpinalRelationRef extends BaseSpinalRelation {
      * @param {SpinalNode | Model} node Node to add
      */
     addChild(node) {
-        if (node instanceof SpinalNode) {
-            this.children.push(node);
-        }
-        else if (node instanceof globalType.Model) {
-            const tmpNode = new SpinalNode(undefined, this.name, node);
-            this.addChild(tmpNode);
-        }
-        else {
+        if (!(node instanceof globalType.Model)) {
             throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
+        } else if (!(node instanceof SpinalNode)) {
+            node = new SpinalNode(undefined, undefined, node);
         }
+        if (this.getChildrenIds().includes(node.getId().get())) {
+            throw new Error("Cannot add a child twice to the same relation.");
+        }
+
+        this.children.push(node);
     }
 
     /**
