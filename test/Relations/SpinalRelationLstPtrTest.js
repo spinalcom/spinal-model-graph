@@ -22,7 +22,7 @@ describe("SpinalRelationLstPtr", function () {
         let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
 
         await rel.addChild(DEFAULT_NODE);
-        assert.deepEqual(rel.getChildrenIds(), [DEFAULT_NODE.getId().get()]);
+        assert.deepStrictEqual(rel.getChildrenIds(), [DEFAULT_NODE.getId().get()]);
       });
     });
 
@@ -34,7 +34,7 @@ describe("SpinalRelationLstPtr", function () {
         await rel.addChild(DEFAULT_NODE);
 
         children = await rel.getChildren();
-        assert.deepEqual(children, [DEFAULT_NODE]);
+        assert.deepStrictEqual(children, [DEFAULT_NODE]);
       });
 
       it("should return the relation's children", async function () {
@@ -51,14 +51,14 @@ describe("SpinalRelationLstPtr", function () {
         ]);
 
         children = await rel.getChildren();
-        assert.deepEqual(children, [node1, node2, node3]);
+        assert.deepStrictEqual(children, [node1, node2, node3]);
       });
 
       it("should return an empty array", async function () {
         let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
         const children = await rel.getChildren()
 
-        assert.deepEqual(children, []);
+        assert.deepStrictEqual(children, []);
       });
     });
 
@@ -125,7 +125,7 @@ describe("SpinalRelationLstPtr", function () {
         await rel.removeChild(DEFAULT_NODE);
 
         children = await rel.getChildren()
-        assert.deepEqual(children, []);
+        assert.deepStrictEqual(children, []);
       });
 
       it("should remove a child and update the children ids of the relation", async function () {
@@ -136,7 +136,7 @@ describe("SpinalRelationLstPtr", function () {
         await rel.removeChild(DEFAULT_NODE);
 
         ids = rel.getChildrenIds();
-        assert.deepEqual(ids, []);
+        assert.deepStrictEqual(ids, []);
       });
 
       it("should remove a child and update the children ids of the relation", async function () {
@@ -149,7 +149,7 @@ describe("SpinalRelationLstPtr", function () {
         await rel.removeChild(childNode)
 
         parents = await childNode.getParents()
-        assert.deepEqual(parents, []);
+        assert.deepStrictEqual(parents, []);
       });
     });
   });

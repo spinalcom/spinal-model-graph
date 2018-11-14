@@ -68,7 +68,7 @@ describe("BaseSpinalRelation", function () {
 
         await rel.removeChildren();
         const children = await rel.getChildren();
-        assert.deepEqual(children, []);
+        assert.deepStrictEqual(children, []);
       });
     });
 
@@ -88,7 +88,7 @@ describe("BaseSpinalRelation", function () {
         await rel.removeChildren();
 
         const children = await rel.getChildren();
-        assert.deepEqual(children, []);
+        assert.deepStrictEqual(children, []);
       });
 
       it("should the relation from the parent pointer", async function () {

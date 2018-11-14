@@ -358,7 +358,7 @@ describe("SpinalNode", function () {
                 await node.removeChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
 
                 const children = await node.getChildren([]);
-                assert.deepEqual(children, []);
+                assert.deepStrictEqual(children, []);
             });
         });
 
@@ -372,7 +372,7 @@ describe("SpinalNode", function () {
                 await node.removeFromGraph()
 
                 const children = await parentNode.getChildren([]);
-                assert.deepEqual(children, []);
+                assert.deepStrictEqual(children, []);
             });
 
             it('should remove the node from its children', async function () {
@@ -384,7 +384,7 @@ describe("SpinalNode", function () {
                 await parentNode.removeFromGraph();
 
                 const parents = await parentNode.getParents([]);
-                assert.deepEqual(parents, []);
+                assert.deepStrictEqual(parents, []);
             });
         });
     });
@@ -395,7 +395,7 @@ describe("SpinalNode", function () {
                 let node = new lib.SpinalNode();
                 const children = await node.getChildren([]);
 
-                assert.deepEqual(children, []);
+                assert.deepStrictEqual(children, []);
             });
 
             it("should return some children", async function () {
@@ -407,7 +407,7 @@ describe("SpinalNode", function () {
                 ]);
 
                 const children = await node.getChildren([DEFAULT_RELATION_NAME]);
-                assert.deepEqual(children, [DEFAULT_NODE]);
+                assert.deepStrictEqual(children, [DEFAULT_NODE]);
             });
 
             it("should return all children", async function () {
@@ -419,7 +419,7 @@ describe("SpinalNode", function () {
                 ]);
 
                 const children = await node.getChildren([]);
-                assert.deepEqual(children, [DEFAULT_NODE, DEFAULT_NODE]);
+                assert.deepStrictEqual(children, [DEFAULT_NODE, DEFAULT_NODE]);
             });
 
             it("should return all children also", async function () {
@@ -431,7 +431,7 @@ describe("SpinalNode", function () {
                 ]);
 
                 const children = await node.getChildren();
-                assert.deepEqual(children, [DEFAULT_NODE, DEFAULT_NODE]);
+                assert.deepStrictEqual(children, [DEFAULT_NODE, DEFAULT_NODE]);
             });
 
             it("should return children for one relation name passed has string", async function () {
@@ -443,7 +443,7 @@ describe("SpinalNode", function () {
                 ]);
 
                 const children = await node.getChildren(DEFAULT_RELATION_NAME);
-                assert.deepEqual(children, [DEFAULT_NODE]);
+                assert.deepStrictEqual(children, [DEFAULT_NODE]);
             });
         });
 
@@ -452,7 +452,7 @@ describe("SpinalNode", function () {
                 let node = new lib.SpinalNode();
                 const parents = await node.getParents([]);
 
-                assert.deepEqual(parents, []);
+                assert.deepStrictEqual(parents, []);
             });
 
             it("should return some parents", async function () {
@@ -466,7 +466,7 @@ describe("SpinalNode", function () {
                 ]);
 
                 const parents = await childNode.getParents([DEFAULT_RELATION_NAME]);
-                assert.deepEqual(parents, [parentNode1]);
+                assert.deepStrictEqual(parents, [parentNode1]);
             });
 
             it("should return all parents", async function () {
@@ -480,7 +480,7 @@ describe("SpinalNode", function () {
                 ]);
 
                 const parents = await childNode.getParents([]);
-                assert.deepEqual(parents, [parentNode1, parentNode2]);
+                assert.deepStrictEqual(parents, [parentNode1, parentNode2]);
             });
 
             it("should return all parents with a certain relation name", async function () {
@@ -494,7 +494,7 @@ describe("SpinalNode", function () {
                 ]);
 
                 const parents = await childNode.getParents([]);
-                assert.deepEqual(parents, [parentNode1, parentNode2]);
+                assert.deepStrictEqual(parents, [parentNode1, parentNode2]);
             });
         });
     });

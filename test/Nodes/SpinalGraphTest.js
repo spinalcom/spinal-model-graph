@@ -36,7 +36,7 @@ describe("SpinalGraph", function () {
             await graph.addContext(context);
 
             const children = await graph.getChildren([HAS_CONTEXT_RELATION_NAME]);
-            assert.deepEqual(children, [context]);
+            assert.deepStrictEqual(children, [context]);
         });
 
         it("should throw an error if the context to add is not a context", async function () {
