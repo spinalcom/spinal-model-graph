@@ -77,9 +77,10 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
 
     /**
      * Adds a child to the relation.
-     * @param {SpinalNode | Model} node Node to be added
+     * @param {SpinalNode | Model} node Node or model to add
+     * @return {Promise<SpinalNode>} Promise containing the node that was added
      */
-    addChild(node) {
+    async addChild(node) {
         if (!(node instanceof globalType.Model)) {
             throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
         } else if (!(node instanceof SpinalNode)) {
@@ -90,7 +91,8 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
         }
 
         node._addParent(this);
-        this.children.push(new SpinalNodePointer(node))
+        this.children.push(new SpinalNodePointer(node));
+        return node;
     }
 
     /**

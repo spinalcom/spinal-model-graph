@@ -50,10 +50,11 @@ class SpinalGraph extends SpinalNode {
     /**
      * Adds a context to the graph.
      * @param {SpinalContext} context Context to be added
+     * @return {Promise<nothing>} An empty promise
      */
-    addContext(context) {
+    async addContext(context) {
         if (context instanceof SpinalContext)
-            this.addChild(context, HAS_CONTEXT_RELATION_NAME, SPINAL_RELATION_TYPE);
+            return this.addChild(context, HAS_CONTEXT_RELATION_NAME, SPINAL_RELATION_TYPE);
         else
             throw new Error("Cannot add an element which is not a context");
     }

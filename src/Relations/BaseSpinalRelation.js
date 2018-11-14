@@ -104,7 +104,7 @@ class BaseSpinalRelation extends globalType.Model {
      * Adds a node to the relation.
      * @param {SpinalNode | Model} node Node to be added
      */
-    addChild(node) {
+    async addChild(node) {
 
     }
 

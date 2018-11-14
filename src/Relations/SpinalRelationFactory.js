@@ -71,4 +71,4 @@ export {
     SPINAL_RELATION_PTR_LST_TYPE,
     RELATION_TYPE_LIST,
     SpinalRelationFactory
-}
+};

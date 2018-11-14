@@ -1,6 +1,6 @@
 const lib = require("../../build/index");
 const BaseSpinalRelation = require("../../build/Relations/BaseSpinalRelation").default;
-const SpinalRelationPtrLst = require("../../build/Relations/SpinalRelationPtrLst").default;
+const SpinalRelationLstPtr = require("../../build/Relations/SpinalRelationLstPtr").default;
 
 const assert = require("assert");
 
@@ -28,78 +28,75 @@ describe("BaseSpinalRelation", function () {
     });
 
     describe("How to use getParent", function () {
-      it('should return the node DEFAULT_NODE', function (done) {
+      it('should return the node DEFAULT_NODE', async function () {
         let rel = new BaseSpinalRelation(DEFAULT_RELATION_NAME);
 
         rel.setParent(DEFAULT_NODE);
-        rel.getParent().then(parent => {
-          assert.equal(parent, DEFAULT_NODE);
-          done();
-        });
+
+        const parent = await rel.getParent();
+        assert.equal(parent, DEFAULT_NODE);
       });
     });
   });
 
   describe("How to set a parent", function () {
     describe("How to use setParent", function () {
-      it("should set the parent to DEFAULT_NODE", function (done) {
+      it("should set the parent to DEFAULT_NODE", async function () {
         let rel = new BaseSpinalRelation(DEFAULT_RELATION_NAME);
 
         rel.setParent(DEFAULT_NODE);
-        rel.getParent().then(parent => {
-          assert.equal(parent, DEFAULT_NODE);
-          done();
-        });
+
+        const parent = await rel.getParent();
+        assert.equal(parent, DEFAULT_NODE);
       });
     });
   });
 
   describe("How to remove from the graph", function () {
     describe("How to use removeChildren", function () {
-      it("should delete all of the children", function (done) {
-        let rel = new SpinalRelationPtrLst(DEFAULT_RELATION_NAME);
+      it("should delete all of the children", async function () {
+        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
         const node1 = new lib.SpinalNode();
         const node2 = new lib.SpinalNode();
         const node3 = new lib.SpinalNode();
 
-        rel.addChild(node1);
-        rel.addChild(node2);
-        rel.addChild(node3);
-        rel.removeChildren().then(() => {
-          rel.getChildren().then(children => {
-            assert.deepEqual(children, []);
-            done();
-          });
-        });
+        await Promise.all([
+          rel.addChild(node1),
+          rel.addChild(node2),
+          rel.addChild(node3)
+        ]);
+
+        await rel.removeChildren();
+        const children = await rel.getChildren();
+        assert.deepEqual(children, []);
       });
     });
 
     describe("How to use removeFromGraph", function () {
-      it("should delete all of the children", function (done) {
-        let rel = new SpinalRelationPtrLst(DEFAULT_RELATION_NAME);
+      it("should delete all of the children", async function () {
+        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
         const node1 = new lib.SpinalNode();
         const node2 = new lib.SpinalNode();
         const node3 = new lib.SpinalNode();
 
-        rel.addChild(node1);
-        rel.addChild(node2);
-        rel.addChild(node3);
-        rel.removeChildren().then(() => {
-          rel.getChildren().then(children => {
-            assert.deepEqual(children, []);
-            done();
-          });
-        });
+        await Promise.all([
+          rel.addChild(node1),
+          rel.addChild(node2),
+          rel.addChild(node3)
+        ]);
+
+        await rel.removeChildren();
+
+        const children = await rel.getChildren();
+        assert.deepEqual(children, []);
       });
 
-      it("should the relation from the parent pointer", function (done) {
+      it("should the relation from the parent pointer", async function () {
         let parent = new lib.SpinalNode();
         let rel = parent._createRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE);
 
-        rel.removeFromGraph().then(() => {
-          assert(!parent.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE));
-          done();
-        });
+        await rel.removeFromGraph();
+        assert(!parent.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE));
       });
     });
   });

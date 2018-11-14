@@ -11,15 +11,13 @@ const DEFAULT_NODE = new lib.SpinalNode();
 
 describe("SpinalContext", function () {
     describe("How to use the constructor", function () {
-        it("should create a context with default values", function (done) {
+        it("should create a context with default values", async function () {
             let context = new lib.SpinalContext();
 
             assert.equal(context.getName(), DEFAULT_SPINAL_CONTEXT_NAME);
             assert.equal(context.getType(), DEFAULT_SPINAL_CONTEXT_TYPE);
-            context.getElement().then(element => {
-                assert(element instanceof globalType.Model);
-                done();
-            });
+            const element = await context.getElement();
+            assert(element instanceof globalType.Model);
         });
     });
 
@@ -193,40 +191,40 @@ describe("SpinalContext", function () {
 
     describe("How to add children to the context", function () {
         describe("How to use addChild", function () {
-            it("should add a child to the context with a SPINAL_RELATION_PTR_LST_TYPE type", function () {
+            it("should add a child to the context with a SPINAL_RELATION_PTR_LST_TYPE type", async function () {
                 let context = new lib.SpinalContext();
 
-                context.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+                await context.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME);
                 assert(context.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE));
             });
 
-            it("should overload SpinalNode.addChild correctly", function () {
+            it("should overload SpinalNode.addChild correctly", async function () {
                 let context = new lib.SpinalContext();
 
-                context.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                await context.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
                 assert(context.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE));
             });
         });
 
         describe("How to use addChildInContext", function () {
-            it("should add a child to the context with a SPINAL_RELATION_PTR_LST_TYPE type", function () {
+            it("should add a child to the context with a SPINAL_RELATION_PTR_LST_TYPE type", async function () {
                 let context = new lib.SpinalContext();
 
-                context.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+                await context.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME);
                 assert(context.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE));
             });
 
-            it("should overload SpinalNode.addChildInContext correctly", function () {
+            it("should overload SpinalNode.addChildInContext correctly", async function () {
                 let context = new lib.SpinalContext();
 
-                context.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+                await context.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
                 assert(context.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE));
             });
 
-            it("should add the node to itself (has a context) by default", function () {
+            it("should add the node to itself (has a context) by default", async function () {
                 let context = new lib.SpinalContext();
 
-                context.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+                await context.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME);
                 let relationNames = context.getRelationNames();
 
                 assert.equal(relationNames.length, 1);

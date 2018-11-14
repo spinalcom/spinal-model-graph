@@ -27,13 +27,7 @@ import SpinalNodePointer from "../SpinalNodePointer"
 
 const globalType = typeof window === "undefined" ? global : window;
 
-import {
-    SPINAL_RELATION_TYPE,
-    SPINAL_RELATION_LST_PTR_TYPE,
-    SPINAL_RELATION_PTR_LST_TYPE,
-    RELATION_TYPE_LIST,
-    SpinalRelationFactory
-} from "../Relations/SpinalRelationFactory"
+import { SpinalRelationFactory } from "../Relations/SpinalRelationFactory"
 import SpinalMap from "../SpinalMap"
 
 class SpinalNode extends globalType.Model {
@@ -140,9 +134,9 @@ class SpinalNode extends globalType.Model {
      * @param {SpinalNode | Model} child Element to add as child
      * @param {String} relationName Name of the relation
      * @param {String} relationType Type of the relation
-     * @return {SpinalNode} The child node
+     * @return {Promise<SpinalNode>} The child node in a promise
      */
-    addChild(child, relationName, relationType) {
+    async addChild(child, relationName, relationType) {
         let relation;
 
         if (!(child instanceof globalType.Model)) {
@@ -157,7 +151,7 @@ class SpinalNode extends globalType.Model {
         else
             relation = this._getRelation(relationName, relationType);
 
-        relation.addChild(child);
+        await relation.addChild(child);
         return child;
     }
 
@@ -167,9 +161,9 @@ class SpinalNode extends globalType.Model {
      * @param {String} relationName Name of the relation
      * @param {String} relationType Type of the relation
      * @param {SpinalContext} context Context to update
-     * @return {SpinalNode} The child node
+     * @return {Promise<SpinalNode>} The child node in a promise
      */
-    addChildInContext(child, relationName, relationType, context) {
+    async addChildInContext(child, relationName, relationType, context) {
         let relation;
 
         if (!(child instanceof globalType.Model)) {
@@ -186,7 +180,7 @@ class SpinalNode extends globalType.Model {
         else
             relation = this._getRelation(relationName, relationType);
 
-        relation.addChild(child);
+        await relation.addChild(child);
         return child;
     }
 

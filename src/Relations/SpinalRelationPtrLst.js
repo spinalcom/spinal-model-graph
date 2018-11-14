@@ -82,9 +82,10 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
     /**
      * Adds a child to the relation.
-     * @param {SpinalNode | Model} node Node to be added
+     * @param {SpinalNode | Model} node Node or model to add
+     * @return {Promise<SpinalNode>} Promise containing the node that was added
      */
-    addChild(node) {
+    async addChild(node) {
         if (!(node instanceof globalType.Model)) {
             throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
         } else if (!(node instanceof SpinalNode)) {
@@ -95,10 +96,11 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
         }
 
         this.children.info.ids.push(node.getId());
-        promiseLoad(this.children).then((children) => {
+        node._addParent(this);
+        await promiseLoad(this.children).then((children) => {
             children.push(node);
         });
-        node._addParent(this);
+        return node;
     }
 
     /**

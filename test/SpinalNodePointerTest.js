@@ -27,26 +27,24 @@ describe("SpinalNodePointer", function () {
 
     describe("How to set/unset the pointer", function () {
         describe("How to use setElement", function () {
-            it("should set an element and update pointedId and pointedType", function (done) {
+            it("should set an element and update pointedId and pointedType", async function () {
                 let ptr = new SpinalNodePointer(DEFAULT_NODE);
 
                 assert.equal(ptr.getId(), DEFAULT_NODE.getId());
                 assert.equal(ptr.getType(), DEFAULT_NODE.getType());
-                promiseLoad(ptr).then(elem => {
-                    assert.equal(elem, DEFAULT_NODE);
-                    done();
-                });
+
+                const elem = await promiseLoad(ptr);
+                assert.equal(elem, DEFAULT_NODE);
             });
 
-            it("should set an element but not update pointedId and pointedType", function (done) {
+            it("should set an element but not update pointedId and pointedType", async function () {
                 let ptr = new SpinalNodePointer(DEFAULT_MODEL);
 
                 assert.equal(typeof ptr.getId(), "undefined");
                 assert.equal(typeof ptr.getType(), "undefined");
-                promiseLoad(ptr).then(elem => {
-                    assert.equal(elem, DEFAULT_MODEL);
-                    done();
-                });
+
+                const elem = await promiseLoad(ptr);
+                assert.equal(elem, DEFAULT_MODEL);
             });
         });
 
