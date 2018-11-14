@@ -89,6 +89,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
             throw new Error("Cannot add a child twice to the same relation.");
         }
 
+        node._addParent(this);
         this.children.push(new SpinalNodePointer(node))
     }
 
@@ -103,6 +104,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
                 this.children.splice(i, 1);
             }
         }
+        node._removeParent(this);
         return Promise.resolve();
     }
 }

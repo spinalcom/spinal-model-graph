@@ -88,6 +88,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
         }
 
         this.children.push(node);
+        node._addParent(this);
     }
 
     /**
@@ -97,6 +98,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
      */
     async removeChild(node) {
         this.children.remove(node);
+        node._removeParent(this);
     }
 }
 

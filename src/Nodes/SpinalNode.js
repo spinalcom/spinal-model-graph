@@ -158,7 +158,6 @@ class SpinalNode extends globalType.Model {
             relation = this._getRelation(relationName, relationType);
 
         relation.addChild(child);
-        child._addParent(relation);
         return child;
     }
 
@@ -188,7 +187,6 @@ class SpinalNode extends globalType.Model {
             relation = this._getRelation(relationName, relationType);
 
         relation.addChild(child);
-        child._addParent(relation);
         return child;
     }
 
@@ -297,7 +295,22 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Remove the node from all parent relation the property parents.
+     * Removes a parent relation of the node.
+     * @param {SpinalRelation} relation Relation to remove
+     * @private
+     */
+    _removeParent(relation) {
+        const parentLst = this.parents.getElement(relation.getName().get());
+
+        const indexTORemove = parentLst.indexOf(parentPtr =>
+            parentPtr.getId().get() === relation.getId().get()
+        );
+
+        parentLst.splice(indexTORemove);
+    }
+
+    /**
+     * Removes the node from all parent relation the property parents.
      * @private
      */
     async _removeFromParents() {
@@ -314,12 +327,13 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Add the relation as parent of the node.
+     * Adds the relation as parent of the node.
      * @param {SpinalRelation} relation Parent relation
      * @private
      */
     _addParent(relation) {
         const relationName = relation.getName();
+
         if (this.parents.has(relationName.get())) {
             this.parents.getElement(relationName).push(new SpinalNodePointer(relation));
         }

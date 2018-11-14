@@ -25,26 +25,41 @@ describe("SpinalNodePointer", function () {
         });
     });
 
-    describe("How to use setElement", function () {
-        it("should set an element and update pointedId and pointedType", function (done) {
-            let ptr = new SpinalNodePointer(DEFAULT_NODE);
+    describe("How to set/unset the pointer", function () {
+        describe("How to use setElement", function () {
+            it("should set an element and update pointedId and pointedType", function (done) {
+                let ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-            assert.equal(ptr.getId(), DEFAULT_NODE.getId());
-            assert.equal(ptr.getType(), DEFAULT_NODE.getType());
-            promiseLoad(ptr).then(elem => {
-                assert.equal(elem, DEFAULT_NODE);
-                done();
+                assert.equal(ptr.getId(), DEFAULT_NODE.getId());
+                assert.equal(ptr.getType(), DEFAULT_NODE.getType());
+                promiseLoad(ptr).then(elem => {
+                    assert.equal(elem, DEFAULT_NODE);
+                    done();
+                });
+            });
+
+            it("should set an element but not update pointedId and pointedType", function (done) {
+                let ptr = new SpinalNodePointer(DEFAULT_MODEL);
+
+                assert.equal(typeof ptr.getId(), "undefined");
+                assert.equal(typeof ptr.getType(), "undefined");
+                promiseLoad(ptr).then(elem => {
+                    assert.equal(elem, DEFAULT_MODEL);
+                    done();
+                });
             });
         });
 
-        it("should set an element but not update pointedId and pointedType", function (done) {
-            let ptr = new SpinalNodePointer(DEFAULT_MODEL);
+        describe("How to use unset", function () {
+            it("should unset the pointer", function () {
+                let ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-            assert.equal(typeof ptr.getId(), "undefined");
-            assert.equal(typeof ptr.getType(), "undefined");
-            promiseLoad(ptr).then(elem => {
-                assert.equal(elem, DEFAULT_MODEL);
-                done();
+                assert.equal(ptr.getId(), DEFAULT_NODE.getId());
+                assert.equal(ptr.getType(), DEFAULT_NODE.getType());
+                ptr.unset();
+                assert.equal(typeof ptr.getId(), "undefined");
+                assert.equal(typeof ptr.getType(), "undefined");
+                assert.deepEqual(ptr.ptr.data, { value: 0 });
             });
         });
     });

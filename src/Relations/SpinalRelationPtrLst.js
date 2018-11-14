@@ -98,6 +98,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
         promiseLoad(this.children).then((children) => {
             children.push(node);
         });
+        node._addParent(this);
     }
 
     /**
@@ -110,6 +111,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
         childrenLst.remove(node);
         this.children.info.ids.remove(node.getId());
+        node._removeParent(this);
     }
 }
 

@@ -133,6 +133,20 @@ describe("SpinalRelationPtrLst", function () {
           done();
         });
       });
+
+      it("should remove a child and update the children ids of the relation", function (done) {
+        let parentNode = new lib.SpinalNode();
+        let rel = parentNode._createRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE);
+        let childNode = new lib.SpinalNode();
+
+        rel.addChild(childNode);
+        rel.removeChild(childNode).then(() => {
+          childNode.getParents().then(parents => {
+            assert.deepEqual(parents, []);
+            done();
+          });
+        });
+      });
     });
   });
 });
