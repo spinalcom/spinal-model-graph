@@ -390,11 +390,25 @@ describe("SpinalNode", function () {
                 let node = new lib.SpinalNode();
                 let parentNode = new lib.SpinalNode();
 
-                parentNode.addChild(node, DEFAULT_NODE, lib.SPINAL_RELATION_TYPE);
+                parentNode.addChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
 
                 node.removeFromGraph().then(() => {
                     parentNode.getChildren([]).then(children => {
                         assert.deepEqual(children, []);
+                        done();
+                    });
+                });
+            });
+
+            it('should remove the node from its children', function (done) {
+                let node = new lib.SpinalNode();
+                let parentNode = new lib.SpinalNode();
+
+                parentNode.addChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+
+                parentNode.removeFromGraph().then(() => {
+                    parentNode.getParents([]).then(parents => {
+                        assert.deepEqual(parents, []);
                         done();
                     });
                 });

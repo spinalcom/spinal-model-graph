@@ -60,6 +60,15 @@ class SpinalNodePointer extends globalType.Model {
     }
 
     /**
+     * Unsets the pointer.
+     */
+    unset() {
+        this.info.rem_attr("pointedId");
+        this.info.rem_attr("pointedType");
+        this.ptr.set(0);
+    }
+
+    /**
      * Returns the id of the pointed element.
      * @return {Str} Id of the pointed element
      */
