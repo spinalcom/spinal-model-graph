@@ -10,8 +10,8 @@
     * [.addRelationId(relationId)](#SpinalContext+addRelationId) ⇒ <code>Boolean</code>
     * [.addRelationName(relationName)](#SpinalContext+addRelationName) ⇒ <code>Boolean</code>
     * [.addRelation(relation)](#SpinalContext+addRelation)
-    * [.addChild(child, relationName, relationType)](#SpinalContext+addChild) ⇒ <code>SpinalNode</code>
-    * [.addChildInContext(child, relationName, relationType, context)](#SpinalContext+addChildInContext) ⇒ <code>SpinalNode</code>
+    * [.addChild(child, relationName, relationType)](#SpinalContext+addChild) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
+    * [.addChildInContext(child, relationName, relationType, context)](#SpinalContext+addChildInContext) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
 
 <a name="new_SpinalContext_new"></a>
 
@@ -76,11 +76,11 @@ Adds a relation relations known by the context.
 
 <a name="SpinalContext+addChild"></a>
 
-### spinalContext.addChild(child, relationName, relationType) ⇒ <code>SpinalNode</code>
+### spinalContext.addChild(child, relationName, relationType) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
 Adds a child with a SpinalRelationLstPtrType.
 
 **Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
-**Returns**: <code>SpinalNode</code> - The child node  
+**Returns**: <code>Promise.&lt;SpinalNode&gt;</code> - The child node in a promise  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -90,11 +90,11 @@ Adds a child with a SpinalRelationLstPtrType.
 
 <a name="SpinalContext+addChildInContext"></a>
 
-### spinalContext.addChildInContext(child, relationName, relationType, context) ⇒ <code>SpinalNode</code>
+### spinalContext.addChildInContext(child, relationName, relationType, context) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
 Adds a child with a SpinalRelationLstPtrType and notices the context if a new relation was created.
 
 **Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
-**Returns**: <code>SpinalNode</code> - The child node  
+**Returns**: <code>Promise.&lt;SpinalNode&gt;</code> - The child node in a promise  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -110,7 +110,7 @@ Adds a child with a SpinalRelationLstPtrType and notices the context if a new re
 
 * [SpinalGraph](#SpinalGraph)
     * [new SpinalGraph(name, type, element)](#new_SpinalGraph_new)
-    * [.addContext(context)](#SpinalGraph+addContext)
+    * [.addContext(context)](#SpinalGraph+addContext) ⇒ <code>Promise.&lt;nothing&gt;</code>
     * [.getContext(name)](#SpinalGraph+getContext) ⇒ <code>SpinalContext</code> \| <code>undefined</code>
     * [.removeFromGraph()](#SpinalGraph+removeFromGraph) ⇒ <code>Promise.&lt;nothing&gt;</code>
 
@@ -128,10 +128,11 @@ Constructor for the SpinalGraph class.
 
 <a name="SpinalGraph+addContext"></a>
 
-### spinalGraph.addContext(context)
+### spinalGraph.addContext(context) ⇒ <code>Promise.&lt;nothing&gt;</code>
 Adds a context to the graph.
 
 **Kind**: instance method of [<code>SpinalGraph</code>](#SpinalGraph)  
+**Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -170,8 +171,8 @@ Empty override of the SpinalNode method.
     * [.getNbChildren()](#SpinalNode+getNbChildren) ⇒ <code>Number</code>
     * [.hasRelation(relationName, relationType)](#SpinalNode+hasRelation) ⇒ <code>Boolean</code>
     * [.hasRelations(relationNames, relationType)](#SpinalNode+hasRelations) ⇒ <code>Boolean</code>
-    * [.addChild(child, relationName, relationType)](#SpinalNode+addChild) ⇒ [<code>SpinalNode</code>](#SpinalNode)
-    * [.addChildInContext(child, relationName, relationType, context)](#SpinalNode+addChildInContext) ⇒ [<code>SpinalNode</code>](#SpinalNode)
+    * [.addChild(child, relationName, relationType)](#SpinalNode+addChild) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
+    * [.addChildInContext(child, relationName, relationType, context)](#SpinalNode+addChildInContext) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
     * [.removeChild(node, relationName, relationType)](#SpinalNode+removeChild) ⇒ <code>Promise.&lt;nothing&gt;</code>
     * [.removeFromGraph()](#SpinalNode+removeFromGraph) ⇒ <code>Promise.&lt;nothing&gt;</code>
     * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
@@ -252,11 +253,11 @@ Verify if the node contains all the relation names.
 
 <a name="SpinalNode+addChild"></a>
 
-### spinalNode.addChild(child, relationName, relationType) ⇒ [<code>SpinalNode</code>](#SpinalNode)
+### spinalNode.addChild(child, relationName, relationType) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
 Add the node as child of the relation.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: [<code>SpinalNode</code>](#SpinalNode) - The child node  
+**Returns**: [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode) - The child node in a promise  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -266,11 +267,11 @@ Add the node as child of the relation.
 
 <a name="SpinalNode+addChildInContext"></a>
 
-### spinalNode.addChildInContext(child, relationName, relationType, context) ⇒ [<code>SpinalNode</code>](#SpinalNode)
+### spinalNode.addChildInContext(child, relationName, relationType, context) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
 Adds a child and notices the context if a new relation was created.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: [<code>SpinalNode</code>](#SpinalNode) - The child node  
+**Returns**: [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode) - The child node in a promise  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -551,7 +552,7 @@ Removes the relation from the graph.
     * [.getChildrenIds()](#SpinalRelationPtrLst+getChildrenIds) ⇒ <code>Array.&lt;String&gt;</code>
     * [.getChildren()](#SpinalRelationPtrLst+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getType()](#SpinalRelationPtrLst+getType) ⇒ <code>Number</code>
-    * [.addChild(node)](#SpinalRelationPtrLst+addChild)
+    * [.addChild(node)](#SpinalRelationPtrLst+addChild) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
     * [.removeChild(node)](#SpinalRelationPtrLst+removeChild) ⇒ <code>Promise.&lt;nothing&gt;</code>
 
 <a name="new_SpinalRelationPtrLst_new"></a>
@@ -585,14 +586,15 @@ Returns the type of the relation.
 **Returns**: <code>Number</code> - Type of the relation  
 <a name="SpinalRelationPtrLst+addChild"></a>
 
-### spinalRelationPtrLst.addChild(node)
+### spinalRelationPtrLst.addChild(node) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
 Adds a child to the relation.
 
 **Kind**: instance method of [<code>SpinalRelationPtrLst</code>](#SpinalRelationPtrLst)  
+**Returns**: <code>Promise.&lt;SpinalNode&gt;</code> - Promise containing the node that was added  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| node | <code>SpinalNode</code> \| <code>Model</code> | Node to be added |
+| node | <code>SpinalNode</code> \| <code>Model</code> | Node or model to add |
 
 <a name="SpinalRelationPtrLst+removeChild"></a>
 
@@ -616,7 +618,7 @@ Removes a child from the relation.
     * [.getChildrenIds()](#SpinalRelationLstPtr+getChildrenIds) ⇒ <code>Array.&lt;String&gt;</code>
     * [.getChildren()](#SpinalRelationLstPtr+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getType()](#SpinalRelationLstPtr+getType) ⇒ <code>Number</code>
-    * [.addChild(node)](#SpinalRelationLstPtr+addChild)
+    * [.addChild(node)](#SpinalRelationLstPtr+addChild) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
     * [.removeChild(node)](#SpinalRelationLstPtr+removeChild) ⇒ <code>Promise.&lt;nothing&gt;</code>
 
 <a name="new_SpinalRelationLstPtr_new"></a>
@@ -650,14 +652,15 @@ Returns the type of the relation.
 **Returns**: <code>Number</code> - Type of the relation  
 <a name="SpinalRelationLstPtr+addChild"></a>
 
-### spinalRelationLstPtr.addChild(node)
+### spinalRelationLstPtr.addChild(node) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
 Adds a child to the relation.
 
 **Kind**: instance method of [<code>SpinalRelationLstPtr</code>](#SpinalRelationLstPtr)  
+**Returns**: <code>Promise.&lt;SpinalNode&gt;</code> - Promise containing the node that was added  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| node | <code>SpinalNode</code> \| <code>Model</code> | Node to be added |
+| node | <code>SpinalNode</code> \| <code>Model</code> | Node or model to add |
 
 <a name="SpinalRelationLstPtr+removeChild"></a>
 
@@ -681,7 +684,7 @@ Removes a child from the relation.
     * [.getChildrenIds()](#SpinalRelationRef+getChildrenIds) ⇒ <code>Array.&lt;String&gt;</code>
     * [.getChildren()](#SpinalRelationRef+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getType()](#SpinalRelationRef+getType) ⇒ <code>Number</code>
-    * [.addChild(node)](#SpinalRelationRef+addChild)
+    * [.addChild(node)](#SpinalRelationRef+addChild) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
     * [.removeChild(node)](#SpinalRelationRef+removeChild) ⇒ <code>Promise.&lt;nothing&gt;</code>
 
 <a name="new_SpinalRelationRef_new"></a>
@@ -715,14 +718,15 @@ Returns the type of the relation.
 **Returns**: <code>Number</code> - Type of the relation  
 <a name="SpinalRelationRef+addChild"></a>
 
-### spinalRelationRef.addChild(node)
+### spinalRelationRef.addChild(node) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
 Adds a child to the relation.
 
 **Kind**: instance method of [<code>SpinalRelationRef</code>](#SpinalRelationRef)  
+**Returns**: <code>Promise.&lt;SpinalNode&gt;</code> - Promise containing the node that was added  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| node | <code>SpinalNode</code> \| <code>Model</code> | Node to add |
+| node | <code>SpinalNode</code> \| <code>Model</code> | Node or model to add |
 
 <a name="SpinalRelationRef+removeChild"></a>
 
