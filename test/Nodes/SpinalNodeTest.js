@@ -85,7 +85,7 @@ describe("SpinalNode", function () {
         });
     });
 
-    describe("How to get informations about the node", function () {
+    describe("How to get/set information about the node", function () {
         describe("How to use getName", function () {
             it('should return the name CUSTOM_SPINAL_NODE_NAME', function () {
                 let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME);
@@ -158,6 +158,23 @@ describe("SpinalNode", function () {
                 await node.removeChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
                 res = node.getNbChildren();
                 assert.equal(res, 2);
+            });
+        });
+
+        describe("How to use addContextId and getContextId", function () {
+            it("should get the ids of the associated contexts", function () {
+                let node = new lib.SpinalNode();
+                let contextId1 = new lib.SpinalContext().getId().get();
+                let contextId2 = new lib.SpinalContext().getId().get();
+
+                node.addContextId(contextId1);
+
+                assert.deepStrictEqual(node.getContextIds(), [contextId1]);
+
+                node.addContextId(contextId1);
+                node.addContextId(contextId2);
+
+                assert.deepStrictEqual(node.getContextIds(), [contextId1, contextId2]);
             });
         });
     });
@@ -296,16 +313,14 @@ describe("SpinalNode", function () {
                 assert.equal(children[0], DEFAULT_NODE);
             });
 
-            it("Shoud add a child and update the relation names and ids known by the context", async function () {
-                let node = new lib.SpinalNode();
+            it("Shoud add a child and associate it to the context", async function () {
                 let context = new lib.SpinalContext();
+                let parent = new lib.SpinalNode();
+                let child = new lib.SpinalNode();
 
-                await node.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
+                await parent.addChildInContext(child, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
 
-                assert.equal(context.relationNames.length, 1);
-                assert.equal(context.relationNames[0], DEFAULT_RELATION_NAME);
-
-                assert.equal(context.relationIds.length, 1);
+                assert.deepStrictEqual(child.getContextIds(), [context.getId().get()]);
             });
 
             it("should throw an error if you try to add the same node twice", async function () {

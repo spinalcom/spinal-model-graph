@@ -25,12 +25,13 @@ import spinalCore from "spinal-core-connectorjs";
 import { promiseLoad, guid } from "../Utilities";
 import SpinalNode from "../Nodes/SpinalNode";
 import SpinalNodePointer from "../SpinalNodePointer"
+import SpinalMap from "../SpinalMap";
 
 const globalType = typeof window === "undefined" ? global : window;
 
 class BaseSpinalRelation extends globalType.Model {
     /**
-     * 
+     * Constructor for the BaseSpinalRelation class.
      * @param {String} name Name of the relation
      */
     constructor(name) {
@@ -38,8 +39,9 @@ class BaseSpinalRelation extends globalType.Model {
         this.add_attr({
             id: guid(name),
             name: name,
-            parent: new SpinalNodePointer()
-        })
+            parent: new SpinalNodePointer(),
+            contextIds: new SpinalMap()
+        });
     }
 
     /**
@@ -60,10 +62,28 @@ class BaseSpinalRelation extends globalType.Model {
 
     /**
      * Returns the parent of the relation.
-     * @return {Promise<SpinalNode>} returns a promise where the resolve is the parent
+     * @return {Promise<SpinalNode>} Returns a promise where the resolve is the parent
      */
     getParent() {
         return promiseLoad(this.parent);
+    }
+
+    /**
+     * Returns a list of the contexts the relation is associated to.
+     * @return {Array<String>} A list of ids of the associated contexts
+     */
+    getContextIds() {
+        return this.contextIds.keys();
+    }
+
+    /**
+     * Adds an id to the context ids of the relation.
+     * @param {String} id Id of the context
+     */
+    addContextId(id) {
+        if (!this.contextIds.has(id)) {
+            this.contextIds.setElement(id, 0);
+        }
     }
 
     /**
@@ -73,48 +93,6 @@ class BaseSpinalRelation extends globalType.Model {
     setParent(parent) {
         if (typeof parent !== "undefined" && parent instanceof SpinalNode)
             this.parent.setElement(parent);
-    }
-
-    /**
-     * Returns the type of the relation.
-     * @return {Number} Type of the relation
-     */
-    getType() {
-        return -1;
-    }
-
-    /**
-     * Retrieves all the ids of the children of the relation and return them inside an array.
-     * @return {Array<Str>} Array containing all the children ids of the relation
-     */
-    getChildrenIds() {
-
-    }
-
-    /**
-     * Return all the children of the relation.
-     * @return {Promise<Lst<SpinalNode>>} Promise containing a list of the children of the relation
-     */
-    getChildren() {
-        // noinspection JSValidateTypes
-        return Promise.resolve();
-    }
-
-    /**
-     * Adds a node to the relation.
-     * @param {SpinalNode | Model} node Node to be added
-     */
-    async addChild(node) {
-
-    }
-
-    /**
-     * Removes a child from the relation.
-     * @param {SpinalNode} node Child of the relation
-     * @return {Promise<nothing>} An empty promise
-     */
-    async removeChild(node) {
-
     }
 
     /**

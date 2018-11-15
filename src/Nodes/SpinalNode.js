@@ -23,12 +23,12 @@
  */
 import spinalCore from "spinal-core-connectorjs";
 import { promiseLoad, guid } from "../Utilities";
-import SpinalNodePointer from "../SpinalNodePointer"
+import SpinalNodePointer from "../SpinalNodePointer";
 
 const globalType = typeof window === "undefined" ? global : window;
 
-import { SpinalRelationFactory } from "../Relations/SpinalRelationFactory"
-import SpinalMap from "../SpinalMap"
+import { SpinalRelationFactory } from "../Relations/SpinalRelationFactory";
+import SpinalMap from "../SpinalMap";
 
 class SpinalNode extends globalType.Model {
     /**
@@ -48,6 +48,7 @@ class SpinalNode extends globalType.Model {
             parents: new SpinalMap(),
             children: new SpinalMap(),
             element: new SpinalNodePointer(element),
+            contextIds: new SpinalMap()
         });
     }
 
@@ -97,6 +98,23 @@ class SpinalNode extends globalType.Model {
             });
         });
         return nbChildren;
+    }
+
+    /**
+     * Returns a list of the contexts the node is associated to.
+     * @return {Array<String>} A list of ids of the associated contexts
+     */
+    getContextIds() {
+        return this.contextIds.keys();
+    }
+
+    /**
+     * Adds an id to the context ids of the node.
+     * @param {String} id Id of the context
+     */
+    addContextId(id) {
+        if (!this.contextIds.has(id))
+            this.contextIds.setElement(id, 0);
     }
 
     /**
@@ -173,12 +191,13 @@ class SpinalNode extends globalType.Model {
             child = new SpinalNode(undefined, undefined, child);
         }
 
-        if (!this.hasRelation(relationName, relationType)) {
+        if (!this.hasRelation(relationName, relationType))
             relation = this._createRelation(relationName, relationType);
-            context.addRelation(relation);
-        }
         else
             relation = this._getRelation(relationName, relationType);
+
+        child.addContextId(context.getId().get());
+        relation.addContextId(context.getId().get());
 
         await relation.addChild(child);
         return child;

@@ -21,11 +21,11 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-import SpinalNode from "./SpinalNode"
+import SpinalNode from "./SpinalNode";
 import spinalCore from "spinal-core-connectorjs";
 import {
     SPINAL_RELATION_PTR_LST_TYPE
-} from "../Relations/SpinalRelationFactory"
+} from "../Relations/SpinalRelationFactory";
 import { guid } from "../Utilities";
 
 const globalType = typeof window === "undefined" ? global : window;
@@ -40,19 +40,9 @@ class SpinalContext extends SpinalNode {
     constructor(name = "undefined", type = "SpinalContext", element = new globalType.Model) {
         super(name, type, element);
         this.add_attr({
-            relationIds: new globalType.Lst(),
             relationNames: new globalType.Lst()
         });
-
         this.info.id.set(guid(this.constructor.name));
-    }
-
-    /**
-     * Returns the relation ids of the context.
-     * @return {Lst<String>} The relation ids that the context knows
-     */
-    getRelationIds() {
-        return this.relationIds;
     }
 
     /**
@@ -61,19 +51,6 @@ class SpinalContext extends SpinalNode {
      */
     getRelationNames() {
         return this.relationNames;
-    }
-
-    /**
-     * Adds a relation id to the relation ids known by the context.
-     * @param {String} relationId Id of the relation
-     * @return {Boolean} Return false if the relation id is already known
-     */
-    addRelationId(relationId) {
-        if (!this.relationIds.contains(relationId)) {
-            this.relationIds.push(relationId);
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -87,18 +64,6 @@ class SpinalContext extends SpinalNode {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Adds a relation relations known by the context.
-     * @param {SpinalRelation} relation Relation to add
-     */
-    addRelation(relation) {
-        let res = false;
-
-        res = this.addRelationId(relation.getId());
-        res = this.addRelationName(relation.getName()) || res;
-        return res;
     }
 
     /**

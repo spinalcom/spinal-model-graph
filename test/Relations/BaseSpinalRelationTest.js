@@ -16,7 +16,7 @@ describe("BaseSpinalRelation", function () {
     });
   });
 
-  describe("How to get informations about the relation", function () {
+  describe("How to get/set information about the relation", function () {
     describe("How to use getName", function () {
       it('should return the name DEFAULT_RELATION_NAME', function () {
         let rel = new BaseSpinalRelation(DEFAULT_RELATION_NAME);
@@ -37,9 +37,7 @@ describe("BaseSpinalRelation", function () {
         assert.equal(parent, DEFAULT_NODE);
       });
     });
-  });
 
-  describe("How to set a parent", function () {
     describe("How to use setParent", function () {
       it("should set the parent to DEFAULT_NODE", async function () {
         let rel = new BaseSpinalRelation(DEFAULT_RELATION_NAME);
@@ -48,6 +46,23 @@ describe("BaseSpinalRelation", function () {
 
         const parent = await rel.getParent();
         assert.equal(parent, DEFAULT_NODE);
+      });
+    });
+
+    describe("How to use addContextIds and getContextIds", function () {
+      it("should get the ids of the associated contexts", function () {
+        let relation = new BaseSpinalRelation();
+        let contextId1 = new lib.SpinalContext().getId().get();
+        let contextId2 = new lib.SpinalContext().getId().get();
+
+        relation.addContextId(contextId1);
+
+        assert.deepStrictEqual(relation.getContextIds(), [contextId1]);
+
+        relation.addContextId(contextId1);
+        relation.addContextId(contextId2);
+
+        assert.deepStrictEqual(relation.getContextIds(), [contextId1, contextId2]);
       });
     });
   });
