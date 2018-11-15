@@ -54,13 +54,30 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
     /**
      * Return all the children of the relation.
-     * @return {Promise<Array<SpinalNode>>} Promise containing a list of all the children of the relation
+     * @return {Promise<Array<SpinalNode>>} The children of the relation
      */
     getChildren() {
         let children = [];
 
         for (let i = 0; i < this.children.length; i++) {
             children.push(this.children[i]);
+        }
+        return Promise.resolve(children);
+    }
+
+    /**
+     * Return all the children of the relation associated to a certain context.
+     * @param {SpinalContext} context The context to use for the search
+     * @return {Promise<Array<SpinalNode>>} The children of the relation associated to the context
+     */
+    getChildrenInContext(context) {
+        let children = [];
+
+        for (let i = 0; i < this.children.length; i++) {
+            let child = this.children[i];
+
+            if (child.belongsToContext(context))
+                children.push(child);
         }
         return Promise.resolve(children);
     }

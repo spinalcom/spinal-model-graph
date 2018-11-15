@@ -177,6 +177,25 @@ describe("SpinalNode", function () {
                 assert.deepStrictEqual(node.getContextIds(), [contextId1, contextId2]);
             });
         });
+
+        describe("How to use belongsToContext", function () {
+            it("should return true", async function () {
+                let context = new lib.SpinalContext();
+                let parent = new lib.SpinalNode();
+                let child = new lib.SpinalNode();
+
+                await parent.addChildInContext(child, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
+
+                assert(child.belongsToContext(context));
+            });
+
+            it("should return false", function () {
+                let context = new lib.SpinalContext();
+                let node = new lib.SpinalNode();
+
+                assert(!node.belongsToContext(context));
+            });
+        });
     });
 
     describe("How to get information about the node's relations", function () {
@@ -459,6 +478,36 @@ describe("SpinalNode", function () {
 
                 const children = await node.getChildren(DEFAULT_RELATION_NAME);
                 assert.deepStrictEqual(children, [DEFAULT_NODE]);
+            });
+        });
+
+        describe("How to use getChildrenInContext", function () {
+            it("should return the node's child", async function () {
+                let context = new lib.SpinalContext();
+                let parent = new lib.SpinalNode();
+                let child = new lib.SpinalNode();
+
+                await parent.addChildInContext(child, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE, context);
+
+                const children = await parent.getChildrenInContext(context);
+                assert.deepStrictEqual(children, [child]);
+            });
+
+            it("should return the node's children associated to the context", async function () {
+                let context = new lib.SpinalContext();
+                let parent = new lib.SpinalNode();
+                let child1 = new lib.SpinalNode();
+                let child2 = new lib.SpinalNode();
+                let child3 = new lib.SpinalNode();
+
+                await Promise.all([
+                    parent.addChildInContext(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE, context),
+                    parent.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE),
+                    parent.addChildInContext(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context)
+                ]);
+
+                const children = await parent.getChildrenInContext(context);
+                assert.deepStrictEqual(children, [child1, child3]);
             });
         });
 

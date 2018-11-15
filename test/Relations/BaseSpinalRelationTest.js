@@ -65,6 +65,24 @@ describe("BaseSpinalRelation", function () {
         assert.deepStrictEqual(relation.getContextIds(), [contextId1, contextId2]);
       });
     });
+
+    describe("How to use belongsToContext", function () {
+      it("should return true", async function () {
+        let context = new lib.SpinalContext();
+        let relation = new BaseSpinalRelation();
+
+        relation.addContextId(context.getId().get());
+
+        assert(relation.belongsToContext(context));
+      });
+
+      it("should return false", function () {
+        let context = new lib.SpinalContext();
+        let relation = new BaseSpinalRelation();
+
+        assert(!relation.belongsToContext(context));
+      });
+    });
   });
 
   describe("How to remove from the graph", function () {

@@ -60,7 +60,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
     /**
      * Return all the children of the relation.
-     * @return {Promise<Array<SpinalNode>>} Promise containing a list of all the children of the relation
+     * @return {Promise<Array<SpinalNode>>} The children of the relation
      */
     async getChildren() {
         const childrenLst = await promiseLoad(this.children);
@@ -68,6 +68,24 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
         for (let i = 0; i < childrenLst.length; i++) {
             children.push(childrenLst[i]);
+        }
+        return children;
+    }
+
+    /**
+     * Return all the children of the relation associated to a certain context.
+     * @param {SpinalContext} context Context to use for the search
+     * @return {Promise<Array<SpinalNode>>} The children associated to the context
+     */
+    async getChildrenInContext(context) {
+        const childrenLst = await promiseLoad(this.children);
+        let children = [];
+
+        for (let i = 0; i < childrenLst.length; i++) {
+            let child = childrenLst[i];
+
+            if (child.belongsToContext(context))
+                children.push(child);
         }
         return children;
     }

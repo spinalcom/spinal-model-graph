@@ -62,6 +62,39 @@ describe("SpinalRelationLstPtr", function () {
       });
     });
 
+    describe("How to use getChildrenInContext", function () {
+      it("should return the relation's child", async function () {
+        let context = new lib.SpinalContext();
+        let relation = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+        let child = new lib.SpinalNode();
+
+        child.addContextId(context.getId().get())
+        await relation.addChild(child);
+
+        const children = await relation.getChildrenInContext(context);
+        assert.deepStrictEqual(children, [child]);
+      });
+
+      it("should return the relation's children associated to the context", async function () {
+        let context = new lib.SpinalContext();
+        let relation = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+        let child1 = new lib.SpinalNode();
+        let child2 = new lib.SpinalNode();
+        let child3 = new lib.SpinalNode();
+
+        child1.addContextId(context.getId().get())
+        child3.addContextId(context.getId().get())
+        await Promise.all([
+          relation.addChild(child1),
+          relation.addChild(child2),
+          relation.addChild(child3)
+        ]);
+
+        const children = await relation.getChildrenInContext(context);
+        assert.deepStrictEqual(children, [child1, child3]);
+      });
+    });
+
     describe("How to use getType", function () {
       it("should return the relation's type", function () {
         let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);

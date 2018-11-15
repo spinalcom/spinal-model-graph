@@ -87,6 +87,15 @@ class BaseSpinalRelation extends globalType.Model {
     }
 
     /**
+     * Returns true if the relation belongs to the context.
+     * @param {SpinalContext} context The context that might own the node
+     * @return {Boolean} A boolean
+     */
+    belongsToContext(context) {
+        return this.contextIds.has(context.getId().get());
+    }
+
+    /**
      * Sets the parent of the relation. If a parent was already set, the parent relation is removed.
      * @param {SpinalNode} parent New parent of the relation
      */

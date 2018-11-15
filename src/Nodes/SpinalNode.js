@@ -118,6 +118,15 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
+     * Returns true if the node belongs to the context.
+     * @param {SpinalContext} context The context that might own the node
+     * @return {Boolean} A boolean
+     */
+    belongsToContext(context) {
+        return this.contextIds.has(context.getId().get());
+    }
+
+    /**
      * Verify if the node contains the relation name.
      * @param {String} relationName Name of the relation
      * @param {String} relationType Type of the relation
@@ -250,6 +259,38 @@ class SpinalNode extends globalType.Model {
                     promises.push(relation.getChildren());
                 }
             }
+        });
+
+        const childrenLst = await Promise.all(promises);
+        let res = [];
+
+        for (let children of childrenLst) {
+            for (let i = 0; i < children.length; i++) {
+                res.push(children[i]);
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * Return all children that are registered in the context
+     * @param {SpinalContext} context Context to use for the search
+     * @return {Promise<Array<SpinalNode>>} Promise containing the children that were found
+     */
+    async getChildrenInContext(context) {
+        if (typeof context === "undefined") {
+            throw new Error("You must give a context");
+        }
+
+        const promises = [];
+
+        this.children.forEach(relationMap => {
+            relationMap.forEach(relation => {
+                if (relation.belongsToContext(context)) {
+                    promises.push(relation.getChildrenInContext(context));
+                }
+            });
         });
 
         const childrenLst = await Promise.all(promises);
