@@ -202,7 +202,7 @@ Computes and returns the number of children of the node.
 Returns a list of the contexts the node is associated to.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Array.&lt;String&gt;</code> - A list of ids of the associated contexts  
+**Returns**: <code>Array.&lt;String&gt;</code> - An array of ids of the associated contexts  
 <a name="SpinalNode+addContextId"></a>
 
 ### spinalNode.addContextId(id)
@@ -307,10 +307,10 @@ After this operation the node can be deleted without fear.
 <a name="SpinalNode+getChildren"></a>
 
 ### spinalNode.getChildren(relationNames) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
-Return all children for the relation names no matter the type of relation
+Returns the children of the node for the relation names.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - Promise containing the children that were found  
+**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The children that were found  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -319,10 +319,10 @@ Return all children for the relation names no matter the type of relation
 <a name="SpinalNode+getChildrenInContext"></a>
 
 ### spinalNode.getChildrenInContext(context) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
-Return all children that are registered in the context
+Return the children of the node that are registered in the context
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - Promise containing the children that were found  
+**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The children that were found  
 
 | Param | Type | Description |
 | --- | --- | --- |

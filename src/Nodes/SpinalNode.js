@@ -91,18 +91,18 @@ class SpinalNode extends globalType.Model {
     getNbChildren() {
         let nbChildren = 0;
 
-        this.children.forEach(relationMap => {
-            relationMap.forEach(relation => {
+        for (let relationMap of this.children) {
+            for (let relation of relationMap) {
                 let childrenIds = relation.getChildrenIds();
                 nbChildren += childrenIds.length;
-            });
-        });
+            }
+        }
         return nbChildren;
     }
 
     /**
      * Returns a list of the contexts the node is associated to.
-     * @return {Array<String>} A list of ids of the associated contexts
+     * @return {Array<String>} An array of ids of the associated contexts
      */
     getContextIds() {
         return this.contextIds.keys();
@@ -240,9 +240,9 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Return all children for the relation names no matter the type of relation
+     * Returns the children of the node for the relation names.
      * @param {Array<String>} relationNames Array containing the relation names of the desired children
-     * @return {Promise<Array<SpinalNode>>} Promise containing the children that were found
+     * @return {Promise<Array<SpinalNode>>} The children that were found
      */
     async getChildren(relationNames) {
         if (typeof relationNames === "undefined" || relationNames.length === 0) {
@@ -252,14 +252,14 @@ class SpinalNode extends globalType.Model {
 
         const promises = [];
 
-        this.children.forEach(relationMap => {
+        for (let relationMap of this.children) {
             for (let j = 0; j < relationNames.length; j++) {
                 if (relationMap.has(relationNames[j])) {
                     const relation = relationMap.getElement(relationNames[j]);
                     promises.push(relation.getChildren());
                 }
             }
-        });
+        }
 
         const childrenLst = await Promise.all(promises);
         let res = [];
@@ -274,9 +274,9 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Return all children that are registered in the context
+     * Return the children of the node that are registered in the context
      * @param {SpinalContext} context Context to use for the search
-     * @return {Promise<Array<SpinalNode>>} Promise containing the children that were found
+     * @return {Promise<Array<SpinalNode>>} The children that were found
      */
     async getChildrenInContext(context) {
         if (typeof context === "undefined") {
@@ -285,13 +285,13 @@ class SpinalNode extends globalType.Model {
 
         const promises = [];
 
-        this.children.forEach(relationMap => {
-            relationMap.forEach(relation => {
+        for (let relationMap of this.children) {
+            for (let relation of relationMap) {
                 if (relation.belongsToContext(context)) {
                     promises.push(relation.getChildrenInContext(context));
                 }
-            });
-        });
+            }
+        }
 
         const childrenLst = await Promise.all(promises);
         let res = [];
@@ -322,7 +322,7 @@ class SpinalNode extends globalType.Model {
                 promises.push(promiseLoad(list[i]).then(relation => {
                     return relation.getParent();
                 }));
-            };
+            }
         }
         return Promise.all(promises);
     }
@@ -370,13 +370,13 @@ class SpinalNode extends globalType.Model {
     async _removeFromParents() {
         const promises = [];
 
-        this.parents.forEach((parent) => {
+        for (let parent of this.parents) {
             for (let i = 0; i < parent.length; i++) {
                 promiseLoad(parent[i]).then(parentRel => {
                     promises.push(parentRel.removeChild(this));
                 });
             }
-        });
+        }
         await Promise.all(promises);
     }
 
@@ -423,11 +423,11 @@ class SpinalNode extends globalType.Model {
     async _removeFromChildren() {
         const promises = [];
 
-        this.children.forEach(relationMap => {
-            relationMap.forEach(relation => {
+        for (let relationMap of this.children) {
+            for (let relation of relationMap) {
                 promises.push(relation.removeFromGraph());
-            });
-        });
+            }
+        }
         await Promise.all(promises);
     }
 
@@ -439,9 +439,9 @@ class SpinalNode extends globalType.Model {
     _getRelationNames() {
         let names = [];
 
-        this.children.forEach(relationMap => {
+        for (let relationMap of this.children) {
             names.push(...relationMap.keys());
-        });
+        }
         return names;
     }
 }
