@@ -99,6 +99,23 @@ class SpinalNode extends globalType.Model {
         }
         return nbChildren;
     }
+    
+    /**
+    * Return all the children id in an array
+    @return {Array<String>} ids of the children
+    */
+    getChildrenIds() {
+        let nbChildren = [];
+
+        for (let relationMap of this.children) {
+            for (let relation of relationMap) {
+                let childrenIds = relation.getChildrenIds();
+                for (let i = 0; i < childrenIds.length; i++)
+                    nbChildren.push(childrenIds[i])
+            }
+        }
+        return nbChildren;
+    }
 
     /**
      * Returns a list of the contexts the node is associated to.
