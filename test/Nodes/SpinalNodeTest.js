@@ -145,7 +145,7 @@ describe("SpinalNode", function () {
                     parent.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE),
                     parent.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE)
                 ]);
-                      assert.deepStrictEqual(parent.getChildrenIds(), childrenIds);
+                assert.deepStrictEqual(parent.getChildrenIds(), childrenIds);
             });
         });
 

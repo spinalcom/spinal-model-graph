@@ -39,17 +39,6 @@ class SpinalSet extends globalType.Model {
     }
 
     /**
-     * Applies a function to each of the values in the set.
-     * @param {function} fun Funcion to apply
-     */
-    forEach(fun) {
-        for (let i = 0; i < this._attribute_names.length; i++) {
-            let value = this._attribute_names[i];
-            fun(value);
-        }
-    }
-
-    /**
      * Returns a boolean asserting whether the value is in the set or not.
      * @param {String} value Value
      * @returns {Boolean} Return true if the value exists
@@ -93,16 +82,34 @@ class SpinalSet extends globalType.Model {
         return this._attribute_names.length;
     }
 
+    /**
+     * Applies a function to each of the values in the set.
+     * @param {function} fun Funcion to apply
+     */
+    forEach(fun) {
+        for (let i = 0; i < this._attribute_names.length; i++) {
+            let value = this._attribute_names[i];
+            fun(value);
+        }
+    }
+
+    /**
+     * Function to iterate over the set object.
+     */
     [Symbol.iterator]() {
         let index = -1;
-        let keys = this._attribute_names;
+        let values = this._attribute_names;
         let set = this;
 
         return {
-            next: () => ({ value: set[keys[++index]], done: index >= keys.length })
+            next() {
+                return {
+                    value: values[++index],
+                    done: index >= values.length
+                };
+            }
         };
-    };
-
+    }
 }
 
 spinalCore.register_models([SpinalSet]);

@@ -53,35 +53,6 @@ class SpinalMap extends globalType.Model {
     }
 
     /**
-     * Applies a function to each of the values in the map.
-     * @param {function} fun Funcion to apply
-     */
-    forEach(fun) {
-        for (let i = 0; i < this._attribute_names.length; i++) {
-            let name = this._attribute_names[i];
-            fun(this[name]);
-        }
-    }
-
-    /**
-     * Function to iterate over the map object.
-     */
-    [Symbol.iterator]() {
-        let index = -1;
-        let keys = this.keys();
-        let map = this;
-
-        return {
-            next() {
-                return {
-                    value: map[keys[++index]],
-                    done: index >= keys.length
-                };
-            }
-        };
-    };
-
-    /**
      * Returns a boolean asserting whether a value has been associated to the key or not.
      * @param key Key
      * @returns {Boolean} Return true if the key exists
@@ -123,6 +94,35 @@ class SpinalMap extends globalType.Model {
         while (keys[0]) {
             this.delete(keys[0]);
         }
+    }
+
+    /**
+     * Applies a function to each of the values in the map.
+     * @param {function} fun Funcion to apply
+     */
+    forEach(fun) {
+        for (let i = 0; i < this._attribute_names.length; i++) {
+            let name = this._attribute_names[i];
+            fun(this[name]);
+        }
+    }
+
+    /**
+     * Function to iterate over the map object.
+     */
+    [Symbol.iterator]() {
+        let index = -1;
+        let keys = this.keys();
+        let map = this;
+
+        return {
+            next() {
+                return {
+                    value: map[keys[++index]],
+                    done: index >= keys.length
+                };
+            }
+        };
     }
 }
 
