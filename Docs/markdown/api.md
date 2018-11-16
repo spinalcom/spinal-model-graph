@@ -5,8 +5,8 @@
 
 * [SpinalContext](#SpinalContext)
     * [new SpinalContext(name, type, element)](#new_SpinalContext_new)
-    * [.getRelationNames()](#SpinalContext+getRelationNames) ⇒ <code>Lst.&lt;String&gt;</code>
-    * [.addRelationName(relationName)](#SpinalContext+addRelationName) ⇒ <code>Boolean</code>
+    * [.getRelationNames()](#SpinalContext+getRelationNames) ⇒ <code>Lst.&lt;Str&gt;</code>
+    * [.addRelationNames(relationNames)](#SpinalContext+addRelationNames) ⇒ <code>Boolean</code>
     * [.addChild(child, relationName, relationType)](#SpinalContext+addChild) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
     * [.addChildInContext(child, relationName, relationType, context)](#SpinalContext+addChildInContext) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
 
@@ -24,22 +24,22 @@ Constructor for the SpinalContext class.
 
 <a name="SpinalContext+getRelationNames"></a>
 
-### spinalContext.getRelationNames() ⇒ <code>Lst.&lt;String&gt;</code>
+### spinalContext.getRelationNames() ⇒ <code>Lst.&lt;Str&gt;</code>
 Returns the relation names of the context.
 
 **Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
-**Returns**: <code>Lst.&lt;String&gt;</code> - The relation names that the context knows  
-<a name="SpinalContext+addRelationName"></a>
+**Returns**: <code>Lst.&lt;Str&gt;</code> - The relation names that the context knows  
+<a name="SpinalContext+addRelationNames"></a>
 
-### spinalContext.addRelationName(relationName) ⇒ <code>Boolean</code>
-Adds a relation name to the relation names known by the context.
+### spinalContext.addRelationNames(relationNames) ⇒ <code>Boolean</code>
+Adds relation names to the relation names known by the context.
 
 **Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
-**Returns**: <code>Boolean</code> - Return false if the relation name is already known  
+**Returns**: <code>Boolean</code> - Return false if all the relation names are already known  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| relationName | <code>String</code> | Name of the relation |
+| relationNames | <code>Array.&lt;String&gt;</code> \| <code>String</code> | Names of the relations |
 
 <a name="SpinalContext+addChild"></a>
 
@@ -135,6 +135,7 @@ Empty override of the SpinalNode method.
     * [.getName()](#SpinalNode+getName) ⇒ <code>Str</code>
     * [.getType()](#SpinalNode+getType) ⇒ <code>Str</code>
     * [.getElement()](#SpinalNode+getElement) ⇒ <code>Promise.&lt;\*&gt;</code>
+    * [.getChildrenIds()](#SpinalNode+getChildrenIds) ⇒ <code>Array.&lt;String&gt;</code>
     * [.getNbChildren()](#SpinalNode+getNbChildren) ⇒ <code>Number</code>
     * [.getContextIds()](#SpinalNode+getContextIds) ⇒ <code>Array.&lt;String&gt;</code>
     * [.addContextId(id)](#SpinalNode+addContextId)
@@ -189,6 +190,13 @@ Returns the element.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;\*&gt;</code> - A promise where the parameter of the resolve method is the element  
+<a name="SpinalNode+getChildrenIds"></a>
+
+### spinalNode.getChildrenIds() ⇒ <code>Array.&lt;String&gt;</code>
+Returns all the children ids in an array.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Array.&lt;String&gt;</code> - Ids of the children  
 <a name="SpinalNode+getNbChildren"></a>
 
 ### spinalNode.getNbChildren() ⇒ <code>Number</code>
@@ -772,4 +780,43 @@ Removes a child from the relation.
 | Param | Type | Description |
 | --- | --- | --- |
 | node | <code>SpinalNode</code> | Child to remove |
+
+## Functions
+
+<dl>
+<dt><a href="#find">find(startingNode, relationNames, predicate)</a> ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code></dt>
+<dd><p>Finds all the nodes under the starting node for which the predicate is true.</p>
+</dd>
+<dt><a href="#findInContext">findInContext(startingNode, context, predicate)</a> ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code></dt>
+<dd><p>Finds all the nodes under the starting node that are in the context and for which the predicate is true.</p>
+</dd>
+</dl>
+
+<a name="find"></a>
+
+## find(startingNode, relationNames, predicate) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+Finds all the nodes under the starting node for which the predicate is true.
+
+**Kind**: global function  
+**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The nodes that were found  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| startingNode | <code>SpinalNode</code> | The node from which the traversal starts |
+| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names to follow |
+| predicate | <code>function</code> | Function returning true if the node needs to be returned |
+
+<a name="findInContext"></a>
+
+## findInContext(startingNode, context, predicate) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+Finds all the nodes under the starting node that are in the context and for which the predicate is true.
+
+**Kind**: global function  
+**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The nodes that were found  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| startingNode | <code>SpinalNode</code> | The node from which the traversal starts |
+| context | <code>SpinalContext</code> | Context to use for the search |
+| predicate | <code>function</code> | Function returning true if the node needs to be returned |
 
