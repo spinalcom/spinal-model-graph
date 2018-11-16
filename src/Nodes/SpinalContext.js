@@ -54,9 +54,9 @@ class SpinalContext extends SpinalNode {
     }
 
     /**
-     * Adds a relation name to the relation names known by the context.
+     * Adds relation names to the relation names known by the context.
      * @param {Array<String> | String} relationNames Names of the relations
-     * @return {Boolean} Return false if the relation name is already known
+     * @return {Boolean} Return false if all the relation names are already known
      */
     addRelationNames(relationNames) {
         let result = false;

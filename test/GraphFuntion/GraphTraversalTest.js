@@ -366,9 +366,9 @@ describe("GraphTraversal", function () {
 
         assert.deepStrictEqual(foundChildren, [child2, child3, child4]);
 
-        // foundChildren = await funcs.findInContext(parent, context1);
+        foundChildren = await funcs.findInContext(parent, context1);
 
-        // assert.deepStrictEqual(foundChildren, [child1]);
+        assert.deepStrictEqual(foundChildren, [child1]);
       });
     });
   });

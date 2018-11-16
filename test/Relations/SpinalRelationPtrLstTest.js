@@ -12,17 +12,38 @@ describe("SpinalRelationPtrLst", function () {
     it("should create a new relation with a name", function () {
       let rel = new SpinalRelationPtrLst(DEFAULT_RELATION_NAME);
 
-      assert.equal(rel.getName(), DEFAULT_RELATION_NAME);
+      assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
     });
   });
 
   describe("How to get informations about the relation", function () {
     describe("How to use getChildrenIds", function () {
-      it("should return the ids of all children", async function () {
+      it("should return the ids of the child", async function () {
         let rel = new SpinalRelationPtrLst(DEFAULT_RELATION_NAME);
 
         await rel.addChild(DEFAULT_NODE);
         assert.deepStrictEqual(rel.getChildrenIds(), [DEFAULT_NODE.getId().get()]);
+      });
+
+      it("should return the ids of all children", async function () {
+        let rel = new SpinalRelationPtrLst(DEFAULT_RELATION_NAME);
+        const node1 = new lib.SpinalNode();
+        const node2 = new lib.SpinalNode();
+        const node3 = new lib.SpinalNode();
+
+        const nodeIds = [
+          node1.getId().get(),
+          node2.getId().get(),
+          node3.getId().get()
+        ];
+
+        await Promise.all([
+          rel.addChild(node1),
+          rel.addChild(node2),
+          rel.addChild(node3),
+        ]);
+
+        assert.deepStrictEqual(rel.getChildrenIds(), nodeIds);
       });
     });
 
@@ -96,7 +117,7 @@ describe("SpinalRelationPtrLst", function () {
       it("should return the relation's type", function () {
         let rel = new SpinalRelationPtrLst(DEFAULT_RELATION_NAME);
 
-        assert.equal(rel.getType(), lib.SPINAL_RELATION_PTR_LST_TYPE);
+        assert.strictEqual(rel.getType(), lib.SPINAL_RELATION_PTR_LST_TYPE);
       });
     });
   });
@@ -143,12 +164,12 @@ describe("SpinalRelationPtrLst", function () {
 
         const res1 = await rel.addChild(node);
 
-        assert.equal(res1, node);
+        assert.strictEqual(res1, node);
 
         const res2 = await rel.addChild(model);
         const res2Elem = await res2.getElement();
 
-        assert.equal(res2Elem, model);
+        assert.strictEqual(res2Elem, model);
       });
     });
   });

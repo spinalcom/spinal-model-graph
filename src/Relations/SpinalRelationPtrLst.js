@@ -53,7 +53,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
         let ids = [];
 
         for (let i = 0; i < idLst.length; i++) {
-            ids.push(idLst[0].get());
+            ids.push(idLst[i].get());
         }
         return ids;
     }

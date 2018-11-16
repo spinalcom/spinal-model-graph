@@ -12,7 +12,7 @@ describe("BaseSpinalRelation", function () {
     it("should create a new relation with a name", function () {
       let rel = new BaseSpinalRelation(DEFAULT_RELATION_NAME);
 
-      assert.equal(rel.getName(), DEFAULT_RELATION_NAME);
+      assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
     });
   });
 
@@ -20,8 +20,8 @@ describe("BaseSpinalRelation", function () {
     describe("How to use getName", function () {
       it('should return the name DEFAULT_RELATION_NAME', function () {
         let rel = new BaseSpinalRelation(DEFAULT_RELATION_NAME);
-        assert.equal(
-          rel.getName(),
+        assert.strictEqual(
+          rel.getName().get(),
           DEFAULT_RELATION_NAME
         );
       });
@@ -34,7 +34,7 @@ describe("BaseSpinalRelation", function () {
         rel.setParent(DEFAULT_NODE);
 
         const parent = await rel.getParent();
-        assert.equal(parent, DEFAULT_NODE);
+        assert.strictEqual(parent, DEFAULT_NODE);
       });
     });
 
@@ -45,7 +45,7 @@ describe("BaseSpinalRelation", function () {
         rel.setParent(DEFAULT_NODE);
 
         const parent = await rel.getParent();
-        assert.equal(parent, DEFAULT_NODE);
+        assert.strictEqual(parent, DEFAULT_NODE);
       });
     });
 

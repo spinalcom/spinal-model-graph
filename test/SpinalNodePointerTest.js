@@ -13,15 +13,15 @@ describe("SpinalNodePointer", function () {
         it("should create a SpinalNodePointer with correct default values if no node is given", function () {
             let ptr = new SpinalNodePointer();
 
-            assert.equal(typeof ptr.getId(), "undefined");
-            assert.equal(typeof ptr.getType(), "undefined");
+            assert.strictEqual(typeof ptr.getId(), "undefined");
+            assert.strictEqual(typeof ptr.getType(), "undefined");
         });
 
         it("should create a SpinalNodePointer with correct default values if a node is given", function () {
             let ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-            assert.equal(ptr.getId(), DEFAULT_NODE.getId());
-            assert.equal(ptr.getType(), DEFAULT_NODE.getType());
+            assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
+            assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
         });
     });
 
@@ -30,21 +30,21 @@ describe("SpinalNodePointer", function () {
             it("should set an element and update pointedId and pointedType", async function () {
                 let ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-                assert.equal(ptr.getId(), DEFAULT_NODE.getId());
-                assert.equal(ptr.getType(), DEFAULT_NODE.getType());
+                assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
+                assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
 
                 const elem = await promiseLoad(ptr);
-                assert.equal(elem, DEFAULT_NODE);
+                assert.strictEqual(elem, DEFAULT_NODE);
             });
 
             it("should set an element but not update pointedId and pointedType", async function () {
                 let ptr = new SpinalNodePointer(DEFAULT_MODEL);
 
-                assert.equal(typeof ptr.getId(), "undefined");
-                assert.equal(typeof ptr.getType(), "undefined");
+                assert.strictEqual(typeof ptr.getId(), "undefined");
+                assert.strictEqual(typeof ptr.getType(), "undefined");
 
                 const elem = await promiseLoad(ptr);
-                assert.equal(elem, DEFAULT_MODEL);
+                assert.strictEqual(elem, DEFAULT_MODEL);
             });
         });
 
@@ -52,11 +52,11 @@ describe("SpinalNodePointer", function () {
             it("should unset the pointer", function () {
                 let ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-                assert.equal(ptr.getId(), DEFAULT_NODE.getId());
-                assert.equal(ptr.getType(), DEFAULT_NODE.getType());
+                assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
+                assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
                 ptr.unset();
-                assert.equal(typeof ptr.getId(), "undefined");
-                assert.equal(typeof ptr.getType(), "undefined");
+                assert.strictEqual(typeof ptr.getId(), "undefined");
+                assert.strictEqual(typeof ptr.getType(), "undefined");
                 assert.deepStrictEqual(ptr.ptr.data, { value: 0 });
             });
         });
@@ -67,7 +67,7 @@ describe("SpinalNodePointer", function () {
             it("should return the id of the pointed node", function () {
                 let ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-                assert.equal(ptr.getId(), DEFAULT_NODE.getId());
+                assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
             });
         });
 
@@ -75,7 +75,7 @@ describe("SpinalNodePointer", function () {
             it("should return the type of the pointed node", function () {
                 let ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-                assert.equal(ptr.getType(), DEFAULT_NODE.getType());
+                assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
             });
         });
     });

@@ -14,8 +14,8 @@ describe("SpinalGraph", function () {
         it("should create a graph with default values", async function () {
             let context = new lib.SpinalGraph();
 
-            assert.equal(context.getName(), DEFAULT_SPINAL_GRAPH_NAME);
-            assert.equal(context.getType(), DEFAULT_SPINAL_GRAPH_TYPE);
+            assert.strictEqual(context.getName().get(), DEFAULT_SPINAL_GRAPH_NAME);
+            assert.strictEqual(context.getType().get(), DEFAULT_SPINAL_GRAPH_TYPE);
 
             const element = await context.getElement();
             assert(element instanceof globalType.Model);
@@ -63,7 +63,7 @@ describe("SpinalGraph", function () {
             ]);
 
             const context = await graph.getContext(DEFAULT_SPINAL_CONTEXT_NAME2);
-            assert.equal(context, context2);
+            assert.strictEqual(context, context2);
         });
     });
 });

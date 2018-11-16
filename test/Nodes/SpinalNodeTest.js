@@ -20,18 +20,18 @@ describe("SpinalNode", function () {
         it('should create a new spinal node.', async function () {
             const node = new lib.SpinalNode();
 
-            assert.equal(
-                node.getName(),
+            assert.strictEqual(
+                node.getName().get(),
                 DEFAULT_SPINAL_NODE_NAME
             );
 
-            assert.equal(
-                node.getType(),
+            assert.strictEqual(
+                node.getType().get(),
                 DEFAULT_SPINAL_NODE_TYPE
             );
 
             const elt = await node.getElement()
-            assert.equal(
+            assert.strictEqual(
                 elt instanceof Model,
                 true,
             );
@@ -40,8 +40,8 @@ describe("SpinalNode", function () {
         it('should create spinal a new SpinalNode with a specific name.', function () {
             const node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME);
 
-            assert.equal(
-                node.getName(),
+            assert.strictEqual(
+                node.getName().get(),
                 CUSTOM_SPINAL_NODE_NAME,
                 "By setting the first argument of the construct the name should be setElement."
             );
@@ -50,14 +50,14 @@ describe("SpinalNode", function () {
         it('should create a new SpinalNode with specific name and type.', function () {
             const node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE);
 
-            assert.equal(
-                node.getName(),
+            assert.strictEqual(
+                node.getName().get(),
                 CUSTOM_SPINAL_NODE_NAME,
                 "By setting the first argument of the construct the name should be setElement."
             );
 
-            assert.equal(
-                node.getType(),
+            assert.strictEqual(
+                node.getType().get(),
                 CUSTOM_SPINAL_NODE_TYPE,
                 "By setting the second argument of the construct the type should be setElement."
             );
@@ -66,14 +66,14 @@ describe("SpinalNode", function () {
         it('should create a new SpinalNode with specific name, type and element', async function () {
             const node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE, new lib.SpinalNode());
 
-            assert.equal(
-                node.getName(),
+            assert.strictEqual(
+                node.getName().get(),
                 CUSTOM_SPINAL_NODE_NAME,
                 "By setting the first argument of the construct the name should be setElement."
             );
 
-            assert.equal(
-                node.getType(),
+            assert.strictEqual(
+                node.getType().get(),
                 CUSTOM_SPINAL_NODE_TYPE,
                 "By setting the second argument of the construct the type should be setElement.");
 
@@ -89,8 +89,8 @@ describe("SpinalNode", function () {
         describe("How to use getName", function () {
             it('should return the name CUSTOM_SPINAL_NODE_NAME', function () {
                 let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME);
-                assert.equal(
-                    node.getName(),
+                assert.strictEqual(
+                    node.getName().get(),
                     CUSTOM_SPINAL_NODE_NAME,
                     "By setting the first argument of the construct the name should be setElement."
                 );
@@ -100,8 +100,8 @@ describe("SpinalNode", function () {
         describe("How to use getType", function () {
             it('should return the type CUSTOM_SPINAL_NODE_TYPE', function () {
                 let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE);
-                assert.equal(
-                    node.getType(),
+                assert.strictEqual(
+                    node.getType().get(),
                     CUSTOM_SPINAL_NODE_TYPE,
                     "By setting the first argument of the construct the type should be setElement."
                 );
@@ -113,7 +113,7 @@ describe("SpinalNode", function () {
                 let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
 
                 const elt = await node.getElement()
-                assert.equal(
+                assert.strictEqual(
                     elt,
                     DEFAULT_ELEMENT,
                     "By setting the second argument of the construct the element should be setElement."
@@ -155,7 +155,7 @@ describe("SpinalNode", function () {
                 let node = new lib.SpinalNode();
                 let res = node.getNbChildren();
 
-                assert.equal(res, 0);
+                assert.strictEqual(res, 0);
             });
 
             it("should return 3", function () {
@@ -169,7 +169,7 @@ describe("SpinalNode", function () {
                 node.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
                 node.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
                 res = node.getNbChildren();
-                assert.equal(res, 3);
+                assert.strictEqual(res, 3);
             });
 
             it("should return 2", async function () {
@@ -186,7 +186,7 @@ describe("SpinalNode", function () {
                 ]);
                 await node.removeChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
                 res = node.getNbChildren();
-                assert.equal(res, 2);
+                assert.strictEqual(res, 2);
             });
         });
 
@@ -233,14 +233,14 @@ describe("SpinalNode", function () {
                 let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
 
                 await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-                assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
+                assert.strictEqual(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
             });
 
             it('should return false', async function () {
                 let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
 
                 await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-                assert.equal(node.hasRelation(CUSTOM_RELATION_NAME1, lib.SPINAL_RELATION_TYPE), false);
+                assert.strictEqual(node.hasRelation(CUSTOM_RELATION_NAME1, lib.SPINAL_RELATION_TYPE), false);
             });
         });
 
@@ -252,7 +252,7 @@ describe("SpinalNode", function () {
                     node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
                     node.addChild(DEFAULT_NODE, CUSTOM_RELATION_NAME1, lib.SPINAL_RELATION_TYPE)
                 ]);
-                assert.equal(node.hasRelations([DEFAULT_RELATION_NAME, CUSTOM_RELATION_NAME1], lib.SPINAL_RELATION_TYPE), true);
+                assert.strictEqual(node.hasRelations([DEFAULT_RELATION_NAME, CUSTOM_RELATION_NAME1], lib.SPINAL_RELATION_TYPE), true);
 
             });
 
@@ -263,7 +263,7 @@ describe("SpinalNode", function () {
                     node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
                     node.addChild(DEFAULT_NODE, CUSTOM_RELATION_NAME1, lib.SPINAL_RELATION_TYPE),
                 ]);
-                assert.equal(node.hasRelations([CUSTOM_RELATION_NAME2, CUSTOM_RELATION_NAME1], lib.SPINAL_RELATION_TYPE), false);
+                assert.strictEqual(node.hasRelations([CUSTOM_RELATION_NAME2, CUSTOM_RELATION_NAME1], lib.SPINAL_RELATION_TYPE), false);
             });
         });
     });
@@ -274,39 +274,39 @@ describe("SpinalNode", function () {
                 let node = new lib.SpinalNode();
 
                 await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-                assert.equal(typeof node !== "undefined", true);
-                assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
+                assert.strictEqual(typeof node !== "undefined", true);
+                assert.strictEqual(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
 
                 const children = await node.getChildren([DEFAULT_RELATION_NAME]);
 
-                assert.equal(children.length, 1);
-                assert.equal(children[0], DEFAULT_NODE);
+                assert.strictEqual(children.length, 1);
+                assert.strictEqual(children[0], DEFAULT_NODE);
             });
 
             it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', async function () {
                 let node = new lib.SpinalNode();
 
                 node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE);
-                assert.equal(typeof node !== "undefined", true);
-                assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE), true);
+                assert.strictEqual(typeof node !== "undefined", true);
+                assert.strictEqual(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE), true);
 
                 const children = await node.getChildren([DEFAULT_RELATION_NAME]);
 
-                assert.equal(children.length, 1);
-                assert.equal(children[0], DEFAULT_NODE);
+                assert.strictEqual(children.length, 1);
+                assert.strictEqual(children[0], DEFAULT_NODE);
             });
 
             it('should add a child to the node with a relation type SPINAL_RELATION_LST_PTR_TYPE', async function () {
                 let node = new lib.SpinalNode();
 
                 await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE);
-                assert.equal(typeof node !== "undefined", true);
-                assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE), true);
+                assert.strictEqual(typeof node !== "undefined", true);
+                assert.strictEqual(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE), true);
 
                 const children = await node.getChildren([DEFAULT_RELATION_NAME]);
 
-                assert.equal(children.length, 1);
-                assert.equal(children[0], DEFAULT_NODE);
+                assert.strictEqual(children.length, 1);
+                assert.strictEqual(children[0], DEFAULT_NODE);
             });
 
             it("should throw an error if you try to add the same node twice", async function () {
@@ -337,12 +337,12 @@ describe("SpinalNode", function () {
 
                 const res1 = await node.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
 
-                assert.equal(res1, childNode);
+                assert.strictEqual(res1, childNode);
 
                 const res2 = await node.addChild(childModel, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
                 const res2Elem = await res2.getElement();
 
-                assert.equal(res2Elem, childModel);
+                assert.strictEqual(res2Elem, childModel);
             });
         });
 
@@ -352,13 +352,13 @@ describe("SpinalNode", function () {
                 let context = new lib.SpinalContext();
 
                 await node.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
-                assert.equal(typeof node !== "undefined", true);
-                assert.equal(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
+                assert.strictEqual(typeof node !== "undefined", true);
+                assert.strictEqual(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
 
                 const children = await node.getChildren([DEFAULT_RELATION_NAME]);
 
-                assert.equal(children.length, 1);
-                assert.equal(children[0], DEFAULT_NODE);
+                assert.strictEqual(children.length, 1);
+                assert.strictEqual(children[0], DEFAULT_NODE);
             });
 
             it("Shoud add a child and associate it to the context", async function () {
@@ -402,12 +402,12 @@ describe("SpinalNode", function () {
 
                 const res1 = await node.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
 
-                assert.equal(res1, childNode);
+                assert.strictEqual(res1, childNode);
 
                 const res2 = await node.addChild(childModel, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
                 const res2Elem = await res2.getElement();
 
-                assert.equal(res2Elem, childModel);
+                assert.strictEqual(res2Elem, childModel);
             });
         });
     });
