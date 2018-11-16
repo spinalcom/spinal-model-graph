@@ -47,7 +47,7 @@ class SpinalContext extends SpinalNode {
 
     /**
      * Returns the relation names of the context.
-     * @return {Lst<String>} The relation names that the context knows
+     * @return {Lst<Str>} The relation names that the context knows
      */
     getRelationNames() {
         return this.relationNames;
@@ -55,15 +55,23 @@ class SpinalContext extends SpinalNode {
 
     /**
      * Adds a relation name to the relation names known by the context.
-     * @param {String} relationName Name of the relation
+     * @param {Array<String> | String} relationNames Names of the relations
      * @return {Boolean} Return false if the relation name is already known
      */
-    addRelationName(relationName) {
-        if (!this.relationNames.contains(relationName)) {
-            this.relationNames.push(relationName);
-            return true;
+    addRelationNames(relationNames) {
+        let result = false;
+
+        if (typeof relationNames === "string") {
+            relationNames = [relationNames];
         }
-        return false;
+
+        for (let name of relationNames) {
+            if (!this.relationNames.contains(name)) {
+                this.relationNames.push(name);
+                result = true;
+            }
+        }
+        return result;
     }
 
     /**
