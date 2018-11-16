@@ -23,6 +23,7 @@
  */
 import {
   SpinalNode,
+  SpinalContext
 } from "../index";
 
 const DEFAULT_PREDICATE = () => true;
@@ -80,8 +81,10 @@ async function findInContext(startingNode, context, predicate = DEFAULT_PREDICAT
     throw Error("You must give a starting node");
   } else if (!(startingNode instanceof SpinalNode)) {
     throw new Error("The starting node must be a SpinalNode");
+  } else if (!(context instanceof SpinalContext)) {
+    throw new Error("The context must be a SpinalContext");
   } else if (typeof predicate !== "function") {
-    throw new Error("predicate must be a function");
+    throw new Error("The predicate function must be a function");
   }
 
   let seen = new Set([startingNode]);
