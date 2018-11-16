@@ -63,6 +63,9 @@ class SpinalMap extends globalType.Model {
         }
     }
 
+    /**
+     * Function to iterate over the map object.
+     */
     [Symbol.iterator]() {
         let index = -1;
         let keys = this.keys();
@@ -72,7 +75,7 @@ class SpinalMap extends globalType.Model {
             next() {
                 return {
                     value: map[keys[++index]],
-                    done: !(index in keys)
+                    done: index >= keys.length
                 };
             }
         };

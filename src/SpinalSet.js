@@ -24,70 +24,71 @@
 import spinalCore from "spinal-core-connectorjs";
 
 const globalType = typeof window === "undefined" ? global : window;
+
 class SpinalSet extends globalType.Model {
     constructor() {
         super();
     }
 
     /**
-     * Appends a new element with the given value to the Set object. Returns the Set object
-     * @param {String} value to store in the set
+     * Appends a new element with the given value to the set.
+     * @param {String} value Value to store in the set
      */
     add(value) {
-        this.rem_attr(value);
-        this.add_attr(value);
+        this.mod_attr(value, 0);
     }
 
-
     /**
-     * Applies a function to each of the values in the map.
+     * Applies a function to each of the values in the set.
      * @param {function} fun Funcion to apply
      */
     forEach(fun) {
         for (let i = 0; i < this._attribute_names.length; i++) {
-            let name = this._attribute_names[i];
-            fun(this[name]);
+            let value = this._attribute_names[i];
+            fun(value);
         }
     }
 
-
-
     /**
-     * Returns a boolean asserting whether a value has been associated to the key or not.
-     * @param key Key
-     * @returns {Boolean} Return true if the key exists
+     * Returns a boolean asserting whether the value is in the set or not.
+     * @param {String} value Value
+     * @returns {Boolean} Return true if the value exists
      */
-    has(key) {
-        return this.hasOwnProperty(key)
+    has(value) {
+        return this.hasOwnProperty(value)
     }
 
     /**
-     * Returns an array that contains the keys for each element in the map in insertion order.
-     * @returns {Array<String>} Array containing all the keys in the map
+     * Returns an array that contains all the values of the set.
+     * @returns {Array<String>} Array containing all the values in the set
      */
-    keys() {
+    values() {
         return this._attribute_names;
     }
 
     /**
      * Deletes an element.
-     * @param key Key of the element
+     * @param {String} value Value to delete
      */
-    delete(key) {
-        this.rem_attr(key);
+    delete(value) {
+        this.rem_attr(value);
     }
 
     /**
-     * Deletes all elements.
+     * Deletes all values in the set.
      */
     clear() {
-        let keys = this.keys();
+        let values = this.values();
 
-        while (keys[0]) {
-            this.delete(keys[0]);
+        while (values[0]) {
+            this.delete(values[0]);
         }
     }
 
+    /**
+     * Returns the number of values in the set.
+     * @return {Number} Number of values in the set
+     */
     size() {
         return this._attribute_names.length;
     }
