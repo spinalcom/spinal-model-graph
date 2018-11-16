@@ -30,11 +30,11 @@ const DEFAULT_PREDICATE = () => true;
 /**
  * Finds all the nodes under the starting node for which the predicate is true.
  * @param {SpinalNode} startingNode The node from which the traversal starts
- * @param {function} predicate Function returning true if the node needs to be returned
  * @param {Array<String>} relationNames Array containing the relation names to follow
+ * @param {function} predicate Function returning true if the node needs to be returned
  * @return {Promise<Array<SpinalNode>>} The nodes that were found
  */
-async function findInGraph(startingNode, predicate = DEFAULT_PREDICATE, relationNames) {
+async function find(startingNode, relationNames, predicate = DEFAULT_PREDICATE) {
   if (typeof startingNode === "undefined") {
     throw Error("You must give a starting node");
   } else if (!(startingNode instanceof SpinalNode)) {
@@ -68,6 +68,48 @@ async function findInGraph(startingNode, predicate = DEFAULT_PREDICATE, relation
   return found;
 }
 
+/**
+ * Finds all the nodes under the starting node that are in the context and for which the predicate is true.
+ * @param {SpinalNode} startingNode The node from which the traversal starts
+ * @param {SpinalContext} context Context to use for the search
+ * @param {function} predicate Function returning true if the node needs to be returned
+ * @return {Promise<Array<SpinalNode>>} The nodes that were found
+ */
+async function findInContext(startingNode, context, predicate = DEFAULT_PREDICATE) {
+  if (typeof startingNode === "undefined") {
+    throw Error("You must give a starting node");
+  } else if (!(startingNode instanceof SpinalNode)) {
+    throw new Error("The starting node must be a SpinalNode");
+  } else if (typeof predicate !== "function") {
+    throw new Error("predicate must be a function");
+  }
+
+  let seen = new Set([startingNode]);
+  let children = [];
+  let current = startingNode;
+  let found = [];
+
+  while (current) {
+    let newChildren = await current.getChildrenInContext(context);
+
+    for (let newChild of newChildren) {
+      if (!seen.has(newChild)) {
+        children.push(newChild);
+        seen.add(newChild);
+      }
+    }
+
+    current = children.shift();
+
+    if (current && predicate(current)) {
+      found.push(current);
+    }
+  }
+
+  return found;
+}
+
 export {
-  findInGraph
+  find,
+  findInContext
 };

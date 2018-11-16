@@ -86,7 +86,7 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-    * Return all the children ids in an array.
+    * Returns all the children ids in an array.
     * @return {Array<String>} Ids of the children
     */
     getChildrenIds() {
