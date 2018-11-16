@@ -99,7 +99,7 @@ class SpinalSet extends globalType.Model {
         let set = this;
 
         return {
-            next: () => ({ value: set[keys[++index]], done: !(index in keys) })
+            next: () => ({ value: set[keys[++index]], done: index >= keys.length })
         };
     };
 
