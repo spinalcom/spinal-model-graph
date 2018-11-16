@@ -34,8 +34,7 @@ class SpinalSet extends globalType.Model {
      * @param {String} value to store in the set
      */
     add(value) {
-        this.rem_attr(value);
-        this.add_attr(value);
+        this.mod_attr(value, 0);
     }
 
 
@@ -91,6 +90,17 @@ class SpinalSet extends globalType.Model {
     size() {
         return this._attribute_names.length;
     }
+
+    [Symbol.iterator]() {
+        let index = -1;
+        let keys = this._attribute_names;
+        let set = this;
+
+        return {
+            next: () => ({ value: set[keys[++index]], done: !(index in keys) })
+        };
+    };
+
 }
 
 spinalCore.register_models([SpinalSet]);
