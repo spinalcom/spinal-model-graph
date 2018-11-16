@@ -58,11 +58,11 @@ async function find(startingNode, relationNames, predicate = DEFAULT_PREDICATE) 
       }
     }
 
-    current = children.shift();
-
-    if (current && predicate(current)) {
+    if (predicate(current)) {
       found.push(current);
     }
+
+    current = children.shift();
   }
 
   return found;
@@ -99,11 +99,11 @@ async function findInContext(startingNode, context, predicate = DEFAULT_PREDICAT
       }
     }
 
-    current = children.shift();
-
-    if (current && predicate(current)) {
+    if (predicate(current)) {
       found.push(current);
     }
+
+    current = children.shift();
   }
 
   return found;

@@ -44,7 +44,7 @@ describe("GraphTraversal", function () {
 
         const foundChild = await funcs.find(node1);
 
-        assert.deepStrictEqual(foundChild, [node2]);
+        assert.deepStrictEqual(foundChild, [node1, node2]);
       });
     });
 
@@ -97,7 +97,7 @@ describe("GraphTraversal", function () {
       });
 
       it("should return a node with a certain name", async function () {
-        const parent = new lib.SpinalNode();
+        const parent = new lib.SpinalNode(DEFAULT_NODE_NAME);
         const child1 = new lib.SpinalNode(DEFAULT_NODE_NAME + "1");
         const child2 = new lib.SpinalNode(DEFAULT_NODE_NAME + "2");
         const child3 = new lib.SpinalNode(DEFAULT_NODE_NAME + "3");
@@ -118,7 +118,7 @@ describe("GraphTraversal", function () {
           return node.getName().get() !== DEFAULT_NODE_NAME + "2";
         });
 
-        assert.deepStrictEqual(foundChild, [child1, child3]);
+        assert.deepStrictEqual(foundChild, [parent, child1, child3]);
       });
 
       it("should return nodes with a certain type", async function () {
@@ -174,11 +174,11 @@ describe("GraphTraversal", function () {
 
         let foundChildren = await funcs.find(parent, DEFAULT_RELATION_NAME + "2");
 
-        assert.deepStrictEqual(foundChildren, [child2, child3, child4]);
+        assert.deepStrictEqual(foundChildren, [parent, child2, child3, child4]);
 
         foundChildren = await funcs.find(parent, DEFAULT_RELATION_NAME + "1");
 
-        assert.deepStrictEqual(foundChildren, [child1]);
+        assert.deepStrictEqual(foundChildren, [parent, child1]);
       });
     });
   });
@@ -232,7 +232,7 @@ describe("GraphTraversal", function () {
 
         const foundChild = await funcs.findInContext(node1, context);
 
-        assert.deepStrictEqual(foundChild, [node2]);
+        assert.deepStrictEqual(foundChild, [node1, node2]);
       });
     });
 
@@ -306,7 +306,7 @@ describe("GraphTraversal", function () {
           return node.getName().get() !== DEFAULT_NODE_NAME + "2";
         });
 
-        assert.deepStrictEqual(foundChild, [child1, child3]);
+        assert.deepStrictEqual(foundChild, [context, child1, child3]);
       });
 
       it("should return nodes with a certain type", async function () {
@@ -364,11 +364,11 @@ describe("GraphTraversal", function () {
 
         let foundChildren = await funcs.findInContext(parent, context2);
 
-        assert.deepStrictEqual(foundChildren, [child2, child3, child4]);
+        assert.deepStrictEqual(foundChildren, [parent, child2, child3, child4]);
 
         foundChildren = await funcs.findInContext(parent, context1);
 
-        assert.deepStrictEqual(foundChildren, [child1]);
+        assert.deepStrictEqual(foundChildren, [parent, child1]);
       });
     });
   });
