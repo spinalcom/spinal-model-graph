@@ -29,6 +29,7 @@ const globalType = typeof window === "undefined" ? global : window;
 
 import { SpinalRelationFactory } from "../Relations/SpinalRelationFactory";
 import SpinalMap from "../SpinalMap";
+import SpinalSet from "../SpinalSet";
 
 class SpinalNode extends globalType.Model {
     /**
@@ -48,7 +49,7 @@ class SpinalNode extends globalType.Model {
             parents: new SpinalMap(),
             children: new SpinalMap(),
             element: new SpinalNodePointer(element),
-            contextIds: new SpinalMap()
+            contextIds: new SpinalSet()
         });
     }
 
@@ -85,36 +86,31 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
+    * Returns all the children ids in an array.
+    * @return {Array<String>} Ids of the children
+    */
+    getChildrenIds() {
+        let nodeChildrenIds = [];
+
+        for (let relationMap of this.children) {
+            for (let relation of relationMap) {
+                let relChildrenIds = relation.getChildrenIds();
+
+                for (let i = 0; i < relChildrenIds.length; i++)
+                    nodeChildrenIds.push(relChildrenIds[i]);
+            }
+        }
+        return nodeChildrenIds;
+    }
+
+    /**
      * Computes and returns the number of children of the node.
      * @return {Number} The number of children
      */
     getNbChildren() {
-        let nbChildren = 0;
+        let childrenIds = this.getChildrenIds();
 
-        for (let relationMap of this.children) {
-            for (let relation of relationMap) {
-                let childrenIds = relation.getChildrenIds();
-                nbChildren += childrenIds.length;
-            }
-        }
-        return nbChildren;
-    }
-    
-    /**
-    * Return all the children id in an array
-    @return {Array<String>} ids of the children
-    */
-    getChildrenIds() {
-        let nbChildren = [];
-
-        for (let relationMap of this.children) {
-            for (let relation of relationMap) {
-                let childrenIds = relation.getChildrenIds();
-                for (let i = 0; i < childrenIds.length; i++)
-                    nbChildren.push(childrenIds[i])
-            }
-        }
-        return nbChildren;
+        return childrenIds.length;
     }
 
     /**
@@ -122,7 +118,7 @@ class SpinalNode extends globalType.Model {
      * @return {Array<String>} An array of ids of the associated contexts
      */
     getContextIds() {
-        return this.contextIds.keys();
+        return this.contextIds.values();
     }
 
     /**
@@ -131,7 +127,7 @@ class SpinalNode extends globalType.Model {
      */
     addContextId(id) {
         if (!this.contextIds.has(id))
-            this.contextIds.setElement(id, 0);
+            this.contextIds.add(id);
     }
 
     /**

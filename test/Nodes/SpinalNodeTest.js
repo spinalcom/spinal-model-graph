@@ -121,6 +121,35 @@ describe("SpinalNode", function () {
             });
         });
 
+        describe("How to use getChildrenIds", function () {
+            it("should return no ids", function () {
+                const node = new lib.SpinalNode();
+
+                assert.deepStrictEqual(node.getChildrenIds(), []);
+            });
+
+            it("should all children ids", async function () {
+                const parent = new lib.SpinalNode();
+                const child1 = new lib.SpinalNode();
+                const child2 = new lib.SpinalNode();
+                const child3 = new lib.SpinalNode();
+
+                const childrenIds = [
+                    child1.getId().get(),
+                    child2.getId().get(),
+                    child3.getId().get()
+                ];
+
+                await Promise.all([
+                    parent.addChild(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE),
+                    parent.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE),
+                    parent.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE)
+                ]);
+
+                assert.deepStrictEqual(parent.getChildrenIds(), childrenIds);
+            });
+        });
+
         describe("How to use getNbChildren", function () {
             it("should return 0", function () {
                 let node = new lib.SpinalNode();

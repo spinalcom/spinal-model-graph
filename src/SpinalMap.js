@@ -63,16 +63,23 @@ class SpinalMap extends globalType.Model {
         }
     }
 
+    /**
+     * Function to iterate over the map object.
+     */
     [Symbol.iterator]() {
         let index = -1;
         let keys = this.keys();
         let map = this;
 
         return {
-            next: () => ({ value: map[keys[++index]], done: !(index in keys) })
+            next() {
+                return {
+                    value: map[keys[++index]],
+                    done: index >= keys.length
+                };
+            }
         };
     };
-
 
     /**
      * Returns a boolean asserting whether a value has been associated to the key or not.
