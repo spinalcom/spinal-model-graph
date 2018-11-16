@@ -92,6 +92,17 @@ class SpinalSet extends globalType.Model {
     size() {
         return this._attribute_names.length;
     }
+
+    [Symbol.iterator]() {
+        let index = -1;
+        let keys = this._attribute_names;
+        let set = this;
+
+        return {
+            next: () => ({ value: set[keys[++index]], done: index >= keys.length })
+        };
+    };
+
 }
 
 spinalCore.register_models([SpinalSet]);
