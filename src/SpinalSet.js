@@ -94,4 +94,4 @@ class SpinalSet extends globalType.Model {
 }
 
 spinalCore.register_models([SpinalSet]);
-export default SpinalMap;
+export default SpinalSet;
