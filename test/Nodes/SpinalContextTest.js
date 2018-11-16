@@ -14,8 +14,8 @@ describe("SpinalContext", function () {
         it("should create a context with default values", async function () {
             let context = new lib.SpinalContext();
 
-            assert.equal(context.getName(), DEFAULT_SPINAL_CONTEXT_NAME);
-            assert.equal(context.getType(), DEFAULT_SPINAL_CONTEXT_TYPE);
+            assert.strictEqual(context.getName().get(), DEFAULT_SPINAL_CONTEXT_NAME);
+            assert.strictEqual(context.getType().get(), DEFAULT_SPINAL_CONTEXT_TYPE);
             const element = await context.getElement();
             assert(element instanceof globalType.Model);
         });
@@ -27,12 +27,12 @@ describe("SpinalContext", function () {
                 let context = new lib.SpinalContext();
                 let relation = new SpinalRelationRef(DEFAULT_RELATION_NAME);
 
-                context.addRelationName(relation.getName().get());
+                context.addRelationNames(relation.getName().get());
 
                 let relationNames = context.getRelationNames();
 
-                assert.equal(relationNames.length, 1);
-                assert.equal(relationNames[0], relation.getName().get());
+                assert.strictEqual(relationNames.length, 1);
+                assert.strictEqual(relationNames[0].get(), relation.getName().get());
             });
 
             it("should return an empty list", function () {
@@ -40,40 +40,81 @@ describe("SpinalContext", function () {
 
                 let relationNames = context.getRelationNames();
 
-                assert.equal(relationNames.length, 0);
+                assert.strictEqual(relationNames.length, 0);
             });
         });
     });
 
     describe("How to register relations", function () {
-        describe("How to use addRelationName", function () {
+        describe("How to use addRelationNames", function () {
             it("should add a relation name to the list", function () {
                 let context = new lib.SpinalContext();
-                let relation = new SpinalRelationRef(DEFAULT_RELATION_NAME);
 
-                const res = context.addRelationName(relation.getName().get());
+                const res = context.addRelationNames(DEFAULT_RELATION_NAME);
 
                 assert(res);
 
                 let relationNames = context.getRelationNames();
 
-                assert.equal(relationNames.length, 1);
-                assert.equal(relationNames[0], relation.getName().get());
+                assert.strictEqual(relationNames.length, 1);
+                assert.strictEqual(relationNames[0].get(), DEFAULT_RELATION_NAME);
             });
 
             it("should not add the known relation name to the list", function () {
                 let context = new lib.SpinalContext();
-                let relation = new SpinalRelationRef(DEFAULT_RELATION_NAME);
 
-                context.addRelationName(relation.getName().get());
-                const res = context.addRelationName(relation.getName().get());
+                context.addRelationNames(DEFAULT_RELATION_NAME);
+                const res = context.addRelationNames(DEFAULT_RELATION_NAME);
 
                 assert(!res);
 
                 let relationNames = context.getRelationNames();
 
-                assert.equal(relationNames.length, 1);
-                assert.equal(relationNames[0], relation.getName().get());
+                assert.strictEqual(relationNames.length, 1);
+                assert.strictEqual(relationNames[0].get(), DEFAULT_RELATION_NAME);
+            });
+
+            it("should add a relation names to the list", function () {
+                let context = new lib.SpinalContext();
+                const name1 = DEFAULT_RELATION_NAME + "1";
+                const name2 = DEFAULT_RELATION_NAME + "2";
+
+                const res = context.addRelationNames([name1, name2]);
+
+                assert(res);
+
+                let relationNames = context.getRelationNames();
+
+                assert.strictEqual(relationNames.length, 2);
+                assert.strictEqual(relationNames[0].get(), name1);
+                assert.strictEqual(relationNames[1].get(), name2);
+            });
+
+            it("should not add the known relation names to the list", function () {
+                let context = new lib.SpinalContext();
+                const name1 = DEFAULT_RELATION_NAME + "1";
+                const name2 = DEFAULT_RELATION_NAME + "2";
+
+                context.addRelationNames(name1);
+                const res1 = context.addRelationNames([name1, name2]);
+
+                assert(res1);
+
+                let relationNames = context.getRelationNames();
+
+                assert.strictEqual(relationNames.length, 2);
+                assert.strictEqual(relationNames[0].get(), name1);
+                assert.strictEqual(relationNames[1].get(), name2);
+
+                const res2 = context.addRelationNames([name1, name2]);
+
+                assert(!res2);
+
+                relationNames = context.getRelationNames();
+
+                assert.strictEqual(relationNames.length, 2);
+                assert.strictEqual(relationNames[0].get(), name1);
+                assert.strictEqual(relationNames[1].get(), name2);
             });
         });
     });
