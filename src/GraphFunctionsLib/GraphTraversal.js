@@ -25,22 +25,31 @@ import {
   SpinalNode,
 } from "../index";
 
-async function findInGraph(startingNode, predicate, options = {}) {
-  if (typeof startingNode === "undefined" || typeof predicate === "undefined") {
-    throw Error("You must give a starting node and a predicate");
+const DEFAULT_PREDICATE = () => true;
+
+/**
+ * Finds all the nodes under the starting node for which the predicate is true.
+ * @param {SpinalNode} startingNode The node from which the traversal starts
+ * @param {function} predicate Function returning true if the node needs to be returned
+ * @param {Array<String>} relationNames Array containing the relation names to follow
+ * @return {Promise<Array<SpinalNode>>} The nodes that were found
+ */
+async function findInGraph(startingNode, predicate = DEFAULT_PREDICATE, relationNames) {
+  if (typeof startingNode === "undefined") {
+    throw Error("You must give a starting node");
   } else if (!(startingNode instanceof SpinalNode)) {
     throw new Error("The starting node must be a SpinalNode");
   } else if (typeof predicate !== "function") {
-    throw new Error("The predicate must be a function");
+    throw new Error("predicate must be a function");
   }
 
-  let seen = new Set();
+  let seen = new Set([startingNode]);
   let children = [];
   let current = startingNode;
   let found = [];
 
   while (current) {
-    let newChildren = await current.getChildren();
+    let newChildren = await current.getChildren(relationNames);
 
     for (let newChild of newChildren) {
       if (!seen.has(newChild)) {

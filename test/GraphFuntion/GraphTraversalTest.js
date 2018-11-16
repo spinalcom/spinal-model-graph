@@ -4,13 +4,51 @@ const funcs = require("../../build/GraphFunctionsLib/GraphTraversal")
 const assert = require("assert");
 
 const DEFAULT_NODE = new lib.SpinalNode();
-const DEFAULT_PREDICATE = () => true;
 const DEFAULT_RELATION_NAME = "relationName";
+const DEFAULT_RELATION_TYPE = lib.SPINAL_RELATION_LST_PTR_TYPE;
 const DEFAULT_NODE_NAME = "nodeName";
 
 describe("GraphTraversal", function () {
   describe("How to use findInGraph", function () {
-    describe("Basic usage", function () {
+    describe("Error handling", function () {
+      it("should throw an error if the starting node is missing", async function () {
+        let error = false;
+
+        await funcs.findInGraph().catch(() => {
+          error = true;
+        });
+        assert(error);
+
+        error = false;
+        await funcs.findInGraph(DEFAULT_NODE).catch(() => {
+          error = true;
+        });
+        assert(!error);
+      });
+
+      it("should throw an error if the starting node is not a SpinalNode", async function () {
+        let error = false;
+
+        await funcs.findInGraph(32).catch(() => {
+          error = true;
+        });
+        assert(error);
+      });
+
+      it("should not fall in infinite loops", async function () {
+        const node1 = new lib.SpinalNode();
+        const node2 = new lib.SpinalNode();
+
+        node1.addChild(node2, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE);
+        node2.addChild(node1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE);
+
+        const foundChild = await funcs.findInGraph(node1);
+
+        assert.deepStrictEqual(foundChild, [node2]);
+      });
+    });
+
+    describe("Basic predicate manipulation", function () {
       it("should return all contexts", async function () {
         const graph = new lib.SpinalGraph();
         const context1 = new lib.SpinalContext("context1");
@@ -65,9 +103,9 @@ describe("GraphTraversal", function () {
         const child3 = new lib.SpinalNode(DEFAULT_NODE_NAME + "3");
 
         await Promise.all([
-          parent.addChild(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-          parent.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-          parent.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE)
+          parent.addChild(child1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
+          parent.addChild(child2, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
+          parent.addChild(child3, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE)
         ]);
 
         let foundChild = await funcs.findInGraph(parent, node => {
@@ -93,12 +131,12 @@ describe("GraphTraversal", function () {
         const child6 = new lib.SpinalNode(DEFAULT_NODE_NAME, "type1");
 
         await Promise.all([
-          parent.addChild(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-          parent.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-          parent.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-          child2.addChild(child4, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-          child3.addChild(child5, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-          child5.addChild(child6, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          parent.addChild(child1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
+          parent.addChild(child2, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
+          parent.addChild(child3, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
+          child2.addChild(child4, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
+          child3.addChild(child5, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
+          child5.addChild(child6, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
         ]);
 
         let foundChildren = await funcs.findInGraph(parent, node => {
@@ -115,64 +153,32 @@ describe("GraphTraversal", function () {
       });
     });
 
-    describe("Error handling", function () {
-      it("should throw an error if the starting node or the predicate is missing", async function () {
-        let node = new lib.SpinalNode();
-        let predicate = () => true;
-        let error = false;
+    describe("How to use relationNames", function () {
+      it("should find all the nodes from the given relation names", async function () {
+        const parent = new lib.SpinalNode();
+        const child1 = new lib.SpinalNode();
+        const child2 = new lib.SpinalNode();
+        const child3 = new lib.SpinalNode();
+        const child4 = new lib.SpinalNode();
+        const child5 = new lib.SpinalNode();
+        const child6 = new lib.SpinalNode();
 
-        await funcs.findInGraph().catch(() => {
-          error = true;
-        });
-        assert(error);
+        await Promise.all([
+          parent.addChild(child1, DEFAULT_RELATION_NAME + "1", DEFAULT_RELATION_TYPE),
+          parent.addChild(child2, DEFAULT_RELATION_NAME + "2", DEFAULT_RELATION_TYPE),
+          parent.addChild(child3, DEFAULT_RELATION_NAME + "2", DEFAULT_RELATION_TYPE),
+          child2.addChild(child4, DEFAULT_RELATION_NAME + "2", DEFAULT_RELATION_TYPE),
+          child3.addChild(child5, DEFAULT_RELATION_NAME + "1", DEFAULT_RELATION_TYPE),
+          child5.addChild(child6, DEFAULT_RELATION_NAME + "2", DEFAULT_RELATION_TYPE)
+        ]);
 
-        error = false;
-        await funcs.findInGraph(node).catch(() => {
-          error = true;
-        });
-        assert(error);
+        let foundChildren = await funcs.findInGraph(parent, undefined, DEFAULT_RELATION_NAME + "2");
 
-        error = false;
-        await funcs.findInGraph(undefined, predicate).catch(() => {
-          error = true;
-        });
-        assert(error);
+        assert.deepStrictEqual(foundChildren, [child2, child3, child4]);
 
-        error = false;
-        await funcs.findInGraph(node, predicate).catch(() => {
-          error = true;
-        });
-        assert(!error);
-      });
+        foundChildren = await funcs.findInGraph(parent, undefined, DEFAULT_RELATION_NAME + "1");
 
-      it("should throw an error if the starting node is not a SpinalNode", async function () {
-        let error = false;
-
-        await funcs.findInGraph(32, DEFAULT_PREDICATE).catch(() => {
-          error = true;
-        });
-        assert(error);
-
-        error = false
-        await funcs.findInGraph(DEFAULT_NODE, DEFAULT_PREDICATE).catch(() => {
-          error = true;
-        });
-        assert(!error);
-      });
-
-      it("should throw an error if the predicate is not a function", async function () {
-        let error = false;
-
-        await funcs.findInGraph(DEFAULT_NODE, 64).catch(() => {
-          error = true;
-        });
-        assert(error);
-
-        error = false
-        await funcs.findInGraph(DEFAULT_NODE, DEFAULT_PREDICATE).catch(() => {
-          error = true;
-        });
-        assert(!error);
+        assert.deepStrictEqual(foundChildren, [child1]);
       });
     });
   });

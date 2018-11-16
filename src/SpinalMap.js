@@ -69,10 +69,14 @@ class SpinalMap extends globalType.Model {
         let map = this;
 
         return {
-            next: () => ({ value: map[keys[++index]], done: !(index in keys) })
+            next() {
+                return {
+                    value: map[keys[++index]],
+                    done: !(index in keys)
+                };
+            }
         };
     };
-
 
     /**
      * Returns a boolean asserting whether a value has been associated to the key or not.
