@@ -50,7 +50,7 @@ async function forEach(startingNode, relationNames, callback) {
  * @param {SpinalContext} context Context to use for the search
  * @param {function} callback Function that takes a node
  */
-async function forEach(startingNode, context, callback) {
+async function forEachInContext(startingNode, context, callback) {
   if (typeof callback === "undefined") {
     throw Error("You must give a callback function");
   } else if (typeof callback !== "function") {
