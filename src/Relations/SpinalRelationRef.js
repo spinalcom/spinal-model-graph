@@ -30,7 +30,7 @@ const globalType = typeof window === "undefined" ? global : window;
 
 class SpinalRelationRef extends BaseSpinalRelation {
     /**
-     * 
+     * Constructor for the SpinalRelationRef class.
      * @param {String} name Name of the relation 
      */
     constructor(name) {

@@ -31,7 +31,7 @@ const globalType = typeof window === "undefined" ? global : window;
  */
 class SpinalNodePointer extends globalType.Model {
     /**
-     * 
+     * Constructor for the SpinalNodePointer class.
      * @param {SpinalNode | Model} element Element to wich the SpinalNodePointer will point
      */
     constructor(element) {

@@ -26,6 +26,9 @@ import spinalCore from "spinal-core-connectorjs";
 const globalType = typeof window === "undefined" ? global : window;
 
 class SpinalSet extends globalType.Model {
+    /**
+     * Constructor for the SpinalSet class.
+     */
     constructor() {
         super();
     }

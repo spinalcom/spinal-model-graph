@@ -1,3 +1,102 @@
+<a name="SpinalMap"></a>
+
+## SpinalMap
+**Kind**: global class  
+
+* [SpinalMap](#SpinalMap)
+    * [new SpinalMap()](#new_SpinalMap_new)
+    * [.setElement(key, value)](#SpinalMap+setElement)
+    * [.getElement(key)](#SpinalMap+getElement) ⇒ <code>\*</code>
+    * [.has(key)](#SpinalMap+has) ⇒ <code>Boolean</code>
+    * [.hasKey()](#SpinalMap+hasKey) ⇒ <code>Boolean</code>
+    * [.keys()](#SpinalMap+keys) ⇒ <code>Array.&lt;String&gt;</code>
+    * [.delete(key)](#SpinalMap+delete)
+    * [.clear()](#SpinalMap+clear)
+    * [.forEach(fun)](#SpinalMap+forEach)
+
+<a name="new_SpinalMap_new"></a>
+
+### new SpinalMap()
+Constructor for the SpinalMap class.
+
+<a name="SpinalMap+setElement"></a>
+
+### spinalMap.setElement(key, value)
+Sets the value corresponding to the key.
+
+**Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>String</code> | Key to the value |
+| value | <code>\*</code> | New value |
+
+<a name="SpinalMap+getElement"></a>
+
+### spinalMap.getElement(key) ⇒ <code>\*</code>
+Returns the value associated to the key, or undefined if there is none.
+
+**Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
+**Returns**: <code>\*</code> - Value corresponding to the key  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key | <code>String</code> | Key to the value |
+
+<a name="SpinalMap+has"></a>
+
+### spinalMap.has(key) ⇒ <code>Boolean</code>
+Returns a boolean asserting whether a value has been associated to the key or not.
+
+**Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
+**Returns**: <code>Boolean</code> - Return true if the key exists  
+
+| Param | Description |
+| --- | --- |
+| key | Key |
+
+<a name="SpinalMap+hasKey"></a>
+
+### spinalMap.hasKey() ⇒ <code>Boolean</code>
+Returns a boolean asserting whether the map contains any key.
+
+**Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
+**Returns**: <code>Boolean</code> - Return true if the map contains at least one key  
+<a name="SpinalMap+keys"></a>
+
+### spinalMap.keys() ⇒ <code>Array.&lt;String&gt;</code>
+Returns an array that contains the keys for each element in the map in insertion order.
+
+**Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
+**Returns**: <code>Array.&lt;String&gt;</code> - Array containing all the keys in the map  
+<a name="SpinalMap+delete"></a>
+
+### spinalMap.delete(key)
+Deletes an element.
+
+**Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
+
+| Param | Description |
+| --- | --- |
+| key | Key of the element |
+
+<a name="SpinalMap+clear"></a>
+
+### spinalMap.clear()
+Deletes all elements.
+
+**Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
+<a name="SpinalMap+forEach"></a>
+
+### spinalMap.forEach(fun)
+Applies a function to each of the values in the map.
+
+**Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fun | <code>function</code> | Funcion to apply |
+
 <a name="SpinalContext"></a>
 
 ## SpinalContext
@@ -348,6 +447,91 @@ Return all parents for the relation names no matter the type of relation
 | --- | --- | --- |
 | relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation name of the desired parents |
 
+<a name="SpinalSet"></a>
+
+## SpinalSet
+**Kind**: global class  
+
+* [SpinalSet](#SpinalSet)
+    * [new SpinalSet()](#new_SpinalSet_new)
+    * [.add(value)](#SpinalSet+add)
+    * [.has(value)](#SpinalSet+has) ⇒ <code>Boolean</code>
+    * [.values()](#SpinalSet+values) ⇒ <code>Array.&lt;String&gt;</code>
+    * [.delete(value)](#SpinalSet+delete)
+    * [.clear()](#SpinalSet+clear)
+    * [.size()](#SpinalSet+size) ⇒ <code>Number</code>
+    * [.forEach(fun)](#SpinalSet+forEach)
+
+<a name="new_SpinalSet_new"></a>
+
+### new SpinalSet()
+Constructor for the SpinalSet class.
+
+<a name="SpinalSet+add"></a>
+
+### spinalSet.add(value)
+Appends a new element with the given value to the set.
+
+**Kind**: instance method of [<code>SpinalSet</code>](#SpinalSet)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| value | <code>String</code> | Value to store in the set |
+
+<a name="SpinalSet+has"></a>
+
+### spinalSet.has(value) ⇒ <code>Boolean</code>
+Returns a boolean asserting whether the value is in the set or not.
+
+**Kind**: instance method of [<code>SpinalSet</code>](#SpinalSet)  
+**Returns**: <code>Boolean</code> - Return true if the value exists  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| value | <code>String</code> | Value |
+
+<a name="SpinalSet+values"></a>
+
+### spinalSet.values() ⇒ <code>Array.&lt;String&gt;</code>
+Returns an array that contains all the values of the set.
+
+**Kind**: instance method of [<code>SpinalSet</code>](#SpinalSet)  
+**Returns**: <code>Array.&lt;String&gt;</code> - Array containing all the values in the set  
+<a name="SpinalSet+delete"></a>
+
+### spinalSet.delete(value)
+Deletes an element.
+
+**Kind**: instance method of [<code>SpinalSet</code>](#SpinalSet)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| value | <code>String</code> | Value to delete |
+
+<a name="SpinalSet+clear"></a>
+
+### spinalSet.clear()
+Deletes all values in the set.
+
+**Kind**: instance method of [<code>SpinalSet</code>](#SpinalSet)  
+<a name="SpinalSet+size"></a>
+
+### spinalSet.size() ⇒ <code>Number</code>
+Returns the number of values in the set.
+
+**Kind**: instance method of [<code>SpinalSet</code>](#SpinalSet)  
+**Returns**: <code>Number</code> - Number of values in the set  
+<a name="SpinalSet+forEach"></a>
+
+### spinalSet.forEach(fun)
+Applies a function to each of the values in the set.
+
+**Kind**: instance method of [<code>SpinalSet</code>](#SpinalSet)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| fun | <code>function</code> | Funcion to apply |
+
 ## Functions
 
 <dl>
@@ -410,6 +594,8 @@ Wrapper over SpinalNodePointer containing some information about the pointed ele
 <a name="new_SpinalNodePointer_new"></a>
 
 ### new SpinalNodePointer(element)
+Constructor for the SpinalNodePointer class.
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -566,6 +752,8 @@ Removes the relation from the graph.
 <a name="new_SpinalRelationPtrLst_new"></a>
 
 ### new SpinalRelationPtrLst(name)
+Constructor for the SpinalRelationPtrLst class.
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -645,6 +833,8 @@ Removes a child from the relation.
 <a name="new_SpinalRelationLstPtr_new"></a>
 
 ### new SpinalRelationLstPtr(name)
+Constructor for the SpinalRelationLstPtr class.
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -719,6 +909,8 @@ Removes a child from the relation.
 <a name="new_SpinalRelationRef_new"></a>
 
 ### new SpinalRelationRef(name)
+Constructor for the SpinalRelationRef class.
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -819,4 +1011,80 @@ Finds all the nodes under the starting node that are in the context and for whic
 | startingNode | <code>SpinalNode</code> | The node from which the traversal starts |
 | context | <code>SpinalContext</code> | Context to use for the search |
 | predicate | <code>function</code> | Function returning true if the node needs to be returned |
+
+## Functions
+
+<dl>
+<dt><a href="#map">map(startingNode, relationNames, callback)</a> ⇒ <code>Promise.&lt;Array.&lt;*&gt;&gt;</code></dt>
+<dd><p>Applies a function to all the nodes under the starting node and returns the results in an array.</p>
+</dd>
+<dt><a href="#mapInContext">mapInContext(startingNode, context, callback)</a> ⇒ <code>Promise.&lt;Array.&lt;*&gt;&gt;</code></dt>
+<dd><p>Applies a function to all the nodes under the starting node that are in the context and returns the results in an array.</p>
+</dd>
+</dl>
+
+<a name="map"></a>
+
+## map(startingNode, relationNames, callback) ⇒ <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code>
+Applies a function to all the nodes under the starting node and returns the results in an array.
+
+**Kind**: global function  
+**Returns**: <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code> - The results  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| startingNode | <code>SpinalNode</code> | The node from which the traversal starts |
+| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names to follow |
+| callback | <code>function</code> | Function that takes a node and returns something |
+
+<a name="mapInContext"></a>
+
+## mapInContext(startingNode, context, callback) ⇒ <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code>
+Applies a function to all the nodes under the starting node that are in the context and returns the results in an array.
+
+**Kind**: global function  
+**Returns**: <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code> - The results  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| startingNode | <code>SpinalNode</code> | The node from which the traversal starts |
+| context | <code>SpinalContext</code> | Context to use for the search |
+| callback | <code>function</code> | Function that takes a node and returns something |
+
+## Functions
+
+<dl>
+<dt><a href="#forEach">forEach(startingNode, relationNames, callback)</a></dt>
+<dd><p>Applies a function to all the nodes under the starting node.</p>
+</dd>
+<dt><a href="#forEachInContext">forEachInContext(startingNode, context, callback)</a></dt>
+<dd><p>Applies a function to all the nodes under the starting node.</p>
+</dd>
+</dl>
+
+<a name="forEach"></a>
+
+## forEach(startingNode, relationNames, callback)
+Applies a function to all the nodes under the starting node.
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| startingNode | <code>SpinalNode</code> | The node from which the traversal starts |
+| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names to follow |
+| callback | <code>function</code> | Function that takes a node |
+
+<a name="forEachInContext"></a>
+
+## forEachInContext(startingNode, context, callback)
+Applies a function to all the nodes under the starting node.
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| startingNode | <code>SpinalNode</code> | The node from which the traversal starts |
+| context | <code>SpinalContext</code> | Context to use for the search |
+| callback | <code>function</code> | Function that takes a node |
 
