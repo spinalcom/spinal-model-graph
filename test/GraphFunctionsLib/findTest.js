@@ -1,5 +1,6 @@
 const lib = require("../../build/index");
-const funcs = require("../../build/GraphFunctionsLib/find")
+const find = lib.GraphFunction.find;
+const findInContext = lib.GraphFunction.findInContext;
 
 const assert = require("assert");
 
@@ -14,13 +15,13 @@ describe("How to use find", function () {
     it("should throw an error if the starting node is missing", async function () {
       let error = false;
 
-      await funcs.find().catch(() => {
+      await find().catch(() => {
         error = true;
       });
       assert(error);
 
       error = false;
-      await funcs.find(DEFAULT_NODE).catch(() => {
+      await find(DEFAULT_NODE).catch(() => {
         error = true;
       });
       assert(!error);
@@ -29,7 +30,7 @@ describe("How to use find", function () {
     it("should throw an error if the starting node is not a SpinalNode", async function () {
       let error = false;
 
-      await funcs.find(32).catch(() => {
+      await find(32).catch(() => {
         error = true;
       });
       assert(error);
@@ -38,7 +39,7 @@ describe("How to use find", function () {
     it("should throw an error if the predicate is not a function", async function () {
       let error = false;
 
-      await funcs.find(DEFAULT_NODE, undefined, 64).catch(() => {
+      await find(DEFAULT_NODE, undefined, 64).catch(() => {
         error = true;
       });
       assert(error);
@@ -51,7 +52,7 @@ describe("How to use find", function () {
       node1.addChild(node2, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE);
       node2.addChild(node1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE);
 
-      const foundChild = await funcs.find(node1);
+      const foundChild = await find(node1);
 
       assert.deepStrictEqual(foundChild, [node1, node2]);
     });
@@ -70,7 +71,7 @@ describe("How to use find", function () {
         graph.addContext(context3)
       ]);
 
-      const contexts = await funcs.find(graph, undefined, node => {
+      const contexts = await find(graph, undefined, node => {
         return node.getType().get() === "SpinalContext";
       });
 
@@ -98,7 +99,7 @@ describe("How to use find", function () {
 
       await Promise.all(promises);
 
-      const contexts = await funcs.find(graph, undefined, node => {
+      const contexts = await find(graph, undefined, node => {
         return node.getType().get() === "SpinalContext";
       });
 
@@ -117,13 +118,13 @@ describe("How to use find", function () {
         parent.addChild(child3, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE)
       ]);
 
-      let foundChild = await funcs.find(parent, undefined, node => {
+      let foundChild = await find(parent, undefined, node => {
         return node.getName().get() === DEFAULT_NODE_NAME + "2";
       });
 
       assert.deepStrictEqual(foundChild, [child2]);
 
-      foundChild = await funcs.find(parent, undefined, node => {
+      foundChild = await find(parent, undefined, node => {
         return node.getName().get() !== DEFAULT_NODE_NAME + "2";
       });
 
@@ -148,13 +149,13 @@ describe("How to use find", function () {
         child5.addChild(child6, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
       ]);
 
-      let foundChildren = await funcs.find(parent, undefined, node => {
+      let foundChildren = await find(parent, undefined, node => {
         return node.getType().get() === "type1";
       });
 
       assert.deepStrictEqual(foundChildren, [child1, child3, child4, child6]);
 
-      foundChildren = await funcs.find(parent, undefined, node => {
+      foundChildren = await find(parent, undefined, node => {
         return node.getType().get() === "type2";
       });
 
@@ -181,11 +182,11 @@ describe("How to use find", function () {
         child5.addChild(child6, DEFAULT_RELATION_NAME + "2", DEFAULT_RELATION_TYPE)
       ]);
 
-      let foundChildren = await funcs.find(parent, DEFAULT_RELATION_NAME + "2");
+      let foundChildren = await find(parent, DEFAULT_RELATION_NAME + "2");
 
       assert.deepStrictEqual(foundChildren, [parent, child2, child3, child4]);
 
-      foundChildren = await funcs.find(parent, DEFAULT_RELATION_NAME + "1");
+      foundChildren = await find(parent, DEFAULT_RELATION_NAME + "1");
 
       assert.deepStrictEqual(foundChildren, [parent, child1]);
     });
@@ -198,25 +199,25 @@ describe("How to use findInContext", function () {
       const context = new lib.SpinalContext();
       let error = false;
 
-      await funcs.findInContext().catch(() => {
+      await findInContext().catch(() => {
         error = true;
       });
       assert(error);
 
       error = false;
-      await funcs.findInContext(DEFAULT_NODE).catch(() => {
+      await findInContext(DEFAULT_NODE).catch(() => {
         error = true;
       });
       assert(error);
 
       error = false;
-      await funcs.findInContext(undefined, context).catch(() => {
+      await findInContext(undefined, context).catch(() => {
         error = true;
       });
       assert(error);
 
       error = false;
-      await funcs.findInContext(DEFAULT_NODE, context).catch(() => {
+      await findInContext(DEFAULT_NODE, context).catch(() => {
         error = true;
       });
       assert(!error);
@@ -225,7 +226,7 @@ describe("How to use findInContext", function () {
     it("should throw an error if the starting node is not a SpinalNode", async function () {
       let error = false;
 
-      await funcs.findInContext(32).catch(() => {
+      await findInContext(32).catch(() => {
         error = true;
       });
       assert(error);
@@ -234,13 +235,13 @@ describe("How to use findInContext", function () {
     it("should throw an error if the context is not a SpinalContext", async function () {
       let error = false;
 
-      await funcs.findInContext(DEFAULT_NODE, 64).catch(() => {
+      await findInContext(DEFAULT_NODE, 64).catch(() => {
         error = true;
       });
       assert(error);
 
       error = false;
-      await funcs.findInContext(DEFAULT_NODE, DEFAULT_CONTEXT).catch(() => {
+      await findInContext(DEFAULT_NODE, DEFAULT_CONTEXT).catch(() => {
         error = true;
       });
       assert(!error);
@@ -254,7 +255,7 @@ describe("How to use findInContext", function () {
       node1.addChildInContext(node2, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context);
       node2.addChildInContext(node1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context);
 
-      const foundChild = await funcs.findInContext(node1, context);
+      const foundChild = await findInContext(node1, context);
 
       assert.deepStrictEqual(foundChild, [node1, node2]);
     });
@@ -273,7 +274,7 @@ describe("How to use findInContext", function () {
         context.addChildInContext(node3, DEFAULT_RELATION_NAME)
       ]);
 
-      const contexts = await funcs.findInContext(context, context, node => {
+      const contexts = await findInContext(context, context, node => {
         return node.getType().get() === "SpinalNode";
       });
 
@@ -301,7 +302,7 @@ describe("How to use findInContext", function () {
 
       await Promise.all(promises);
 
-      const directs = await funcs.findInContext(context, context, node => {
+      const directs = await findInContext(context, context, node => {
         return node.getType().get() === "direct";
       });
 
@@ -320,13 +321,13 @@ describe("How to use findInContext", function () {
         context.addChildInContext(child3, DEFAULT_RELATION_NAME)
       ]);
 
-      let foundChild = await funcs.findInContext(context, context, node => {
+      let foundChild = await findInContext(context, context, node => {
         return node.getName().get() === DEFAULT_NODE_NAME + "2";
       });
 
       assert.deepStrictEqual(foundChild, [child2]);
 
-      foundChild = await funcs.findInContext(context, context, node => {
+      foundChild = await findInContext(context, context, node => {
         return node.getName().get() !== DEFAULT_NODE_NAME + "2";
       });
 
@@ -351,13 +352,13 @@ describe("How to use findInContext", function () {
         child5.addChildInContext(child6, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context),
       ]);
 
-      let foundChildren = await funcs.findInContext(context, context, node => {
+      let foundChildren = await findInContext(context, context, node => {
         return node.getType().get() === "type1";
       });
 
       assert.deepStrictEqual(foundChildren, [child1, child3, child4, child6]);
 
-      foundChildren = await funcs.findInContext(context, context, node => {
+      foundChildren = await findInContext(context, context, node => {
         return node.getType().get() === "type2";
       });
 
@@ -386,11 +387,11 @@ describe("How to use findInContext", function () {
         child5.addChildInContext(child6, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context2)
       ]);
 
-      let foundChildren = await funcs.findInContext(parent, context2);
+      let foundChildren = await findInContext(parent, context2);
 
       assert.deepStrictEqual(foundChildren, [parent, child2, child3, child4]);
 
-      foundChildren = await funcs.findInContext(parent, context1);
+      foundChildren = await findInContext(parent, context1);
 
       assert.deepStrictEqual(foundChildren, [parent, child1]);
     });

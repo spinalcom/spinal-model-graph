@@ -1,5 +1,6 @@
 const lib = require("../../build/index");
-const funcs = require("../../build/GraphFunctionsLib/forEach")
+const forEach = lib.GraphFunction.forEach;
+const forEachInContext = lib.GraphFunction.forEachInContext;
 
 const assert = require("assert");
 
@@ -19,13 +20,13 @@ describe("How to use forEach", function () {
     it("should throw an error if the starting node is missing", async function () {
       let error = false;
 
-      await funcs.forEach(undefined, undefined, DEFAULT_FUN).catch(() => {
+      await forEach(undefined, undefined, DEFAULT_FUN).catch(() => {
         error = true;
       });
       assert(error);
 
       error = false;
-      await funcs.forEach(DEFAULT_NODE, undefined, DEFAULT_FUN).catch(() => {
+      await forEach(DEFAULT_NODE, undefined, DEFAULT_FUN).catch(() => {
         error = true;
       });
       assert(!error);
@@ -34,13 +35,13 @@ describe("How to use forEach", function () {
     it("should throw an error if the callback function is missing", async function () {
       let error = false;
 
-      await funcs.forEach(DEFAULT_NODE, undefined, undefined).catch(() => {
+      await forEach(DEFAULT_NODE, undefined, undefined).catch(() => {
         error = true;
       });
       assert(error);
 
       error = false;
-      await funcs.forEach(DEFAULT_NODE, undefined, DEFAULT_FUN).catch(() => {
+      await forEach(DEFAULT_NODE, undefined, DEFAULT_FUN).catch(() => {
         error = true;
       });
       assert(!error);
@@ -49,7 +50,7 @@ describe("How to use forEach", function () {
     it("should throw an error if the starting node is not a SpinalNode", async function () {
       let error = false;
 
-      await funcs.forEach(128, undefined, DEFAULT_FUN).catch(() => {
+      await forEach(128, undefined, DEFAULT_FUN).catch(() => {
         error = true;
       });
       assert(error);
@@ -58,7 +59,7 @@ describe("How to use forEach", function () {
     it("should throw an error if the callback function is not a function", async function () {
       let error = false;
 
-      await funcs.forEach(DEFAULT_NODE, undefined, 256).catch(() => {
+      await forEach(DEFAULT_NODE, undefined, 256).catch(() => {
         error = true;
       });
       assert(error);
@@ -71,7 +72,7 @@ describe("How to use forEach", function () {
       node1.addChild(node2, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE);
       node2.addChild(node1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE);
 
-      await funcs.forEach(node1, undefined, DEFAULT_FUN);
+      await forEach(node1, undefined, DEFAULT_FUN);
 
       assert.strictEqual(node1.getType().get(), CUSTOM_TYPE);
       assert.strictEqual(node2.getType().get(), CUSTOM_TYPE);
@@ -91,7 +92,7 @@ describe("How to use forEach", function () {
         parent.addChild(child3, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE)
       ]);
 
-      await funcs.forEach(parent, undefined, DEFAULT_FUN);
+      await forEach(parent, undefined, DEFAULT_FUN);
 
       assert.strictEqual(parent.getType().get(), CUSTOM_TYPE);
       assert.strictEqual(child1.getType().get(), CUSTOM_TYPE);
@@ -108,25 +109,25 @@ describe("How to use forEachInContext", function () {
       let error = false;
 
       error = false;
-      await funcs.forEachInContext(undefined, context, DEFAULT_FUN).catch(() => {
+      await forEachInContext(undefined, context, DEFAULT_FUN).catch(() => {
         error = true;
       });
       assert(error);
 
       error = false;
-      await funcs.forEachInContext(DEFAULT_NODE, undefined, DEFAULT_FUN).catch(() => {
+      await forEachInContext(DEFAULT_NODE, undefined, DEFAULT_FUN).catch(() => {
         error = true;
       });
       assert(error);
 
       error = false;
-      await funcs.forEachInContext(DEFAULT_NODE, context).catch(() => {
+      await forEachInContext(DEFAULT_NODE, context).catch(() => {
         error = true;
       });
       assert(error);
 
       error = false;
-      await funcs.forEachInContext(DEFAULT_NODE, context, DEFAULT_FUN).catch(() => {
+      await forEachInContext(DEFAULT_NODE, context, DEFAULT_FUN).catch(() => {
         error = true;
       });
       assert(!error);
@@ -135,7 +136,7 @@ describe("How to use forEachInContext", function () {
     it("should throw an error if the starting node is not a SpinalNode", async function () {
       let error = false;
 
-      await funcs.forEachInContext(32).catch(() => {
+      await forEachInContext(32).catch(() => {
         error = true;
       });
       assert(error);
@@ -144,13 +145,13 @@ describe("How to use forEachInContext", function () {
     it("should throw an error if the context is not a SpinalContext", async function () {
       let error = false;
 
-      await funcs.forEachInContext(DEFAULT_NODE, 64, DEFAULT_FUN).catch(() => {
+      await forEachInContext(DEFAULT_NODE, 64, DEFAULT_FUN).catch(() => {
         error = true;
       });
       assert(error);
 
       error = false;
-      await funcs.forEachInContext(DEFAULT_NODE, DEFAULT_CONTEXT, DEFAULT_FUN).catch(() => {
+      await forEachInContext(DEFAULT_NODE, DEFAULT_CONTEXT, DEFAULT_FUN).catch(() => {
         error = true;
       });
       assert(!error);
@@ -159,13 +160,13 @@ describe("How to use forEachInContext", function () {
     it("should throw an error if the callback is not a function", async function () {
       let error = false;
 
-      await funcs.forEachInContext(DEFAULT_NODE, DEFAULT_CONTEXT, 128).catch(() => {
+      await forEachInContext(DEFAULT_NODE, DEFAULT_CONTEXT, 128).catch(() => {
         error = true;
       });
       assert(error);
 
       error = false;
-      await funcs.forEachInContext(DEFAULT_NODE, DEFAULT_CONTEXT, DEFAULT_FUN).catch(() => {
+      await forEachInContext(DEFAULT_NODE, DEFAULT_CONTEXT, DEFAULT_FUN).catch(() => {
         error = true;
       });
       assert(!error);
@@ -179,7 +180,7 @@ describe("How to use forEachInContext", function () {
       node1.addChildInContext(node2, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context);
       node2.addChildInContext(node1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context);
 
-      await funcs.forEachInContext(node1, context, DEFAULT_FUN);
+      await forEachInContext(node1, context, DEFAULT_FUN);
 
       assert.strictEqual(node1.getType().get(), CUSTOM_TYPE);
       assert.strictEqual(node2.getType().get(), CUSTOM_TYPE);
@@ -199,7 +200,7 @@ describe("How to use forEachInContext", function () {
         context.addChildInContext(child3, DEFAULT_RELATION_NAME)
       ]);
 
-      await funcs.forEachInContext(context, context, DEFAULT_FUN);
+      await forEachInContext(context, context, DEFAULT_FUN);
 
       assert.strictEqual(child1.getType().get(), CUSTOM_TYPE);
       assert.strictEqual(child2.getType().get(), CUSTOM_TYPE);
@@ -230,12 +231,12 @@ describe("How to use forEachInContext", function () {
 
       let foundChildren = [];
 
-      await funcs.forEachInContext(parent, context2, node => foundChildren.push(node));
+      await forEachInContext(parent, context2, node => foundChildren.push(node));
 
       assert.deepStrictEqual(foundChildren, [parent, child2, child3, child4]);
 
       foundChildren = [];
-      await funcs.forEachInContext(parent, context1, node => foundChildren.push(node));
+      await forEachInContext(parent, context1, node => foundChildren.push(node));
 
       assert.deepStrictEqual(foundChildren, [parent, child1]);
     });
