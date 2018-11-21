@@ -39,9 +39,6 @@ class SpinalGraph extends SpinalNode {
      */
     constructor(name = "undefined", type = "SpinalGraph", element = new globalType.Model) {
         super(name, type, element);
-        this.add_attr({
-            BIMObjects: new globalType.Lst()
-        });
 
         this._createRelation(HAS_CONTEXT_RELATION_NAME, SPINAL_RELATION_TYPE);
         this.info.id.set(guid(this.constructor.name));
