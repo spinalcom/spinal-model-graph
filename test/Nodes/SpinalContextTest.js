@@ -161,4 +161,23 @@ describe("SpinalContext", function () {
             });
         });
     });
+
+    describe("How to use getChildrenInContext", function () {
+        it("should use this by default", async function () {
+            let context = new lib.SpinalContext();
+            let node1 = new lib.SpinalNode();
+            let node2 = new lib.SpinalNode();
+            let node3 = new lib.SpinalNode();
+
+            await Promise.all([
+                context.addChildInContext(node1, DEFAULT_RELATION_NAME + "1"),
+                context.addChildInContext(node2, DEFAULT_RELATION_NAME + "2"),
+                context.addChild(node3, DEFAULT_RELATION_NAME + "3")
+            ]);
+
+            const children = await context.getChildrenInContext();
+
+            assert.deepStrictEqual(children, [node1, node2]);
+        })
+    });
 });

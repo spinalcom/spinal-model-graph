@@ -108,6 +108,7 @@ Applies a function to each of the values in the map.
     * [.addRelationNames(relationNames)](#SpinalContext+addRelationNames) ⇒ <code>Boolean</code>
     * [.addChild(child, relationName, relationType)](#SpinalContext+addChild) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
     * [.addChildInContext(child, relationName, relationType, context)](#SpinalContext+addChildInContext) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
+    * [.getChildrenInContext(context)](#SpinalContext+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
 
 <a name="new_SpinalContext_new"></a>
 
@@ -168,6 +169,18 @@ Adds a child with a SpinalRelationLstPtrType and notices the context if a new re
 | relationName | <code>String</code> | Name of the relation |
 | relationType | <code>String</code> | This parameter is here only to properly override the parent method |
 | context | [<code>SpinalContext</code>](#SpinalContext) | Context to update, usually unused |
+
+<a name="SpinalContext+getChildrenInContext"></a>
+
+### spinalContext.getChildrenInContext(context) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+Return the children of the node that are registered in the context
+
+**Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
+**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The children that were found  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| context | [<code>SpinalContext</code>](#SpinalContext) | Context to use for the search, this by default |
 
 <a name="SpinalGraph"></a>
 

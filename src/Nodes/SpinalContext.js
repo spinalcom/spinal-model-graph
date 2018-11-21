@@ -96,6 +96,15 @@ class SpinalContext extends SpinalNode {
     addChildInContext(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE, context = this) {
         return super.addChildInContext(child, relationName, SPINAL_RELATION_PTR_LST_TYPE, context);
     }
+
+    /**
+     * Return the children of the node that are registered in the context
+     * @param {SpinalContext} context Context to use for the search, this by default
+     * @return {Promise<Array<SpinalNode>>} The children that were found
+     */
+    async getChildrenInContext(context = this) {
+        return super.getChildrenInContext(context);
+    }
 }
 
 spinalCore.register_models([SpinalContext]);
