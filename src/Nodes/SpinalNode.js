@@ -54,6 +54,72 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
+     * Adds an id to the context ids of the node.
+     * @param {String} id Id of the context
+     */
+    addContextId(id) {
+        if (!this.contextIds.has(id))
+            this.contextIds.add(id);
+    }
+    /**
+     * Add the node as child of the relation.
+     * @param {SpinalNode | Model} child Element to add as child
+     * @param {String} relationName Name of the relation
+     * @param {String} relationType Type of the relation
+     * @return {Promise<SpinalNode>} The child node in a promise
+     */
+    async addChild(child, relationName, relationType) {
+        let relation;
+
+        if (!(child instanceof globalType.Model)) {
+            throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
+        }
+        else if (!(child instanceof SpinalNode)) {
+            child = new SpinalNode(undefined, undefined, child);
+        }
+
+        if (!this.hasRelation(relationName, relationType))
+            relation = this._createRelation(relationName, relationType);
+        else
+            relation = this._getRelation(relationName, relationType);
+
+
+
+        await relation.addChild(child);
+        return child;
+    }
+
+    /**
+     * Adds a child and notices the context if a new relation was created.
+     * @param {SpinalNode | Model} child Node to add as child
+     * @param {String} relationName Name of the relation
+     * @param {String} relationType Type of the relation
+     * @param {SpinalContext} context Context to update
+     * @return {Promise<SpinalNode>} The child node in a promise
+     */
+    async addChildInContext(child, relationName, relationType, context) {
+        let relation;
+
+        if (!(child instanceof globalType.Model)) {
+            throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
+        }
+        else if (!(child instanceof SpinalNode)) {
+            child = new SpinalNode(undefined, undefined, child);
+        }
+
+        if (!this.hasRelation(relationName, relationType))
+            relation = this._createRelation(relationName, relationType);
+        else
+            relation = this._getRelation(relationName, relationType);
+
+        child.addContextId(context.getId().get());
+        relation.addContextId(context.getId().get());
+
+        await relation.addChild(child);
+        return child;
+    }
+
+    /**
      * Returns the id.
      * @return {Str} Id of the node
      */
@@ -122,144 +188,13 @@ class SpinalNode extends globalType.Model {
     }
 
     /**
-     * Adds an id to the context ids of the node.
-     * @param {String} id Id of the context
-     */
-    addContextId(id) {
-        if (!this.contextIds.has(id))
-            this.contextIds.add(id);
-    }
-
-    /**
-     * Returns true if the node belongs to the context.
-     * @param {SpinalContext} context The context that might own the node
-     * @return {Boolean} A boolean
-     */
-    belongsToContext(context) {
-        return this.contextIds.has(context.getId().get());
-    }
-
-    /**
-     * Verify if the node contains the relation name.
-     * @param {String} relationName Name of the relation
-     * @param {String} relationType Type of the relation
-     * @return {Boolean} Return true is the relation is contained in the node and false otherwise.
-     */
-    hasRelation(relationName, relationType) {
-        const typeMap = this._getChildrenType(relationType);
-
-        if (typeof typeMap === "undefined")
-            return false;
-        return typeMap.has(relationName);
-    }
-
-    /**
-     * Verify if the node contains all the relation names.
-     * @param {Array<String>} relationNames Array containing all the relation name
-     * @param {String} relationType Type of the relations
-     * @return {Boolean} Return true if the node contains all the relations in relationNames, false otherwise.
-     */
-    hasRelations(relationNames, relationType) {
-        let res = true;
-
-        for (let i = 0; i < relationNames.length && res; i++) {
-            res = this.hasRelation(relationNames[i], relationType)
-        }
-
-        return res;
-    }
-
-    /**
-     * Add the node as child of the relation.
-     * @param {SpinalNode | Model} child Element to add as child
-     * @param {String} relationName Name of the relation
-     * @param {String} relationType Type of the relation
-     * @return {Promise<SpinalNode>} The child node in a promise
-     */
-    async addChild(child, relationName, relationType) {
-        let relation;
-
-        if (!(child instanceof globalType.Model)) {
-            throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
-        }
-        else if (!(child instanceof SpinalNode)) {
-            child = new SpinalNode(undefined, undefined, child);
-        }
-
-        if (!this.hasRelation(relationName, relationType))
-            relation = this._createRelation(relationName, relationType);
-        else
-            relation = this._getRelation(relationName, relationType);
-
-        await relation.addChild(child);
-        return child;
-    }
-
-    /**
-     * Adds a child and notices the context if a new relation was created.
-     * @param {SpinalNode | Model} child Node to add as child
-     * @param {String} relationName Name of the relation
-     * @param {String} relationType Type of the relation
-     * @param {SpinalContext} context Context to update
-     * @return {Promise<SpinalNode>} The child node in a promise
-     */
-    async addChildInContext(child, relationName, relationType, context) {
-        let relation;
-
-        if (!(child instanceof globalType.Model)) {
-            throw new Error("Cannot add a child witch is not an instance of SpinalNode or Model.");
-        }
-        else if (!(child instanceof SpinalNode)) {
-            child = new SpinalNode(undefined, undefined, child);
-        }
-
-        if (!this.hasRelation(relationName, relationType))
-            relation = this._createRelation(relationName, relationType);
-        else
-            relation = this._getRelation(relationName, relationType);
-
-        child.addContextId(context.getId().get());
-        relation.addContextId(context.getId().get());
-
-        await relation.addChild(child);
-        return child;
-    }
-
-    /**
-     * Remove the node from the relation children.
-     * @param {SpinalNode} node Node to remove
-     * @param {String} relationName Name of the relation to wich the node belongs
-     * @param {String} relationType Type of the relation to wich the node belongs
-     * @return {Promise<nothing>} An empty promise
-     */
-    async removeChild(node, relationName, relationType) {
-        if (this.hasRelation(relationName, relationType)) {
-            let rel = this._getRelation(relationName, relationType);
-            rel.removeChild(node);
-        }
-    }
-
-    /**
-     * Remove the node from the graph i.e remove the node from all the parent relations and remove all the children relations.
-     * This operation might delete all the sub-graph under this node.
-     * After this operation the node can be deleted without fear.
-     * @return {Promise<nothing>} An empty promise
-     */
-    async removeFromGraph() {
-        await Promise.all([
-            this._removeFromParents(),
-            this._removeFromChildren()
-        ]);
-    }
-
-    /**
      * Returns the children of the node for the relation names.
      * @param {Array<String>} relationNames Array containing the relation names of the desired children
      * @return {Promise<Array<SpinalNode>>} The children that were found
      */
     async getChildren(relationNames) {
         if (typeof relationNames === "undefined" || relationNames.length === 0) {
-            relationNames = this._getRelationNames();
+            relationNames = this.getRelationNames();
         } else if (typeof relationNames === "string")
             relationNames = [relationNames];
 
@@ -339,6 +274,85 @@ class SpinalNode extends globalType.Model {
         }
         return Promise.all(promises);
     }
+    /**
+     * Returns all the relation names of the node.
+     * @return {Array<String>} The names of the relations of the node
+     * @private
+     */
+    getRelationNames() {
+        let names = [];
+
+        for (let relationMap of this.children) {
+            names.push(...relationMap.keys());
+        }
+        return names;
+    }
+    /**
+     * Returns true if the node belongs to the context.
+     * @param {SpinalContext} context The context that might own the node
+     * @return {Boolean} A boolean
+     */
+    belongsToContext(context) {
+        return this.contextIds.has(context.getId().get());
+    }
+
+    /**
+     * Verify if the node contains the relation name.
+     * @param {String} relationName Name of the relation
+     * @param {String} relationType Type of the relation
+     * @return {Boolean} Return true is the relation is contained in the node and false otherwise.
+     */
+    hasRelation(relationName, relationType) {
+        const typeMap = this._getChildrenType(relationType);
+
+        if (typeof typeMap === "undefined")
+            return false;
+        return typeMap.has(relationName);
+    }
+
+    /**
+     * Verify if the node contains all the relation names.
+     * @param {Array<String>} relationNames Array containing all the relation name
+     * @param {String} relationType Type of the relations
+     * @return {Boolean} Return true if the node contains all the relations in relationNames, false otherwise.
+     */
+    hasRelations(relationNames, relationType) {
+        let res = true;
+
+        for (let i = 0; i < relationNames.length && res; i++) {
+            res = this.hasRelation(relationNames[i], relationType)
+        }
+
+        return res;
+    }
+
+    /**
+     * Remove the node from the relation children.
+     * @param {SpinalNode} node Node to remove
+     * @param {String} relationName Name of the relation to wich the node belongs
+     * @param {String} relationType Type of the relation to wich the node belongs
+     * @return {Promise<nothing>} An empty promise
+     */
+    async removeChild(node, relationName, relationType) {
+        if (this.hasRelation(relationName, relationType)) {
+            let rel = this._getRelation(relationName, relationType);
+            rel.removeChild(node);
+        }
+    }
+
+    /**
+     * Remove the node from the graph i.e remove the node from all the parent relations and remove all the children relations.
+     * This operation might delete all the sub-graph under this node.
+     * After this operation the node can be deleted without fear.
+     * @return {Promise<nothing>} An empty promise
+     */
+    async removeFromGraph() {
+        await Promise.all([
+            this._removeFromParents(),
+            this._removeFromChildren()
+        ]);
+    }
+
 
     /**
      * Return the relation list corresponding to the relation type.
@@ -444,19 +458,7 @@ class SpinalNode extends globalType.Model {
         await Promise.all(promises);
     }
 
-    /**
-     * Returns all the relation names of the node.
-     * @return {Array<String>} The names of the relations of the node
-     * @private
-     */
-    _getRelationNames() {
-        let names = [];
 
-        for (let relationMap of this.children) {
-            names.push(...relationMap.keys());
-        }
-        return names;
-    }
 }
 
 spinalCore.register_models([SpinalNode]);
