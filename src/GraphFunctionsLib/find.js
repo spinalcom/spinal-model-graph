@@ -35,6 +35,39 @@ const DEFAULT_PREDICATE = () => true;
  * @param {function} predicate Function returning true if the node needs to be returned
  * @return {Promise<Array<SpinalNode>>} The nodes that were found
  */
+// async function find(startingNode, relationNames, predicate = DEFAULT_PREDICATE) {
+//   if (typeof startingNode === "undefined") {
+//     throw Error("You must give a starting node");
+//   } else if (!(startingNode instanceof SpinalNode)) {
+//     throw new Error("The starting node must be a SpinalNode");
+//   } else if (typeof predicate !== "function") {
+//     throw new Error("predicate must be a function");
+//   }
+
+//   let seen = new Set([startingNode]);
+//   let children = [];
+//   let current = startingNode;
+//   let found = [];
+
+//   while (current) {
+//     let newChildren = await current.getChildren(relationNames);
+
+//     for (let newChild of newChildren) {
+//       if (!seen.has(newChild)) {
+//         children.push(newChild);
+//         seen.add(newChild);
+//       }
+//     }
+
+//     if (predicate(current)) {
+//       found.push(current);
+//     }
+
+//     current = children.shift();
+//   }
+
+//   return found;
+// }
 async function find(startingNode, relationNames, predicate = DEFAULT_PREDICATE) {
   if (typeof startingNode === "undefined") {
     throw Error("You must give a starting node");
@@ -45,25 +78,32 @@ async function find(startingNode, relationNames, predicate = DEFAULT_PREDICATE) 
   }
 
   let seen = new Set([startingNode]);
-  let children = [];
-  let current = startingNode;
+  let childrenArrays = [];
+  let nextGen = [startingNode];
+  let currentGen = [];
   let found = [];
 
-  while (current) {
-    let newChildren = await current.getChildren(relationNames);
+  while (nextGen.length) {
+    currentGen = nextGen;
+    childrenArrays = [];
+    nextGen = [];
 
-    for (let newChild of newChildren) {
-      if (!seen.has(newChild)) {
-        children.push(newChild);
-        seen.add(newChild);
+    for (let node of currentGen) {
+      childrenArrays.push(node.getChildren(relationNames));
+
+      if (predicate(node)) {
+        found.push(node);
       }
     }
 
-    if (predicate(current)) {
-      found.push(current);
+    for await (let children of childrenArrays) {
+      for (let child of children) {
+        if (!seen.has(child)) {
+          nextGen.push(child);
+          seen.add(child);
+        }
+      }
     }
-
-    current = children.shift();
   }
 
   return found;
@@ -89,25 +129,32 @@ DEFAULT_PREDICATE) {
   }
 
   let seen = new Set([startingNode]);
-  let children = [];
-  let current = startingNode;
+  let childrenArrays = [];
+  let nextGen = [startingNode];
+  let currentGen = [];
   let found = [];
 
-  while (current) {
-    let newChildren = await current.getChildrenInContext(context);
+  while (nextGen.length) {
+    currentGen = nextGen;
+    childrenArrays = [];
+    nextGen = [];
 
-    for (let newChild of newChildren) {
-      if (!seen.has(newChild)) {
-        children.push(newChild);
-        seen.add(newChild);
+    for (let node of currentGen) {
+      childrenArrays.push(node.getChildrenInContext(context));
+
+      if (predicate(node)) {
+        found.push(node);
       }
     }
 
-    if (predicate(current)) {
-      found.push(current);
+    for await (let children of childrenArrays) {
+      for (let child of children) {
+        if (!seen.has(child)) {
+          nextGen.push(child);
+          seen.add(child);
+        }
+      }
     }
-
-    current = children.shift();
   }
 
   return found;
