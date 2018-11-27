@@ -35,39 +35,6 @@ const DEFAULT_PREDICATE = () => true;
  * @param {function} predicate Function returning true if the node needs to be returned
  * @return {Promise<Array<SpinalNode>>} The nodes that were found
  */
-// async function find(startingNode, relationNames, predicate = DEFAULT_PREDICATE) {
-//   if (typeof startingNode === "undefined") {
-//     throw Error("You must give a starting node");
-//   } else if (!(startingNode instanceof SpinalNode)) {
-//     throw new Error("The starting node must be a SpinalNode");
-//   } else if (typeof predicate !== "function") {
-//     throw new Error("predicate must be a function");
-//   }
-
-//   let seen = new Set([startingNode]);
-//   let children = [];
-//   let current = startingNode;
-//   let found = [];
-
-//   while (current) {
-//     let newChildren = await current.getChildren(relationNames);
-
-//     for (let newChild of newChildren) {
-//       if (!seen.has(newChild)) {
-//         children.push(newChild);
-//         seen.add(newChild);
-//       }
-//     }
-
-//     if (predicate(current)) {
-//       found.push(current);
-//     }
-
-//     current = children.shift();
-//   }
-
-//   return found;
-// }
 async function find(startingNode, relationNames, predicate = DEFAULT_PREDICATE) {
   if (typeof startingNode === "undefined") {
     throw Error("You must give a starting node");
@@ -117,7 +84,7 @@ async function find(startingNode, relationNames, predicate = DEFAULT_PREDICATE) 
  * @return {Promise<Array<SpinalNode>>} The nodes that were found
  */
 async function findInContext(startingNode, context, predicate =
-DEFAULT_PREDICATE) {
+  DEFAULT_PREDICATE) {
   if (typeof startingNode === "undefined") {
     throw Error("You must give a starting node");
   } else if (!(startingNode instanceof SpinalNode)) {

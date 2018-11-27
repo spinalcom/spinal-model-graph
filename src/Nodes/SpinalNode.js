@@ -472,8 +472,6 @@ class SpinalNode extends globalType.Model {
     }
     await Promise.all(promises);
   }
-
-
 }
 
 spinalCore.register_models([SpinalNode]);
