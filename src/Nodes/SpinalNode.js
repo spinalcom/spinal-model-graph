@@ -30,7 +30,9 @@ import SpinalNodePointer from "../SpinalNodePointer";
 
 const globalType = typeof window === "undefined" ? global : window;
 
-import {SpinalRelationFactory} from "../Relations/SpinalRelationFactory";
+import {
+  SpinalRelationFactory
+} from "../Relations/SpinalRelationFactory";
 import SpinalMap from "../SpinalMap";
 import SpinalSet from "../SpinalSet";
 
@@ -290,21 +292,20 @@ class SpinalNode extends globalType.Model {
       relationNames = [relationNames];
     }
 
-    const promises = [];
+    const childrenLst = [];
 
     for (let relationMap of this.children) {
       for (let j = 0; j < relationNames.length; j++) {
         if (relationMap.has(relationNames[j])) {
           const relation = relationMap.getElement(relationNames[j]);
-          promises.push(relation.getChildren());
+          childrenLst.push(relation.getChildren());
         }
       }
     }
 
-    const childrenLst = await Promise.all(promises);
     let res = [];
 
-    for (let children of childrenLst) {
+    for await (let children of childrenLst) {
       for (let i = 0; i < children.length; i++) {
         res.push(children[i]);
       }
@@ -323,20 +324,19 @@ class SpinalNode extends globalType.Model {
       throw new Error("You must give a context");
     }
 
-    const promises = [];
+    const childrenLst = [];
 
     for (let relationMap of this.children) {
       for (let relation of relationMap) {
         if (relation.belongsToContext(context)) {
-          promises.push(relation.getChildrenInContext(context));
+          childrenLst.push(relation.getChildrenInContext(context));
         }
       }
     }
 
-    const childrenLst = await Promise.all(promises);
     let res = [];
 
-    for (let children of childrenLst) {
+    for await (let children of childrenLst) {
       for (let i = 0; i < children.length; i++) {
         res.push(children[i]);
       }

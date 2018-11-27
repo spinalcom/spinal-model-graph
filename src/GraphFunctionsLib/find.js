@@ -84,7 +84,7 @@ async function find(startingNode, relationNames, predicate = DEFAULT_PREDICATE) 
  * @return {Promise<Array<SpinalNode>>} The nodes that were found
  */
 async function findInContext(startingNode, context, predicate =
-  DEFAULT_PREDICATE) {
+DEFAULT_PREDICATE) {
   if (typeof startingNode === "undefined") {
     throw Error("You must give a starting node");
   } else if (!(startingNode instanceof SpinalNode)) {
