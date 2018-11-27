@@ -139,7 +139,7 @@ describe("SpinalNode", function() {
         assert.deepStrictEqual(node.getChildrenIds(), []);
       });
 
-      it("should all children ids", async function() {
+      it("should return all children ids", async function() {
         const parent = new lib.SpinalNode();
         const child1 = new lib.SpinalNode();
         const child2 = new lib.SpinalNode();
@@ -307,9 +307,53 @@ describe("SpinalNode", function() {
             CUSTOM_RELATION_NAME1, lib.SPINAL_RELATION_TYPE
           ),
         ]);
+
         assert.strictEqual(node.hasRelations([
           CUSTOM_RELATION_NAME2, CUSTOM_RELATION_NAME1
         ], lib.SPINAL_RELATION_TYPE), false);
+      });
+    });
+
+    describe("How to use getRelationNames", function() {
+      it("should return no name", function() {
+        let node = new lib.SpinalNode();
+
+        assert.deepStrictEqual(node.getRelationNames(), []);
+      });
+
+      it("should return all relation names", async function() {
+        let node = new lib.SpinalNode();
+        let child1 = new lib.SpinalNode();
+        let child2 = new lib.SpinalNode();
+        let child3 = new lib.SpinalNode();
+        let child4 = new lib.SpinalNode();
+        let child5 = new lib.SpinalNode();
+
+        await Promise.all([
+          node.addChild(child1,
+            DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_LST_PTR_TYPE
+          ),
+          node.addChild(child2,
+            DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_LST_PTR_TYPE
+          ),
+          node.addChild(child3,
+            DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_LST_PTR_TYPE
+          ),
+          node.addChild(child4,
+            DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_LST_PTR_TYPE
+          ),
+          node.addChild(child5,
+            DEFAULT_RELATION_NAME + "4", lib.SPINAL_RELATION_LST_PTR_TYPE
+          ),
+        ]);
+        assert.deepStrictEqual(
+          node.getRelationNames(),
+          [
+            DEFAULT_RELATION_NAME + "1",
+            DEFAULT_RELATION_NAME + "2",
+            DEFAULT_RELATION_NAME + "4",
+          ]
+        );
       });
     });
   });

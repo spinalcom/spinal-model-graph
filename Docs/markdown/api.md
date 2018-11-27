@@ -243,24 +243,24 @@ Empty override of the SpinalNode method.
 
 * [SpinalNode](#SpinalNode)
     * [new SpinalNode(name, type, element)](#new_SpinalNode_new)
-    * [.addContextId(id)](#SpinalNode+addContextId)
-    * [.addChild(child, relationName, relationType)](#SpinalNode+addChild) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
-    * [.addChildInContext(child, relationName, relationType, context)](#SpinalNode+addChildInContext) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
     * [.getId()](#SpinalNode+getId) ⇒ <code>Str</code>
     * [.getName()](#SpinalNode+getName) ⇒ <code>Str</code>
     * [.getType()](#SpinalNode+getType) ⇒ <code>Str</code>
     * [.getElement()](#SpinalNode+getElement) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [.getChildrenIds()](#SpinalNode+getChildrenIds) ⇒ <code>Array.&lt;String&gt;</code>
     * [.getNbChildren()](#SpinalNode+getNbChildren) ⇒ <code>Number</code>
+    * [.addContextId(id)](#SpinalNode+addContextId)
     * [.getContextIds()](#SpinalNode+getContextIds) ⇒ <code>Array.&lt;String&gt;</code>
-    * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
-    * [.getChildrenInContext(context)](#SpinalNode+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
-    * [.getParents(relationNames)](#SpinalNode+getParents) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.belongsToContext(context)](#SpinalNode+belongsToContext) ⇒ <code>Boolean</code>
     * [.hasRelation(relationName, relationType)](#SpinalNode+hasRelation) ⇒ <code>Boolean</code>
     * [.hasRelations(relationNames, relationType)](#SpinalNode+hasRelations) ⇒ <code>Boolean</code>
+    * [.addChild(child, relationName, relationType)](#SpinalNode+addChild) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
+    * [.addChildInContext(child, relationName, relationType, context)](#SpinalNode+addChildInContext) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
     * [.removeChild(node, relationName, relationType)](#SpinalNode+removeChild) ⇒ <code>Promise.&lt;nothing&gt;</code>
     * [.removeFromGraph()](#SpinalNode+removeFromGraph) ⇒ <code>Promise.&lt;nothing&gt;</code>
+    * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+    * [.getChildrenInContext(context)](#SpinalNode+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+    * [.getParents(relationNames)](#SpinalNode+getParents) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
 
 <a name="new_SpinalNode_new"></a>
 
@@ -273,46 +273,6 @@ Constructor for the SpinalNode class.
 | name | <code>String</code> | <code>undefined</code> | Name of the node |
 | type | <code>String</code> | <code>SpinalNode</code> | Type of the node |
 | element | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> |  | Element of the node |
-
-<a name="SpinalNode+addContextId"></a>
-
-### spinalNode.addContextId(id)
-Adds an id to the context ids of the node.
-
-**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| id | <code>String</code> | Id of the context |
-
-<a name="SpinalNode+addChild"></a>
-
-### spinalNode.addChild(child, relationName, relationType) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
-Add the node as child of the relation.
-
-**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode) - The child node in a promise  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| child | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> | Element to add as child |
-| relationName | <code>String</code> | Name of the relation |
-| relationType | <code>String</code> | Type of the relation |
-
-<a name="SpinalNode+addChildInContext"></a>
-
-### spinalNode.addChildInContext(child, relationName, relationType, context) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
-Adds a child and notices the context if a new relation was created.
-
-**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode) - The child node in a promise  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| child | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> | Node to add as child |
-| relationName | <code>String</code> | Name of the relation |
-| relationType | <code>String</code> | Type of the relation |
-| context | <code>SpinalContext</code> | Context to update |
 
 <a name="SpinalNode+getId"></a>
 
@@ -356,6 +316,17 @@ Computes and returns the number of children of the node.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Number</code> - The number of children  
+<a name="SpinalNode+addContextId"></a>
+
+### spinalNode.addContextId(id)
+Adds an id to the context ids of the node.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| id | <code>String</code> | Id of the context |
+
 <a name="SpinalNode+getContextIds"></a>
 
 ### spinalNode.getContextIds() ⇒ <code>Array.&lt;String&gt;</code>
@@ -363,42 +334,6 @@ Returns a list of the contexts the node is associated to.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Array.&lt;String&gt;</code> - An array of ids of the associated contexts  
-<a name="SpinalNode+getChildren"></a>
-
-### spinalNode.getChildren(relationNames) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
-Returns the children of the node for the relation names.
-
-**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The children that were found  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names of the desired children |
-
-<a name="SpinalNode+getChildrenInContext"></a>
-
-### spinalNode.getChildrenInContext(context) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
-Return the children of the node that are registered in the context
-
-**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The children that were found  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| context | <code>SpinalContext</code> | Context to use for the search |
-
-<a name="SpinalNode+getParents"></a>
-
-### spinalNode.getParents(relationNames) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
-Return all parents for the relation names no matter the type of relation
-
-**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - Promise containing the parents that were found  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation name of the desired parents |
-
 <a name="SpinalNode+belongsToContext"></a>
 
 ### spinalNode.belongsToContext(context) ⇒ <code>Boolean</code>
@@ -437,6 +372,35 @@ Verify if the node contains all the relation names.
 | relationNames | <code>Array.&lt;String&gt;</code> | Array containing all the relation name |
 | relationType | <code>String</code> | Type of the relations |
 
+<a name="SpinalNode+addChild"></a>
+
+### spinalNode.addChild(child, relationName, relationType) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
+Add the node as child of the relation.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode) - The child node in a promise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| child | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> | Element to add as child |
+| relationName | <code>String</code> | Name of the relation |
+| relationType | <code>String</code> | Type of the relation |
+
+<a name="SpinalNode+addChildInContext"></a>
+
+### spinalNode.addChildInContext(child, relationName, relationType, context) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
+Adds a child and notices the context if a new relation was created.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode) - The child node in a promise  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| child | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> | Node to add as child |
+| relationName | <code>String</code> | Name of the relation |
+| relationType | <code>String</code> | Type of the relation |
+| context | <code>SpinalContext</code> | Context to update |
+
 <a name="SpinalNode+removeChild"></a>
 
 ### spinalNode.removeChild(node, relationName, relationType) ⇒ <code>Promise.&lt;nothing&gt;</code>
@@ -460,6 +424,42 @@ After this operation the node can be deleted without fear.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
+<a name="SpinalNode+getChildren"></a>
+
+### spinalNode.getChildren(relationNames) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+Returns the children of the node for the relation names.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The children that were found  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names of the desired children |
+
+<a name="SpinalNode+getChildrenInContext"></a>
+
+### spinalNode.getChildrenInContext(context) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+Return the children of the node that are registered in the context
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The children that were found  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| context | <code>SpinalContext</code> | Context to use for the search |
+
+<a name="SpinalNode+getParents"></a>
+
+### spinalNode.getParents(relationNames) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+Return all parents for the relation names no matter the type of relation
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - Promise containing the parents that were found  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation name of the desired parents |
+
 <a name="SpinalSet"></a>
 
 ## SpinalSet
