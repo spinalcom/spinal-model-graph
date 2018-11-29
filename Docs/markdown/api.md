@@ -261,6 +261,12 @@ Empty override of the SpinalNode method.
     * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getChildrenInContext(context)](#SpinalNode+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getParents(relationNames)](#SpinalNode+getParents) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+    * [.find(relationNames, predicate)](#SpinalNode+find) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+    * [.findInContext(context, predicate)](#SpinalNode+findInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+    * [.forEach(relationNames, callback)](#SpinalNode+forEach)
+    * [.forEachInContext(context, callback)](#SpinalNode+forEachInContext)
+    * [.map(relationNames, callback)](#SpinalNode+map) ⇒ <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code>
+    * [.mapInContext(context, callback)](#SpinalNode+mapInContext) ⇒ <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code>
 
 <a name="new_SpinalNode_new"></a>
 
@@ -458,7 +464,83 @@ Return all parents for the relation names no matter the type of relation
 
 | Param | Type | Description |
 | --- | --- | --- |
-| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation name of the desired parents |
+| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names of the desired parents |
+
+<a name="SpinalNode+find"></a>
+
+### spinalNode.find(relationNames, predicate) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+Recursively finds all the children nodes for which the predicate is true.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The nodes that were found  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names to follow |
+| predicate | <code>function</code> | Function returning true if the node needs to be returned |
+
+<a name="SpinalNode+findInContext"></a>
+
+### spinalNode.findInContext(context, predicate) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
+Recursively finds all the children nodes in the context for which the predicate is true..
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The nodes that were found  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| context | <code>SpinalContext</code> | Context to use for the search |
+| predicate | <code>function</code> | Function returning true if the node needs to be returned |
+
+<a name="SpinalNode+forEach"></a>
+
+### spinalNode.forEach(relationNames, callback)
+Recursively applies a function to all the children nodes.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names to follow |
+| callback | <code>function</code> | Function to apply to the nodes |
+
+<a name="SpinalNode+forEachInContext"></a>
+
+### spinalNode.forEachInContext(context, callback)
+Recursively applies a function to all the children nodes in the context.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| context | <code>SpinalContext</code> | Context to use for the search |
+| callback | <code>function</code> | Function to apply to the nodes |
+
+<a name="SpinalNode+map"></a>
+
+### spinalNode.map(relationNames, callback) ⇒ <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code>
+Recursively applies a function to all the children nodes and returns the results in an array.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code> - The results of the callback for each node  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names to follow |
+| callback | <code>function</code> | Function to apply to the nodes |
+
+<a name="SpinalNode+mapInContext"></a>
+
+### spinalNode.mapInContext(context, callback) ⇒ <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code>
+Recursively applies a function to all the children nodes in the context and returns the results in an array.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code> - The results of the callback for each node  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| context | <code>SpinalContext</code> | Context to use for the search |
+| callback | <code>function</code> | Function to apply to the nodes |
 
 <a name="SpinalSet"></a>
 
@@ -985,119 +1067,4 @@ Removes a child from the relation.
 | Param | Type | Description |
 | --- | --- | --- |
 | node | <code>SpinalNode</code> | Child to remove |
-
-## Functions
-
-<dl>
-<dt><a href="#find">find(startingNode, relationNames, predicate)</a> ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code></dt>
-<dd><p>Finds all the nodes under the starting node for which the predicate is true.</p>
-</dd>
-<dt><a href="#findInContext">findInContext(startingNode, context, predicate)</a> ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code></dt>
-<dd><p>Finds all the nodes under the starting node that are in the context and for which the predicate is true.</p>
-</dd>
-</dl>
-
-<a name="find"></a>
-
-## find(startingNode, relationNames, predicate) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
-Finds all the nodes under the starting node for which the predicate is true.
-
-**Kind**: global function  
-**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The nodes that were found  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| startingNode | <code>SpinalNode</code> | The node from which the traversal starts |
-| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names to follow |
-| predicate | <code>function</code> | Function returning true if the node needs to be returned |
-
-<a name="findInContext"></a>
-
-## findInContext(startingNode, context, predicate) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
-Finds all the nodes under the starting node that are in the context and for which the predicate is true.
-
-**Kind**: global function  
-**Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The nodes that were found  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| startingNode | <code>SpinalNode</code> | The node from which the traversal starts |
-| context | <code>SpinalContext</code> | Context to use for the search |
-| predicate | <code>function</code> | Function returning true if the node needs to be returned |
-
-## Functions
-
-<dl>
-<dt><a href="#map">map(startingNode, relationNames, callback)</a> ⇒ <code>Promise.&lt;Array.&lt;*&gt;&gt;</code></dt>
-<dd><p>Applies a function to all the nodes under the starting node and returns the results in an array.</p>
-</dd>
-<dt><a href="#mapInContext">mapInContext(startingNode, context, callback)</a> ⇒ <code>Promise.&lt;Array.&lt;*&gt;&gt;</code></dt>
-<dd><p>Applies a function to all the nodes under the starting node that are in the context and returns the results in an array.</p>
-</dd>
-</dl>
-
-<a name="map"></a>
-
-## map(startingNode, relationNames, callback) ⇒ <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code>
-Applies a function to all the nodes under the starting node and returns the results in an array.
-
-**Kind**: global function  
-**Returns**: <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code> - The results  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| startingNode | <code>SpinalNode</code> | The node from which the traversal starts |
-| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names to follow |
-| callback | <code>function</code> | Function that takes a node and returns something |
-
-<a name="mapInContext"></a>
-
-## mapInContext(startingNode, context, callback) ⇒ <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code>
-Applies a function to all the nodes under the starting node that are in the context and returns the results in an array.
-
-**Kind**: global function  
-**Returns**: <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code> - The results  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| startingNode | <code>SpinalNode</code> | The node from which the traversal starts |
-| context | <code>SpinalContext</code> | Context to use for the search |
-| callback | <code>function</code> | Function that takes a node and returns something |
-
-## Functions
-
-<dl>
-<dt><a href="#forEach">forEach(startingNode, relationNames, callback)</a></dt>
-<dd><p>Applies a function to all the nodes under the starting node.</p>
-</dd>
-<dt><a href="#forEachInContext">forEachInContext(startingNode, context, callback)</a></dt>
-<dd><p>Applies a function to all the nodes under the starting node.</p>
-</dd>
-</dl>
-
-<a name="forEach"></a>
-
-## forEach(startingNode, relationNames, callback)
-Applies a function to all the nodes under the starting node.
-
-**Kind**: global function  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| startingNode | <code>SpinalNode</code> | The node from which the traversal starts |
-| relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names to follow |
-| callback | <code>function</code> | Function that takes a node |
-
-<a name="forEachInContext"></a>
-
-## forEachInContext(startingNode, context, callback)
-Applies a function to all the nodes under the starting node.
-
-**Kind**: global function  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| startingNode | <code>SpinalNode</code> | The node from which the traversal starts |
-| context | <code>SpinalContext</code> | Context to use for the search |
-| callback | <code>function</code> | Function that takes a node |
 

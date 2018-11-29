@@ -30,9 +30,7 @@ import SpinalNodePointer from "../SpinalNodePointer";
 
 const globalType = typeof window === "undefined" ? global : window;
 
-import {
-  SpinalRelationFactory
-} from "../Relations/SpinalRelationFactory";
+import {SpinalRelationFactory} from "../Relations/SpinalRelationFactory";
 import SpinalMap from "../SpinalMap";
 import SpinalSet from "../SpinalSet";
 
@@ -351,7 +349,7 @@ class SpinalNode extends globalType.Model {
 
   /**
    * Return all parents for the relation names no matter the type of relation
-   * @param {Array<String>} relationNames Array containing the relation name of the desired parents
+   * @param {Array<String>} relationNames Array containing the relation names of the desired parents
    * @return {Promise<Array<SpinalNode>>} Promise containing the parents that were found
    */
   getParents(relationNames) {
@@ -465,7 +463,7 @@ class SpinalNode extends globalType.Model {
   /**
    * Recursively applies a function to all the children nodes.
    * @param {Array<String>} relationNames Array containing the relation names to follow
-   * @param {function} callback Function that takes a node
+   * @param {function} callback Function to apply to the nodes
    */
   async forEach(relationNames, callback) {
     if (typeof callback === "undefined") {
@@ -484,7 +482,7 @@ class SpinalNode extends globalType.Model {
   /**
    * Recursively applies a function to all the children nodes in the context.
    * @param {SpinalContext} context Context to use for the search
-   * @param {function} callback Function that takes a node
+   * @param {function} callback Function to apply to the nodes
    */
   async forEachInContext(context, callback) {
     if (typeof callback === "undefined") {
@@ -503,8 +501,8 @@ class SpinalNode extends globalType.Model {
   /**
    * Recursively applies a function to all the children nodes and returns the results in an array.
    * @param {Array<String>} relationNames Array containing the relation names to follow
-   * @param {function} callback Function that takes a node and returns something
-   * @return {Promise<Array<*>>} The results
+   * @param {function} callback Function to apply to the nodes
+   * @return {Promise<Array<*>>} The results of the callback for each node
    */
   async map(relationNames, callback) {
     if (typeof callback === "undefined") {
@@ -526,8 +524,8 @@ class SpinalNode extends globalType.Model {
   /**
    * Recursively applies a function to all the children nodes in the context and returns the results in an array.
    * @param {SpinalContext} context Context to use for the search
-   * @param {function} callback Function that takes a node and returns something
-   * @return {Promise<Array<*>>} The results
+   * @param {function} callback Function to apply to the nodes
+   * @return {Promise<Array<*>>} The results of the callback for each node
    */
   async mapInContext(context, callback) {
     if (typeof callback === "undefined") {
