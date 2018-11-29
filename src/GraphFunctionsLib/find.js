@@ -45,25 +45,27 @@ async function find(startingNode, relationNames, predicate = DEFAULT_PREDICATE) 
   }
 
   let seen = new Set([startingNode]);
-  let childrenArrays = [];
+  let promises = [];
   let nextGen = [startingNode];
   let currentGen = [];
   let found = [];
 
   while (nextGen.length) {
     currentGen = nextGen;
-    childrenArrays = [];
+    promises = [];
     nextGen = [];
 
     for (let node of currentGen) {
-      childrenArrays.push(node.getChildren(relationNames));
+      promises.push(node.getChildren(relationNames));
 
       if (predicate(node)) {
         found.push(node);
       }
     }
 
-    for await (let children of childrenArrays) {
+    let childrenArrays = await Promise.all(promises);
+
+    for (let children of childrenArrays) {
       for (let child of children) {
         if (!seen.has(child)) {
           nextGen.push(child);
@@ -96,25 +98,27 @@ DEFAULT_PREDICATE) {
   }
 
   let seen = new Set([startingNode]);
-  let childrenArrays = [];
+  let promises = [];
   let nextGen = [startingNode];
   let currentGen = [];
   let found = [];
 
   while (nextGen.length) {
     currentGen = nextGen;
-    childrenArrays = [];
+    promises = [];
     nextGen = [];
 
     for (let node of currentGen) {
-      childrenArrays.push(node.getChildrenInContext(context));
+      promises.push(node.getChildrenInContext(context));
 
       if (predicate(node)) {
         found.push(node);
       }
     }
 
-    for await (let children of childrenArrays) {
+    let childrenArrays = await Promise.all(promises);
+
+    for (let children of childrenArrays) {
       for (let child of children) {
         if (!seen.has(child)) {
           nextGen.push(child);

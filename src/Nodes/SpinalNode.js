@@ -292,20 +292,21 @@ class SpinalNode extends globalType.Model {
       relationNames = [relationNames];
     }
 
-    const childrenLst = [];
+    const promises = [];
 
     for (let relationMap of this.children) {
       for (let j = 0; j < relationNames.length; j++) {
         if (relationMap.has(relationNames[j])) {
           const relation = relationMap.getElement(relationNames[j]);
-          childrenLst.push(relation.getChildren());
+          promises.push(relation.getChildren());
         }
       }
     }
 
+    const childrenLst = await Promise.all(promises);
     let res = [];
 
-    for await (let children of childrenLst) {
+    for (let children of childrenLst) {
       for (let i = 0; i < children.length; i++) {
         res.push(children[i]);
       }
@@ -324,19 +325,20 @@ class SpinalNode extends globalType.Model {
       throw new Error("You must give a context");
     }
 
-    const childrenLst = [];
+    const promises = [];
 
     for (let relationMap of this.children) {
       for (let relation of relationMap) {
         if (relation.belongsToContext(context)) {
-          childrenLst.push(relation.getChildrenInContext(context));
+          promises.push(relation.getChildrenInContext(context));
         }
       }
     }
 
+    const childrenLst = await Promise.all(promises);
     let res = [];
 
-    for await (let children of childrenLst) {
+    for (let children of childrenLst) {
       for (let i = 0; i < children.length; i++) {
         res.push(children[i]);
       }
