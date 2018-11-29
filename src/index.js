@@ -21,6 +21,7 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
+
 import SpinalGraph from "./Nodes/SpinalGraph";
 import SpinalNode from "./Nodes/SpinalNode";
 import SpinalContext from "./Nodes/SpinalContext";
@@ -34,24 +35,6 @@ import {
   SPINAL_RELATION_LST_PTR_TYPE,
   SPINAL_RELATION_PTR_LST_TYPE
 } from "./Relations/SpinalRelationFactory";
-import {
-  find,
-  findInContext
-} from "./GraphFunctionsLib/find";
-import {
-  map,
-  mapInContext
-} from "./GraphFunctionsLib/map";
-import {
-  forEach,
-  forEachInContext
-} from "./GraphFunctionsLib/forEach";
-GraphFunction.find = find;
-GraphFunction.findInContext = findInContext;
-GraphFunction.map = map;
-GraphFunction.mapInContext = mapInContext;
-GraphFunction.forEach = forEach;
-GraphFunction.forEachInContext = forEachInContext;
 
 export {
   SpinalGraph,

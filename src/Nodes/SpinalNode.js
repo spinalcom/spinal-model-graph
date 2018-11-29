@@ -36,6 +36,8 @@ import {
 import SpinalMap from "../SpinalMap";
 import SpinalSet from "../SpinalSet";
 
+const DEFAULT_PREDICATE = () => true;
+
 class SpinalNode extends globalType.Model {
   /**
    * Constructor for the SpinalNode class.
@@ -368,6 +370,180 @@ class SpinalNode extends globalType.Model {
       }
     }
     return Promise.all(promises);
+  }
+
+  /**
+   * Recursively finds all the children nodes for which the predicate is true.
+   * @param {Array<String>} relationNames Array containing the relation names to follow
+   * @param {function} predicate Function returning true if the node needs to be returned
+   * @return {Promise<Array<SpinalNode>>} The nodes that were found
+   */
+  async find(relationNames, predicate = DEFAULT_PREDICATE) {
+    if (typeof predicate !== "function") {
+      throw new Error("predicate must be a function");
+    }
+
+    let seen = new Set([this]);
+    let promises = [];
+    let nextGen = [this];
+    let currentGen = [];
+    let found = [];
+
+    while (nextGen.length) {
+      currentGen = nextGen;
+      promises = [];
+      nextGen = [];
+
+      for (let node of currentGen) {
+        promises.push(node.getChildren(relationNames));
+
+        if (predicate(node)) {
+          found.push(node);
+        }
+      }
+
+      let childrenArrays = await Promise.all(promises);
+
+      for (let children of childrenArrays) {
+        for (let child of children) {
+          if (!seen.has(child)) {
+            nextGen.push(child);
+            seen.add(child);
+          }
+        }
+      }
+    }
+
+    return found;
+  }
+
+  /**
+   * Recursively finds all the children nodes in the context for which the predicate is true..
+   * @param {SpinalContext} context Context to use for the search
+   * @param {function} predicate Function returning true if the node needs to be returned
+   * @return {Promise<Array<SpinalNode>>} The nodes that were found
+   */
+  async findInContext(context, predicate = DEFAULT_PREDICATE) {
+    if (typeof predicate !== "function") {
+      throw new Error("The predicate function must be a function");
+    }
+
+    let seen = new Set([this]);
+    let promises = [];
+    let nextGen = [this];
+    let currentGen = [];
+    let found = [];
+
+    while (nextGen.length) {
+      currentGen = nextGen;
+      promises = [];
+      nextGen = [];
+
+      for (let node of currentGen) {
+        promises.push(node.getChildrenInContext(context));
+
+        if (predicate(node)) {
+          found.push(node);
+        }
+      }
+
+      let childrenArrays = await Promise.all(promises);
+
+      for (let children of childrenArrays) {
+        for (let child of children) {
+          if (!seen.has(child)) {
+            nextGen.push(child);
+            seen.add(child);
+          }
+        }
+      }
+    }
+
+    return found;
+  }
+
+  /**
+   * Recursively applies a function to all the children nodes.
+   * @param {Array<String>} relationNames Array containing the relation names to follow
+   * @param {function} callback Function that takes a node
+   */
+  async forEach(relationNames, callback) {
+    if (typeof callback === "undefined") {
+      throw Error("You must give a callback function");
+    } else if (typeof callback !== "function") {
+      throw new Error("The callback function must be a function");
+    }
+
+    let nodes = await this.find(relationNames);
+
+    for (let node of nodes) {
+      callback(node);
+    }
+  }
+
+  /**
+   * Recursively applies a function to all the children nodes in the context.
+   * @param {SpinalContext} context Context to use for the search
+   * @param {function} callback Function that takes a node
+   */
+  async forEachInContext(context, callback) {
+    if (typeof callback === "undefined") {
+      throw Error("You must give a callback function");
+    } else if (typeof callback !== "function") {
+      throw new Error("The callback function must be a function");
+    }
+
+    let nodes = await this.findInContext(context);
+
+    for (let node of nodes) {
+      callback(node);
+    }
+  }
+
+  /**
+   * Recursively applies a function to all the children nodes and returns the results in an array.
+   * @param {Array<String>} relationNames Array containing the relation names to follow
+   * @param {function} callback Function that takes a node and returns something
+   * @return {Promise<Array<*>>} The results
+   */
+  async map(relationNames, callback) {
+    if (typeof callback === "undefined") {
+      throw Error("You must give a callback function");
+    } else if (typeof callback !== "function") {
+      throw new Error("The callback function must be a function");
+    }
+
+    let nodes = await this.find(relationNames);
+    let results = [];
+
+    for (let node of nodes) {
+      results.push(callback(node));
+    }
+
+    return results;
+  }
+
+  /**
+   * Recursively applies a function to all the children nodes in the context and returns the results in an array.
+   * @param {SpinalContext} context Context to use for the search
+   * @param {function} callback Function that takes a node and returns something
+   * @return {Promise<Array<*>>} The results
+   */
+  async mapInContext(context, callback) {
+    if (typeof callback === "undefined") {
+      throw Error("You must give a callback function");
+    } else if (typeof callback !== "function") {
+      throw new Error("The callback function must be a function");
+    }
+
+    let nodes = await this.findInContext(context);
+    let results = [];
+
+    for (let node of nodes) {
+      results.push(callback(node));
+    }
+
+    return results;
   }
 
   /**
