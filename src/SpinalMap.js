@@ -113,19 +113,12 @@ class SpinalMap extends globalType.Model {
   /**
    * Function to iterate over the map object.
    */
-  [Symbol.iterator]() {
-    let index = -1;
-    let keys = this.keys();
-    let map = this;
+  *[Symbol.iterator]() {
+    const keys = this.keys();
 
-    return {
-      next() {
-        return {
-          value: map[keys[++index]],
-          done: index >= keys.length
-        };
-      }
-    };
+    for (let key of keys) {
+      yield this[key];
+    }
   }
 }
 

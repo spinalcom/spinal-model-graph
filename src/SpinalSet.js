@@ -99,19 +99,12 @@ class SpinalSet extends globalType.Model {
   /**
    * Function to iterate over the set object.
    */
-  [Symbol.iterator]() {
-    let index = -1;
+  *[Symbol.iterator]() {
     let values = this._attribute_names;
-    let set = this;
 
-    return {
-      next() {
-        return {
-          value: values[++index],
-          done: index >= values.length
-        };
-      }
-    };
+    for (let value of values) {
+      yield value;
+    }
   }
 }
 
