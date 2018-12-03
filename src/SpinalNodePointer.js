@@ -34,11 +34,11 @@ class SpinalNodePointer extends globalType.Model {
    * Constructor for the SpinalNodePointer class.
    * @param {SpinalNode | Model} element Element to wich the SpinalNodePointer will point
    */
-  constructor(element) {
+  constructor(element, blockRights = false) {
     super();
 
     this.add_attr({
-      ptr: new globalType.Ptr(),
+      ptr: blockRights === true ? new globalType.Pbr() : new globalType.Ptr(),
       info: {}
     });
 

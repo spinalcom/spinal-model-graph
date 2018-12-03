@@ -99,7 +99,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
    * @param {SpinalNode | Model} node Node or model to add
    * @return {Promise<SpinalNode>} Promise containing the node that was added
    */
-  async addChild(node) {
+  async addChild(node) { // eslint-disable-line require-await
     if (!(node instanceof globalType.Model)) {
       throw new Error(
         "Cannot add a child witch is not an instance of SpinalNode or Model."

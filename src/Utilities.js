@@ -34,9 +34,12 @@ function promiseLoad(nodePointer) {
   if (
     nodePointer.ptr instanceof globalType.Ptr &&
     nodePointer.ptr.data.value !== 0 &&
-    typeof FileSystem._objects[nodePointer.ptr.data.value] !== "undefined"
+    typeof globalType.FileSystem._objects[nodePointer.ptr.data.value] !==
+    "undefined"
   ) {
-    return Promise.resolve(FileSystem._objects[nodePointer.ptr.data.value]);
+    return Promise.resolve(
+      globalType.FileSystem._objects[nodePointer.ptr.data.value]
+    );
   } else {
     return new Promise(resolve => {
       nodePointer.ptr.load(resolve);
@@ -61,8 +64,22 @@ function s4() {
  */
 function guid(name) {
   return (
-    name + "-" + s4() + s4() + "-" + s4() + "-" + s4() + "-" +
-    s4() + "-" + s4() + s4() + s4() + "-" + Date.now().toString(16)
+    name +
+    "-" +
+    s4() +
+    s4() +
+    "-" +
+    s4() +
+    "-" +
+    s4() +
+    "-" +
+    s4() +
+    "-" +
+    s4() +
+    s4() +
+    s4() +
+    "-" +
+    Date.now().toString(16)
   );
 }
 

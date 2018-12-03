@@ -30,7 +30,9 @@ import SpinalNodePointer from "../SpinalNodePointer";
 
 const globalType = typeof window === "undefined" ? global : window;
 
-import {SpinalRelationFactory} from "../Relations/SpinalRelationFactory";
+import {
+  SpinalRelationFactory
+} from "../Relations/SpinalRelationFactory";
 import SpinalMap from "../SpinalMap";
 import SpinalSet from "../SpinalSet";
 
@@ -43,14 +45,17 @@ class SpinalNode extends globalType.Model {
    * @param {String} type Type of the node
    * @param {SpinalNode | Model} element Element of the node
    */
-  constructor(name = "undefined", type = "SpinalNode", element = new globalType
-    .Model) {
+  constructor(
+    name = "undefined",
+    type = "SpinalNode",
+    element = new globalType.Model()
+  ) {
     super();
     this.add_attr({
       info: {
         id: guid(this.constructor.name),
         name: name,
-        type: type,
+        type: type
       },
       parents: new SpinalMap(),
       children: new SpinalMap(),
@@ -606,11 +611,12 @@ class SpinalNode extends globalType.Model {
     const relationName = relation.getName();
 
     if (this.parents.has(relationName.get())) {
-      this.parents.getElement(relationName).push(new SpinalNodePointer(
-        relation));
+      this.parents
+        .getElement(relationName)
+        .push(new SpinalNodePointer(relation, true));
     } else {
       const list = new globalType.Lst();
-      list.push(new SpinalNodePointer(relation));
+      list.push(new SpinalNodePointer(relation, true));
       this.parents.setElement(relationName, list);
     }
   }

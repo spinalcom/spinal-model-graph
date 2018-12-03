@@ -80,8 +80,7 @@ class SpinalContext extends SpinalNode {
    * @param {String} relationType This parameter is here only to properly override the parent method
    * @return {Promise<SpinalNode>} The child node in a promise
    */
-  addChild(child, relationName, relationType =
-  SPINAL_RELATION_PTR_LST_TYPE) {
+  addChild(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE) {
     return super.addChild(child, relationName, SPINAL_RELATION_PTR_LST_TYPE);
   }
 
@@ -93,8 +92,7 @@ class SpinalContext extends SpinalNode {
    * @param {SpinalContext} context Context to update, usually unused
    * @return {Promise<SpinalNode>} The child node in a promise
    */
-  addChildInContext(child, relationName, relationType =
-  SPINAL_RELATION_PTR_LST_TYPE, context = this) {
+  addChildInContext(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE, context = this) {
     return super.addChildInContext(child, relationName,
       SPINAL_RELATION_PTR_LST_TYPE, context);
   }

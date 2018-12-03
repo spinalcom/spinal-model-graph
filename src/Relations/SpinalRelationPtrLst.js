@@ -118,7 +118,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
     this.children.info.ids.push(node.getId());
     node._addParent(this);
-    await promiseLoad(this.children).then((children) => {
+    await promiseLoad(this.children).then(children => {
       children.push(node);
     });
     return node;
