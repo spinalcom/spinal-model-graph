@@ -22,14 +22,6 @@ describe("SpinalGraph", function() {
       const element = await context.getElement();
       assert(element instanceof globalType.Model);
     });
-
-    it(
-      "should create a hasContext relation with a SPINAL_RELATION_TYPE TYPE",
-      function() {
-        let context = new lib.SpinalGraph();
-
-        assert(context.hasRelation(HAS_CONTEXT_RELATION_NAME, lib.SPINAL_RELATION_TYPE));
-      });
   });
 
   describe("How to add a context to the graph", function() {
