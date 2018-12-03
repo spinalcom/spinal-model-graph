@@ -41,7 +41,6 @@ class SpinalGraph extends SpinalNode {
     .Model) {
     super(name, type, element);
 
-    this._createRelation(HAS_CONTEXT_RELATION_NAME, SPINAL_RELATION_TYPE);
     this.info.id.set(guid(this.constructor.name));
   }
 
@@ -52,8 +51,7 @@ class SpinalGraph extends SpinalNode {
    */
   async addContext(context) {
     if (context instanceof SpinalContext) {
-      return this.addChild(context, HAS_CONTEXT_RELATION_NAME,
-        SPINAL_RELATION_TYPE);
+      return this.addChild(context, HAS_CONTEXT_RELATION_NAME, SPINAL_RELATION_TYPE);
     } else {
       throw new Error("Cannot add an element which is not a context");
     }
