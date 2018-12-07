@@ -23,14 +23,15 @@
  */
 import spinalCore from "spinal-core-connectorjs";
 import {
-  promiseLoad,
   guid
 } from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer";
 
 const globalType = typeof window === "undefined" ? global : window;
 
-import {SpinalRelationFactory} from "../Relations/SpinalRelationFactory";
+import {
+  SpinalRelationFactory
+} from "../Relations/SpinalRelationFactory";
 import SpinalMap from "../SpinalMap";
 import SpinalSet from "../SpinalSet";
 
@@ -88,7 +89,7 @@ class SpinalNode extends globalType.Model {
    * @return {Promise<*>} A promise where the parameter of the resolve method is the element
    */
   getElement() {
-    return promiseLoad(this.element);
+    return this.element.load();
   }
 
   /**
@@ -362,7 +363,7 @@ class SpinalNode extends globalType.Model {
       const list = this.parents.getElement(name);
 
       for (let i = 0; i < list.length; i++) {
-        promises.push(promiseLoad(list[i]).then(relation => {
+        promises.push(list[i].load().then(relation => {
           return relation.getParent();
         }));
       }
@@ -589,7 +590,7 @@ class SpinalNode extends globalType.Model {
 
     for (let parent of this.parents) {
       for (let i = 0; i < parent.length; i++) {
-        promiseLoad(parent[i]).then(parentRel => {
+        parent[i].load().then(parentRel => {
           promises.push(parentRel.removeChild(this));
         });
       }

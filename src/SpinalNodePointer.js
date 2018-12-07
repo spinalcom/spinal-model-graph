@@ -47,6 +47,20 @@ class SpinalNodePointer extends globalType.Model {
     }
   }
 
+  load() {
+    if (
+      this.ptr instanceof globalType.Ptr &&
+      this.ptr.data.value !== 0 &&
+      typeof FileSystem._objects[this.ptr.data.value] !== "undefined"
+    ) {
+      return Promise.resolve(FileSystem._objects[this.ptr.data.value]);
+    } else {
+      return new Promise(resolve => {
+        this.ptr.load(resolve);
+      });
+    }
+  }
+
   /**
    * Sets pointer to point to an element.
    * @param {SpinalNode | Model} element

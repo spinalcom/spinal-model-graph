@@ -22,9 +22,10 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 import BaseSpinalRelation from "./BaseSpinalRelation";
-import {SPINAL_RELATION_LST_PTR_TYPE} from "./SpinalRelationFactory";
+import {
+  SPINAL_RELATION_LST_PTR_TYPE
+} from "./SpinalRelationFactory";
 import SpinalNode from "../Nodes/SpinalNode";
-import {promiseLoad} from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer";
 import spinalCore from "spinal-core-connectorjs";
 
@@ -63,7 +64,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
 
     for (let i = 0; i < this.children.length; i++) {
       let ptr = this.children[i];
-      promises.push(promiseLoad(ptr));
+      promises.push(ptr.load());
     }
     return Promise.all(promises);
   }
@@ -79,7 +80,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
     for (let i = 0; i < this.children.length; i++) {
       let ptr = this.children[i];
 
-      promises.push(promiseLoad(ptr));
+      promises.push(ptr.load());
     }
 
     children = await Promise.all(promises);

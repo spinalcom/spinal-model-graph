@@ -1,7 +1,6 @@
 const lib = require("../build/index");
 const globalType = typeof window === "undefined" ? global : window;
 const SpinalNodePointer = require("../build/SpinalNodePointer").default;
-const promiseLoad = require("../build/Utilities").promiseLoad;
 
 const assert = require("assert");
 
@@ -39,7 +38,7 @@ describe("SpinalNodePointer", function() {
           assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
           assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
 
-          const elem = await promiseLoad(ptr);
+          const elem = await ptr.load();
           assert.strictEqual(elem, DEFAULT_NODE);
         });
 
@@ -51,7 +50,7 @@ describe("SpinalNodePointer", function() {
           assert.strictEqual(typeof ptr.getId(), "undefined");
           assert.strictEqual(typeof ptr.getType(), "undefined");
 
-          const elem = await promiseLoad(ptr);
+          const elem = await ptr.load();
           assert.strictEqual(elem, DEFAULT_MODEL);
         });
     });

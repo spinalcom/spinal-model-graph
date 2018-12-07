@@ -23,7 +23,6 @@
  */
 import spinalCore from "spinal-core-connectorjs";
 import {
-  promiseLoad,
   guid
 } from "../Utilities";
 import SpinalNode from "../Nodes/SpinalNode";
@@ -68,7 +67,7 @@ class BaseSpinalRelation extends globalType.Model {
    * @return {Promise<SpinalNode>} Returns a promise where the resolve is the parent
    */
   getParent() {
-    return promiseLoad(this.parent);
+    return this.parent.load();
   }
 
   /**

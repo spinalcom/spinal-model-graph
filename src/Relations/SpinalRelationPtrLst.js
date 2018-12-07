@@ -22,9 +22,10 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 import BaseSpinalRelation from "./BaseSpinalRelation";
-import {SPINAL_RELATION_PTR_LST_TYPE} from "./SpinalRelationFactory";
+import {
+  SPINAL_RELATION_PTR_LST_TYPE
+} from "./SpinalRelationFactory";
 import SpinalNode from "../Nodes/SpinalNode";
-import {promiseLoad} from "../Utilities";
 import SpinalNodePointer from "../SpinalNodePointer";
 import spinalCore from "spinal-core-connectorjs";
 
@@ -63,7 +64,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * @return {Promise<Array<SpinalNode>>} The children of the relation
    */
   async getChildren() {
-    const childrenLst = await promiseLoad(this.children);
+    const childrenLst = await this.children.load();
     let children = [];
 
     for (let i = 0; i < childrenLst.length; i++) {
@@ -78,7 +79,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * @return {Promise<Array<SpinalNode>>} The children associated to the context
    */
   async getChildrenInContext(context) {
-    const childrenLst = await promiseLoad(this.children);
+    const childrenLst = await this.children.load();
     let children = [];
 
     for (let i = 0; i < childrenLst.length; i++) {
@@ -118,7 +119,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
     this.children.info.ids.push(node.getId());
     node._addParent(this);
-    await promiseLoad(this.children).then((children) => {
+    await this.children.load().then((children) => {
       children.push(node);
     });
     return node;
@@ -130,7 +131,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * @return {Promise<nothing>} An empty promise
    */
   async removeChild(node) {
-    const childrenLst = await promiseLoad(this.children);
+    const childrenLst = await this.children.load();
 
     childrenLst.remove(node);
     this.children.info.ids.remove(node.getId());
