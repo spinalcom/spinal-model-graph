@@ -1,8 +1,4 @@
-const lib = require("../build/index");
-const globalType = typeof window === "undefined" ? global : window;
-
 const SpinalMap = require("../build/SpinalMap").default;
-// import SpinalMap from "../build/SpinalMap";
 
 const assert = require("assert");
 
