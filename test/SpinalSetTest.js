@@ -3,6 +3,26 @@ const SpinalSet = require("../build/SpinalSet").default;
 const assert = require("assert");
 
 describe("SpinalSet", function() {
+  describe("How to use the constructor", function() {
+    it("should create an empty set", function() {
+      const map = new SpinalSet();
+
+      assert.strictEqual(map.size(), 0);
+    });
+
+    it("should create a set using an array", function() {
+      const init = [
+        ["value"],
+        ["val"]
+      ];
+
+      const map = new SpinalSet(init);
+
+      assert(map.has("value"));
+      assert(map.has("val"));
+    });
+  });
+
   describe("How to use add", function() {
     it("should add a value", function() {
       const set = new SpinalSet();

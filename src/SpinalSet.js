@@ -29,8 +29,16 @@ class SpinalSet extends globalType.Model {
   /**
    * Constructor for the SpinalSet class.
    */
-  constructor() {
+  constructor(init) {
     super();
+
+    if (!init) {
+      return;
+    }
+
+    for (let value of init) {
+      this.add(value);
+    }
   }
 
   /**
