@@ -95,6 +95,26 @@ describe("SpinalMap", function() {
     });
   });
 
+  describe("How to use entries", function() {
+    it("should return an empty array", function() {
+      const map = new SpinalMap();
+
+      assert.deepStrictEqual(map.entries(), []);
+    });
+
+    it("should return the map's entries", function() {
+      const map = new SpinalMap();
+
+      map.setElement("hello", "world");
+      map.setElement("bye", "inexistance");
+
+      assert.deepStrictEqual(map.entries(), [
+        ["hello", map.getElement("hello")],
+        ["bye", map.getElement("bye")]
+      ]);
+    });
+  });
+
   describe("How to use delete", function() {
     it("should delete the key and its value", function() {
       const map = new SpinalMap();

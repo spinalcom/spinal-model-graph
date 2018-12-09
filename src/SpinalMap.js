@@ -89,6 +89,20 @@ class SpinalMap extends globalType.Model {
   }
 
   /**
+   * Returns an array that contains the keys and the values for each element in the map in insertion order.
+   * @returns {Array<Array<String, *>>} Array containing all the keys and values in the map
+   */
+  entries() {
+    const arr = [];
+
+    for (let key of this.keys()) {
+      arr.push([key, this.getElement(key)]);
+    }
+
+    return arr;
+  }
+
+  /**
    * Deletes an element.
    * @param key Key of the element
    */
