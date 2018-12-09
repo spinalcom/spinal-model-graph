@@ -3,6 +3,28 @@ const SpinalMap = require("../build/SpinalMap").default;
 const assert = require("assert");
 
 describe("SpinalMap", function() {
+  describe("How to use the constructor", function() {
+    it("should create an empty map", function() {
+      const map = new SpinalMap();
+
+      assert(!map.hasKey());
+    });
+
+    it("should create a map using an array", function() {
+      const init = [
+        ["key", "value"],
+        ["hello", "world"]
+      ];
+
+      const map = new SpinalMap(init);
+
+      assert(map.has("key"));
+      assert.strictEqual(map.getElement("key").get(), "value");
+      assert(map.has("hello"));
+      assert.strictEqual(map.getElement("hello").get(), "world");
+    });
+  });
+
   describe("How to use setElement and getElement", function() {
     it("should create and set a new element", function() {
       const map = new SpinalMap();

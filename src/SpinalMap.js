@@ -29,8 +29,16 @@ class SpinalMap extends globalType.Model {
   /**
    * Constructor for the SpinalMap class.
    */
-  constructor() {
+  constructor(init) {
     super();
+
+    if (!init) {
+      return;
+    }
+
+    for (let [key, value] of init) {
+      this.setElement(key, value);
+    }
   }
 
   /**
