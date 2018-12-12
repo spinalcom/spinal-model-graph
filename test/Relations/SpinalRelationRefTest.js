@@ -97,28 +97,26 @@ describe("SpinalRelationRef", function() {
         assert.deepStrictEqual(children, [child]);
       });
 
-      it(
-        "should return the relation's children associated to the context",
-        async function() {
-          let context = new lib.SpinalContext();
-          let relation = new SpinalRelationRef(
-            DEFAULT_RELATION_NAME);
-          let child1 = new lib.SpinalNode();
-          let child2 = new lib.SpinalNode();
-          let child3 = new lib.SpinalNode();
+      it("should return the relation's children associated to the context", async function() {
+        let context = new lib.SpinalContext();
+        let relation = new SpinalRelationRef(
+          DEFAULT_RELATION_NAME);
+        let child1 = new lib.SpinalNode();
+        let child2 = new lib.SpinalNode();
+        let child3 = new lib.SpinalNode();
 
-          child1.addContextId(context.getId().get());
-          child3.addContextId(context.getId().get());
-          await Promise.all([
-            relation.addChild(child1),
-            relation.addChild(child2),
-            relation.addChild(child3)
-          ]);
+        child1.addContextId(context.getId().get());
+        child3.addContextId(context.getId().get());
+        await Promise.all([
+          relation.addChild(child1),
+          relation.addChild(child2),
+          relation.addChild(child3)
+        ]);
 
-          const children = await relation.getChildrenInContext(
-            context);
-          assert.deepStrictEqual(children, [child1, child3]);
-        });
+        const children = await relation.getChildrenInContext(
+          context);
+        assert.deepStrictEqual(children, [child1, child3]);
+      });
     });
 
     describe("How to use getType", function() {
@@ -141,34 +139,30 @@ describe("SpinalRelationRef", function() {
           assert.deepStrictEqual(children, [DEFAULT_NODE]);
         });
 
-      it(
-        "should throw an error if you try to add the same node twice",
-        async function() {
-          let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
-          let error;
+      it("should throw an error if you try to add the same node twice", async function() {
+        let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
+        let error;
 
-          await rel.addChild(DEFAULT_NODE);
-          await rel.addChild(DEFAULT_NODE).then(() => {
-            error = true;
-          }).catch(() => {
-            error = false;
-          });
-          assert(!error);
+        await rel.addChild(DEFAULT_NODE);
+        await rel.addChild(DEFAULT_NODE).then(() => {
+          error = true;
+        }).catch(() => {
+          error = false;
         });
+        assert(!error);
+      });
 
-      it(
-        "should throw an error when you pass it something that is not a model",
-        async function() {
-          let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
-          let error;
+      it("should throw an error when you pass it something that is not a model", async function() {
+        let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
+        let error;
 
-          await rel.addChild(new Array()).then(() => {
-            error = true;
-          }).catch(() => {
-            error = false;
-          });
-          assert(!error);
+        await rel.addChild(new Array()).then(() => {
+          error = true;
+        }).catch(() => {
+          error = false;
         });
+        assert(!error);
+      });
 
       it("should return the node added to the relation", async function() {
         let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
@@ -189,46 +183,124 @@ describe("SpinalRelationRef", function() {
 
   describe("How to remove children", function() {
     describe("How to use removeChild", function() {
-      it("should remove a child from the children of the relation",
-        async function() {
-          let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
-          let children;
+      it("should remove a child from the children of the relation", async function() {
+        let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
+        let children;
 
-          await rel.addChild(DEFAULT_NODE);
-          await rel.removeChild(DEFAULT_NODE);
+        await rel.addChild(DEFAULT_NODE);
+        await rel.removeChild(DEFAULT_NODE);
 
-          children = await rel.getChildren();
-          assert.deepStrictEqual(children, []);
-        });
+        children = await rel.getChildren();
+        assert.deepStrictEqual(children, []);
+      });
 
-      it(
-        "should remove a child and update the children ids of the relation",
-        async function() {
-          let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
-          let ids;
+      it("should remove a child and update the children ids of the relation", async function() {
+        let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
+        let ids;
 
-          await rel.addChild(DEFAULT_NODE);
-          await rel.removeChild(DEFAULT_NODE);
+        await rel.addChild(DEFAULT_NODE);
+        await rel.removeChild(DEFAULT_NODE);
 
-          ids = rel.getChildrenIds();
-          assert.deepStrictEqual(ids, []);
-        });
+        ids = rel.getChildrenIds();
+        assert.deepStrictEqual(ids, []);
+      });
 
-      it(
-        "should remove a child and remove the relation the node's parents",
-        async function() {
-          let parentNode = new lib.SpinalNode();
-          let rel = parentNode._createRelation(
-            DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-          let childNode = new lib.SpinalNode();
-          let parents;
+      it("should remove a child and remove the relation the node's parents", async function() {
+        let parentNode = new lib.SpinalNode();
+        let rel = parentNode._createRelation(
+          DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        let childNode = new lib.SpinalNode();
+        let parents;
 
-          await rel.addChild(childNode);
-          await rel.removeChild(childNode);
+        await rel.addChild(childNode);
+        await rel.removeChild(childNode);
 
-          parents = await childNode.getParents();
-          assert.deepStrictEqual(parents, []);
-        });
+        parents = await childNode.getParents();
+        assert.deepStrictEqual(parents, []);
+      });
+
+      it("should remove a child and return true", async function() {
+        let parentNode = new lib.SpinalNode();
+        let rel = parentNode._createRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        let childNode = new lib.SpinalNode();
+        let res;
+
+        await rel.addChild(childNode);
+        res = await rel.removeChild(childNode);
+
+        assert.strictEqual(res, true);
+      });
+
+      it("should exit and return false", async function() {
+        let parentNode = new lib.SpinalNode();
+        let rel = parentNode._createRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        let childNode = new lib.SpinalNode();
+        let res;
+
+        res = await rel.removeChild(childNode);
+
+        assert.strictEqual(res, false);
+      });
+    });
+
+    describe("How to use removeChildren", function() {
+      it("should delete all of the children", async function() {
+        let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
+        const node1 = new lib.SpinalNode();
+        const node2 = new lib.SpinalNode();
+        const node3 = new lib.SpinalNode();
+
+        await Promise.all([
+          rel.addChild(node1),
+          rel.addChild(node2),
+          rel.addChild(node3)
+        ]);
+
+        const res = await rel.removeChildren();
+        assert.deepStrictEqual(res, [true, true, true]);
+
+        const children = await rel.getChildren();
+        assert.deepStrictEqual(children, []);
+      });
+
+      it("should delete the given children", async function() {
+        let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
+        const node1 = new lib.SpinalNode();
+        const node2 = new lib.SpinalNode();
+        const node3 = new lib.SpinalNode();
+
+        await Promise.all([
+          rel.addChild(node1),
+          rel.addChild(node2),
+          rel.addChild(node3)
+        ]);
+
+        const res = await rel.removeChildren([node3, node1]);
+        assert.deepStrictEqual(res, [true, true]);
+
+        const children = await rel.getChildren();
+        assert.deepStrictEqual(children, [node2]);
+      });
+
+      it("should delete some of the given children", async function() {
+        let rel = new SpinalRelationRef(DEFAULT_RELATION_NAME);
+        const node1 = new lib.SpinalNode();
+        const node2 = new lib.SpinalNode();
+        const node3 = new lib.SpinalNode();
+        const node4 = new lib.SpinalNode();
+
+        await Promise.all([
+          rel.addChild(node1),
+          rel.addChild(node2),
+          rel.addChild(node3)
+        ]);
+
+        const res = await rel.removeChildren([node3, node1, node4]);
+        assert.deepStrictEqual(res, [true, true, false]);
+
+        const children = await rel.getChildren();
+        assert.deepStrictEqual(children, [node2]);
+      });
     });
   });
 });

@@ -120,7 +120,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
   /**
    * Removes a child from the relation.
    * @param {SpinalNode} node Child to remove
-   * @returns {Promise<nothing>} An empty promise
+   * @returns {Promise<Boolean>} A promise containing true if the node was a child
    */
   removeChild(node) {
     let found = false;
@@ -133,11 +133,12 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
       }
     }
 
-    if (found) {
-      node._removeParent(this);
+    if (!found) {
+      return Promise.resolve(false);
     }
 
-    return Promise.resolve();
+    node._removeParent(this);
+    return Promise.resolve(true);
   }
 }
 

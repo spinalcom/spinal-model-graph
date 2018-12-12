@@ -128,17 +128,51 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
   /**
    * Removes a child from the relation.
    * @param {SpinalNode} node Child to remove
-   * @returns {Promise<nothing>} An empty promise
+   * @returns {Promise<Boolean>} A promise containing true if the node was a child
    */
   async removeChild(node) {
     const childrenLst = await this.children.load();
 
-    if (childrenLst.contains(node)) {
-      node._removeParent(this);
+    if (!childrenLst.contains(node)) {
+      return false;
     }
 
     childrenLst.remove(node);
     this.children.info.ids.remove(node.getId());
+    node._removeParent(this);
+    return true;
+  }
+
+  /**
+   * Removes children from the relation.
+   * @param {Array<SpinalNode>} nodes Childs to remove
+   * @returns {Promise<Array<Boolean>>} A promise containing an array of boolean
+   */
+  async removeChildren(nodes) {
+    const childrenLst = await this.children.load();
+    const successful = [];
+
+    if (nodes === undefined || nodes.length === 0) {
+      const length = childrenLst.length;
+      childrenLst.clear();
+      this.children.info.ids.clear();
+      return Array(length).fill(true);
+    }
+
+    for (let node of nodes) {
+      let index = childrenLst.indexOf(node);
+
+      if (index !== -1) {
+        childrenLst.remove(node);
+        this.children.info.ids.remove(node.getId());
+        node._removeParent(this);
+        successful.push(true);
+      } else {
+        successful.push(false);
+      }
+    }
+
+    return successful;
   }
 }
 

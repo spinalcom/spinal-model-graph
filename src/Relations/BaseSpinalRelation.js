@@ -108,17 +108,22 @@ class BaseSpinalRelation extends globalType.Model {
   }
 
   /**
-   * Removes all children from the relation.
-   * @returns {Promise<nothing>} An empty promise
+   * Removes children from the relation.
+   * @param {Array<SpinalNode>} nodes Childs to remove
+   * @returns {Promise<Array<Boolean>>} A promise containing an array of boolean
    */
-  async removeChildren() {
-    const children = await this.getChildren();
+  async removeChildren(nodes) {
     const promises = [];
 
-    for (let i = 0; i < children.length; i++) {
-      promises.push(this.removeChild(children[i]));
+    if (nodes === undefined || nodes.length === 0) {
+      nodes = await this.getChildren();
     }
-    await Promise.all(promises);
+
+    for (let node of nodes) {
+      promises.push(this.removeChild(node));
+    }
+
+    return await Promise.all(promises);
   }
 
   /**

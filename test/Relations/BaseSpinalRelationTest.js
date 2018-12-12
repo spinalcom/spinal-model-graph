@@ -95,8 +95,7 @@ describe("BaseSpinalRelation", function() {
   describe("How to remove from the graph", function() {
     describe("How to use removeChildren", function() {
       it("should delete all of the children", async function() {
-        let rel = new SpinalRelationLstPtr(
-          DEFAULT_RELATION_NAME);
+        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
         const node1 = new lib.SpinalNode();
         const node2 = new lib.SpinalNode();
         const node3 = new lib.SpinalNode();
@@ -107,16 +106,56 @@ describe("BaseSpinalRelation", function() {
           rel.addChild(node3)
         ]);
 
-        await rel.removeChildren();
+        const res = await rel.removeChildren();
+        assert.deepStrictEqual(res, [true, true, true]);
+
         const children = await rel.getChildren();
         assert.deepStrictEqual(children, []);
+      });
+
+      it("should delete the given children", async function() {
+        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+        const node1 = new lib.SpinalNode();
+        const node2 = new lib.SpinalNode();
+        const node3 = new lib.SpinalNode();
+
+        await Promise.all([
+          rel.addChild(node1),
+          rel.addChild(node2),
+          rel.addChild(node3)
+        ]);
+
+        const res = await rel.removeChildren([node3, node1]);
+        assert.deepStrictEqual(res, [true, true]);
+
+        const children = await rel.getChildren();
+        assert.deepStrictEqual(children, [node2]);
+      });
+
+      it("should delete some of the given children", async function() {
+        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+        const node1 = new lib.SpinalNode();
+        const node2 = new lib.SpinalNode();
+        const node3 = new lib.SpinalNode();
+        const node4 = new lib.SpinalNode();
+
+        await Promise.all([
+          rel.addChild(node1),
+          rel.addChild(node2),
+          rel.addChild(node3)
+        ]);
+
+        const res = await rel.removeChildren([node3, node1, node4]);
+        assert.deepStrictEqual(res, [true, true, false]);
+
+        const children = await rel.getChildren();
+        assert.deepStrictEqual(children, [node2]);
       });
     });
 
     describe("How to use removeFromGraph", function() {
       it("should delete all of the children", async function() {
-        let rel = new SpinalRelationLstPtr(
-          DEFAULT_RELATION_NAME);
+        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
         const node1 = new lib.SpinalNode();
         const node2 = new lib.SpinalNode();
         const node3 = new lib.SpinalNode();
