@@ -575,11 +575,11 @@ class SpinalNode extends globalType.Model {
   _removeParent(relation) {
     const parentLst = this.parents.getElement(relation.getName().get());
 
-    const indexTORemove = parentLst.indexOf(parentPtr =>
+    const indexToRemove = parentLst.indexOf(parentPtr =>
       parentPtr.getId().get() === relation.getId().get()
     );
 
-    parentLst.splice(indexTORemove);
+    parentLst.splice(indexToRemove);
   }
 
   /**
