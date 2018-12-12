@@ -21,6 +21,7 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
+
 import spinalCore from "spinal-core-connectorjs";
 import SpinalNode from "./Nodes/SpinalNode";
 
@@ -47,6 +48,22 @@ class SpinalNodePointer extends globalType.Model {
     }
   }
 
+  /**
+   * Sets pointer to point to an element.
+   * @param {SpinalNode | Model} element
+   */
+  setElement(element) {
+    if (element instanceof SpinalNode) {
+      this.info.mod_attr("pointedId", element.getId());
+      this.info.mod_attr("pointedType", element.getType());
+    }
+    this.ptr.set(element);
+  }
+
+  /**
+   * Loads the model to which the pointer is pointing.
+   * @returns {Model} The model to which the pointer is pointing
+   */
   load() {
     if (
       this.ptr instanceof globalType.Ptr &&
@@ -59,18 +76,6 @@ class SpinalNodePointer extends globalType.Model {
         this.ptr.load(resolve);
       });
     }
-  }
-
-  /**
-   * Sets pointer to point to an element.
-   * @param {SpinalNode | Model} element
-   */
-  setElement(element) {
-    if (element instanceof SpinalNode) {
-      this.info.mod_attr("pointedId", element.getId());
-      this.info.mod_attr("pointedType", element.getType());
-    }
-    this.ptr.set(element);
   }
 
   /**
