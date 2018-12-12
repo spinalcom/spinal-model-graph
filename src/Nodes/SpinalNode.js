@@ -256,7 +256,7 @@ class SpinalNode extends globalType.Model {
   }
 
   /**
-   * Remove the node from the relation children.
+   * Removes the node from the relation children.
    * @param {SpinalNode} node Node to remove
    * @param {String} relationName Name of the relation to wich the node belongs
    * @param {String} relationType Type of the relation to wich the node belongs
@@ -272,7 +272,7 @@ class SpinalNode extends globalType.Model {
   }
 
   /**
-   * Removes children with the relationNames.
+   * Removes children with the relation names.
    * @param {Array<String>} relationNames Names of the relations to empty
    * @returns {Promise<Array<Boolean>>} A promise containing an array of boolean
    */

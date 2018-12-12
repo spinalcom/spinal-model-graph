@@ -424,7 +424,7 @@ Adds a child and notices the context if a new relation was created.
 <a name="SpinalNode+removeChild"></a>
 
 ### spinalNode.removeChild(node, relationName, relationType) ⇒ <code>Promise.&lt;Boolean&gt;</code>
-Remove the node from the relation children.
+Removes the node from the relation children.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;Boolean&gt;</code> - A promise containing true if the node was a child  
@@ -438,7 +438,7 @@ Remove the node from the relation children.
 <a name="SpinalNode+removeChildren"></a>
 
 ### spinalNode.removeChildren(relationNames) ⇒ <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code>
-Removes children with the relationNames.
+Removes children with the relation names.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code> - A promise containing an array of boolean  
