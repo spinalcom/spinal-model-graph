@@ -742,7 +742,7 @@ This function returns the type of the pointed element.
     * [.addContextId(id)](#BaseSpinalRelation+addContextId)
     * [.belongsToContext(context)](#BaseSpinalRelation+belongsToContext) ⇒ <code>Boolean</code>
     * [.setParent(parent)](#BaseSpinalRelation+setParent)
-    * [.removeChildren()](#BaseSpinalRelation+removeChildren) ⇒ <code>Promise.&lt;nothing&gt;</code>
+    * [.removeChildren(nodes)](#BaseSpinalRelation+removeChildren) ⇒ <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code>
     * [.removeFromGraph()](#BaseSpinalRelation+removeFromGraph) ⇒ <code>Promise.&lt;nothing&gt;</code>
 
 <a name="new_BaseSpinalRelation_new"></a>
@@ -819,11 +819,16 @@ Sets the parent of the relation. If a parent was already set, the parent relatio
 
 <a name="BaseSpinalRelation+removeChildren"></a>
 
-### baseSpinalRelation.removeChildren() ⇒ <code>Promise.&lt;nothing&gt;</code>
-Removes all children from the relation.
+### baseSpinalRelation.removeChildren(nodes) ⇒ <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code>
+Removes children from the relation.
 
 **Kind**: instance method of [<code>BaseSpinalRelation</code>](#BaseSpinalRelation)  
-**Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
+**Returns**: <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code> - A promise containing an array of boolean  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| nodes | <code>Array.&lt;SpinalNode&gt;</code> | Childs to remove |
+
 <a name="BaseSpinalRelation+removeFromGraph"></a>
 
 ### baseSpinalRelation.removeFromGraph() ⇒ <code>Promise.&lt;nothing&gt;</code>
@@ -843,7 +848,8 @@ Removes the relation from the graph.
     * [.getChildrenInContext(context)](#SpinalRelationPtrLst+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getType()](#SpinalRelationPtrLst+getType) ⇒ <code>Number</code>
     * [.addChild(node)](#SpinalRelationPtrLst+addChild) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
-    * [.removeChild(node)](#SpinalRelationPtrLst+removeChild) ⇒ <code>Promise.&lt;nothing&gt;</code>
+    * [.removeChild(node)](#SpinalRelationPtrLst+removeChild) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+    * [.removeChildren(nodes)](#SpinalRelationPtrLst+removeChildren) ⇒ <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code>
 
 <a name="new_SpinalRelationPtrLst_new"></a>
 
@@ -902,15 +908,27 @@ Adds a child to the relation.
 
 <a name="SpinalRelationPtrLst+removeChild"></a>
 
-### spinalRelationPtrLst.removeChild(node) ⇒ <code>Promise.&lt;nothing&gt;</code>
+### spinalRelationPtrLst.removeChild(node) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 Removes a child from the relation.
 
 **Kind**: instance method of [<code>SpinalRelationPtrLst</code>](#SpinalRelationPtrLst)  
-**Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - A promise containing true if the node was a child  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | node | <code>SpinalNode</code> | Child to remove |
+
+<a name="SpinalRelationPtrLst+removeChildren"></a>
+
+### spinalRelationPtrLst.removeChildren(nodes) ⇒ <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code>
+Removes children from the relation.
+
+**Kind**: instance method of [<code>SpinalRelationPtrLst</code>](#SpinalRelationPtrLst)  
+**Returns**: <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code> - A promise containing an array of boolean  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| nodes | <code>Array.&lt;SpinalNode&gt;</code> | Childs to remove |
 
 <a name="SpinalRelationLstPtr"></a>
 
@@ -924,7 +942,7 @@ Removes a child from the relation.
     * [.getChildrenInContext()](#SpinalRelationLstPtr+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getType()](#SpinalRelationLstPtr+getType) ⇒ <code>Number</code>
     * [.addChild(node)](#SpinalRelationLstPtr+addChild) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
-    * [.removeChild(node)](#SpinalRelationLstPtr+removeChild) ⇒ <code>Promise.&lt;nothing&gt;</code>
+    * [.removeChild(node)](#SpinalRelationLstPtr+removeChild) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 
 <a name="new_SpinalRelationLstPtr_new"></a>
 
@@ -978,11 +996,11 @@ Adds a child to the relation.
 
 <a name="SpinalRelationLstPtr+removeChild"></a>
 
-### spinalRelationLstPtr.removeChild(node) ⇒ <code>Promise.&lt;nothing&gt;</code>
+### spinalRelationLstPtr.removeChild(node) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 Removes a child from the relation.
 
 **Kind**: instance method of [<code>SpinalRelationLstPtr</code>](#SpinalRelationLstPtr)  
-**Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - A promise containing true if the node was a child  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1000,7 +1018,7 @@ Removes a child from the relation.
     * [.getChildrenInContext(context)](#SpinalRelationRef+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getType()](#SpinalRelationRef+getType) ⇒ <code>Number</code>
     * [.addChild(node)](#SpinalRelationRef+addChild) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
-    * [.removeChild(node)](#SpinalRelationRef+removeChild) ⇒ <code>Promise.&lt;nothing&gt;</code>
+    * [.removeChild(node)](#SpinalRelationRef+removeChild) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 
 <a name="new_SpinalRelationRef_new"></a>
 
@@ -1059,11 +1077,11 @@ Adds a child to the relation.
 
 <a name="SpinalRelationRef+removeChild"></a>
 
-### spinalRelationRef.removeChild(node) ⇒ <code>Promise.&lt;nothing&gt;</code>
+### spinalRelationRef.removeChild(node) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 Removes a child from the relation.
 
 **Kind**: instance method of [<code>SpinalRelationRef</code>](#SpinalRelationRef)  
-**Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - A promise containing true if the node was a child  
 
 | Param | Type | Description |
 | --- | --- | --- |
