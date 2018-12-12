@@ -34,7 +34,7 @@ class SpinalRelationRef extends _BaseSpinalRelation.default {
   }
   /**
    * Retrieves all the ids of the children of the relation and return them inside an array.
-   * @return {Array<String>} Array containing all the children ids of the relation
+   * @returns {Array<String>} Array containing all the children ids of the relation
    */
 
 
@@ -49,7 +49,7 @@ class SpinalRelationRef extends _BaseSpinalRelation.default {
   }
   /**
    * Return all the children of the relation.
-   * @return {Promise<Array<SpinalNode>>} The children of the relation
+   * @returns {Promise<Array<SpinalNode>>} The children of the relation
    */
 
 
@@ -65,7 +65,7 @@ class SpinalRelationRef extends _BaseSpinalRelation.default {
   /**
    * Return all the children of the relation associated to a certain context.
    * @param {SpinalContext} context The context to use for the search
-   * @return {Promise<Array<SpinalNode>>} The children of the relation associated to the context
+   * @returns {Promise<Array<SpinalNode>>} The children of the relation associated to the context
    */
 
 
@@ -84,7 +84,7 @@ class SpinalRelationRef extends _BaseSpinalRelation.default {
   }
   /**
    * Returns the type of the relation.
-   * @return {Number} Type of the relation
+   * @returns {Number} Type of the relation
    */
 
 
@@ -94,7 +94,7 @@ class SpinalRelationRef extends _BaseSpinalRelation.default {
   /**
    * Adds a child to the relation.
    * @param {SpinalNode | Model} node Node or model to add
-   * @return {Promise<SpinalNode>} Promise containing the node that was added
+   * @returns {Promise<SpinalNode>} Promise containing the node that was added
    */
 
 
@@ -122,7 +122,7 @@ class SpinalRelationRef extends _BaseSpinalRelation.default {
   /**
    * Removes a child from the relation.
    * @param {SpinalNode} node Child to remove
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    */
 
 

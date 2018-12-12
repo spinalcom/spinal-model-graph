@@ -10,6 +10,7 @@
     * [.has(key)](#SpinalMap+has) ⇒ <code>Boolean</code>
     * [.hasKey()](#SpinalMap+hasKey) ⇒ <code>Boolean</code>
     * [.keys()](#SpinalMap+keys) ⇒ <code>Array.&lt;String&gt;</code>
+    * [.entries()](#SpinalMap+entries) ⇒ <code>Array.&lt;Array.&lt;String, \*&gt;&gt;</code>
     * [.delete(key)](#SpinalMap+delete)
     * [.clear()](#SpinalMap+clear)
     * [.forEach(fun)](#SpinalMap+forEach)
@@ -69,6 +70,13 @@ Returns an array that contains the keys for each element in the map in insertion
 
 **Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
 **Returns**: <code>Array.&lt;String&gt;</code> - Array containing all the keys in the map  
+<a name="SpinalMap+entries"></a>
+
+### spinalMap.entries() ⇒ <code>Array.&lt;Array.&lt;String, \*&gt;&gt;</code>
+Returns an array that contains the keys and the values for each element in the map in insertion order.
+
+**Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
+**Returns**: <code>Array.&lt;Array.&lt;String, \*&gt;&gt;</code> - Array containing all the keys and values in the map  
 <a name="SpinalMap+delete"></a>
 
 ### spinalMap.delete(key)
@@ -630,9 +638,6 @@ Applies a function to each of the values in the set.
 ## Functions
 
 <dl>
-<dt><a href="#promiseLoad">promiseLoad(nodePointer)</a> ⇒ <code>Promise.&lt;*&gt;</code></dt>
-<dd><p>Loads the element pointed by the pointer.</p>
-</dd>
 <dt><a href="#s4">s4()</a> ⇒ <code>String</code></dt>
 <dd><p>Generates a random number and returns in a string.</p>
 </dd>
@@ -640,18 +645,6 @@ Applies a function to each of the values in the set.
 <dd><p>Creates a unique id based on a name.</p>
 </dd>
 </dl>
-
-<a name="promiseLoad"></a>
-
-## promiseLoad(nodePointer) ⇒ <code>Promise.&lt;\*&gt;</code>
-Loads the element pointed by the pointer.
-
-**Kind**: global function  
-**Returns**: <code>Promise.&lt;\*&gt;</code> - Element to wich the pointer pointed  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| nodePointer | <code>SpinalNodePointer</code> | SpinalNodePointer to load |
 
 <a name="s4"></a>
 

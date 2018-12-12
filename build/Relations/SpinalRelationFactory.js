@@ -52,7 +52,7 @@ class SpinalRelationFactory {
    * Create a new relation of relationType with the relationName.
    * @param {String} relationName Name of the relation
    * @param {String} relationType Type of the relation
-   * @return {SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst} A new SpinalRelation
+   * @returns {SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst} A new SpinalRelation
    * @static
    */
   static getNewRelation(relationName, relationType) {

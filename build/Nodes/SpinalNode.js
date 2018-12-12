@@ -50,7 +50,7 @@ class SpinalNode extends globalType.Model {
   }
   /**
    * Returns the id.
-   * @return {Str} Id of the node
+   * @returns {Str} Id of the node
    */
 
 
@@ -59,7 +59,7 @@ class SpinalNode extends globalType.Model {
   }
   /**
    * Returns the name.
-   * @return {Str} Name of the node
+   * @returns {Str} Name of the node
    */
 
 
@@ -68,7 +68,7 @@ class SpinalNode extends globalType.Model {
   }
   /**
    * Returns the type.
-   * @return {Str} Type of the node
+   * @returns {Str} Type of the node
    */
 
 
@@ -77,7 +77,7 @@ class SpinalNode extends globalType.Model {
   }
   /**
    * Returns the element.
-   * @return {Promise<*>} A promise where the parameter of the resolve method is the element
+   * @returns {Promise<*>} A promise where the parameter of the resolve method is the element
    */
 
 
@@ -86,7 +86,7 @@ class SpinalNode extends globalType.Model {
   }
   /**
    * Returns all the children ids in an array.
-   * @return {Array<String>} Ids of the children
+   * @returns {Array<String>} Ids of the children
    */
 
 
@@ -146,7 +146,7 @@ class SpinalNode extends globalType.Model {
   }
   /**
    * Computes and returns the number of children of the node.
-   * @return {Number} The number of children
+   * @returns {Number} The number of children
    */
 
 
@@ -167,7 +167,7 @@ class SpinalNode extends globalType.Model {
   }
   /**
    * Returns a list of the contexts the node is associated to.
-   * @return {Array<String>} An array of ids of the associated contexts
+   * @returns {Array<String>} An array of ids of the associated contexts
    */
 
 
@@ -177,7 +177,7 @@ class SpinalNode extends globalType.Model {
   /**
    * Returns true if the node belongs to the context.
    * @param {SpinalContext} context The context that might own the node
-   * @return {Boolean} A boolean
+   * @returns {Boolean} A boolean
    */
 
 
@@ -188,7 +188,7 @@ class SpinalNode extends globalType.Model {
    * Verify if the node contains the relation name.
    * @param {String} relationName Name of the relation
    * @param {String} relationType Type of the relation
-   * @return {Boolean} Return true is the relation is contained in the node and false otherwise.
+   * @returns {Boolean} Return true is the relation is contained in the node and false otherwise.
    */
 
 
@@ -205,7 +205,7 @@ class SpinalNode extends globalType.Model {
    * Verify if the node contains all the relation names.
    * @param {Array<String>} relationNames Array containing all the relation name
    * @param {String} relationType Type of the relations
-   * @return {Boolean} Return true if the node contains all the relations in relationNames, false otherwise.
+   * @returns {Boolean} Return true if the node contains all the relations in relationNames, false otherwise.
    */
 
 
@@ -220,7 +220,7 @@ class SpinalNode extends globalType.Model {
   }
   /**
    * Returns all the relation names of the node.
-   * @return {Array<String>} The names of the relations of the node
+   * @returns {Array<String>} The names of the relations of the node
    * @private
    */
 
@@ -258,7 +258,7 @@ class SpinalNode extends globalType.Model {
    * @param {SpinalNode | Model} child Element to add as child
    * @param {String} relationName Name of the relation
    * @param {String} relationType Type of the relation
-   * @return {Promise<SpinalNode>} The child node in a promise
+   * @returns {Promise<SpinalNode>} The child node in a promise
    */
 
 
@@ -290,7 +290,7 @@ class SpinalNode extends globalType.Model {
    * @param {String} relationName Name of the relation
    * @param {String} relationType Type of the relation
    * @param {SpinalContext} context Context to update
-   * @return {Promise<SpinalNode>} The child node in a promise
+   * @returns {Promise<SpinalNode>} The child node in a promise
    */
 
 
@@ -323,7 +323,7 @@ class SpinalNode extends globalType.Model {
    * @param {SpinalNode} node Node to remove
    * @param {String} relationName Name of the relation to wich the node belongs
    * @param {String} relationType Type of the relation to wich the node belongs
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    */
 
 
@@ -340,7 +340,7 @@ class SpinalNode extends globalType.Model {
    * Remove the node from the graph i.e remove the node from all the parent relations and remove all the children relations.
    * This operation might delete all the sub-graph under this node.
    * After this operation the node can be deleted without fear.
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    */
 
 
@@ -354,7 +354,7 @@ class SpinalNode extends globalType.Model {
   /**
    * Returns the children of the node for the relation names.
    * @param {Array<String>} relationNames Array containing the relation names of the desired children
-   * @return {Promise<Array<SpinalNode>>} The children that were found
+   * @returns {Promise<Array<SpinalNode>>} The children that were found
    */
 
 
@@ -434,7 +434,7 @@ class SpinalNode extends globalType.Model {
   /**
    * Return the children of the node that are registered in the context
    * @param {SpinalContext} context Context to use for the search
-   * @return {Promise<Array<SpinalNode>>} The children that were found
+   * @returns {Promise<Array<SpinalNode>>} The children that were found
    */
 
 
@@ -531,7 +531,7 @@ class SpinalNode extends globalType.Model {
   /**
    * Return all parents for the relation names no matter the type of relation
    * @param {Array<String>} relationNames Array containing the relation names of the desired parents
-   * @return {Promise<Array<SpinalNode>>} Promise containing the parents that were found
+   * @returns {Promise<Array<SpinalNode>>} Promise containing the parents that were found
    */
 
 
@@ -578,7 +578,7 @@ class SpinalNode extends globalType.Model {
    * Recursively finds all the children nodes for which the predicate is true.
    * @param {Array<String>} relationNames Array containing the relation names to follow
    * @param {function} predicate Function returning true if the node needs to be returned
-   * @return {Promise<Array<SpinalNode>>} The nodes that were found
+   * @returns {Promise<Array<SpinalNode>>} The nodes that were found
    */
 
 
@@ -669,7 +669,7 @@ class SpinalNode extends globalType.Model {
    * Recursively finds all the children nodes in the context for which the predicate is true..
    * @param {SpinalContext} context Context to use for the search
    * @param {function} predicate Function returning true if the node needs to be returned
-   * @return {Promise<Array<SpinalNode>>} The nodes that were found
+   * @returns {Promise<Array<SpinalNode>>} The nodes that were found
    */
 
 
@@ -846,7 +846,7 @@ class SpinalNode extends globalType.Model {
    * Recursively applies a function to all the children nodes and returns the results in an array.
    * @param {Array<String>} relationNames Array containing the relation names to follow
    * @param {function} callback Function to apply to the nodes
-   * @return {Promise<Array<*>>} The results of the callback for each node
+   * @returns {Promise<Array<*>>} The results of the callback for each node
    */
 
 
@@ -893,7 +893,7 @@ class SpinalNode extends globalType.Model {
    * Recursively applies a function to all the children nodes in the context and returns the results in an array.
    * @param {SpinalContext} context Context to use for the search
    * @param {function} callback Function to apply to the nodes
-   * @return {Promise<Array<*>>} The results of the callback for each node
+   * @returns {Promise<Array<*>>} The results of the callback for each node
    */
 
 
@@ -939,7 +939,7 @@ class SpinalNode extends globalType.Model {
   /**
    * Return the relation list corresponding to the relation type.
    * @param {String} relationType Type of the relation
-   * @return {SpinalMap} Return the relation list corresponding to the relation type
+   * @returns {SpinalMap} Return the relation list corresponding to the relation type
    * @private
    */
 
@@ -951,7 +951,7 @@ class SpinalNode extends globalType.Model {
    * Return the relation corresponding.
    * @param {String} relationName Name of the relation
    * @param {String} relationType Type of the relation
-   * @return {SpinalRelation} The relation corresponding
+   * @returns {SpinalRelation} The relation corresponding
    * @private
    */
 
@@ -1055,7 +1055,7 @@ class SpinalNode extends globalType.Model {
   }
   /**
    * Remove all children relation from the graph.
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    * @private
    */
 

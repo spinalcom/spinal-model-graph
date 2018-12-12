@@ -45,7 +45,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
 
   /**
    * Retrieves all the ids of the children of the relation and return them inside an array.
-   * @return {Array<String>} Array containing all the children ids of the relation
+   * @returns {Array<String>} Array containing all the children ids of the relation
    */
   getChildrenIds() {
     const res = [];
@@ -57,7 +57,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
 
   /**
    * Return all the children of the relation.
-   * @return {Promise<Array<SpinalNode>>} The children of the relation
+   * @returns {Promise<Array<SpinalNode>>} The children of the relation
    */
   getChildren() {
     const promises = [];
@@ -71,7 +71,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
 
   /**
    * Return all the children of the relation associated to a certain context.
-   * @return {Promise<Array<SpinalNode>>} The children of the relation
+   * @returns {Promise<Array<SpinalNode>>} The children of the relation
    */
   async getChildrenInContext(context) {
     const promises = [];
@@ -89,7 +89,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
 
   /**
    * Returns the type of the relation.
-   * @return {Number} Type of the relation
+   * @returns {Number} Type of the relation
    */
   getType() {
     return SPINAL_RELATION_LST_PTR_TYPE;
@@ -98,7 +98,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
   /**
    * Adds a child to the relation.
    * @param {SpinalNode | Model} node Node or model to add
-   * @return {Promise<SpinalNode>} Promise containing the node that was added
+   * @returns {Promise<SpinalNode>} Promise containing the node that was added
    */
   async addChild(node) {
     if (!(node instanceof globalType.Model)) {
@@ -120,7 +120,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
   /**
    * Removes a child from the relation.
    * @param {SpinalNode} node Child to remove
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    */
   removeChild(node) {
     for (let i = 0; i < this.children.length; i++) {

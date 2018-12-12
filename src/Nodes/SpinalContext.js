@@ -46,7 +46,7 @@ class SpinalContext extends SpinalNode {
 
   /**
    * Returns the relation names of the context.
-   * @return {Lst<Str>} The relation names that the context knows
+   * @returns {Lst<Str>} The relation names that the context knows
    */
   getRelationNames() {
     return this.relationNames;
@@ -55,7 +55,7 @@ class SpinalContext extends SpinalNode {
   /**
    * Adds relation names to the relation names known by the context.
    * @param {Array<String> | String} relationNames Names of the relations
-   * @return {Boolean} Return false if all the relation names are already known
+   * @returns {Boolean} Return false if all the relation names are already known
    */
   addRelationNames(relationNames) {
     let result = false;
@@ -78,7 +78,7 @@ class SpinalContext extends SpinalNode {
    * @param {SpinalNode | Model} child Node to add as child
    * @param {String} relationName Name of the relation
    * @param {String} relationType This parameter is here only to properly override the parent method
-   * @return {Promise<SpinalNode>} The child node in a promise
+   * @returns {Promise<SpinalNode>} The child node in a promise
    */
   addChild(child, relationName, relationType =
   SPINAL_RELATION_PTR_LST_TYPE) {
@@ -91,7 +91,7 @@ class SpinalContext extends SpinalNode {
    * @param {String} relationName Name of the relation
    * @param {String} relationType This parameter is here only to properly override the parent method
    * @param {SpinalContext} context Context to update, usually unused
-   * @return {Promise<SpinalNode>} The child node in a promise
+   * @returns {Promise<SpinalNode>} The child node in a promise
    */
   addChildInContext(child, relationName, relationType =
   SPINAL_RELATION_PTR_LST_TYPE, context = this) {
@@ -102,7 +102,7 @@ class SpinalContext extends SpinalNode {
   /**
    * Return the children of the node that are registered in the context
    * @param {SpinalContext} context Context to use for the search, this by default
-   * @return {Promise<Array<SpinalNode>>} The children that were found
+   * @returns {Promise<Array<SpinalNode>>} The children that were found
    */
   getChildrenInContext(context = this) {
     return super.getChildrenInContext(context);

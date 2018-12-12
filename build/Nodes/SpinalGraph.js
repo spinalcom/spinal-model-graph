@@ -38,7 +38,7 @@ class SpinalGraph extends _SpinalNode.default {
   /**
    * Adds a context to the graph.
    * @param {SpinalContext} context Context to be added
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    */
 
 
@@ -56,7 +56,7 @@ class SpinalGraph extends _SpinalNode.default {
   /**
    * Searches for a context using its name.
    * @param {String} name Name of the context
-   * @return {SpinalContext | undefined} The wanted context or undefined
+   * @returns {SpinalContext | undefined} The wanted context or undefined
    */
 
 
@@ -70,7 +70,7 @@ class SpinalGraph extends _SpinalNode.default {
   }
   /**
    * Empty override of the SpinalNode method.
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    */
 
 

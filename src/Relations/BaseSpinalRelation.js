@@ -48,7 +48,7 @@ class BaseSpinalRelation extends globalType.Model {
 
   /**
    * Shortcut to id.
-   * @return {Str} Id of the relation
+   * @returns {Str} Id of the relation
    */
   getId() {
     return this.id;
@@ -56,7 +56,7 @@ class BaseSpinalRelation extends globalType.Model {
 
   /**
    * Returns the name of the relation.
-   * @return {Str} Name of the relation
+   * @returns {Str} Name of the relation
    */
   getName() {
     return this.name;
@@ -64,7 +64,7 @@ class BaseSpinalRelation extends globalType.Model {
 
   /**
    * Returns the parent of the relation.
-   * @return {Promise<SpinalNode>} Returns a promise where the resolve is the parent
+   * @returns {Promise<SpinalNode>} Returns a promise where the resolve is the parent
    */
   getParent() {
     return this.parent.load();
@@ -72,7 +72,7 @@ class BaseSpinalRelation extends globalType.Model {
 
   /**
    * Returns a list of the contexts the relation is associated to.
-   * @return {Array<String>} A list of ids of the associated contexts
+   * @returns {Array<String>} A list of ids of the associated contexts
    */
   getContextIds() {
     return this.contextIds.keys();
@@ -91,7 +91,7 @@ class BaseSpinalRelation extends globalType.Model {
   /**
    * Returns true if the relation belongs to the context.
    * @param {SpinalContext} context The context that might own the node
-   * @return {Boolean} A boolean
+   * @returns {Boolean} A boolean
    */
   belongsToContext(context) {
     return this.contextIds.has(context.getId().get());
@@ -109,7 +109,7 @@ class BaseSpinalRelation extends globalType.Model {
 
   /**
    * Removes all children from the relation.
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    */
   async removeChildren() {
     const children = await this.getChildren();
@@ -123,7 +123,7 @@ class BaseSpinalRelation extends globalType.Model {
 
   /**
    * Removes the relation from the graph.
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    */
   async removeFromGraph() {
     await Promise.all([
@@ -134,7 +134,7 @@ class BaseSpinalRelation extends globalType.Model {
 
   /**
    * Removes the relation from the parent.
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    * @private
    */
   async _removeFromParent() {

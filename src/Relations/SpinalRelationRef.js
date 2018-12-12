@@ -42,7 +42,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
   /**
    * Retrieves all the ids of the children of the relation and return them inside an array.
-   * @return {Array<String>} Array containing all the children ids of the relation
+   * @returns {Array<String>} Array containing all the children ids of the relation
    */
   getChildrenIds() {
     const res = [];
@@ -54,7 +54,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
   /**
    * Return all the children of the relation.
-   * @return {Promise<Array<SpinalNode>>} The children of the relation
+   * @returns {Promise<Array<SpinalNode>>} The children of the relation
    */
   getChildren() {
     let children = [];
@@ -68,7 +68,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
   /**
    * Return all the children of the relation associated to a certain context.
    * @param {SpinalContext} context The context to use for the search
-   * @return {Promise<Array<SpinalNode>>} The children of the relation associated to the context
+   * @returns {Promise<Array<SpinalNode>>} The children of the relation associated to the context
    */
   getChildrenInContext(context) {
     let children = [];
@@ -85,7 +85,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
   /**
    * Returns the type of the relation.
-   * @return {Number} Type of the relation
+   * @returns {Number} Type of the relation
    */
   getType() {
     return SPINAL_RELATION_TYPE;
@@ -94,7 +94,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
   /**
    * Adds a child to the relation.
    * @param {SpinalNode | Model} node Node or model to add
-   * @return {Promise<SpinalNode>} Promise containing the node that was added
+   * @returns {Promise<SpinalNode>} Promise containing the node that was added
    */
   async addChild(node) {
     if (!(node instanceof globalType.Model)) {
@@ -116,7 +116,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
   /**
    * Removes a child from the relation.
    * @param {SpinalNode} node Child to remove
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    */
   removeChild(node) {
     this.children.remove(node);

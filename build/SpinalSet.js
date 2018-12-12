@@ -120,7 +120,7 @@ class SpinalSet extends globalType.Model {
   }
   /**
    * Returns the number of values in the set.
-   * @return {Number} Number of values in the set
+   * @returns {Number} Number of values in the set
    */
 
 

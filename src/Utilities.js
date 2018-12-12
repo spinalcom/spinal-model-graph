@@ -38,7 +38,7 @@ function s4() {
 /**
  * Creates a unique id based on a name.
  * @param {String} name Name from wich the id is generated
- * @return {String} Generated id
+ * @returns {String} Generated id
  */
 function guid(name) {
   return (

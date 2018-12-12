@@ -39,7 +39,7 @@ class BaseSpinalRelation extends globalType.Model {
   }
   /**
    * Shortcut to id.
-   * @return {Str} Id of the relation
+   * @returns {Str} Id of the relation
    */
 
 
@@ -48,7 +48,7 @@ class BaseSpinalRelation extends globalType.Model {
   }
   /**
    * Returns the name of the relation.
-   * @return {Str} Name of the relation
+   * @returns {Str} Name of the relation
    */
 
 
@@ -57,7 +57,7 @@ class BaseSpinalRelation extends globalType.Model {
   }
   /**
    * Returns the parent of the relation.
-   * @return {Promise<SpinalNode>} Returns a promise where the resolve is the parent
+   * @returns {Promise<SpinalNode>} Returns a promise where the resolve is the parent
    */
 
 
@@ -66,7 +66,7 @@ class BaseSpinalRelation extends globalType.Model {
   }
   /**
    * Returns a list of the contexts the relation is associated to.
-   * @return {Array<String>} A list of ids of the associated contexts
+   * @returns {Array<String>} A list of ids of the associated contexts
    */
 
 
@@ -87,7 +87,7 @@ class BaseSpinalRelation extends globalType.Model {
   /**
    * Returns true if the relation belongs to the context.
    * @param {SpinalContext} context The context that might own the node
-   * @return {Boolean} A boolean
+   * @returns {Boolean} A boolean
    */
 
 
@@ -107,7 +107,7 @@ class BaseSpinalRelation extends globalType.Model {
   }
   /**
    * Removes all children from the relation.
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    */
 
 
@@ -127,7 +127,7 @@ class BaseSpinalRelation extends globalType.Model {
   }
   /**
    * Removes the relation from the graph.
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    */
 
 
@@ -140,7 +140,7 @@ class BaseSpinalRelation extends globalType.Model {
   }
   /**
    * Removes the relation from the parent.
-   * @return {Promise<nothing>} An empty promise
+   * @returns {Promise<nothing>} An empty promise
    * @private
    */
 
