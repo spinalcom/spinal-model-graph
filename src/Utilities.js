@@ -21,9 +21,6 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-import "spinal-core-connectorjs";
-
-const globalType = typeof window === "undefined" ? global : window;
 
 /**
  * Generates a random number and returns in a string.
