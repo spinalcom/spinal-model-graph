@@ -675,6 +675,7 @@ Wrapper over SpinalNodePointer containing some information about the pointed ele
 * [SpinalNodePointer](#SpinalNodePointer)
     * [new SpinalNodePointer(element)](#new_SpinalNodePointer_new)
     * [.setElement(element)](#SpinalNodePointer+setElement)
+    * [.load()](#SpinalNodePointer+load) ⇒ <code>Model</code>
     * [.unset()](#SpinalNodePointer+unset)
     * [.getId()](#SpinalNodePointer+getId) ⇒ <code>Str</code>
     * [.getType()](#SpinalNodePointer+getType) ⇒ <code>Str</code>
@@ -700,6 +701,13 @@ Sets pointer to point to an element.
 | --- | --- |
 | element | <code>SpinalNode</code> \| <code>Model</code> | 
 
+<a name="SpinalNodePointer+load"></a>
+
+### spinalNodePointer.load() ⇒ <code>Model</code>
+Loads the model to which the pointer is pointing.
+
+**Kind**: instance method of [<code>SpinalNodePointer</code>](#SpinalNodePointer)  
+**Returns**: <code>Model</code> - The model to which the pointer is pointing  
 <a name="SpinalNodePointer+unset"></a>
 
 ### spinalNodePointer.unset()
