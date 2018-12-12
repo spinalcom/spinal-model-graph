@@ -265,6 +265,7 @@ Empty override of the SpinalNode method.
     * [.addChild(child, relationName, relationType)](#SpinalNode+addChild) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
     * [.addChildInContext(child, relationName, relationType, context)](#SpinalNode+addChildInContext) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
     * [.removeChild(node, relationName, relationType)](#SpinalNode+removeChild) ⇒ <code>Promise.&lt;Boolean&gt;</code>
+    * [.removeChildren(relationNames)](#SpinalNode+removeChildren) ⇒ <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code>
     * [.removeFromGraph()](#SpinalNode+removeFromGraph) ⇒ <code>Promise.&lt;nothing&gt;</code>
     * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getChildrenInContext(context)](#SpinalNode+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
@@ -428,6 +429,18 @@ Remove the node from the relation children.
 | node | [<code>SpinalNode</code>](#SpinalNode) | Node to remove |
 | relationName | <code>String</code> | Name of the relation to wich the node belongs |
 | relationType | <code>String</code> | Type of the relation to wich the node belongs |
+
+<a name="SpinalNode+removeChildren"></a>
+
+### spinalNode.removeChildren(relationNames) ⇒ <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code>
+Removes children with the relationNames.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code> - A promise containing an array of boolean  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| relationNames | <code>Array.&lt;String&gt;</code> | Names of the relations to empty |
 
 <a name="SpinalNode+removeFromGraph"></a>
 

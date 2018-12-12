@@ -185,12 +185,14 @@ class SpinalNode extends globalType.Model {
    * @private
    */
   getRelationNames() {
-    let names = [];
+    const names = [];
 
     for (let relationMap of this.children) {
       names.push(...relationMap.keys());
     }
-    return names;
+
+    // Removes all duplicates
+    return Array.from(new Set(names));
   }
 
   /**
@@ -267,6 +269,34 @@ class SpinalNode extends globalType.Model {
 
     const rel = this._getRelation(relationName, relationType);
     return rel.removeChild(node);
+  }
+
+  /**
+   * Removes children with the relationNames.
+   * @param {Array<String>} relationNames Names of the relations to empty
+   * @returns {Promise<Array<Boolean>>} A promise containing an array of boolean
+   */
+  async removeChildren(relationNames) {
+    if (relationNames === undefined || relationNames.length === 0) {
+      relationNames = this.getRelationNames();
+    } else if (typeof relationNames === "string") {
+      relationNames = [relationNames];
+    }
+
+    const promises = [];
+
+    for (let relationMap of this.children) {
+      for (let relationName of relationNames) {
+        if (relationMap.has(relationName)) {
+          const relation = relationMap.getElement(relationName);
+          promises.push(relation.removeChildren());
+        }
+      }
+    }
+
+    const boolArray = await Promise.all(promises);
+    // Flattens the array
+    return [].concat.apply([], boolArray);
   }
 
   /**
@@ -624,8 +654,7 @@ class SpinalNode extends globalType.Model {
    * @private
    */
   _createRelation(relationName, relationType) {
-    const relation = SpinalRelationFactory.getNewRelation(relationName,
-      relationType);
+    const relation = SpinalRelationFactory.getNewRelation(relationName, relationType);
     relation.setParent(this);
 
     if (!this.children.has(relationType)) {

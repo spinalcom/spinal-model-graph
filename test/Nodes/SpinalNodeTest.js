@@ -326,21 +326,11 @@ describe("SpinalNode", function() {
         let child5 = new lib.SpinalNode();
 
         await Promise.all([
-          node.addChild(child1,
-            DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_LST_PTR_TYPE
-          ),
-          node.addChild(child2,
-            DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_LST_PTR_TYPE
-          ),
-          node.addChild(child3,
-            DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_LST_PTR_TYPE
-          ),
-          node.addChild(child4,
-            DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_LST_PTR_TYPE
-          ),
-          node.addChild(child5,
-            DEFAULT_RELATION_NAME + "4", lib.SPINAL_RELATION_LST_PTR_TYPE
-          ),
+          node.addChild(child1, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_LST_PTR_TYPE),
+          node.addChild(child2, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_LST_PTR_TYPE),
+          node.addChild(child3, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_LST_PTR_TYPE),
+          node.addChild(child4, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_LST_PTR_TYPE),
+          node.addChild(child5, DEFAULT_RELATION_NAME + "4", lib.SPINAL_RELATION_LST_PTR_TYPE),
         ]);
         assert.deepStrictEqual(
           node.getRelationNames(),
@@ -348,6 +338,25 @@ describe("SpinalNode", function() {
             DEFAULT_RELATION_NAME + "1",
             DEFAULT_RELATION_NAME + "2",
             DEFAULT_RELATION_NAME + "4",
+          ]
+        );
+      });
+
+      it("shouldn't return duplicates if there are different relation with the same names but different types", async function() {
+        let node = new lib.SpinalNode();
+        let child1 = new lib.SpinalNode();
+        let child2 = new lib.SpinalNode();
+        let child3 = new lib.SpinalNode();
+
+        await Promise.all([
+          node.addChild(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          node.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE),
+          node.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE),
+        ]);
+        assert.deepStrictEqual(
+          node.getRelationNames(),
+          [
+            DEFAULT_RELATION_NAME,
           ]
         );
       });
@@ -483,18 +492,16 @@ describe("SpinalNode", function() {
         assert(error);
       });
 
-      it(
-        "should throw an error when you pass it something that is not a model",
-        async function() {
-          let node = new lib.SpinalNode(DEFAULT_RELATION_NAME);
-          let context = new lib.SpinalContext();
-          let error = false;
+      it("should throw an error when you pass it something that is not a model", async function() {
+        let node = new lib.SpinalNode(DEFAULT_RELATION_NAME);
+        let context = new lib.SpinalContext();
+        let error = false;
 
-          await node.addChild(new Array(), DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context).catch(() => {
-            error = true;
-          });
-          assert(error);
+        await node.addChild(new Array(), DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context).catch(() => {
+          error = true;
         });
+        assert(error);
+      });
 
       it("should return the node added to the relation", async function() {
         let node = new lib.SpinalNode(DEFAULT_RELATION_NAME);
@@ -543,6 +550,51 @@ describe("SpinalNode", function() {
         const res = await node.removeChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
 
         assert.strictEqual(res, false);
+      });
+    });
+
+    describe("How to use removeChildren", function() {
+      it("should delete all of the children", async function() {
+        let parent = new lib.SpinalNode();
+        const node1 = new lib.SpinalNode();
+        const node2 = new lib.SpinalNode();
+        const node3 = new lib.SpinalNode();
+
+        await Promise.all([
+          parent.addChild(node1, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_LST_PTR_TYPE),
+          parent.addChild(node2, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_TYPE),
+          parent.addChild(node3, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_PTR_LST_TYPE)
+        ]);
+
+        const res = await parent.removeChildren();
+
+        assert.deepStrictEqual(res, [true, true, true]);
+
+        const children = await parent.getChildren();
+        assert.deepStrictEqual(children, []);
+      });
+
+      it("should delete the given children", async function() {
+        let parent = new lib.SpinalNode();
+        const node1 = new lib.SpinalNode();
+        const node2 = new lib.SpinalNode();
+        const node3 = new lib.SpinalNode();
+
+        await Promise.all([
+          parent.addChild(node1, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_TYPE),
+          parent.addChild(node2, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE),
+          parent.addChild(node3, DEFAULT_RELATION_NAME + "3", lib.SPINAL_RELATION_TYPE)
+        ]);
+
+        const res = await parent.removeChildren([
+          DEFAULT_RELATION_NAME + "1",
+          DEFAULT_RELATION_NAME + "3"
+        ]);
+
+        assert.deepStrictEqual(res, [true, true]);
+
+        const children = await parent.getChildren();
+        assert.deepStrictEqual(children, [node2]);
       });
     });
 
