@@ -45,8 +45,7 @@ class SpinalNode extends globalType.Model {
    * @param {String} type Type of the node
    * @param {SpinalNode | Model} element Element of the node
    */
-  constructor(name = "undefined", type = "SpinalNode", element = new globalType
-    .Model) {
+  constructor(name = "undefined", type = "SpinalNode", element = new globalType.Model) {
     super();
     this.add_attr({
       info: {
@@ -259,14 +258,15 @@ class SpinalNode extends globalType.Model {
    * @param {SpinalNode} node Node to remove
    * @param {String} relationName Name of the relation to wich the node belongs
    * @param {String} relationType Type of the relation to wich the node belongs
-   * @returns {Promise<nothing>} An empty promise
+   * @returns {Promise<Boolean>} A promise containing true if the node was a child
    */
   removeChild(node, relationName, relationType) {
-    if (this.hasRelation(relationName, relationType)) {
-      let rel = this._getRelation(relationName, relationType);
-      rel.removeChild(node);
+    if (!this.hasRelation(relationName, relationType)) {
+      return Promise.resolve(false);
     }
-    return Promise.resolve();
+
+    const rel = this._getRelation(relationName, relationType);
+    return rel.removeChild(node);
   }
 
   /**

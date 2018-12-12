@@ -264,7 +264,7 @@ Empty override of the SpinalNode method.
     * [.hasRelations(relationNames, relationType)](#SpinalNode+hasRelations) ⇒ <code>Boolean</code>
     * [.addChild(child, relationName, relationType)](#SpinalNode+addChild) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
     * [.addChildInContext(child, relationName, relationType, context)](#SpinalNode+addChildInContext) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
-    * [.removeChild(node, relationName, relationType)](#SpinalNode+removeChild) ⇒ <code>Promise.&lt;nothing&gt;</code>
+    * [.removeChild(node, relationName, relationType)](#SpinalNode+removeChild) ⇒ <code>Promise.&lt;Boolean&gt;</code>
     * [.removeFromGraph()](#SpinalNode+removeFromGraph) ⇒ <code>Promise.&lt;nothing&gt;</code>
     * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getChildrenInContext(context)](#SpinalNode+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
@@ -417,11 +417,11 @@ Adds a child and notices the context if a new relation was created.
 
 <a name="SpinalNode+removeChild"></a>
 
-### spinalNode.removeChild(node, relationName, relationType) ⇒ <code>Promise.&lt;nothing&gt;</code>
+### spinalNode.removeChild(node, relationName, relationType) ⇒ <code>Promise.&lt;Boolean&gt;</code>
 Remove the node from the relation children.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
+**Returns**: <code>Promise.&lt;Boolean&gt;</code> - A promise containing true if the node was a child  
 
 | Param | Type | Description |
 | --- | --- | --- |

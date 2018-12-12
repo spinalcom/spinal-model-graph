@@ -23,8 +23,12 @@
  */
 import SpinalNode from "./SpinalNode";
 import spinalCore from "spinal-core-connectorjs";
-import {SPINAL_RELATION_TYPE} from "../Relations/SpinalRelationFactory";
-import {guid} from "../Utilities";
+import {
+  SPINAL_RELATION_TYPE
+} from "../Relations/SpinalRelationFactory";
+import {
+  guid
+} from "../Utilities";
 import SpinalContext from "./SpinalContext";
 
 const globalType = typeof window === "undefined" ? global : window;
@@ -37,8 +41,7 @@ class SpinalGraph extends SpinalNode {
    * @param {String} type Type of the graph, usually unused
    * @param {SpinalNode | Model} element Element of the graph, usually unused
    */
-  constructor(name = "undefined", type = "SpinalGraph", element = new globalType
-    .Model) {
+  constructor(name = "undefined", type = "SpinalGraph", element = new globalType.Model) {
     super(name, type, element);
 
     this.info.id.set(guid(this.constructor.name));
