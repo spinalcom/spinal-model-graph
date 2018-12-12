@@ -123,12 +123,20 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
    * @returns {Promise<nothing>} An empty promise
    */
   removeChild(node) {
+    let found = false;
+
     for (let i = 0; i < this.children.length; i++) {
       if (this.children[i].getId() === node.getId()) {
         this.children.splice(i, 1);
+        found = true;
+        break;
       }
     }
-    node._removeParent(this);
+
+    if (found) {
+      node._removeParent(this);
+    }
+
     return Promise.resolve();
   }
 }

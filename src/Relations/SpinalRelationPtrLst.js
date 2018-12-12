@@ -133,9 +133,12 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
   async removeChild(node) {
     const childrenLst = await this.children.load();
 
+    if (childrenLst.contains(node)) {
+      node._removeParent(this);
+    }
+
     childrenLst.remove(node);
     this.children.info.ids.remove(node.getId());
-    node._removeParent(this);
   }
 }
 

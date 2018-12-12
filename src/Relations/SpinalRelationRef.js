@@ -22,7 +22,9 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 import BaseSpinalRelation from "./BaseSpinalRelation";
-import {SPINAL_RELATION_TYPE} from "./SpinalRelationFactory";
+import {
+  SPINAL_RELATION_TYPE
+} from "./SpinalRelationFactory";
 import SpinalNode from "../Nodes/SpinalNode";
 import spinalCore from "spinal-core-connectorjs";
 
@@ -119,8 +121,11 @@ class SpinalRelationRef extends BaseSpinalRelation {
    * @returns {Promise<nothing>} An empty promise
    */
   removeChild(node) {
+    if (this.children.contains(node)) {
+      node._removeParent(this);
+    }
+
     this.children.remove(node);
-    node._removeParent(this);
 
     return Promise.resolve();
   }
