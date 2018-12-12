@@ -28,6 +28,7 @@ const globalType = typeof window === "undefined" ? global : window;
 class SpinalSet extends globalType.Model {
   /**
    * Constructor for the SpinalSet class.
+   * @param {Array<*>} init Array of values
    */
   constructor(init) {
     super();

@@ -28,6 +28,7 @@ const globalType = typeof window === "undefined" ? global : window;
 class SpinalMap extends globalType.Model {
   /**
    * Constructor for the SpinalMap class.
+   * @param {Array<Array<String, *>>} init Array of arrays of key-value pairs
    */
   constructor(init) {
     super();

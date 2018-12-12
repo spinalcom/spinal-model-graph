@@ -4,7 +4,7 @@
 **Kind**: global class  
 
 * [SpinalMap](#SpinalMap)
-    * [new SpinalMap()](#new_SpinalMap_new)
+    * [new SpinalMap(init)](#new_SpinalMap_new)
     * [.setElement(key, value)](#SpinalMap+setElement)
     * [.getElement(key)](#SpinalMap+getElement) ⇒ <code>\*</code>
     * [.has(key)](#SpinalMap+has) ⇒ <code>Boolean</code>
@@ -17,8 +17,13 @@
 
 <a name="new_SpinalMap_new"></a>
 
-### new SpinalMap()
+### new SpinalMap(init)
 Constructor for the SpinalMap class.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| init | <code>Array.&lt;Array.&lt;String, \*&gt;&gt;</code> | Array of arrays of key-value pairs |
 
 <a name="SpinalMap+setElement"></a>
 
@@ -569,7 +574,7 @@ Recursively applies a function to all the children nodes in the context and retu
 **Kind**: global class  
 
 * [SpinalSet](#SpinalSet)
-    * [new SpinalSet()](#new_SpinalSet_new)
+    * [new SpinalSet(init)](#new_SpinalSet_new)
     * [.add(value)](#SpinalSet+add)
     * [.has(value)](#SpinalSet+has) ⇒ <code>Boolean</code>
     * [.values()](#SpinalSet+values) ⇒ <code>Array.&lt;String&gt;</code>
@@ -580,8 +585,13 @@ Recursively applies a function to all the children nodes in the context and retu
 
 <a name="new_SpinalSet_new"></a>
 
-### new SpinalSet()
+### new SpinalSet(init)
 Constructor for the SpinalSet class.
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| init | <code>Array.&lt;\*&gt;</code> | Array of values |
 
 <a name="SpinalSet+add"></a>
 
