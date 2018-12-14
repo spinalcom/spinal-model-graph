@@ -264,11 +264,13 @@ class SpinalNode extends globalType.Model {
    * @param {SpinalNode} node Node to remove
    * @param {String} relationName Name of the relation to wich the node belongs
    * @param {String} relationType Type of the relation to wich the node belongs
-   * @returns {Promise<Boolean>} A promise containing true if the node was a child
+   * @returns {Promise<nothing>} An empty promise
+   * @throws {Error} If Relation doesn't exist
+   * @throws {Error} If the child doesn't exist
    */
   removeChild(node, relationName, relationType) {
     if (!this.hasRelation(relationName, relationType)) {
-      return Promise.resolve(false);
+      throw Error("The relation doesn't exist");
     }
 
     const rel = this._getRelation(relationName, relationType);
@@ -279,6 +281,7 @@ class SpinalNode extends globalType.Model {
    * Removes children with the relation names.
    * @param {Array<String>} relationNames Names of the relations to empty
    * @returns {Promise<Array<Boolean>>} A promise containing an array of boolean
+   * @throws {Error} If one of the nodes is not a child
    */
   async removeChildren(relationNames) {
     if (relationNames === undefined || relationNames.length === 0) {
@@ -298,9 +301,7 @@ class SpinalNode extends globalType.Model {
       }
     }
 
-    const boolArray = await Promise.all(promises);
-    // Flattens the array
-    return [].concat.apply([], boolArray);
+    await Promise.all(promises);
   }
 
   /**

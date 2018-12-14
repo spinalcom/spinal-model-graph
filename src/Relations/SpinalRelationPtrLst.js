@@ -128,35 +128,35 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
   /**
    * Removes a child from the relation.
    * @param {SpinalNode} node Child to remove
-   * @returns {Promise<Boolean>} A promise containing true if the node was a child
+   * @returns {Promise<nothing>} An empty promise
+   * @throws {Error} If the given node is not a child
    */
   async removeChild(node) {
     const childrenLst = await this.children.load();
 
     if (!childrenLst.contains(node)) {
-      return false;
+      throw Error("Invalid node");
     }
 
     childrenLst.remove(node);
     this.children.info.ids.remove(node.getId());
     node._removeParent(this);
-    return true;
   }
 
   /**
    * Removes children from the relation.
    * @param {Array<SpinalNode>} nodes Childs to remove
-   * @returns {Promise<Array<Boolean>>} A promise containing an array of boolean
+   * @returns {Promise<nothing>} An empty promise
+   * @throws {Error} If one of the nodes is not a child
    */
   async removeChildren(nodes) {
     const childrenLst = await this.children.load();
-    const successful = [];
+    let error = false;
 
     if (nodes === undefined || nodes.length === 0) {
-      const length = childrenLst.length;
       childrenLst.clear();
       this.children.info.ids.clear();
-      return Array(length).fill(true);
+      return;
     }
 
     for (let node of nodes) {
@@ -166,13 +166,14 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
         childrenLst.remove(node);
         this.children.info.ids.remove(node.getId());
         node._removeParent(this);
-        successful.push(true);
       } else {
-        successful.push(false);
+        error = true;
       }
     }
 
-    return successful;
+    if (error) {
+      throw Error("Could not remove all nodes");
+    }
   }
 }
 

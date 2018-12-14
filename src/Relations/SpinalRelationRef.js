@@ -118,17 +118,17 @@ class SpinalRelationRef extends BaseSpinalRelation {
   /**
    * Removes a child from the relation.
    * @param {SpinalNode} node Child to remove
-   * @returns {Promise<Boolean>} A promise containing true if the node was a child
+   * @returns {Promise<nothing>} An empty promise
+   * @throws {Error} If the given node is not a child
    */
   removeChild(node) {
     if (!this.children.contains(node)) {
-      return Promise.resolve(false);
+      return Promise.reject(Error("Invalid node"));
     }
 
     node._removeParent(this);
     this.children.remove(node);
-
-    return Promise.resolve(true);
+    return Promise.resolve();
   }
 }
 
