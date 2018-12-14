@@ -45,7 +45,7 @@ class SpinalNode extends globalType.Model {
    * @param {String} type Type of the node
    * @param {SpinalNode | Model} element Element of the node
    */
-  constructor(name = "undefined", type = "SpinalNode", element = new globalType.Model) {
+  constructor(name = "undefined", type = "SpinalNode", element) {
     super();
     this.add_attr({
       info: {
@@ -55,7 +55,7 @@ class SpinalNode extends globalType.Model {
       },
       parents: new SpinalMap(),
       children: new SpinalMap(),
-      element: new SpinalNodePointer(element),
+      element: (element !== undefined) ? new SpinalNodePointer(element) : undefined,
       contextIds: new SpinalSet()
     });
   }
@@ -89,6 +89,10 @@ class SpinalNode extends globalType.Model {
    * @returns {Promise<*>} A promise where the parameter of the resolve method is the element
    */
   getElement() {
+    if (this.element === undefined) {
+      this.element = new SpinalNodePointer(new globalType.Model());
+    }
+
     return this.element.load();
   }
 
