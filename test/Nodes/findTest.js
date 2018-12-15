@@ -9,12 +9,27 @@ const DEFAULT_NODE_NAME = "nodeName";
 
 describe("How to use find", function() {
   describe("Error handling", function() {
+    it("should throw an error if relationNames is neither an array, a string or omitted", async function() {
+      let error = false;
+
+      try {
+        await DEFAULT_NODE.find(1);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
+
     it("should throw an error if the predicate is not a function", async function() {
       let error = false;
 
-      await DEFAULT_NODE.find(undefined, 64).catch(() => {
+      try {
+        await DEFAULT_NODE.find(undefined, 64);
+      } catch (e) {
         error = true;
-      });
+        assert(e instanceof Error);
+      }
       assert(error);
     });
 
@@ -172,21 +187,42 @@ describe("How to use find", function() {
 
 describe("How to use findInContext", function() {
   describe("Error handling", function() {
-    it("should throw an error if the starting node or the context is missing", async function() {
-      const context = new lib.SpinalContext();
+    it("should throw an error if the context is missing", async function() {
       let error = false;
 
-      error = false;
-      await DEFAULT_NODE.findInContext().catch(() => {
+      try {
+        await DEFAULT_NODE.findInContext();
+      } catch (e) {
         error = true;
-      });
+        assert(e instanceof Error);
+      }
       assert(error);
+    });
 
-      error = false;
-      await DEFAULT_NODE.findInContext(context).catch(() => {
+    it("should throw an error if the context is not a SpinalContext", async function() {
+      const context = new lib.SpinalNode();
+      let error = false;
+
+      try {
+        await DEFAULT_NODE.findInContext(context);
+      } catch (e) {
         error = true;
-      });
-      assert(!error);
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
+
+    it("should throw an error if the predicate is not a function", async function() {
+      const context = new lib.SpinalNode();
+      let error = false;
+
+      try {
+        await DEFAULT_NODE.findInContext(context, 64);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
     });
 
     it("should not fall in infinite loops", async function() {

@@ -495,17 +495,26 @@ class SpinalNode extends globalType.Model {
    * @param {Array<String>} relationNames Array containing the relation names to follow
    * @param {function} predicate Function returning true if the node needs to be returned
    * @returns {Promise<Array<SpinalNode>>} The nodes that were found
+   * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+   * @throws {TypeError} If an element of relationNames is not a string
+   * @throws {TypeError} If the predicate is not a function
    */
   async find(relationNames, predicate = DEFAULT_PREDICATE) {
+    if (!Array.isArray(relationNames) &&
+      relationNames !== undefined &&
+      typeof relationNames !== "string") {
+      throw TypeError("relationNames must be an array, a string or omitted");
+    }
+
     if (typeof predicate !== "function") {
-      throw new Error("predicate must be a function");
+      throw TypeError("predicate must be a function");
     }
 
     let seen = new Set([this]);
     let promises = [];
     let nextGen = [this];
     let currentGen = [];
-    let found = [];
+    const found = [];
 
     while (nextGen.length) {
       currentGen = nextGen;
@@ -550,7 +559,7 @@ class SpinalNode extends globalType.Model {
     let promises = [];
     let nextGen = [this];
     let currentGen = [];
-    let found = [];
+    const found = [];
 
     while (nextGen.length) {
       currentGen = nextGen;

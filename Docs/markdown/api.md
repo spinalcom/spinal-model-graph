@@ -593,6 +593,12 @@ Recursively finds all the children nodes for which the predicate is true.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The nodes that were found  
+**Throws**:
+
+- <code>TypeError</code> If the relationNames are neither an array, a string or omitted
+- <code>TypeError</code> If an element of relationNames is not a string
+- <code>TypeError</code> If the predicate is not a function
+
 
 | Param | Type | Description |
 | --- | --- | --- |
