@@ -730,7 +730,7 @@ Sets pointer to point to an element.
 **Kind**: instance method of [<code>SpinalNodePointer</code>](#SpinalNodePointer)  
 **Throws**:
 
-- <code>Error</code> If the element is not a Model
+- <code>TypeError</code> If the element is not a Model
 
 
 | Param | Type |
@@ -747,7 +747,7 @@ Loads the model to which the pointer is pointing.
 <a name="SpinalNodePointer+unset"></a>
 
 ### spinalNodePointer.unset()
-Unsets the pointer.
+Unsets the pointer. The pointer shouldn't be used after that.
 
 **Kind**: instance method of [<code>SpinalNodePointer</code>](#SpinalNodePointer)  
 <a name="SpinalNodePointer+getId"></a>

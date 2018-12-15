@@ -9,26 +9,31 @@ const DEFAULT_MODEL = new globalType.Model();
 
 describe("SpinalNodePointer", function() {
   describe("How to create a SpinalNodePointer", function() {
-    it("should create a SpinalNodePointer with correct default values if no node is given", function() {
-      let ptr = new SpinalNodePointer();
+    it("should create a SpinalNodePointer with correct default values if a Model is given", function() {
+      const ptr = new SpinalNodePointer(new globalType.Model());
 
       assert.strictEqual(typeof ptr.getId(), "undefined");
       assert.strictEqual(typeof ptr.getType(), "undefined");
     });
 
     it("should create a SpinalNodePointer with correct default values if a node is given", function() {
-      let ptr = new SpinalNodePointer(DEFAULT_NODE);
+      const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
       assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
       assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
     });
 
-    // it("should throw an error if no element is given", function() {
-    //   let ptr = new SpinalNodePointer(DEFAULT_NODE);
+    it("should throw an error if no element is given", function() {
+      let error = false;
 
-    //   assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
-    //   assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
-    // });
+      try {
+        new SpinalNodePointer();
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
   });
 
   describe("How to set/unset the pointer", function() {

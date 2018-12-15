@@ -23,7 +23,9 @@
  */
 
 import spinalCore from "spinal-core-connectorjs";
-import SpinalNode from "./Nodes/SpinalNode";
+import {
+  SpinalNode
+} from "./index";
 
 const globalType = typeof window === "undefined" ? global : window;
 
@@ -34,6 +36,7 @@ class SpinalNodePointer extends globalType.Model {
   /**
    * Constructor for the SpinalNodePointer class.
    * @param {SpinalNode | Model} element Element to wich the SpinalNodePointer will point
+   * @throws {TypeError} If the element is not a Model
    */
   constructor(element) {
     super();
@@ -49,12 +52,11 @@ class SpinalNodePointer extends globalType.Model {
   /**
    * Sets pointer to point to an element.
    * @param {SpinalNode | Model} element
-   * @throws {Error} If the element is not a Model
+   * @throws {TypeError} If the element is not a Model
    */
   setElement(element) {
     if (!(element instanceof globalType.Model)) {
-      console.log("element: ", element);
-      throw Error("The pointed value must be a Model");
+      throw TypeError("The pointed value must be a Model");
     }
 
     if (element instanceof SpinalNode) {
@@ -76,7 +78,7 @@ class SpinalNodePointer extends globalType.Model {
   }
 
   /**
-   * Unsets the pointer.
+   * Unsets the pointer. The pointer shouldn't be used after that.
    */
   unset() {
     this.info.rem_attr("pointedId");
