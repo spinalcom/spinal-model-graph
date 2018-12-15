@@ -1139,6 +1139,11 @@ Adds a child to the relation.
 
 **Kind**: instance method of [<code>SpinalRelationRef</code>](#SpinalRelationRef)  
 **Returns**: <code>Promise.&lt;SpinalNode&gt;</code> - Promise containing the node that was added  
+**Throws**:
+
+- <code>TypeError</code> If the node is not a Model
+- <code>Error</code> If the node is already a child of the relation
+
 
 | Param | Type | Description |
 | --- | --- | --- |

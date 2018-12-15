@@ -21,11 +21,14 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
+
 import BaseSpinalRelation from "./BaseSpinalRelation";
 import {
   SPINAL_RELATION_TYPE
 } from "./SpinalRelationFactory";
-import SpinalNode from "../Nodes/SpinalNode";
+import {
+  SpinalNode
+} from "../index";
 import spinalCore from "spinal-core-connectorjs";
 
 const globalType = typeof window === "undefined" ? global : window;
@@ -51,9 +54,11 @@ class SpinalRelationRef extends BaseSpinalRelation {
    */
   getChildrenIds() {
     const res = [];
+
     for (let i = 0; i < this.children.length; i++) {
       res.push(this.children[i].getId().get());
     }
+
     return res;
   }
 
@@ -67,6 +72,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
     for (let i = 0; i < this.children.length; i++) {
       children.push(this.children[i]);
     }
+
     return Promise.resolve(children);
   }
 
@@ -85,6 +91,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
         children.push(child);
       }
     }
+
     return Promise.resolve(children);
   }
 
@@ -100,15 +107,18 @@ class SpinalRelationRef extends BaseSpinalRelation {
    * Adds a child to the relation.
    * @param {SpinalNode | Model} node Node or model to add
    * @returns {Promise<SpinalNode>} Promise containing the node that was added
+   * @throws {TypeError} If the node is not a Model
+   * @throws {Error} If the node is already a child of the relation
    */
   async addChild(node) {
     if (!(node instanceof globalType.Model)) {
-      throw new Error(
+      throw new TypeError(
         "Cannot add a child witch is not an instance of SpinalNode or Model."
       );
     } else if (!(node instanceof SpinalNode)) {
       node = new SpinalNode(undefined, undefined, node);
     }
+
     if (this.getChildrenIds().includes(node.getId().get())) {
       throw new Error("Cannot add a child twice to the same relation.");
     }
@@ -126,7 +136,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
    */
   removeChild(node) {
     if (!this.children.contains(node)) {
-      return Promise.reject(Error("Invalid node"));
+      return Promise.reject(Error("The node is not a child"));
     }
 
     node._removeParent(this);
