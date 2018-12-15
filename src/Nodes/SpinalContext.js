@@ -30,8 +30,6 @@ import {
   guid
 } from "../Utilities";
 
-const globalType = typeof window === "undefined" ? global : window;
-
 class SpinalContext extends SpinalNode {
   /**
    * Constructor for the SpinalContext class.
@@ -39,42 +37,10 @@ class SpinalContext extends SpinalNode {
    * @param {String} type Type of the context, usually unused
    * @param {SpinalNode | Model} element Element of the context, usually unused
    */
-  constructor(name = "undefined", type = "SpinalContext", element = new globalType
-    .Model) {
+  constructor(name, type = "SpinalContext", element) {
     super(name, type, element);
-    this.add_attr({
-      relationNames: new globalType.Lst()
-    });
+
     this.info.id.set(guid(this.constructor.name));
-  }
-
-  /**
-   * Returns the relation names of the context.
-   * @returns {Lst<Str>} The relation names that the context knows
-   */
-  getRelationNames() {
-    return this.relationNames;
-  }
-
-  /**
-   * Adds relation names to the relation names known by the context.
-   * @param {Array<String> | String} relationNames Names of the relations
-   * @returns {Boolean} Return false if all the relation names are already known
-   */
-  addRelationNames(relationNames) {
-    let result = false;
-
-    if (typeof relationNames === "string") {
-      relationNames = [relationNames];
-    }
-
-    for (let name of relationNames) {
-      if (!this.relationNames.contains(name)) {
-        this.relationNames.push(name);
-        result = true;
-      }
-    }
-    return result;
   }
 
   /**
@@ -83,6 +49,8 @@ class SpinalContext extends SpinalNode {
    * @param {String} relationName Name of the relation
    * @param {String} relationType This parameter is here only to properly override the parent method
    * @returns {Promise<SpinalNode>} The child node in a promise
+   * @throws {TypeError} If the child is not a model
+   * @throws {TypeError} If the relation name is not a string
    */
   addChild(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE) {
     return super.addChild(child, relationName, SPINAL_RELATION_PTR_LST_TYPE);
@@ -97,8 +65,7 @@ class SpinalContext extends SpinalNode {
    * @returns {Promise<SpinalNode>} The child node in a promise
    */
   addChildInContext(child, relationName, relationType = SPINAL_RELATION_PTR_LST_TYPE, context = this) {
-    return super.addChildInContext(child, relationName,
-      SPINAL_RELATION_PTR_LST_TYPE, context);
+    return super.addChildInContext(child, relationName, SPINAL_RELATION_PTR_LST_TYPE, context);
   }
 
   /**

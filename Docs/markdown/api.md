@@ -141,8 +141,6 @@ Applies a function to each of the values in the map.
 
 * [SpinalContext](#SpinalContext)
     * [new SpinalContext(name, type, element)](#new_SpinalContext_new)
-    * [.getRelationNames()](#SpinalContext+getRelationNames) ⇒ <code>Lst.&lt;Str&gt;</code>
-    * [.addRelationNames(relationNames)](#SpinalContext+addRelationNames) ⇒ <code>Boolean</code>
     * [.addChild(child, relationName, relationType)](#SpinalContext+addChild) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
     * [.addChildInContext(child, relationName, relationType, context)](#SpinalContext+addChildInContext) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
     * [.getChildrenInContext(context)](#SpinalContext+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
@@ -155,28 +153,9 @@ Constructor for the SpinalContext class.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| name | <code>String</code> | <code>undefined</code> | Name of the context |
+| name | <code>String</code> |  | Name of the context |
 | type | <code>String</code> | <code>SpinalContext</code> | Type of the context, usually unused |
 | element | <code>SpinalNode</code> \| <code>Model</code> |  | Element of the context, usually unused |
-
-<a name="SpinalContext+getRelationNames"></a>
-
-### spinalContext.getRelationNames() ⇒ <code>Lst.&lt;Str&gt;</code>
-Returns the relation names of the context.
-
-**Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
-**Returns**: <code>Lst.&lt;Str&gt;</code> - The relation names that the context knows  
-<a name="SpinalContext+addRelationNames"></a>
-
-### spinalContext.addRelationNames(relationNames) ⇒ <code>Boolean</code>
-Adds relation names to the relation names known by the context.
-
-**Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
-**Returns**: <code>Boolean</code> - Return false if all the relation names are already known  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| relationNames | <code>Array.&lt;String&gt;</code> \| <code>String</code> | Names of the relations |
 
 <a name="SpinalContext+addChild"></a>
 
@@ -185,6 +164,11 @@ Adds a child with a SpinalRelationLstPtrType.
 
 **Kind**: instance method of [<code>SpinalContext</code>](#SpinalContext)  
 **Returns**: <code>Promise.&lt;SpinalNode&gt;</code> - The child node in a promise  
+**Throws**:
+
+- <code>TypeError</code> If the child is not a model
+- <code>TypeError</code> If the relation name is not a string
+
 
 | Param | Type | Description |
 | --- | --- | --- |
