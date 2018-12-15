@@ -39,9 +39,10 @@ class SpinalGraph extends SpinalNode {
    * Constructor for the SpinalGraph class.
    * @param {String} name Name of the graph, usually unused
    * @param {String} type Type of the graph, usually unused
-   * @param {SpinalNode | Model} element Element of the graph, usually unused
+   * @param {SpinalNode | Model} element Element of the graph
+   * @throws {TypeError} If the element is not a Model
    */
-  constructor(name = "undefined", type = "SpinalGraph", element = new globalType.Model) {
+  constructor(name, type = "SpinalGraph", element) {
     super(name, type, element);
 
     this.info.id.set(guid(this.constructor.name));
@@ -50,24 +51,29 @@ class SpinalGraph extends SpinalNode {
   /**
    * Adds a context to the graph.
    * @param {SpinalContext} context Context to be added
-   * @returns {Promise<nothing>} An empty promise
+   * @returns {Promise<SpinalContext>} The added context
+   * @throws {TypeError} If the context is not a context
    */
   async addContext(context) {
-    if (context instanceof SpinalContext) {
-      return this.addChild(context, HAS_CONTEXT_RELATION_NAME, SPINAL_RELATION_TYPE);
-    } else {
-      throw new Error("Cannot add an element which is not a context");
+    if (!(context instanceof SpinalContext)) {
+      throw new TypeError("context must be a context");
     }
+
+    return this.addChild(context, HAS_CONTEXT_RELATION_NAME, SPINAL_RELATION_TYPE);
   }
 
   /**
    * Searches for a context using its name.
    * @param {String} name Name of the context
    * @returns {SpinalContext | undefined} The wanted context or undefined
+   * @throws {TypeError} If name is not a string
    */
   async getContext(name) {
-    let children = await this.getChildren([HAS_CONTEXT_RELATION_NAME]);
+    if (typeof name !== "string") {
+      throw TypeError("name must be string");
+    }
 
+    const children = await this.getChildren([HAS_CONTEXT_RELATION_NAME]);
     return children.find(child => child.info.name.get() === name);
   }
 

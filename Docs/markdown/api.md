@@ -150,12 +150,16 @@ Applies a function to each of the values in the map.
 ### new SpinalContext(name, type, element)
 Constructor for the SpinalContext class.
 
+**Throws**:
+
+- <code>TypeError</code> If the element is not a Model
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | name | <code>String</code> |  | Name of the context |
 | type | <code>String</code> | <code>SpinalContext</code> | Type of the context, usually unused |
-| element | <code>SpinalNode</code> \| <code>Model</code> |  | Element of the context, usually unused |
+| element | <code>SpinalNode</code> \| <code>Model</code> |  | Element of the context |
 
 <a name="SpinalContext+addChild"></a>
 
@@ -210,7 +214,7 @@ Return the children of the node that are registered in the context
 
 * [SpinalGraph](#SpinalGraph)
     * [new SpinalGraph(name, type, element)](#new_SpinalGraph_new)
-    * [.addContext(context)](#SpinalGraph+addContext) ⇒ <code>Promise.&lt;nothing&gt;</code>
+    * [.addContext(context)](#SpinalGraph+addContext) ⇒ <code>Promise.&lt;SpinalContext&gt;</code>
     * [.getContext(name)](#SpinalGraph+getContext) ⇒ <code>SpinalContext</code> \| <code>undefined</code>
     * [.removeFromGraph()](#SpinalGraph+removeFromGraph) ⇒ <code>Promise.&lt;nothing&gt;</code>
 
@@ -219,20 +223,28 @@ Return the children of the node that are registered in the context
 ### new SpinalGraph(name, type, element)
 Constructor for the SpinalGraph class.
 
+**Throws**:
+
+- <code>TypeError</code> If the element is not a Model
+
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| name | <code>String</code> | <code>undefined</code> | Name of the graph, usually unused |
+| name | <code>String</code> |  | Name of the graph, usually unused |
 | type | <code>String</code> | <code>SpinalGraph</code> | Type of the graph, usually unused |
-| element | <code>SpinalNode</code> \| <code>Model</code> |  | Element of the graph, usually unused |
+| element | <code>SpinalNode</code> \| <code>Model</code> |  | Element of the graph |
 
 <a name="SpinalGraph+addContext"></a>
 
-### spinalGraph.addContext(context) ⇒ <code>Promise.&lt;nothing&gt;</code>
+### spinalGraph.addContext(context) ⇒ <code>Promise.&lt;SpinalContext&gt;</code>
 Adds a context to the graph.
 
 **Kind**: instance method of [<code>SpinalGraph</code>](#SpinalGraph)  
-**Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
+**Returns**: <code>Promise.&lt;SpinalContext&gt;</code> - The added context  
+**Throws**:
+
+- <code>TypeError</code> If the context is not a context
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -245,6 +257,10 @@ Searches for a context using its name.
 
 **Kind**: instance method of [<code>SpinalGraph</code>](#SpinalGraph)  
 **Returns**: <code>SpinalContext</code> \| <code>undefined</code> - The wanted context or undefined  
+**Throws**:
+
+- <code>TypeError</code> If name is not a string
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -295,6 +311,10 @@ Empty override of the SpinalNode method.
 
 ### new SpinalNode(name, type, element)
 Constructor for the SpinalNode class.
+
+**Throws**:
+
+- <code>TypeError</code> If the element is not a Model
 
 
 | Param | Type | Default | Description |

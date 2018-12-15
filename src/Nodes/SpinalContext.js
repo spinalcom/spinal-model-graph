@@ -35,7 +35,8 @@ class SpinalContext extends SpinalNode {
    * Constructor for the SpinalContext class.
    * @param {String} name Name of the context
    * @param {String} type Type of the context, usually unused
-   * @param {SpinalNode | Model} element Element of the context, usually unused
+   * @param {SpinalNode | Model} element Element of the context
+   * @throws {TypeError} If the element is not a Model
    */
   constructor(name, type = "SpinalContext", element) {
     super(name, type, element);

@@ -51,6 +51,7 @@ class SpinalNode extends globalType.Model {
    * @param {string} name Name of the node
    * @param {string} type Type of the node
    * @param {SpinalNode | Model} element Element of the node
+   * @throws {TypeError} If the element is not a Model
    */
   constructor(name = "undefined", type = "SpinalNode", element) {
     super();
