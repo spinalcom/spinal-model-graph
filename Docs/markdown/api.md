@@ -291,6 +291,7 @@ Empty override of the SpinalNode method.
     * [.belongsToContext(context)](#SpinalNode+belongsToContext) ⇒ <code>Boolean</code>
     * [.hasRelation(relationName, relationType)](#SpinalNode+hasRelation) ⇒ <code>Boolean</code>
     * [.hasRelations(relationNames, relationType)](#SpinalNode+hasRelations) ⇒ <code>Boolean</code>
+    * [.getRelationNames()](#SpinalNode+getRelationNames) ⇒ <code>Array.&lt;String&gt;</code>
     * [.addChild(child, relationName, relationType)](#SpinalNode+addChild) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
     * [.addChildInContext(child, relationName, relationType, context)](#SpinalNode+addChildInContext) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
     * [.removeChild(node, relationName, relationType)](#SpinalNode+removeChild) ⇒ <code>Promise.&lt;nothing&gt;</code>
@@ -314,8 +315,8 @@ Constructor for the SpinalNode class.
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
-| name | <code>String</code> | <code>undefined</code> | Name of the node |
-| type | <code>String</code> | <code>SpinalNode</code> | Type of the node |
+| name | <code>string</code> | <code>&quot;undefined&quot;</code> | Name of the node |
+| type | <code>string</code> | <code>&quot;SpinalNode&quot;</code> | Type of the node |
 | element | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> |  | Element of the node |
 
 <a name="SpinalNode+getId"></a>
@@ -366,10 +367,14 @@ Computes and returns the number of children of the node.
 Adds an id to the context ids of the node.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Throws**:
+
+- <code>TypeError</code> If the id is not a string
+
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>String</code> | Id of the context |
+| id | <code>string</code> | Id of the context |
 
 <a name="SpinalNode+getContextIds"></a>
 
@@ -385,6 +390,10 @@ Returns true if the node belongs to the context.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Boolean</code> - A boolean  
+**Throws**:
+
+- <code>TypeError</code> If context is not a SpinalContext
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -397,11 +406,16 @@ Verify if the node contains the relation name.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Boolean</code> - Return true is the relation is contained in the node and false otherwise.  
+**Throws**:
+
+- <code>TypeError</code> If the relation name is not a string
+- <code>Error</code> If the relation type doesn't exist
+
 
 | Param | Type | Description |
 | --- | --- | --- |
-| relationName | <code>String</code> | Name of the relation |
-| relationType | <code>String</code> | Type of the relation |
+| relationName | <code>string</code> | Name of the relation |
+| relationType | <code>string</code> | Type of the relation |
 
 <a name="SpinalNode+hasRelations"></a>
 
@@ -410,12 +424,25 @@ Verify if the node contains all the relation names.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Boolean</code> - Return true if the node contains all the relations in relationNames, false otherwise.  
+**Throws**:
+
+- <code>TypeError</code> If the relation names are not in an array
+- <code>TypeError</code> If one of the relation names is not a string
+- <code>Error</code> If the relation type doesn't exist
+
 
 | Param | Type | Description |
 | --- | --- | --- |
 | relationNames | <code>Array.&lt;String&gt;</code> | Array containing all the relation name |
-| relationType | <code>String</code> | Type of the relations |
+| relationType | <code>string</code> | Type of the relations |
 
+<a name="SpinalNode+getRelationNames"></a>
+
+### spinalNode.getRelationNames() ⇒ <code>Array.&lt;String&gt;</code>
+Returns all the relation names of the node.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: <code>Array.&lt;String&gt;</code> - The names of the relations of the node  
 <a name="SpinalNode+addChild"></a>
 
 ### spinalNode.addChild(child, relationName, relationType) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
@@ -423,12 +450,18 @@ Add the node as child of the relation.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode) - The child node in a promise  
+**Throws**:
+
+- <code>TypeError</code> If the child is not a model
+- <code>TypeError</code> If the relation name is not a string
+- <code>Error</code> If the relation type is invalid
+
 
 | Param | Type | Description |
 | --- | --- | --- |
 | child | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> | Element to add as child |
-| relationName | <code>String</code> | Name of the relation |
-| relationType | <code>String</code> | Type of the relation |
+| relationName | <code>string</code> | Name of the relation |
+| relationType | <code>string</code> | Type of the relation |
 
 <a name="SpinalNode+addChildInContext"></a>
 
@@ -437,12 +470,19 @@ Adds a child and notices the context if a new relation was created.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode) - The child node in a promise  
+**Throws**:
+
+- <code>TypeError</code> If the child is not a model
+- <code>TypeError</code> If the relation name is not a string
+- <code>TypeError</code> If the context is not a SpinalContext
+- <code>Error</code> If the relation type is invalid
+
 
 | Param | Type | Description |
 | --- | --- | --- |
 | child | [<code>SpinalNode</code>](#SpinalNode) \| <code>Model</code> | Node to add as child |
-| relationName | <code>String</code> | Name of the relation |
-| relationType | <code>String</code> | Type of the relation |
+| relationName | <code>string</code> | Name of the relation |
+| relationType | <code>string</code> | Type of the relation |
 | context | <code>SpinalContext</code> | Context to update |
 
 <a name="SpinalNode+removeChild"></a>
@@ -454,15 +494,17 @@ Removes the node from the relation children.
 **Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
 **Throws**:
 
-- <code>Error</code> If Relation doesn't exist
+- <code>TypeError</code> If relation name is not a string
+- <code>Error</code> If relation type is invalid
+- <code>Error</code> If relation doesn't exist
 - <code>Error</code> If the child doesn't exist
 
 
 | Param | Type | Description |
 | --- | --- | --- |
 | node | [<code>SpinalNode</code>](#SpinalNode) | Node to remove |
-| relationName | <code>String</code> | Name of the relation to wich the node belongs |
-| relationType | <code>String</code> | Type of the relation to wich the node belongs |
+| relationName | <code>string</code> | Name of the relation to wich the node belongs |
+| relationType | <code>string</code> | Type of the relation to wich the node belongs |
 
 <a name="SpinalNode+removeChildren"></a>
 
@@ -473,12 +515,13 @@ Removes children with the relation names.
 **Returns**: <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code> - A promise containing an array of boolean  
 **Throws**:
 
-- <code>Error</code> If one of the nodes is not a child
+- <code>TypeError</code> If relationNames is neither an array, a string or omitted
+- <code>TypeError</code> If an element of relationNames is not a string
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| relationNames | <code>Array.&lt;String&gt;</code> | Names of the relations to empty |
+| relationNames | <code>Array.&lt;String&gt;</code> \| <code>String</code> \| <code>undefined</code> | Names of the relations to empty |
 
 <a name="SpinalNode+removeFromGraph"></a>
 
@@ -496,6 +539,11 @@ Returns the children of the node for the relation names.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The children that were found  
+**Throws**:
+
+- <code>TypeError</code> If relationNames is neither an array, a string or omitted
+- <code>TypeError</code> If an element of relationNames is not a string
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -508,6 +556,10 @@ Return the children of the node that are registered in the context
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The children that were found  
+**Throws**:
+
+- <code>TypeError</code> If the context is not a SpinalContext
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -520,6 +572,11 @@ Return all parents for the relation names no matter the type of relation
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - Promise containing the parents that were found  
+**Throws**:
+
+- <code>TypeError</code> If the relationNames are neither an array, a string or omitted
+- <code>TypeError</code> If an element of relationNames is not a string
+
 
 | Param | Type | Description |
 | --- | --- | --- |

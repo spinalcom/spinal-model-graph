@@ -67,8 +67,7 @@ describe("SpinalNode", function() {
     });
 
     it('should create a new SpinalNode with specific name, type and element', async function() {
-      const node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME,
-        CUSTOM_SPINAL_NODE_TYPE, new lib.SpinalNode());
+      const node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE, new lib.SpinalNode());
 
       assert.strictEqual(
         node.getName().get(),
@@ -114,10 +113,9 @@ describe("SpinalNode", function() {
       });
     });
 
-    describe("How to getElement the element of a spinal node", function() {
+    describe("How to getElement", function() {
       it('should return the DEFAULT_ELEMENT', async function() {
-        let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME,
-          CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
+        let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
 
         const elt = await node.getElement();
         assert.strictEqual(
@@ -153,616 +151,1101 @@ describe("SpinalNode", function() {
           parent.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE)
         ]);
 
-        // assert.deepStrictEqual(parent.getChildrenIds(), childrenIds);
+        assert.deepStrictEqual(parent.getChildrenIds(), childrenIds);
       });
     });
 
-    //   describe("How to use getNbChildren", function() {
-    //     it("should return 0", function() {
-    //       let node = new lib.SpinalNode();
-    //       let res = node.getNbChildren();
+    describe("How to use getNbChildren", function() {
+      it("should return 0", function() {
+        const node = new lib.SpinalNode();
+        const res = node.getNbChildren();
 
-    //       assert.strictEqual(res, 0);
-    //     });
+        assert.strictEqual(res, 0);
+      });
 
-    //     it("should return 3", function() {
-    //       let node = new lib.SpinalNode();
-    //       let child1 = new lib.SpinalNode();
-    //       let child2 = new lib.SpinalNode();
-    //       let child3 = new lib.SpinalNode();
-    //       let res;
+      it("should return 3", function() {
+        const node = new lib.SpinalNode();
+        const child1 = new lib.SpinalNode();
+        const child2 = new lib.SpinalNode();
+        const child3 = new lib.SpinalNode();
 
-    //       node.addChild(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-    //       node.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-    //       node.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-    //       res = node.getNbChildren();
-    //       assert.strictEqual(res, 3);
-    //     });
+        node.addChild(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        node.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        node.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        const res = node.getNbChildren();
+        assert.strictEqual(res, 3);
+      });
 
-    //     it("should return 2", async function() {
-    //       let node = new lib.SpinalNode();
-    //       let child1 = new lib.SpinalNode();
-    //       let child2 = new lib.SpinalNode();
-    //       let child3 = new lib.SpinalNode();
-    //       let res;
+      it("should return 2", async function() {
+        const node = new lib.SpinalNode();
+        const child1 = new lib.SpinalNode();
+        const child2 = new lib.SpinalNode();
+        const child3 = new lib.SpinalNode();
 
-    //       await Promise.all([
-    //         node.addChild(child1, DEFAULT_RELATION_NAME,
-    //           lib.SPINAL_RELATION_TYPE),
-    //         node.addChild(child2, DEFAULT_RELATION_NAME,
-    //           lib.SPINAL_RELATION_TYPE),
-    //         node.addChild(child3, DEFAULT_RELATION_NAME,
-    //           lib.SPINAL_RELATION_TYPE)
-    //       ]);
-    //       await node.removeChild(child2, DEFAULT_RELATION_NAME,
-    //         lib.SPINAL_RELATION_TYPE);
-    //       res = node.getNbChildren();
-    //       assert.strictEqual(res, 2);
-    //     });
-    //   });
+        await Promise.all([
+          node.addChild(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          node.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          node.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE)
+        ]);
 
-    //   describe("How to use addContextId and getContextId", function() {
-    //     it("should get the ids of the associated contexts", function() {
-    //       let node = new lib.SpinalNode();
-    //       let contextId1 = new lib.SpinalContext().getId().get();
-    //       let contextId2 = new lib.SpinalContext().getId().get();
+        await node.removeChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        const res = node.getNbChildren();
+        assert.strictEqual(res, 2);
+      });
+    });
 
-    //       node.addContextId(contextId1);
+    describe("How to use addContextId and getContextId", function() {
+      it("should get the ids of the associated contexts", function() {
+        const node = new lib.SpinalNode();
+        const contextId1 = new lib.SpinalContext().getId().get();
+        const contextId2 = new lib.SpinalContext().getId().get();
 
-    //       assert.deepStrictEqual(node.getContextIds(), [
-    //         contextId1
-    //       ]);
+        node.addContextId(contextId1);
 
-    //       node.addContextId(contextId1);
-    //       node.addContextId(contextId2);
+        assert.deepStrictEqual(node.getContextIds(), [
+          contextId1
+        ]);
 
-    //       assert.deepStrictEqual(node.getContextIds(), [
-    //         contextId1, contextId2
-    //       ]);
-    //     });
-    //   });
+        node.addContextId(contextId1);
+        node.addContextId(contextId2);
 
-    //   describe("How to use belongsToContext", function() {
-    //     it("should return true", async function() {
-    //       let context = new lib.SpinalContext();
-    //       let parent = new lib.SpinalNode();
-    //       let child = new lib.SpinalNode();
+        assert.deepStrictEqual(node.getContextIds(), [
+          contextId1, contextId2
+        ]);
+      });
 
-    //       await parent.addChildInContext(child,
-    //         DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE,
-    //         context);
+      it("should throw an error if the id is missing", function() {
+        const node = new lib.SpinalNode();
+        let error = false;
 
-    //       assert(child.belongsToContext(context));
-    //     });
+        try {
+          node.addContextId();
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
 
-    //     it("should return false", function() {
-    //       let context = new lib.SpinalContext();
-    //       let node = new lib.SpinalNode();
+      it("should throw an error if the id is not a string", function() {
+        const node = new lib.SpinalNode();
+        let error = false;
 
-    //       assert(!node.belongsToContext(context));
-    //     });
-    //   });
+        try {
+          node.addContextId(contextId1.getId());
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+    });
+
+    describe("How to use belongsToContext", function() {
+      it("should return true", async function() {
+        const context = new lib.SpinalContext();
+        const parent = new lib.SpinalNode();
+        const child = new lib.SpinalNode();
+
+        await parent.addChildInContext(child, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
+
+        assert(child.belongsToContext(context));
+      });
+
+      it("should return false", function() {
+        const context = new lib.SpinalContext();
+        const node = new lib.SpinalNode();
+
+        assert(!node.belongsToContext(context));
+      });
+
+      it("should throw an error if the context is missing", function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          assert(!node.belongsToContext(context));
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the context is missing", function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          assert(!node.belongsToContext(1));
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+    });
   });
 
-  // describe("How to get information about the node's relations", function() {
-  //   describe("How to use hasRelation", function() {
-  //     it('should return true', async function() {
-  //       let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME,
-  //         CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
-
-  //       await node.addChild(DEFAULT_NODE,
-  //         DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-  //       assert.strictEqual(node.hasRelation(
-  //         DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE
-  //       ), true);
-  //     });
-
-  //     it('should return false', async function() {
-  //       let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME,
-  //         CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
-
-  //       await node.addChild(DEFAULT_NODE,
-  //         DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-  //       assert.strictEqual(node.hasRelation(
-  //         CUSTOM_RELATION_NAME1, lib.SPINAL_RELATION_TYPE
-  //       ), false);
-  //     });
-  //   });
-
-  //   describe("How to use hasRelations", function() {
-  //     it("should return true", async function() {
-  //       let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_TYPE,
-  //         DEFAULT_ELEMENT);
-
-  //       await Promise.all([
-  //         node.addChild(DEFAULT_NODE,
-  //           DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE
-  //         ),
-  //         node.addChild(DEFAULT_NODE,
-  //           CUSTOM_RELATION_NAME1, lib.SPINAL_RELATION_TYPE
-  //         )
-  //       ]);
-  //       assert.strictEqual(node.hasRelations([
-  //         DEFAULT_RELATION_NAME, CUSTOM_RELATION_NAME1
-  //       ], lib.SPINAL_RELATION_TYPE), true);
-
-  //     });
-
-  //     it("should return false", async function() {
-  //       let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME,
-  //         CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
-
-  //       await Promise.all([
-  //         node.addChild(DEFAULT_NODE,
-  //           DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE
-  //         ),
-  //         node.addChild(DEFAULT_NODE,
-  //           CUSTOM_RELATION_NAME1, lib.SPINAL_RELATION_TYPE
-  //         ),
-  //       ]);
-
-  //       assert.strictEqual(node.hasRelations([
-  //         CUSTOM_RELATION_NAME2, CUSTOM_RELATION_NAME1
-  //       ], lib.SPINAL_RELATION_TYPE), false);
-  //     });
-  //   });
-
-  //   describe("How to use getRelationNames", function() {
-  //     it("should return no name", function() {
-  //       let node = new lib.SpinalNode();
-
-  //       assert.deepStrictEqual(node.getRelationNames(), []);
-  //     });
-
-  //     it("should return all relation names", async function() {
-  //       let node = new lib.SpinalNode();
-  //       let child1 = new lib.SpinalNode();
-  //       let child2 = new lib.SpinalNode();
-  //       let child3 = new lib.SpinalNode();
-  //       let child4 = new lib.SpinalNode();
-  //       let child5 = new lib.SpinalNode();
-
-  //       await Promise.all([
-  //         node.addChild(child1, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_LST_PTR_TYPE),
-  //         node.addChild(child2, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_LST_PTR_TYPE),
-  //         node.addChild(child3, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_LST_PTR_TYPE),
-  //         node.addChild(child4, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_LST_PTR_TYPE),
-  //         node.addChild(child5, DEFAULT_RELATION_NAME + "4", lib.SPINAL_RELATION_LST_PTR_TYPE),
-  //       ]);
-  //       assert.deepStrictEqual(
-  //         node.getRelationNames(),
-  //         [
-  //           DEFAULT_RELATION_NAME + "1",
-  //           DEFAULT_RELATION_NAME + "2",
-  //           DEFAULT_RELATION_NAME + "4",
-  //         ]
-  //       );
-  //     });
-
-  //     it("shouldn't return duplicates if there are different relation with the same names but different types", async function() {
-  //       let node = new lib.SpinalNode();
-  //       let child1 = new lib.SpinalNode();
-  //       let child2 = new lib.SpinalNode();
-  //       let child3 = new lib.SpinalNode();
-
-  //       await Promise.all([
-  //         node.addChild(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-  //         node.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE),
-  //         node.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE),
-  //       ]);
-  //       assert.deepStrictEqual(
-  //         node.getRelationNames(),
-  //         [
-  //           DEFAULT_RELATION_NAME,
-  //         ]
-  //       );
-  //     });
-  //   });
-  // });
-
-  // describe("How to add a child to the node", function() {
-  //   describe("How to use addChild", function() {
-  //     it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', async function() {
-  //       let node = new lib.SpinalNode();
-
-  //       await node.addChild(DEFAULT_NODE,
-  //         DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-  //       assert.strictEqual(typeof node !== "undefined", true);
-  //       assert.strictEqual(node.hasRelation(
-  //         DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE
-  //       ), true);
-
-  //       const children = await node.getChildren([
-  //         DEFAULT_RELATION_NAME
-  //       ]);
-
-  //       assert.strictEqual(children.length, 1);
-  //       assert.strictEqual(children[0], DEFAULT_NODE);
-  //     });
-
-  //     it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', async function() {
-  //       let node = new lib.SpinalNode();
-
-  //       node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME,
-  //         lib.SPINAL_RELATION_PTR_LST_TYPE);
-  //       assert.strictEqual(typeof node !== "undefined", true);
-  //       assert.strictEqual(node.hasRelation(
-  //         DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE
-  //       ), true);
-
-  //       const children = await node.getChildren([
-  //         DEFAULT_RELATION_NAME
-  //       ]);
-
-  //       assert.strictEqual(children.length, 1);
-  //       assert.strictEqual(children[0], DEFAULT_NODE);
-  //     });
-
-  //     it('should add a child to the node with a relation type SPINAL_RELATION_LST_PTR_TYPE', async function() {
-  //       let node = new lib.SpinalNode();
-
-  //       await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE);
-  //       assert.strictEqual(typeof node !== "undefined", true);
-  //       assert.strictEqual(node.hasRelation(
-  //         DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE
-  //       ), true);
-
-  //       const children = await node.getChildren([
-  //         DEFAULT_RELATION_NAME
-  //       ]);
-
-  //       assert.strictEqual(children.length, 1);
-  //       assert.strictEqual(children[0], DEFAULT_NODE);
-  //     });
-
-  //     it("should throw an error if you try to add the same node twice", async function() {
-  //       let node = new lib.SpinalNode(DEFAULT_RELATION_NAME);
-  //       let error;
-
-  //       await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-  //       await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE).catch(() => {
-  //         error = true;
-  //       });
-  //       assert(error);
-  //     });
-
-  //     it("should throw an error when you pass it something that is not a model", async function() {
-  //       let node = new lib.SpinalNode(DEFAULT_RELATION_NAME);
-  //       let error = false;
-
-  //       await node.addChild(new Array(), DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE).catch(() => {
-  //         error = true;
-  //       });
-  //       assert(error);
-  //     });
-
-  //     it("should return the node added to the relation", async function() {
-  //       let node = new lib.SpinalNode(DEFAULT_RELATION_NAME);
-  //       let childNode = new lib.SpinalNode();
-  //       let childModel = new globalType.Model();
-
-  //       const res1 = await node.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-
-  //       assert.strictEqual(res1, childNode);
-
-  //       const res2 = await node.addChild(childModel, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-  //       const res2Elem = await res2.getElement();
-
-  //       assert.strictEqual(res2Elem, childModel);
-  //     });
-  //   });
-
-  //   describe("How to use addChildInContext", function() {
-  //     it("Should add a child to a node", async function() {
-  //       let node = new lib.SpinalNode();
-  //       let context = new lib.SpinalContext();
-
-  //       await node.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
-  //       assert.strictEqual(typeof node !== "undefined", true);
-  //       assert.strictEqual(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
-
-  //       const children = await node.getChildren([DEFAULT_RELATION_NAME]);
-
-  //       assert.strictEqual(children.length, 1);
-  //       assert.strictEqual(children[0], DEFAULT_NODE);
-  //     });
-
-  //     it("Shoud add a child and associate it to the context", async function() {
-  //       let context = new lib.SpinalContext();
-  //       let parent = new lib.SpinalNode();
-  //       let child = new lib.SpinalNode();
-
-  //       await parent.addChildInContext(child, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
-
-  //       assert.deepStrictEqual(child.getContextIds(), [context.getId().get()]);
-  //     });
-
-  //     it("should throw an error if you try to add the same node twice", async function() {
-  //       let node = new lib.SpinalNode(DEFAULT_RELATION_NAME);
-  //       let context = new lib.SpinalContext();
-  //       let error = false;
-
-  //       await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
-  //       await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context).catch(() => {
-  //         error = true;
-  //       });
-  //       assert(error);
-  //     });
-
-  //     it("should throw an error when you pass it something that is not a model", async function() {
-  //       let node = new lib.SpinalNode(DEFAULT_RELATION_NAME);
-  //       let context = new lib.SpinalContext();
-  //       let error = false;
-
-  //       await node.addChild(new Array(), DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context).catch(() => {
-  //         error = true;
-  //       });
-  //       assert(error);
-  //     });
-
-  //     it("should return the node added to the relation", async function() {
-  //       let node = new lib.SpinalNode(DEFAULT_RELATION_NAME);
-  //       let context = new lib.SpinalContext();
-  //       let childNode = new lib.SpinalNode();
-  //       let childModel = new globalType.Model();
-
-  //       const res1 = await node.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
-
-  //       assert.strictEqual(res1, childNode);
-
-  //       const res2 = await node.addChild(childModel, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
-  //       const res2Elem = await res2.getElement();
-
-  //       assert.strictEqual(res2Elem, childModel);
-  //     });
-  //   });
-  // });
-
-  // describe("How to remove a node", function() {
-  //   describe("How to use removeChild", function() {
-  //     it('should remove the child', async function() {
-  //       let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
-
-  //       await node.addChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-  //       await node.removeChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-
-  //       const children = await node.getChildren([]);
-  //       assert.deepStrictEqual(children, []);
-  //     });
-
-  //     it('should throw if the relation doesn\'t exist', async function() {
-  //       const node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE, DEFAULT_ELEMENT);
-  //       let error = false;
-
-  //       await node.addChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-
-  //       try {
-  //         await node.removeChild(node, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_TYPE);
-  //       } catch (e) {
-  //         error = true;
-  //         assert(e instanceof Error);
-  //       }
-  //       assert(error);
-
-  //       error = false;
-  //       try {
-  //         await node.removeChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE + "1");
-  //       } catch (e) {
-  //         error = true;
-  //         assert(e instanceof Error);
-  //       }
-  //       assert(error);
-
-  //       const children = await node.getChildren([]);
-  //       assert.deepStrictEqual(children, [node]);
-  //     });
-  //   });
-
-  //   describe("How to use removeChildren", function() {
-  //     it("should delete all of the children", async function() {
-  //       let parent = new lib.SpinalNode();
-  //       const node1 = new lib.SpinalNode();
-  //       const node2 = new lib.SpinalNode();
-  //       const node3 = new lib.SpinalNode();
-
-  //       await Promise.all([
-  //         parent.addChild(node1, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_LST_PTR_TYPE),
-  //         parent.addChild(node2, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_TYPE),
-  //         parent.addChild(node3, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_PTR_LST_TYPE)
-  //       ]);
-
-  //       await parent.removeChildren();
-
-  //       const children = await parent.getChildren();
-  //       assert.deepStrictEqual(children, []);
-  //     });
-
-  //     it("should delete the given children", async function() {
-  //       let parent = new lib.SpinalNode();
-  //       const node1 = new lib.SpinalNode();
-  //       const node2 = new lib.SpinalNode();
-  //       const node3 = new lib.SpinalNode();
-
-  //       await Promise.all([
-  //         parent.addChild(node1, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_TYPE),
-  //         parent.addChild(node2, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE),
-  //         parent.addChild(node3, DEFAULT_RELATION_NAME + "3", lib.SPINAL_RELATION_TYPE)
-  //       ]);
-
-  //       await parent.removeChildren([
-  //         DEFAULT_RELATION_NAME + "1",
-  //         DEFAULT_RELATION_NAME + "3"
-  //       ]);
-
-  //       const children = await parent.getChildren();
-  //       assert.deepStrictEqual(children, [node2]);
-  //     });
-  //   });
-
-  //   describe("How to use removeFromGraph", function() {
-  //     it('should remove the node from its parents', async function() {
-  //       let node = new lib.SpinalNode();
-  //       let parentNode = new lib.SpinalNode();
-
-  //       await parentNode.addChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-
-  //       await node.removeFromGraph();
-
-  //       const children = await parentNode.getChildren([]);
-  //       assert.deepStrictEqual(children, []);
-  //     });
-
-  //     it('should remove the node from its children', async function() {
-  //       let node = new lib.SpinalNode();
-  //       let parentNode = new lib.SpinalNode();
-
-  //       await parentNode.addChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-
-  //       await parentNode.removeFromGraph();
-
-  //       const parents = await parentNode.getParents([]);
-  //       assert.deepStrictEqual(parents, []);
-  //     });
-  //   });
-  // });
-
-  // describe("How to get related nodes", function() {
-  //   describe("How to use getChildren", function() {
-  //     it("should return no children", async function() {
-  //       let node = new lib.SpinalNode();
-  //       const children = await node.getChildren([]);
-
-  //       assert.deepStrictEqual(children, []);
-  //     });
-
-  //     it("should return some children", async function() {
-  //       let node = new lib.SpinalNode();
-
-  //       await Promise.all([
-  //         node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-  //         node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE)
-  //       ]);
-
-  //       const children = await node.getChildren([DEFAULT_RELATION_NAME]);
-  //       assert.deepStrictEqual(children, [DEFAULT_NODE]);
-  //     });
-
-  //     it("should return all children", async function() {
-  //       let node = new lib.SpinalNode();
-
-  //       await Promise.all([
-  //         node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-  //         node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE)
-  //       ]);
-
-  //       const children = await node.getChildren([]);
-  //       assert.deepStrictEqual(children, [DEFAULT_NODE, DEFAULT_NODE]);
-  //     });
-
-  //     it("should return all children also", async function() {
-  //       let node = new lib.SpinalNode();
-
-  //       await Promise.all([
-  //         node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-  //         node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE),
-  //       ]);
-
-  //       const children = await node.getChildren();
-  //       assert.deepStrictEqual(children, [DEFAULT_NODE, DEFAULT_NODE]);
-  //     });
-
-  //     it("should return children for one relation name passed has string", async function() {
-  //       let node = new lib.SpinalNode();
-
-  //       await Promise.all([
-  //         node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-  //         node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE)
-  //       ]);
-
-  //       const children = await node.getChildren(DEFAULT_RELATION_NAME);
-  //       assert.deepStrictEqual(children, [DEFAULT_NODE]);
-  //     });
-  //   });
-
-  //   describe("How to use getChildrenInContext", function() {
-  //     it("should return the node's child", async function() {
-  //       let context = new lib.SpinalContext();
-  //       let parent = new lib.SpinalNode();
-  //       let child = new lib.SpinalNode();
-
-  //       await parent.addChildInContext(child, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE, context);
-
-  //       const children = await parent.getChildrenInContext(context);
-  //       assert.deepStrictEqual(children, [child]);
-  //     });
-
-  //     it("should return the node's children associated to the context", async function() {
-  //       let context = new lib.SpinalContext();
-  //       let parent = new lib.SpinalNode();
-  //       let child1 = new lib.SpinalNode();
-  //       let child2 = new lib.SpinalNode();
-  //       let child3 = new lib.SpinalNode();
-
-  //       await Promise.all([
-  //         parent.addChildInContext(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE, context),
-  //         parent.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE),
-  //         parent.addChildInContext(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context)
-  //       ]);
-
-  //       const children = await parent.getChildrenInContext(context);
-  //       assert.deepStrictEqual(children, [child1, child3]);
-  //     });
-  //   });
-
-  //   describe("How to use getParents", function() {
-  //     it("should return no parents", async function() {
-  //       let node = new lib.SpinalNode();
-  //       const parents = await node.getParents([]);
-
-  //       assert.deepStrictEqual(parents, []);
-  //     });
-
-  //     it("should return some parents", async function() {
-  //       let parentNode1 = new lib.SpinalNode();
-  //       let parentNode2 = new lib.SpinalNode();
-  //       let childNode = new lib.SpinalNode();
-
-  //       await Promise.all([
-  //         parentNode1.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-  //         parentNode2.addChild(childNode, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE)
-  //       ]);
-
-  //       const parents = await childNode.getParents([DEFAULT_RELATION_NAME]);
-  //       assert.deepStrictEqual(parents, [parentNode1]);
-  //     });
-
-  //     it("should return all parents", async function() {
-  //       let parentNode1 = new lib.SpinalNode();
-  //       let parentNode2 = new lib.SpinalNode();
-  //       let childNode = new lib.SpinalNode();
-
-  //       await Promise.all([
-  //         parentNode1.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-  //         parentNode2.addChild(childNode, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE)
-  //       ]);
-
-  //       const parents = await childNode.getParents([]);
-  //       assert.deepStrictEqual(parents, [parentNode1, parentNode2]);
-  //     });
-
-  //     it("should return all parents with a certain relation name", async function() {
-  //       let parentNode1 = new lib.SpinalNode();
-  //       let parentNode2 = new lib.SpinalNode();
-  //       let childNode = new lib.SpinalNode();
-
-  //       await Promise.all([
-  //         parentNode1.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
-  //         parentNode2.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE)
-  //       ]);
-
-  //       const parents = await childNode.getParents([]);
-  //       assert.deepStrictEqual(parents, [parentNode1, parentNode2]);
-  //     });
-  //   });
-  // });
+  describe("How to get information about the node's relations", function() {
+    describe("How to use hasRelation", function() {
+      it("should return true", async function() {
+        const node = new lib.SpinalNode();
+
+        await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        assert.strictEqual(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
+      });
+
+      it("should return false", async function() {
+        const node = new lib.SpinalNode();
+
+        await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        assert.strictEqual(node.hasRelation(CUSTOM_RELATION_NAME1, lib.SPINAL_RELATION_TYPE), false);
+      });
+
+      it("should throw an error if the relation name is missing", function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          node.hasRelation(undefined, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation name is not a string", function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          node.hasRelation(1, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation type is missing", function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          node.hasRelation(DEFAULT_RELATION_NAME);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation type is not valid", function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          node.hasRelation(DEFAULT_RELATION_NAME, 1);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+    });
+
+    describe("How to use hasRelations", function() {
+      it("should return true the node contains all the relations", async function() {
+        const node = new lib.SpinalNode();
+
+        await Promise.all([
+          node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          node.addChild(DEFAULT_NODE, CUSTOM_RELATION_NAME1, lib.SPINAL_RELATION_TYPE)
+        ]);
+
+        assert.strictEqual(node.hasRelations([DEFAULT_RELATION_NAME, CUSTOM_RELATION_NAME1], lib.SPINAL_RELATION_TYPE), true);
+      });
+
+      it("should return false if the node doesn't contain all the relations", async function() {
+        let node = new lib.SpinalNode();
+
+        await Promise.all([
+          node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          node.addChild(DEFAULT_NODE, CUSTOM_RELATION_NAME1, lib.SPINAL_RELATION_TYPE)
+        ]);
+
+        assert.strictEqual(node.hasRelations([CUSTOM_RELATION_NAME1, CUSTOM_RELATION_NAME2], lib.SPINAL_RELATION_TYPE), false);
+      });
+
+      it("should throw an error if the relation name array is missing", function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          node.hasRelations(undefined, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation name array is not an array", function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          node.hasRelations(1, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation type is missing", function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          node.hasRelations([]);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation type is not valid", function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          node.hasRelations([], 1);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if on of the relation names is not a string", function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          node.hasRelations([1], lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+    });
+
+    describe("How to use getRelationNames", function() {
+      it("should return no name", function() {
+        const node = new lib.SpinalNode();
+
+        assert.deepStrictEqual(node.getRelationNames(), []);
+      });
+
+      it("should return all relation names", async function() {
+        const node = new lib.SpinalNode();
+        const child1 = new lib.SpinalNode();
+        const child2 = new lib.SpinalNode();
+        const child3 = new lib.SpinalNode();
+        const child4 = new lib.SpinalNode();
+        const child5 = new lib.SpinalNode();
+
+        await Promise.all([
+          node.addChild(child1, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_LST_PTR_TYPE),
+          node.addChild(child2, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_LST_PTR_TYPE),
+          node.addChild(child3, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_LST_PTR_TYPE),
+          node.addChild(child4, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_LST_PTR_TYPE),
+          node.addChild(child5, DEFAULT_RELATION_NAME + "4", lib.SPINAL_RELATION_LST_PTR_TYPE),
+        ]);
+        assert.deepStrictEqual(
+          node.getRelationNames(),
+          [
+            DEFAULT_RELATION_NAME + "1",
+            DEFAULT_RELATION_NAME + "2",
+            DEFAULT_RELATION_NAME + "4",
+          ]
+        );
+      });
+
+      it("shouldn't return duplicates if there are different relation with the same names but different types", async function() {
+        const node = new lib.SpinalNode();
+        const child1 = new lib.SpinalNode();
+        const child2 = new lib.SpinalNode();
+        const child3 = new lib.SpinalNode();
+
+        await Promise.all([
+          node.addChild(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          node.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE),
+          node.addChild(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE),
+        ]);
+        assert.deepStrictEqual(
+          node.getRelationNames(),
+          [
+            DEFAULT_RELATION_NAME,
+          ]
+        );
+      });
+    });
+  });
+
+  describe("How to add a child to the node", function() {
+    describe("How to use addChild", function() {
+      it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', async function() {
+        const node = new lib.SpinalNode();
+
+        await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        assert.strictEqual(typeof node !== "undefined", true);
+        assert.strictEqual(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
+
+        const children = await node.getChildren([DEFAULT_RELATION_NAME]);
+
+        assert.strictEqual(children.length, 1);
+        assert.strictEqual(children[0], DEFAULT_NODE);
+      });
+
+      it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', async function() {
+        const node = new lib.SpinalNode();
+
+        node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE);
+        assert.strictEqual(typeof node !== "undefined", true);
+        assert.strictEqual(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE), true);
+
+        const children = await node.getChildren([DEFAULT_RELATION_NAME]);
+
+        assert.strictEqual(children.length, 1);
+        assert.strictEqual(children[0], DEFAULT_NODE);
+      });
+
+      it('should add a child to the node with a relation type SPINAL_RELATION_LST_PTR_TYPE', async function() {
+        const node = new lib.SpinalNode();
+
+        await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE);
+        assert.strictEqual(typeof node !== "undefined", true);
+        assert.strictEqual(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE), true);
+
+        const children = await node.getChildren([DEFAULT_RELATION_NAME]);
+
+        assert.strictEqual(children.length, 1);
+        assert.strictEqual(children[0], DEFAULT_NODE);
+      });
+
+      it("should return the node added to the relation", async function() {
+        let node = new lib.SpinalNode();
+        let childNode = new lib.SpinalNode();
+        let childModel = new globalType.Model();
+
+        const res1 = await node.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+
+        assert.strictEqual(res1, childNode);
+
+        const res2 = await node.addChild(childModel, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        const res2Elem = await res2.getElement();
+
+        assert.strictEqual(res2Elem, childModel);
+      });
+
+      it("should throw an error if you try to add the same node twice", async function() {
+        const node = new lib.SpinalNode();
+        let error;
+
+        await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+
+        try {
+          await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the child is not a model", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.addChild(new Array(), DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation name is missing", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.addChild(DEFAULT_NODE, undefined, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation name is not a string", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.addChild(DEFAULT_NODE, 1, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation type is missing", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation type is invalid", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, 1);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+    });
+
+    describe("How to use addChildInContext", function() {
+      it("Should add a child to a node", async function() {
+        const node = new lib.SpinalNode();
+        const context = new lib.SpinalContext();
+
+        await node.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
+        assert.strictEqual(typeof node !== "undefined", true);
+        assert.strictEqual(node.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE), true);
+
+        const children = await node.getChildren([DEFAULT_RELATION_NAME]);
+
+        assert.strictEqual(children.length, 1);
+        assert.strictEqual(children[0], DEFAULT_NODE);
+      });
+
+      it("Shoud add a child and associate it to the context", async function() {
+        const context = new lib.SpinalContext();
+        const parent = new lib.SpinalNode();
+        const child = new lib.SpinalNode();
+
+        await parent.addChildInContext(child, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
+
+        assert.deepStrictEqual(child.getContextIds(), [context.getId().get()]);
+      });
+
+      it("should return the node added to the relation", async function() {
+        const node = new lib.SpinalNode(DEFAULT_RELATION_NAME);
+        const context = new lib.SpinalContext();
+        const childNode = new lib.SpinalNode();
+        const childModel = new globalType.Model();
+
+        const res1 = await node.addChildInContext(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
+
+        assert.strictEqual(res1, childNode);
+
+        const res2 = await node.addChildInContext(childModel, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
+        const res2Elem = await res2.getElement();
+
+        assert.strictEqual(res2Elem, childModel);
+      });
+
+      it("should throw an error if you try to add the same node twice", async function() {
+        const node = new lib.SpinalNode(DEFAULT_RELATION_NAME);
+        const context = new lib.SpinalContext();
+        let error = false;
+
+        await node.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
+
+        try {
+          await node.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the child is not a model", async function() {
+        const node = new lib.SpinalNode(DEFAULT_RELATION_NAME);
+        const context = new lib.SpinalContext();
+        let error = false;
+
+        try {
+          await node.addChildInContext(new Array(), DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation name is missing", async function() {
+        const node = new lib.SpinalNode();
+        const context = new lib.SpinalContext()
+        let error = false;
+
+        try {
+          await node.addChildInContext(DEFAULT_NODE, undefined, lib.SPINAL_RELATION_TYPE, context);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation name is not a string", async function() {
+        const node = new lib.SpinalNode();
+        const context = new lib.SpinalContext()
+        let error = false;
+
+        try {
+          await node.addChildInContext(DEFAULT_NODE, 1, lib.SPINAL_RELATION_TYPE, context);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation type is missing", async function() {
+        const node = new lib.SpinalNode();
+        const context = new lib.SpinalContext()
+        let error = false;
+
+        try {
+          await node.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, undefined, context);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the relation type is invalid", async function() {
+        const node = new lib.SpinalNode();
+        const context = new lib.SpinalContext()
+        let error = false;
+
+        try {
+          await node.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, 1, context);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the context is missing", async function() {
+        const node = new lib.SpinalNode();
+        const context = new lib.SpinalContext()
+        let error = false;
+
+        try {
+          await node.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the context is not a SpinalContext", async function() {
+        const node = new lib.SpinalNode();
+        const context = new lib.SpinalContext()
+        let error = false;
+
+        try {
+          await node.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE, 1);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+    });
+  });
+
+  describe("How to remove a node", function() {
+    describe("How to use removeChild", function() {
+      it("should remove the child", async function() {
+        let node = new lib.SpinalNode();
+
+        await node.addChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        await node.removeChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+
+        const children = await node.getChildren([]);
+        assert.deepStrictEqual(children, []);
+      });
+
+      it("should throw if the relation name is missing", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.removeChild(node, undefined, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw if the relation name is not a string", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.removeChild(node, 1, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw if the relation type is missing", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.removeChild(node, DEFAULT_RELATION_NAME);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw if the relation type is missing", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.removeChild(node, DEFAULT_RELATION_NAME, 1);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw if the relation doesn't exist", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        await node.addChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+
+        try {
+          await node.removeChild(node, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+
+        error = false;
+        try {
+          await node.removeChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE + "1");
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+
+        const children = await node.getChildren([]);
+        assert.deepStrictEqual(children, [node]);
+      });
+
+      it("should throw if the node is missing", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.removeChild(undefined, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw if the node is not a child", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.removeChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+    });
+
+    describe("How to use removeChildren", function() {
+      it("should delete all of the children", async function() {
+        const parent = new lib.SpinalNode();
+        const node1 = new lib.SpinalNode();
+        const node2 = new lib.SpinalNode();
+        const node3 = new lib.SpinalNode();
+
+        await Promise.all([
+          parent.addChild(node1, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_LST_PTR_TYPE),
+          parent.addChild(node2, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_TYPE),
+          parent.addChild(node3, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_PTR_LST_TYPE)
+        ]);
+
+        await parent.removeChildren();
+
+        const children = await parent.getChildren();
+        assert.deepStrictEqual(children, []);
+      });
+
+      it("should delete the given children", async function() {
+        const parent = new lib.SpinalNode();
+        const node1 = new lib.SpinalNode();
+        const node2 = new lib.SpinalNode();
+        const node3 = new lib.SpinalNode();
+
+        await Promise.all([
+          parent.addChild(node1, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_TYPE),
+          parent.addChild(node2, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE),
+          parent.addChild(node3, DEFAULT_RELATION_NAME + "3", lib.SPINAL_RELATION_TYPE)
+        ]);
+
+        await parent.removeChildren([
+          DEFAULT_RELATION_NAME + "1",
+          DEFAULT_RELATION_NAME + "3"
+        ]);
+
+        const children = await parent.getChildren();
+        assert.deepStrictEqual(children, [node2]);
+      });
+
+      it("should throw an error if relationNames is neither an array, a string or omitted", async function() {
+        const parent = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await parent.removeChildren(1);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if an element of relationNames is not a string", async function() {
+        const parent = new lib.SpinalNode();
+        const node1 = new lib.SpinalNode();
+        let error = false;
+
+        await Promise.all([
+          parent.addChild(node1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE)
+        ]);
+
+
+        try {
+          await parent.removeChildren([
+            DEFAULT_RELATION_NAME + "1",
+            1
+          ]);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+    });
+
+    describe("How to use removeFromGraph", function() {
+      it('should remove the node from its parents', async function() {
+        let node = new lib.SpinalNode();
+        let parentNode = new lib.SpinalNode();
+
+        await parentNode.addChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+
+        await node.removeFromGraph();
+
+        const children = await parentNode.getChildren([]);
+        assert.deepStrictEqual(children, []);
+      });
+
+      it('should remove the node from its children', async function() {
+        let node = new lib.SpinalNode();
+        let parentNode = new lib.SpinalNode();
+
+        await parentNode.addChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+
+        await parentNode.removeFromGraph();
+
+        const parents = await parentNode.getParents([]);
+        assert.deepStrictEqual(parents, []);
+      });
+    });
+  });
+
+  describe("How to get related nodes", function() {
+    describe("How to use getChildren", function() {
+      it("should return no children", async function() {
+        const node = new lib.SpinalNode();
+        const children = await node.getChildren([]);
+
+        assert.deepStrictEqual(children, []);
+      });
+
+      it("should return some children", async function() {
+        const node = new lib.SpinalNode();
+
+        await Promise.all([
+          node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE)
+        ]);
+
+        const children = await node.getChildren([DEFAULT_RELATION_NAME]);
+        assert.deepStrictEqual(children, [DEFAULT_NODE]);
+      });
+
+      it("should return all children", async function() {
+        const node = new lib.SpinalNode();
+
+        await Promise.all([
+          node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE)
+        ]);
+
+        const children = await node.getChildren([]);
+        assert.deepStrictEqual(children, [DEFAULT_NODE, DEFAULT_NODE]);
+      });
+
+      it("should return all children also", async function() {
+        const node = new lib.SpinalNode();
+
+        await Promise.all([
+          node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE),
+        ]);
+
+        const children = await node.getChildren();
+        assert.deepStrictEqual(children, [DEFAULT_NODE, DEFAULT_NODE]);
+      });
+
+      it("should return children for one relation name passed has string", async function() {
+        const node = new lib.SpinalNode();
+
+        await Promise.all([
+          node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE)
+        ]);
+
+        const children = await node.getChildren(DEFAULT_RELATION_NAME);
+        assert.deepStrictEqual(children, [DEFAULT_NODE]);
+      });
+
+      it("should throw an error if relationNames is neither an array, a string or omitted", async function() {
+        const parent = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await parent.getChildren(1);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if an element of relationNames is not a string", async function() {
+        const parent = new lib.SpinalNode();
+        const node1 = new lib.SpinalNode();
+        let error = false;
+
+        await Promise.all([
+          parent.addChild(node1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE)
+        ]);
+
+
+        try {
+          await parent.getChildren([
+            DEFAULT_RELATION_NAME + "1",
+            1
+          ]);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+    });
+
+    describe("How to use getChildrenInContext", function() {
+      it("should return the node's child", async function() {
+        const context = new lib.SpinalContext();
+        const parent = new lib.SpinalNode();
+        const child = new lib.SpinalNode();
+
+        await parent.addChildInContext(child, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE, context);
+
+        const children = await parent.getChildrenInContext(context);
+        assert.deepStrictEqual(children, [child]);
+      });
+
+      it("should return the node's children associated to the context", async function() {
+        const context = new lib.SpinalContext();
+        const parent = new lib.SpinalNode();
+        const child1 = new lib.SpinalNode();
+        const child2 = new lib.SpinalNode();
+        const child3 = new lib.SpinalNode();
+
+        await Promise.all([
+          parent.addChildInContext(child1, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE, context),
+          parent.addChild(child2, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_PTR_LST_TYPE),
+          parent.addChildInContext(child3, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE, context)
+        ]);
+
+        const children = await parent.getChildrenInContext(context);
+        assert.deepStrictEqual(children, [child1, child3]);
+      });
+
+      it("should throw an error if the context is missing", async function() {
+        const parent = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await parent.getChildrenInContext();
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if the context is not a SpinalContext", async function() {
+        const parent = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await parent.getChildrenInContext(1);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+    });
+
+    describe("How to use getParents", function() {
+      it("should return no parents", async function() {
+        const node = new lib.SpinalNode();
+        const parents = await node.getParents([]);
+
+        assert.deepStrictEqual(parents, []);
+      });
+
+      it("should return some parents", async function() {
+        let parentNode1 = new lib.SpinalNode();
+        let parentNode2 = new lib.SpinalNode();
+        let childNode = new lib.SpinalNode();
+
+        await Promise.all([
+          parentNode1.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          parentNode2.addChild(childNode, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE)
+        ]);
+
+        const parents = await childNode.getParents([DEFAULT_RELATION_NAME]);
+        assert.deepStrictEqual(parents, [parentNode1]);
+      });
+
+      it("should return all parents", async function() {
+        let parentNode1 = new lib.SpinalNode();
+        let parentNode2 = new lib.SpinalNode();
+        let childNode = new lib.SpinalNode();
+
+        await Promise.all([
+          parentNode1.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          parentNode2.addChild(childNode, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE)
+        ]);
+
+        const parents = await childNode.getParents([]);
+        assert.deepStrictEqual(parents, [parentNode1, parentNode2]);
+      });
+
+      it("should return all parents with a certain relation name", async function() {
+        let parentNode1 = new lib.SpinalNode();
+        let parentNode2 = new lib.SpinalNode();
+        let childNode = new lib.SpinalNode();
+
+        await Promise.all([
+          parentNode1.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          parentNode2.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE)
+        ]);
+
+        const parents = await childNode.getParents([]);
+        assert.deepStrictEqual(parents, [parentNode1, parentNode2]);
+      });
+
+      it("should throw an error if relationNames is neither an array, a string or omitted", async function() {
+        const parent = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await parent.getParents(1);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if an element of relationNames is not a string", async function() {
+        const parent = new lib.SpinalNode();
+        const child = new lib.SpinalNode();
+        let error = false;
+
+        await Promise.all([
+          parent.addChild(child, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE)
+        ]);
+
+
+        try {
+          await child.getParents([
+            DEFAULT_RELATION_NAME + "1",
+            1
+          ]);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+    });
+  });
 });

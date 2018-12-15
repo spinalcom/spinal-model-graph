@@ -22,40 +22,48 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
+const globalType = typeof window === "undefined" ? global : window;
 import spinalCore from "spinal-core-connectorjs";
+
 import {
   guid
 } from "../Utilities";
+
+import {
+  SpinalContext
+} from "../index";
+
 import SpinalNodePointer from "../SpinalNodePointer";
-
-const globalType = typeof window === "undefined" ? global : window;
-
 import {
   SpinalRelationFactory
 } from "../Relations/SpinalRelationFactory";
 import SpinalMap from "../SpinalMap";
 import SpinalSet from "../SpinalSet";
+import {
+  RELATION_TYPE_LIST
+} from "../../build/Relations/SpinalRelationFactory";
 
 const DEFAULT_PREDICATE = () => true;
 
 class SpinalNode extends globalType.Model {
   /**
    * Constructor for the SpinalNode class.
-   * @param {String} name Name of the node
-   * @param {String} type Type of the node
+   * @param {string} name Name of the node
+   * @param {string} type Type of the node
    * @param {SpinalNode | Model} element Element of the node
    */
   constructor(name = "undefined", type = "SpinalNode", element) {
     super();
+
     this.add_attr({
       info: {
         id: guid(this.constructor.name),
         name: name,
-        type: type,
+        type: type
       },
       parents: new SpinalMap(),
       children: new SpinalMap(),
-      element: (element !== undefined) ? new SpinalNodePointer(element) : undefined,
+      element: element !== undefined ? new SpinalNodePointer(element) : undefined,
       contextIds: new SpinalSet()
     });
   }
@@ -101,7 +109,7 @@ class SpinalNode extends globalType.Model {
    * @returns {Array<String>} Ids of the children
    */
   getChildrenIds() {
-    let nodeChildrenIds = [];
+    const nodeChildrenIds = [];
 
     for (let relationMap of this.children) {
       for (let relation of relationMap) {
@@ -127,9 +135,14 @@ class SpinalNode extends globalType.Model {
 
   /**
    * Adds an id to the context ids of the node.
-   * @param {String} id Id of the context
+   * @param {string} id Id of the context
+   * @throws {TypeError} If the id is not a string
    */
   addContextId(id) {
+    if (typeof id !== "string") {
+      throw TypeError("id must be a string");
+    }
+
     if (!this.contextIds.has(id)) {
       this.contextIds.add(id);
     }
@@ -147,46 +160,72 @@ class SpinalNode extends globalType.Model {
    * Returns true if the node belongs to the context.
    * @param {SpinalContext} context The context that might own the node
    * @returns {Boolean} A boolean
+   * @throws {TypeError} If context is not a SpinalContext
    */
   belongsToContext(context) {
+    if (!(context instanceof SpinalContext)) {
+      throw TypeError("context must be a SpinalContext");
+    }
+
     return this.contextIds.has(context.getId().get());
   }
 
   /**
    * Verify if the node contains the relation name.
-   * @param {String} relationName Name of the relation
-   * @param {String} relationType Type of the relation
+   * @param {string} relationName Name of the relation
+   * @param {string} relationType Type of the relation
    * @returns {Boolean} Return true is the relation is contained in the node and false otherwise.
+   * @throws {TypeError} If the relation name is not a string
+   * @throws {Error} If the relation type doesn't exist
    */
   hasRelation(relationName, relationType) {
+    if (typeof relationName !== "string") {
+      throw TypeError("the relation name must be a string");
+    }
+
+    if (!RELATION_TYPE_LIST.includes(relationType)) {
+      throw Error("invalid relation type");
+    }
+
     const typeMap = this._getChildrenType(relationType);
 
     if (typeof typeMap === "undefined") {
       return false;
     }
+
     return typeMap.has(relationName);
   }
 
   /**
    * Verify if the node contains all the relation names.
    * @param {Array<String>} relationNames Array containing all the relation name
-   * @param {String} relationType Type of the relations
+   * @param {string} relationType Type of the relations
    * @returns {Boolean} Return true if the node contains all the relations in relationNames, false otherwise.
+   * @throws {TypeError} If the relation names are not in an array
+   * @throws {TypeError} If one of the relation names is not a string
+   * @throws {Error} If the relation type doesn't exist
    */
   hasRelations(relationNames, relationType) {
-    let res = true;
-
-    for (let i = 0; i < relationNames.length && res; i++) {
-      res = this.hasRelation(relationNames[i], relationType);
+    if (!Array.isArray(relationNames)) {
+      throw TypeError("The relation names must be in an array");
     }
 
-    return res;
+    if (!RELATION_TYPE_LIST.includes(relationType)) {
+      throw Error("invalid relation type");
+    }
+
+    for (let relationName of relationNames) {
+      if (!this.hasRelation(relationName, relationType)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /**
    * Returns all the relation names of the node.
    * @returns {Array<String>} The names of the relations of the node
-   * @private
    */
   getRelationNames() {
     const names = [];
@@ -202,15 +241,18 @@ class SpinalNode extends globalType.Model {
   /**
    * Add the node as child of the relation.
    * @param {SpinalNode | Model} child Element to add as child
-   * @param {String} relationName Name of the relation
-   * @param {String} relationType Type of the relation
+   * @param {string} relationName Name of the relation
+   * @param {string} relationType Type of the relation
    * @returns {Promise<SpinalNode>} The child node in a promise
+   * @throws {TypeError} If the child is not a model
+   * @throws {TypeError} If the relation name is not a string
+   * @throws {Error} If the relation type is invalid
    */
   async addChild(child, relationName, relationType) {
     let relation;
 
     if (!(child instanceof globalType.Model)) {
-      throw new Error(
+      throw TypeError(
         "Cannot add a child witch is not an instance of SpinalNode or Model."
       );
     } else if (!(child instanceof SpinalNode)) {
@@ -230,16 +272,24 @@ class SpinalNode extends globalType.Model {
   /**
    * Adds a child and notices the context if a new relation was created.
    * @param {SpinalNode | Model} child Node to add as child
-   * @param {String} relationName Name of the relation
-   * @param {String} relationType Type of the relation
+   * @param {string} relationName Name of the relation
+   * @param {string} relationType Type of the relation
    * @param {SpinalContext} context Context to update
    * @returns {Promise<SpinalNode>} The child node in a promise
+   * @throws {TypeError} If the child is not a model
+   * @throws {TypeError} If the relation name is not a string
+   * @throws {TypeError} If the context is not a SpinalContext
+   * @throws {Error} If the relation type is invalid
    */
   async addChildInContext(child, relationName, relationType, context) {
     let relation;
 
+    if (!(context instanceof SpinalContext)) {
+      throw TypeError("context must be a SpinaContext");
+    }
+
     if (!(child instanceof globalType.Model)) {
-      throw new Error(
+      throw TypeError(
         "Cannot add a child witch is not an instance of SpinalNode or Model."
       );
     } else if (!(child instanceof SpinalNode)) {
@@ -262,10 +312,12 @@ class SpinalNode extends globalType.Model {
   /**
    * Removes the node from the relation children.
    * @param {SpinalNode} node Node to remove
-   * @param {String} relationName Name of the relation to wich the node belongs
-   * @param {String} relationType Type of the relation to wich the node belongs
+   * @param {string} relationName Name of the relation to wich the node belongs
+   * @param {string} relationType Type of the relation to wich the node belongs
    * @returns {Promise<nothing>} An empty promise
-   * @throws {Error} If Relation doesn't exist
+   * @throws {TypeError} If relation name is not a string
+   * @throws {Error} If relation type is invalid
+   * @throws {Error} If relation doesn't exist
    * @throws {Error} If the child doesn't exist
    */
   removeChild(node, relationName, relationType) {
@@ -279,15 +331,22 @@ class SpinalNode extends globalType.Model {
 
   /**
    * Removes children with the relation names.
-   * @param {Array<String>} relationNames Names of the relations to empty
+   * @param {Array<String> | String | undefined} relationNames Names of the relations to empty
    * @returns {Promise<Array<Boolean>>} A promise containing an array of boolean
-   * @throws {Error} If one of the nodes is not a child
+   * @throws {TypeError} If relationNames is neither an array, a string or omitted
+   * @throws {TypeError} If an element of relationNames is not a string
    */
   async removeChildren(relationNames) {
-    if (relationNames === undefined || relationNames.length === 0) {
+    if (Array.isArray(relationNames)) {
+      if (relationNames.length === 0) {
+        relationNames = this.getRelationNames();
+      }
+    } else if (relationNames === undefined) {
       relationNames = this.getRelationNames();
     } else if (typeof relationNames === "string") {
       relationNames = [relationNames];
+    } else {
+      throw TypeError("relationNames must be an array, a string or omitted");
     }
 
     const promises = [];
@@ -321,12 +380,20 @@ class SpinalNode extends globalType.Model {
    * Returns the children of the node for the relation names.
    * @param {Array<String>} relationNames Array containing the relation names of the desired children
    * @returns {Promise<Array<SpinalNode>>} The children that were found
+   * @throws {TypeError} If relationNames is neither an array, a string or omitted
+   * @throws {TypeError} If an element of relationNames is not a string
    */
   async getChildren(relationNames) {
-    if (typeof relationNames === "undefined" || relationNames.length === 0) {
+    if (Array.isArray(relationNames)) {
+      if (relationNames.length === 0) {
+        relationNames = this.getRelationNames();
+      }
+    } else if (relationNames === undefined) {
       relationNames = this.getRelationNames();
     } else if (typeof relationNames === "string") {
       relationNames = [relationNames];
+    } else {
+      throw TypeError("relationNames must be an array, a string or omitted");
     }
 
     const promises = [];
@@ -356,10 +423,11 @@ class SpinalNode extends globalType.Model {
    * Return the children of the node that are registered in the context
    * @param {SpinalContext} context Context to use for the search
    * @returns {Promise<Array<SpinalNode>>} The children that were found
+   * @throws {TypeError} If the context is not a SpinalContext
    */
   async getChildrenInContext(context) {
-    if (typeof context === "undefined") {
-      throw new Error("You must give a context");
+    if (!(context instanceof SpinalContext)) {
+      throw TypeError("context must be a SpinalContext");
     }
 
     const promises = [];
@@ -388,22 +456,36 @@ class SpinalNode extends globalType.Model {
    * Return all parents for the relation names no matter the type of relation
    * @param {Array<String>} relationNames Array containing the relation names of the desired parents
    * @returns {Promise<Array<SpinalNode>>} Promise containing the parents that were found
+   * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+   * @throws {TypeError} If an element of relationNames is not a string
    */
   getParents(relationNames) {
+    if (Array.isArray(relationNames)) {
+      if (relationNames.length === 0) {
+        relationNames = this.parents.keys();
+      }
+    } else if (relationNames === undefined) {
+      relationNames = this.parents.keys();
+    } else if (typeof relationNames === "string") {
+      relationNames = [relationNames];
+    } else {
+      throw TypeError("relationNames must be an array, a string or omitted");
+    }
+
     const promises = [];
 
-    if (typeof relationNames === "undefined" || relationNames.length === 0) {
-      relationNames = this.parents.keys();
-    }
     for (let name of relationNames) {
       const list = this.parents.getElement(name);
 
       for (let i = 0; i < list.length; i++) {
-        promises.push(list[i].load().then(relation => {
-          return relation.getParent();
-        }));
+        promises.push(
+          list[i].load().then(relation => {
+            return relation.getParent();
+          })
+        );
       }
     }
+
     return Promise.all(promises);
   }
 
@@ -583,7 +665,7 @@ class SpinalNode extends globalType.Model {
 
   /**
    * Return the relation list corresponding to the relation type.
-   * @param {String} relationType Type of the relation
+   * @param {string} relationType Type of the relation
    * @returns {SpinalMap} Return the relation list corresponding to the relation type
    * @private
    */
@@ -593,8 +675,8 @@ class SpinalNode extends globalType.Model {
 
   /**
    * Return the relation corresponding.
-   * @param {String} relationName Name of the relation
-   * @param {String} relationType Type of the relation
+   * @param {string} relationName Name of the relation
+   * @param {string} relationType Type of the relation
    * @returns {SpinalRelation} The relation corresponding
    * @private
    */
@@ -610,8 +692,8 @@ class SpinalNode extends globalType.Model {
   _removeParent(relation) {
     const parentLst = this.parents.getElement(relation.getName().get());
 
-    const indexToRemove = parentLst.indexOf(parentPtr =>
-      parentPtr.getId().get() === relation.getId().get()
+    const indexToRemove = parentLst.indexOf(
+      parentPtr => parentPtr.getId().get() === relation.getId().get()
     );
 
     parentLst.splice(indexToRemove);
@@ -643,7 +725,9 @@ class SpinalNode extends globalType.Model {
     const relationName = relation.getName().get();
 
     if (this.parents.has(relationName)) {
-      this.parents.getElement(relationName).push(new SpinalNodePointer(relation));
+      this.parents
+        .getElement(relationName)
+        .push(new SpinalNodePointer(relation));
     } else {
       const list = new globalType.Lst();
       list.push(new SpinalNodePointer(relation));
@@ -653,12 +737,16 @@ class SpinalNode extends globalType.Model {
 
   /**
    * Create a new relation for this node.
-   * @param {String} relationName Name of the relation
-   * @param {String} relationType Type of the relation
+   * @param {string} relationName Name of the relation
+   * @param {string} relationType Type of the relation
    * @private
    */
   _createRelation(relationName, relationType) {
-    const relation = SpinalRelationFactory.getNewRelation(this, relationName, relationType);
+    const relation = SpinalRelationFactory.getNewRelation(
+      this,
+      relationName,
+      relationType
+    );
 
     if (!this.children.has(relationType)) {
       this.children.setElement(relationType, new SpinalMap());
