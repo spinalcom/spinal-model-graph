@@ -25,7 +25,10 @@ import spinalCore from "spinal-core-connectorjs";
 import {
   guid
 } from "../Utilities";
-import SpinalNode from "../Nodes/SpinalNode";
+import {
+  SpinalNode,
+  SpinalContext
+} from "../index";
 import SpinalNodePointer from "../SpinalNodePointer";
 import SpinalMap from "../SpinalMap";
 
@@ -34,14 +37,27 @@ const globalType = typeof window === "undefined" ? global : window;
 class BaseSpinalRelation extends globalType.Model {
   /**
    * Constructor for the BaseSpinalRelation class.
-   * @param {String} name Name of the relation
+   * @param {SpinalNode} parent Parent of the relation
+   * @param {string} name Name of the relation
+   * @throws {TypeError} If the parent is not a node
+   * @throws {TypeError} If the name is not a string
    */
-  constructor(name) {
+  constructor(parent, name) {
     super();
+
+    // instanceof doesn't work here
+    if (!SpinalNode.prototype.isPrototypeOf(parent)) {
+      throw TypeError("parent must be a node");
+    }
+
+    if (typeof name !== "string") {
+      throw TypeError("name must be a string");
+    }
+
     this.add_attr({
       id: guid(name),
       name: name,
-      parent: new SpinalNodePointer(),
+      parent: new SpinalNodePointer(parent),
       contextIds: new SpinalMap()
     });
   }
@@ -71,40 +87,40 @@ class BaseSpinalRelation extends globalType.Model {
   }
 
   /**
-   * Returns a list of the contexts the relation is associated to.
-   * @returns {Array<String>} A list of ids of the associated contexts
-   */
-  getContextIds() {
-    return this.contextIds.keys();
-  }
-
-  /**
    * Adds an id to the context ids of the relation.
-   * @param {String} id Id of the context
+   * @param {string} id Id of the context
+   * @throws {TypeError} If the id is not a string
    */
   addContextId(id) {
+    if (typeof id !== "string") {
+      throw TypeError("id must be a string");
+    }
+
     if (!this.contextIds.has(id)) {
       this.contextIds.setElement(id, 0);
     }
   }
 
   /**
-   * Returns true if the relation belongs to the context.
-   * @param {SpinalContext} context The context that might own the node
-   * @returns {Boolean} A boolean
+   * Returns a list of the contexts the relation is associated to.
+   * @returns {Array<string>} A list of ids of the associated contexts
    */
-  belongsToContext(context) {
-    return this.contextIds.has(context.getId().get());
+  getContextIds() {
+    return this.contextIds.keys();
   }
 
   /**
-   * Sets the parent of the relation. If a parent was already set, the parent relation is removed.
-   * @param {SpinalNode} parent New parent of the relation
+   * Returns true if the relation belongs to the context.
+   * @param {SpinalContext} context The context that might own the node
+   * @returns {Boolean} A boolean
+   * @throws {TypeError} If the context is not a SpinalContext
    */
-  setParent(parent) {
-    if (typeof parent !== "undefined" && parent instanceof SpinalNode) {
-      this.parent.setElement(parent);
+  belongsToContext(context) {
+    if (!(context instanceof SpinalContext)) {
+      throw TypeError("context must be a SpinalContext");
     }
+
+    return this.contextIds.has(context.getId().get());
   }
 
   /**

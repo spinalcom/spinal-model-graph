@@ -33,10 +33,13 @@ const globalType = typeof window === "undefined" ? global : window;
 class SpinalRelationRef extends BaseSpinalRelation {
   /**
    * Constructor for the SpinalRelationRef class.
+   * @param {SpinalNode} parent Parent of the relation
    * @param {String} name Name of the relation
+   * @throws {Error} If the parent is not a node
    */
-  constructor(name) {
-    super(name);
+  constructor(parent, name) {
+    super(parent, name);
+
     this.add_attr({
       children: new globalType.Lst()
     });

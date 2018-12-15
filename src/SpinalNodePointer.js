@@ -43,20 +43,25 @@ class SpinalNodePointer extends globalType.Model {
       info: {}
     });
 
-    if (typeof element !== "undefined") {
-      this.setElement(element);
-    }
+    this.setElement(element);
   }
 
   /**
    * Sets pointer to point to an element.
    * @param {SpinalNode | Model} element
+   * @throws {Error} If the element is not a Model
    */
   setElement(element) {
+    if (!(element instanceof globalType.Model)) {
+      console.log("element: ", element);
+      throw Error("The pointed value must be a Model");
+    }
+
     if (element instanceof SpinalNode) {
       this.info.mod_attr("pointedId", element.getId());
       this.info.mod_attr("pointedType", element.getType());
     }
+
     this.ptr.set(element);
   }
 
@@ -65,17 +70,9 @@ class SpinalNodePointer extends globalType.Model {
    * @returns {Model} The model to which the pointer is pointing
    */
   load() {
-    if (
-      this.ptr instanceof globalType.Ptr &&
-      this.ptr.data.value !== 0 &&
-      typeof FileSystem._objects[this.ptr.data.value] !== "undefined"
-    ) {
-      return Promise.resolve(FileSystem._objects[this.ptr.data.value]);
-    } else {
-      return new Promise(resolve => {
-        this.ptr.load(resolve);
-      });
-    }
+    return new Promise(resolve => {
+      this.ptr.load(resolve);
+    });
   }
 
   /**

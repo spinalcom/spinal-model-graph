@@ -38,23 +38,24 @@ const RELATION_TYPE_LIST = [
 class SpinalRelationFactory {
   /**
    * Create a new relation of relationType with the relationName.
+   * @param {SpinalNode} parent Parent of the relation
    * @param {String} relationName Name of the relation
    * @param {String} relationType Type of the relation
    * @returns {SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst} A new SpinalRelation
    * @static
    */
-  static getNewRelation(relationName, relationType) {
+  static getNewRelation(parent, relationName, relationType) {
     let relation;
 
     switch (relationType) {
       case SPINAL_RELATION_TYPE:
-        relation = new SpinalRelationRef(relationName);
+        relation = new SpinalRelationRef(parent, relationName);
         break;
       case SPINAL_RELATION_LST_PTR_TYPE:
-        relation = new SpinalRelationLstPtr(relationName);
+        relation = new SpinalRelationLstPtr(parent, relationName);
         break;
       case SPINAL_RELATION_PTR_LST_TYPE:
-        relation = new SpinalRelationPtrLst(relationName);
+        relation = new SpinalRelationPtrLst(parent, relationName);
         break;
       default:
         throw new Error("Unknown relationType");

@@ -34,10 +34,13 @@ const globalType = typeof window === "undefined" ? global : window;
 class SpinalRelationPtrLst extends BaseSpinalRelation {
   /**
    * Constructor for the SpinalRelationPtrLst class.
+   * @param {SpinalNode} parent Parent of the relation
    * @param {String} name Name of the relation
+   * @throws {Error} If the parent is not a node
    */
-  constructor(name) {
-    super(name);
+  constructor(parent, name) {
+    super(parent, name);
+
     this.add_attr({
       children: new SpinalNodePointer(new globalType.Lst())
     });
@@ -51,11 +54,12 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    */
   getChildrenIds() {
     const idLst = this.children.info.ids;
-    let ids = [];
+    const ids = [];
 
     for (let i = 0; i < idLst.length; i++) {
       ids.push(idLst[i].get());
     }
+
     return ids;
   }
 
@@ -65,7 +69,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    */
   async getChildren() {
     const childrenLst = await this.children.load();
-    let children = [];
+    const children = [];
 
     for (let i = 0; i < childrenLst.length; i++) {
       children.push(childrenLst[i]);
@@ -80,7 +84,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    */
   async getChildrenInContext(context) {
     const childrenLst = await this.children.load();
-    let children = [];
+    const children = [];
 
     for (let i = 0; i < childrenLst.length; i++) {
       let child = childrenLst[i];
@@ -113,15 +117,18 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     } else if (!(node instanceof SpinalNode)) {
       node = new SpinalNode(undefined, undefined, node);
     }
+
     if (this.getChildrenIds().includes(node.getId().get())) {
       throw new Error("Cannot add a child twice to the same relation.");
     }
 
     this.children.info.ids.push(node.getId());
     node._addParent(this);
+
     await this.children.load().then((children) => {
       children.push(node);
     });
+
     return node;
   }
 

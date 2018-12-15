@@ -22,6 +22,13 @@ describe("SpinalNodePointer", function() {
       assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
       assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
     });
+
+    // it("should throw an error if no element is given", function() {
+    //   let ptr = new SpinalNodePointer(DEFAULT_NODE);
+
+    //   assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
+    //   assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
+    // });
   });
 
   describe("How to set/unset the pointer", function() {

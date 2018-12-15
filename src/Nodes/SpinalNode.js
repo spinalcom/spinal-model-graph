@@ -659,12 +659,12 @@ class SpinalNode extends globalType.Model {
    * @private
    */
   _createRelation(relationName, relationType) {
-    const relation = SpinalRelationFactory.getNewRelation(relationName, relationType);
-    relation.setParent(this);
+    const relation = SpinalRelationFactory.getNewRelation(this, relationName, relationType);
 
     if (!this.children.has(relationType)) {
       this.children.setElement(relationType, new SpinalMap());
     }
+
     this._getChildrenType(relationType).setElement(relationName, relation);
     return relation;
   }
