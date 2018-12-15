@@ -181,9 +181,33 @@ describe("SpinalRelationRef", function() {
           relation.addChild(child3)
         ]);
 
-        const children = await relation.getChildrenInContext(
-          context);
+        const children = await relation.getChildrenInContext(context);
         assert.deepStrictEqual(children, [child1, child3]);
+      });
+
+      it("should throw an error is not a SpinalContext", async function() {
+        const context1 = new globalType.Model();
+        const relation = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        let error = false;
+
+        try {
+          await relation.getChildrenInContext(context1);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+
+        const context2 = new lib.SpinalNode();
+        error = false;
+
+        try {
+          await relation.getChildrenInContext(context2);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
       });
     });
 

@@ -1120,6 +1120,10 @@ Return all the children of the relation associated to a certain context.
 
 **Kind**: instance method of [<code>SpinalRelationRef</code>](#SpinalRelationRef)  
 **Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The children of the relation associated to the context  
+**Throws**:
+
+- <code>TypeError</code> If the context is not a SpinalContext
+
 
 | Param | Type | Description |
 | --- | --- | --- |

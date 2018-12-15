@@ -27,7 +27,8 @@ import {
   SPINAL_RELATION_TYPE
 } from "./SpinalRelationFactory";
 import {
-  SpinalNode
+  SpinalNode,
+  SpinalContext
 } from "../index";
 import spinalCore from "spinal-core-connectorjs";
 
@@ -80,9 +81,14 @@ class SpinalRelationRef extends BaseSpinalRelation {
    * Return all the children of the relation associated to a certain context.
    * @param {SpinalContext} context The context to use for the search
    * @returns {Promise<Array<SpinalNode>>} The children of the relation associated to the context
+   * @throws {TypeError} If the context is not a SpinalContext
    */
   getChildrenInContext(context) {
     let children = [];
+
+    if (!(context instanceof SpinalContext)) {
+      return Promise.reject(TypeError("context must be a SpinalContext"));
+    }
 
     for (let i = 0; i < this.children.length; i++) {
       let child = this.children[i];
