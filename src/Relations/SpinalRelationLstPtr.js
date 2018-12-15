@@ -39,7 +39,8 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
    * Constructor for the SpinalRelationLstPtr class.
    * @param {SpinalNode} parent Parent of the relation
    * @param {String} name Name of the relation
-   * @throws {Error} If the parent is not a node
+   * @throws {TypeError} If the parent is not a node
+   * @throws {TypeError} If the name is not a string
    */
   constructor(parent, name) {
     super(parent, name);
@@ -113,6 +114,8 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
    * Adds a child to the relation.
    * @param {SpinalNode | Model} node Node or model to add
    * @returns {Promise<SpinalNode>} Promise containing the node that was added
+   * @throws {TypeError} If the node is not a Model
+   * @throws {Error} If the node is already a child of the relation
    */
   async addChild(node) {
     if (!(node instanceof globalType.Model)) {

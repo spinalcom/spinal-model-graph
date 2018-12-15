@@ -25,7 +25,10 @@ import BaseSpinalRelation from "./BaseSpinalRelation";
 import {
   SPINAL_RELATION_PTR_LST_TYPE
 } from "./SpinalRelationFactory";
-import SpinalNode from "../Nodes/SpinalNode";
+import {
+  SpinalNode,
+  SpinalContext
+} from "../index";
 import SpinalNodePointer from "../SpinalNodePointer";
 import spinalCore from "spinal-core-connectorjs";
 
@@ -36,7 +39,8 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * Constructor for the SpinalRelationPtrLst class.
    * @param {SpinalNode} parent Parent of the relation
    * @param {String} name Name of the relation
-   * @throws {Error} If the parent is not a node
+   * @throws {TypeError} If the parent is not a node
+   * @throws {TypeError} If the name is not a string
    */
   constructor(parent, name) {
     super(parent, name);
@@ -74,6 +78,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     for (let i = 0; i < childrenLst.length; i++) {
       children.push(childrenLst[i]);
     }
+
     return children;
   }
 
@@ -81,10 +86,15 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * Return all the children of the relation associated to a certain context.
    * @param {SpinalContext} context Context to use for the search
    * @returns {Promise<Array<SpinalNode>>} The children associated to the context
+   * @throws {TypeError} If the context is not a SpinalContext
    */
   async getChildrenInContext(context) {
     const childrenLst = await this.children.load();
     const children = [];
+
+    if (!(context instanceof SpinalContext)) {
+      throw TypeError("context must be a SpinalContext");
+    }
 
     for (let i = 0; i < childrenLst.length; i++) {
       let child = childrenLst[i];
@@ -93,6 +103,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
         children.push(child);
       }
     }
+
     return children;
   }
 
@@ -108,6 +119,8 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * Adds a child to the relation.
    * @param {SpinalNode | Model} node Node or model to add
    * @returns {Promise<SpinalNode>} Promise containing the node that was added
+   * @throws {TypeError} If the node is not a Model
+   * @throws {Error} If the node is already a child of the relation
    */
   async addChild(node) {
     if (!(node instanceof globalType.Model)) {
@@ -142,7 +155,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     const childrenLst = await this.children.load();
 
     if (!childrenLst.contains(node)) {
-      throw Error("Invalid node");
+      throw Error("The node is not a child");
     }
 
     childrenLst.remove(node);

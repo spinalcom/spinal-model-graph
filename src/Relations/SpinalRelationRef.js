@@ -39,7 +39,8 @@ class SpinalRelationRef extends BaseSpinalRelation {
    * Constructor for the SpinalRelationRef class.
    * @param {SpinalNode} parent Parent of the relation
    * @param {String} name Name of the relation
-   * @throws {Error} If the parent is not a node
+   * @throws {TypeError} If the parent is not a node
+   * @throws {TypeError} If the name is not a string
    */
   constructor(parent, name) {
     super(parent, name);

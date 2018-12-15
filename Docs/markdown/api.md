@@ -900,7 +900,8 @@ Constructor for the SpinalRelationPtrLst class.
 
 **Throws**:
 
-- <code>Error</code> If the parent is not a node
+- <code>TypeError</code> If the parent is not a node
+- <code>TypeError</code> If the name is not a string
 
 
 | Param | Type | Description |
@@ -929,6 +930,10 @@ Return all the children of the relation associated to a certain context.
 
 **Kind**: instance method of [<code>SpinalRelationPtrLst</code>](#SpinalRelationPtrLst)  
 **Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The children associated to the context  
+**Throws**:
+
+- <code>TypeError</code> If the context is not a SpinalContext
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -948,6 +953,11 @@ Adds a child to the relation.
 
 **Kind**: instance method of [<code>SpinalRelationPtrLst</code>](#SpinalRelationPtrLst)  
 **Returns**: <code>Promise.&lt;SpinalNode&gt;</code> - Promise containing the node that was added  
+**Throws**:
+
+- <code>TypeError</code> If the node is not a Model
+- <code>Error</code> If the node is already a child of the relation
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1006,7 +1016,8 @@ Constructor for the SpinalRelationLstPtr class.
 
 **Throws**:
 
-- <code>Error</code> If the parent is not a node
+- <code>TypeError</code> If the parent is not a node
+- <code>TypeError</code> If the name is not a string
 
 
 | Param | Type | Description |
@@ -1053,6 +1064,11 @@ Adds a child to the relation.
 
 **Kind**: instance method of [<code>SpinalRelationLstPtr</code>](#SpinalRelationLstPtr)  
 **Returns**: <code>Promise.&lt;SpinalNode&gt;</code> - Promise containing the node that was added  
+**Throws**:
+
+- <code>TypeError</code> If the node is not a Model
+- <code>Error</code> If the node is already a child of the relation
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1095,7 +1111,8 @@ Constructor for the SpinalRelationRef class.
 
 **Throws**:
 
-- <code>Error</code> If the parent is not a node
+- <code>TypeError</code> If the parent is not a node
+- <code>TypeError</code> If the name is not a string
 
 
 | Param | Type | Description |
