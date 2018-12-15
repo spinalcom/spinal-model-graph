@@ -612,6 +612,11 @@ Recursively finds all the children nodes in the context for which the predicate 
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The nodes that were found  
+**Throws**:
+
+- <code>TypeError</code> If context is not a SpinalContext
+- <code>TypeError</code> If the predicate is not a function
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -624,6 +629,12 @@ Recursively finds all the children nodes in the context for which the predicate 
 Recursively applies a function to all the children nodes.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Throws**:
+
+- <code>TypeError</code> If the relationNames are neither an array, a string or omitted
+- <code>TypeError</code> If an element of relationNames is not a string
+- <code>TypeError</code> If the callback is not a function
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -636,6 +647,11 @@ Recursively applies a function to all the children nodes.
 Recursively applies a function to all the children nodes in the context.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Throws**:
+
+- <code>TypeError</code> If context is not a SpinalContext
+- <code>TypeError</code> If the callback is not a function
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -649,6 +665,12 @@ Recursively applies a function to all the children nodes and returns the results
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code> - The results of the callback for each node  
+**Throws**:
+
+- <code>TypeError</code> If the relationNames are neither an array, a string or omitted
+- <code>TypeError</code> If an element of relationNames is not a string
+- <code>TypeError</code> If the callback is not a function
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -662,6 +684,11 @@ Recursively applies a function to all the children nodes in the context and retu
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;Array.&lt;\*&gt;&gt;</code> - The results of the callback for each node  
+**Throws**:
+
+- <code>TypeError</code> If context is not a SpinalContext
+- <code>TypeError</code> If the callback is not a function
+
 
 | Param | Type | Description |
 | --- | --- | --- |

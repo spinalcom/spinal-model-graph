@@ -510,7 +510,7 @@ class SpinalNode extends globalType.Model {
       throw TypeError("predicate must be a function");
     }
 
-    let seen = new Set([this]);
+    const seen = new Set([this]);
     let promises = [];
     let nextGen = [this];
     let currentGen = [];
@@ -549,13 +549,15 @@ class SpinalNode extends globalType.Model {
    * @param {SpinalContext} context Context to use for the search
    * @param {function} predicate Function returning true if the node needs to be returned
    * @returns {Promise<Array<SpinalNode>>} The nodes that were found
+   * @throws {TypeError} If context is not a SpinalContext
+   * @throws {TypeError} If the predicate is not a function
    */
   async findInContext(context, predicate = DEFAULT_PREDICATE) {
     if (typeof predicate !== "function") {
       throw new Error("The predicate function must be a function");
     }
 
-    let seen = new Set([this]);
+    const seen = new Set([this]);
     let promises = [];
     let nextGen = [this];
     let currentGen = [];
@@ -593,15 +595,16 @@ class SpinalNode extends globalType.Model {
    * Recursively applies a function to all the children nodes.
    * @param {Array<String>} relationNames Array containing the relation names to follow
    * @param {function} callback Function to apply to the nodes
+   * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+   * @throws {TypeError} If an element of relationNames is not a string
+   * @throws {TypeError} If the callback is not a function
    */
   async forEach(relationNames, callback) {
-    if (typeof callback === "undefined") {
-      throw Error("You must give a callback function");
-    } else if (typeof callback !== "function") {
-      throw new Error("The callback function must be a function");
+    if (typeof callback !== "function") {
+      throw TypeError("callback must be a function");
     }
 
-    let nodes = await this.find(relationNames);
+    const nodes = await this.find(relationNames);
 
     for (let node of nodes) {
       callback(node);
@@ -612,15 +615,15 @@ class SpinalNode extends globalType.Model {
    * Recursively applies a function to all the children nodes in the context.
    * @param {SpinalContext} context Context to use for the search
    * @param {function} callback Function to apply to the nodes
+   * @throws {TypeError} If context is not a SpinalContext
+   * @throws {TypeError} If the callback is not a function
    */
   async forEachInContext(context, callback) {
-    if (typeof callback === "undefined") {
-      throw Error("You must give a callback function");
-    } else if (typeof callback !== "function") {
-      throw new Error("The callback function must be a function");
+    if (typeof callback !== "function") {
+      throw TypeError("callback must be a function");
     }
 
-    let nodes = await this.findInContext(context);
+    const nodes = await this.findInContext(context);
 
     for (let node of nodes) {
       callback(node);
@@ -632,16 +635,17 @@ class SpinalNode extends globalType.Model {
    * @param {Array<String>} relationNames Array containing the relation names to follow
    * @param {function} callback Function to apply to the nodes
    * @returns {Promise<Array<*>>} The results of the callback for each node
+   * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+   * @throws {TypeError} If an element of relationNames is not a string
+   * @throws {TypeError} If the callback is not a function
    */
   async map(relationNames, callback) {
-    if (typeof callback === "undefined") {
-      throw Error("You must give a callback function");
-    } else if (typeof callback !== "function") {
-      throw new Error("The callback function must be a function");
+    if (typeof callback !== "function") {
+      throw TypeError("The callback function must be a function");
     }
 
-    let nodes = await this.find(relationNames);
-    let results = [];
+    const nodes = await this.find(relationNames);
+    const results = [];
 
     for (let node of nodes) {
       results.push(callback(node));
@@ -655,16 +659,16 @@ class SpinalNode extends globalType.Model {
    * @param {SpinalContext} context Context to use for the search
    * @param {function} callback Function to apply to the nodes
    * @returns {Promise<Array<*>>} The results of the callback for each node
+   * @throws {TypeError} If context is not a SpinalContext
+   * @throws {TypeError} If the callback is not a function
    */
   async mapInContext(context, callback) {
-    if (typeof callback === "undefined") {
-      throw Error("You must give a callback function");
-    } else if (typeof callback !== "function") {
-      throw new Error("The callback function must be a function");
+    if (typeof callback !== "function") {
+      throw TypeError("The callback function must be a function");
     }
 
-    let nodes = await this.findInContext(context);
-    let results = [];
+    const nodes = await this.findInContext(context);
+    const results = [];
 
     for (let node of nodes) {
       results.push(callback(node));

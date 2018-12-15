@@ -10,27 +10,39 @@ const DEFAULT_FUN = node => node;
 
 describe("How to use map", function() {
   describe("Error handling", function() {
+    it("should throw an error if relationNames is neither an array, a string or omitted", async function() {
+      let error = false;
+
+      try {
+        await DEFAULT_NODE.map(1, DEFAULT_FUN);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
+
     it("should throw an error if the callback function is missing", async function() {
       let error = false;
 
-      await DEFAULT_NODE.map().catch(() => {
+      try {
+        await DEFAULT_NODE.map([], undefined);
+      } catch (e) {
         error = true;
-      });
+        assert(e instanceof Error);
+      }
       assert(error);
-
-      error = false;
-      await DEFAULT_NODE.map(undefined, DEFAULT_FUN).catch(() => {
-        error = true;
-      });
-      assert(!error);
     });
 
     it("should throw an error if the callback function is not a function", async function() {
       let error = false;
 
-      await DEFAULT_NODE.map(undefined, 256).catch(() => {
+      try {
+        await DEFAULT_NODE.map([], 256);
+      } catch (e) {
         error = true;
-      });
+        assert(e instanceof Error);
+      }
       assert(error);
     });
 
@@ -119,43 +131,53 @@ describe("How to use map", function() {
 
 describe("How to use mapInContext", function() {
   describe("Error handling", function() {
-    it("should throw an error if the the context or the callback is missing", async function() {
-      const context = new lib.SpinalContext();
+    it("should throw an error if the context is missing", async function() {
       let error = false;
 
-
-      error = false;
-      await DEFAULT_NODE.mapInContext(undefined, DEFAULT_FUN).catch(() => {
+      try {
+        await DEFAULT_NODE.mapInContext(undefined, DEFAULT_FUN);
+      } catch (e) {
         error = true;
-      });
+        assert(e instanceof Error);
+      }
       assert(error);
+    });
 
-      error = false;
-      await DEFAULT_NODE.mapInContext(context).catch(() => {
+    it("should throw an error if the context is not a SpinalContext", async function() {
+      const context = new lib.SpinalNode();
+      let error = false;
+
+      try {
+        await DEFAULT_NODE.mapInContext(context, DEFAULT_FUN);
+      } catch (e) {
         error = true;
-      });
+        assert(e instanceof Error);
+      }
       assert(error);
+    });
 
-      error = false;
-      await DEFAULT_NODE.mapInContext(context, DEFAULT_FUN).catch(() => {
+    it("should throw an error if the callback is missing", async function() {
+      let error = false;
+
+      try {
+        await DEFAULT_NODE.mapInContext(DEFAULT_CONTEXT);
+      } catch (e) {
         error = true;
-      });
-      assert(!error);
+        assert(e instanceof Error);
+      }
+      assert(error);
     });
 
     it("should throw an error if the callback is not a function", async function() {
       let error = false;
 
-      await DEFAULT_NODE.mapInContext(DEFAULT_CONTEXT, 128).catch(() => {
+      try {
+        await DEFAULT_NODE.mapInContext(DEFAULT_CONTEXT, 128);
+      } catch (e) {
         error = true;
-      });
+        assert(e instanceof Error);
+      }
       assert(error);
-
-      error = false;
-      await DEFAULT_NODE.mapInContext(DEFAULT_CONTEXT, DEFAULT_FUN).catch(() => {
-        error = true;
-      });
-      assert(!error);
     });
 
     it("should not fall in infinite loops", async function() {
