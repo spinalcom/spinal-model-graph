@@ -728,6 +728,10 @@ Constructor for the SpinalNodePointer class.
 Sets pointer to point to an element.
 
 **Kind**: instance method of [<code>SpinalNodePointer</code>](#SpinalNodePointer)  
+**Throws**:
+
+- <code>Error</code> If the element is not a Model
+
 
 | Param | Type |
 | --- | --- |
@@ -766,26 +770,31 @@ This function returns the type of the pointed element.
 **Kind**: global class  
 
 * [BaseSpinalRelation](#BaseSpinalRelation)
-    * [new BaseSpinalRelation(name)](#new_BaseSpinalRelation_new)
+    * [new BaseSpinalRelation(parent, name)](#new_BaseSpinalRelation_new)
     * [.getId()](#BaseSpinalRelation+getId) ⇒ <code>Str</code>
     * [.getName()](#BaseSpinalRelation+getName) ⇒ <code>Str</code>
     * [.getParent()](#BaseSpinalRelation+getParent) ⇒ <code>Promise.&lt;SpinalNode&gt;</code>
-    * [.getContextIds()](#BaseSpinalRelation+getContextIds) ⇒ <code>Array.&lt;String&gt;</code>
     * [.addContextId(id)](#BaseSpinalRelation+addContextId)
+    * [.getContextIds()](#BaseSpinalRelation+getContextIds) ⇒ <code>Array.&lt;string&gt;</code>
     * [.belongsToContext(context)](#BaseSpinalRelation+belongsToContext) ⇒ <code>Boolean</code>
-    * [.setParent(parent)](#BaseSpinalRelation+setParent)
     * [.removeChildren(nodes)](#BaseSpinalRelation+removeChildren) ⇒ <code>Promise.&lt;nothing&gt;</code>
     * [.removeFromGraph()](#BaseSpinalRelation+removeFromGraph) ⇒ <code>Promise.&lt;nothing&gt;</code>
 
 <a name="new_BaseSpinalRelation_new"></a>
 
-### new BaseSpinalRelation(name)
+### new BaseSpinalRelation(parent, name)
 Constructor for the BaseSpinalRelation class.
+
+**Throws**:
+
+- <code>TypeError</code> If the parent is not a node
+- <code>TypeError</code> If the name is not a string
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| name | <code>String</code> | Name of the relation |
+| parent | <code>SpinalNode</code> | Parent of the relation |
+| name | <code>string</code> | Name of the relation |
 
 <a name="BaseSpinalRelation+getId"></a>
 
@@ -808,24 +817,28 @@ Returns the parent of the relation.
 
 **Kind**: instance method of [<code>BaseSpinalRelation</code>](#BaseSpinalRelation)  
 **Returns**: <code>Promise.&lt;SpinalNode&gt;</code> - Returns a promise where the resolve is the parent  
-<a name="BaseSpinalRelation+getContextIds"></a>
-
-### baseSpinalRelation.getContextIds() ⇒ <code>Array.&lt;String&gt;</code>
-Returns a list of the contexts the relation is associated to.
-
-**Kind**: instance method of [<code>BaseSpinalRelation</code>](#BaseSpinalRelation)  
-**Returns**: <code>Array.&lt;String&gt;</code> - A list of ids of the associated contexts  
 <a name="BaseSpinalRelation+addContextId"></a>
 
 ### baseSpinalRelation.addContextId(id)
 Adds an id to the context ids of the relation.
 
 **Kind**: instance method of [<code>BaseSpinalRelation</code>](#BaseSpinalRelation)  
+**Throws**:
+
+- <code>TypeError</code> If the id is not a string
+
 
 | Param | Type | Description |
 | --- | --- | --- |
-| id | <code>String</code> | Id of the context |
+| id | <code>string</code> | Id of the context |
 
+<a name="BaseSpinalRelation+getContextIds"></a>
+
+### baseSpinalRelation.getContextIds() ⇒ <code>Array.&lt;string&gt;</code>
+Returns a list of the contexts the relation is associated to.
+
+**Kind**: instance method of [<code>BaseSpinalRelation</code>](#BaseSpinalRelation)  
+**Returns**: <code>Array.&lt;string&gt;</code> - A list of ids of the associated contexts  
 <a name="BaseSpinalRelation+belongsToContext"></a>
 
 ### baseSpinalRelation.belongsToContext(context) ⇒ <code>Boolean</code>
@@ -833,21 +846,14 @@ Returns true if the relation belongs to the context.
 
 **Kind**: instance method of [<code>BaseSpinalRelation</code>](#BaseSpinalRelation)  
 **Returns**: <code>Boolean</code> - A boolean  
+**Throws**:
+
+- <code>TypeError</code> If the context is not a SpinalContext
+
 
 | Param | Type | Description |
 | --- | --- | --- |
 | context | <code>SpinalContext</code> | The context that might own the node |
-
-<a name="BaseSpinalRelation+setParent"></a>
-
-### baseSpinalRelation.setParent(parent)
-Sets the parent of the relation. If a parent was already set, the parent relation is removed.
-
-**Kind**: instance method of [<code>BaseSpinalRelation</code>](#BaseSpinalRelation)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| parent | <code>SpinalNode</code> | New parent of the relation |
 
 <a name="BaseSpinalRelation+removeChildren"></a>
 
@@ -878,7 +884,7 @@ Removes the relation from the graph.
 **Kind**: global class  
 
 * [SpinalRelationPtrLst](#SpinalRelationPtrLst)
-    * [new SpinalRelationPtrLst(name)](#new_SpinalRelationPtrLst_new)
+    * [new SpinalRelationPtrLst(parent, name)](#new_SpinalRelationPtrLst_new)
     * [.getChildrenIds()](#SpinalRelationPtrLst+getChildrenIds) ⇒ <code>Array.&lt;String&gt;</code>
     * [.getChildren()](#SpinalRelationPtrLst+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getChildrenInContext(context)](#SpinalRelationPtrLst+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
@@ -889,12 +895,17 @@ Removes the relation from the graph.
 
 <a name="new_SpinalRelationPtrLst_new"></a>
 
-### new SpinalRelationPtrLst(name)
+### new SpinalRelationPtrLst(parent, name)
 Constructor for the SpinalRelationPtrLst class.
+
+**Throws**:
+
+- <code>Error</code> If the parent is not a node
 
 
 | Param | Type | Description |
 | --- | --- | --- |
+| parent | <code>SpinalNode</code> | Parent of the relation |
 | name | <code>String</code> | Name of the relation |
 
 <a name="SpinalRelationPtrLst+getChildrenIds"></a>
@@ -980,7 +991,7 @@ Removes children from the relation.
 **Kind**: global class  
 
 * [SpinalRelationLstPtr](#SpinalRelationLstPtr)
-    * [new SpinalRelationLstPtr(name)](#new_SpinalRelationLstPtr_new)
+    * [new SpinalRelationLstPtr(parent, name)](#new_SpinalRelationLstPtr_new)
     * [.getChildrenIds()](#SpinalRelationLstPtr+getChildrenIds) ⇒ <code>Array.&lt;String&gt;</code>
     * [.getChildren()](#SpinalRelationLstPtr+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getChildrenInContext()](#SpinalRelationLstPtr+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
@@ -990,12 +1001,17 @@ Removes children from the relation.
 
 <a name="new_SpinalRelationLstPtr_new"></a>
 
-### new SpinalRelationLstPtr(name)
+### new SpinalRelationLstPtr(parent, name)
 Constructor for the SpinalRelationLstPtr class.
+
+**Throws**:
+
+- <code>Error</code> If the parent is not a node
 
 
 | Param | Type | Description |
 | --- | --- | --- |
+| parent | <code>SpinalNode</code> | Parent of the relation |
 | name | <code>String</code> | Name of the relation |
 
 <a name="SpinalRelationLstPtr+getChildrenIds"></a>
@@ -1060,7 +1076,7 @@ Removes a child from the relation.
 **Kind**: global class  
 
 * [SpinalRelationRef](#SpinalRelationRef)
-    * [new SpinalRelationRef(name)](#new_SpinalRelationRef_new)
+    * [new SpinalRelationRef(parent, name)](#new_SpinalRelationRef_new)
     * [.getChildrenIds()](#SpinalRelationRef+getChildrenIds) ⇒ <code>Array.&lt;String&gt;</code>
     * [.getChildren()](#SpinalRelationRef+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getChildrenInContext(context)](#SpinalRelationRef+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
@@ -1070,12 +1086,17 @@ Removes a child from the relation.
 
 <a name="new_SpinalRelationRef_new"></a>
 
-### new SpinalRelationRef(name)
+### new SpinalRelationRef(parent, name)
 Constructor for the SpinalRelationRef class.
+
+**Throws**:
+
+- <code>Error</code> If the parent is not a node
 
 
 | Param | Type | Description |
 | --- | --- | --- |
+| parent | <code>SpinalNode</code> | Parent of the relation |
 | name | <code>String</code> | Name of the relation |
 
 <a name="SpinalRelationRef+getChildrenIds"></a>
