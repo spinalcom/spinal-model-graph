@@ -9,17 +9,87 @@ const DEFAULT_NODE = new lib.SpinalNode();
 
 describe("SpinalRelationLstPtr", function() {
   describe("How to use the constructor", function() {
-    it("should create a new relation with a name", function() {
-      let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+    it("should create a new relation with a name and a node parent", function() {
+      let rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
       assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
+    });
+
+    it("should create a new relation with a name and a context parent", async function() {
+      const parent = new lib.SpinalContext();
+      const rel = new SpinalRelationLstPtr(parent, DEFAULT_RELATION_NAME);
+
+      assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
+      assert.strictEqual(await rel.getParent(), parent);
+    });
+
+    it("should create a new relation with a name and a graph parent", async function() {
+      const parent = new lib.SpinalGraph();
+      const rel = new SpinalRelationLstPtr(parent, DEFAULT_RELATION_NAME);
+
+      assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
+      assert.strictEqual(await rel.getParent(), parent);
+    });
+
+    it("should throw an error if the parent or the name is missing", async function() {
+      let error = false;
+
+      try {
+        new SpinalRelationLstPtr();
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+
+      error = false;
+
+      try {
+        new SpinalRelationLstPtr(undefined, DEFAULT_RELATION_NAME);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+
+      try {
+        new SpinalRelationLstPtr(parent2);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
+
+    it("should throw an error if the parent is not a SpinalNode", async function() {
+      const parent1 = new Array();
+      let error = false;
+
+      try {
+        new SpinalRelationLstPtr(parent1, DEFAULT_RELATION_NAME);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+
+      const parent2 = new globalType.Model();
+      error = false;
+
+      try {
+        new SpinalRelationLstPtr(parent2, DEFAULT_RELATION_NAME);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
     });
   });
 
   describe("How to get informations about the relation", function() {
     describe("How to use getChildrenIds", function() {
       it("should return the ids of all children", async function() {
-        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+        let rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
         await rel.addChild(DEFAULT_NODE);
         assert.deepStrictEqual(rel.getChildrenIds(), [
@@ -28,7 +98,7 @@ describe("SpinalRelationLstPtr", function() {
       });
 
       it("should return the ids of all children", async function() {
-        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+        let rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
         const node1 = new lib.SpinalNode();
         const node2 = new lib.SpinalNode();
         const node3 = new lib.SpinalNode();
@@ -51,21 +121,18 @@ describe("SpinalRelationLstPtr", function() {
 
     describe("How to use getChildren", function() {
       it("should return the relation's child", async function() {
-        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
-        let children;
+        let rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
         await rel.addChild(DEFAULT_NODE);
-
-        children = await rel.getChildren();
+        const children = await rel.getChildren();
         assert.deepStrictEqual(children, [DEFAULT_NODE]);
       });
 
       it("should return the relation's children", async function() {
-        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+        let rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
         const node1 = new lib.SpinalNode();
         const node2 = new lib.SpinalNode();
         const node3 = new lib.SpinalNode();
-        let children;
 
         await Promise.all([
           rel.addChild(node1),
@@ -73,12 +140,12 @@ describe("SpinalRelationLstPtr", function() {
           rel.addChild(node3)
         ]);
 
-        children = await rel.getChildren();
+        const children = await rel.getChildren();
         assert.deepStrictEqual(children, [node1, node2, node3]);
       });
 
       it("should return an empty array", async function() {
-        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+        let rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
         const children = await rel.getChildren();
 
         assert.deepStrictEqual(children, []);
@@ -87,9 +154,9 @@ describe("SpinalRelationLstPtr", function() {
 
     describe("How to use getChildrenInContext", function() {
       it("should return the relation's child", async function() {
-        let context = new lib.SpinalContext();
-        let relation = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
-        let child = new lib.SpinalNode();
+        const context = new lib.SpinalContext();
+        const relation = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const child = new lib.SpinalNode();
 
         child.addContextId(context.getId().get());
         await relation.addChild(child);
@@ -100,11 +167,11 @@ describe("SpinalRelationLstPtr", function() {
       });
 
       it("should return the relation's children associated to the context", async function() {
-        let context = new lib.SpinalContext();
-        let relation = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
-        let child1 = new lib.SpinalNode();
-        let child2 = new lib.SpinalNode();
-        let child3 = new lib.SpinalNode();
+        const context = new lib.SpinalContext();
+        const relation = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const child1 = new lib.SpinalNode();
+        const child2 = new lib.SpinalNode();
+        const child3 = new lib.SpinalNode();
 
         child1.addContextId(context.getId().get());
         child3.addContextId(context.getId().get());
@@ -118,11 +185,49 @@ describe("SpinalRelationLstPtr", function() {
           context);
         assert.deepStrictEqual(children, [child1, child3]);
       });
+
+      it("should throw an error if the context is missing", async function() {
+        const relation = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        let error = false;
+
+        try {
+          await relation.getChildrenInContext();
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if context is not a SpinalContext", async function() {
+        const context1 = new globalType.Model();
+        const relation = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        let error = false;
+
+        try {
+          await relation.getChildrenInContext(context1);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+
+        const context2 = new lib.SpinalNode();
+        error = false;
+
+        try {
+          await relation.getChildrenInContext(context2);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
     });
 
     describe("How to use getType", function() {
       it("should return the relation's type", function() {
-        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+        let rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
         assert.strictEqual(rel.getType(), lib.SPINAL_RELATION_LST_PTR_TYPE);
       });
@@ -131,16 +236,17 @@ describe("SpinalRelationLstPtr", function() {
 
   describe("How to add children", function() {
     describe("How to use addChild", function() {
-      it("should add a child to the children of the relation", async function() {
-        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+      it("should add a child to the children of the relation",
+        async function() {
+          const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
-        await rel.addChild(DEFAULT_NODE);
-        let children = await rel.getChildren();
-        assert.deepStrictEqual(children, [DEFAULT_NODE]);
-      });
+          await rel.addChild(DEFAULT_NODE);
+          const children = await rel.getChildren();
+          assert.deepStrictEqual(children, [DEFAULT_NODE]);
+        });
 
       it("should throw an error if you try to add the same node twice", async function() {
-        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
         let error;
 
         await rel.addChild(DEFAULT_NODE);
@@ -153,8 +259,7 @@ describe("SpinalRelationLstPtr", function() {
       });
 
       it("should throw an error when you pass it something that is not a model", async function() {
-        let rel = new SpinalRelationLstPtr(
-          DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
         let error;
 
         await rel.addChild(new Array()).then(() => {
@@ -166,9 +271,9 @@ describe("SpinalRelationLstPtr", function() {
       });
 
       it("should return the node added to the relation", async function() {
-        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
-        let node = new lib.SpinalNode();
-        let model = new globalType.Model();
+        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const node = new lib.SpinalNode();
+        const model = new globalType.Model();
 
         const res1 = await rel.addChild(node);
 
@@ -185,44 +290,41 @@ describe("SpinalRelationLstPtr", function() {
   describe("How to remove children", function() {
     describe("How to use removeChild", function() {
       it("should remove a child from the children of the relation", async function() {
-        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
-        let children;
+        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
         await rel.addChild(DEFAULT_NODE);
         await rel.removeChild(DEFAULT_NODE);
 
-        children = await rel.getChildren();
+        const children = await rel.getChildren();
         assert.deepStrictEqual(children, []);
       });
 
       it("should remove a child and update the children ids of the relation", async function() {
-        let rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
-        let ids;
+        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
         await rel.addChild(DEFAULT_NODE);
         await rel.removeChild(DEFAULT_NODE);
 
-        ids = rel.getChildrenIds();
+        const ids = rel.getChildrenIds();
         assert.deepStrictEqual(ids, []);
       });
 
       it("should remove a child and remove the relation the node's parents", async function() {
-        let parentNode = new lib.SpinalNode();
-        let rel = parentNode._createRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-        let childNode = new lib.SpinalNode();
-        let parents;
+        const parentNode = new lib.SpinalNode();
+        const rel = parentNode._createRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE);
+        const childNode = new lib.SpinalNode();
 
         await rel.addChild(childNode);
         await rel.removeChild(childNode);
 
-        parents = await childNode.getParents();
+        const parents = await childNode.getParents();
         assert.deepStrictEqual(parents, []);
       });
 
-      it("should throw an error", async function() {
-        let parentNode = new lib.SpinalNode();
-        let rel = parentNode._createRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
-        let childNode = new lib.SpinalNode();
+      it("should throw an error if the node is not a child", async function() {
+        const parentNode = new lib.SpinalNode();
+        const rel = parentNode._createRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE);
+        const childNode = new lib.SpinalNode();
         let error = false;
 
         try {
@@ -237,7 +339,7 @@ describe("SpinalRelationLstPtr", function() {
 
     describe("How to use removeChildren", function() {
       it("should delete all of the children", async function() {
-        const rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
         const node1 = new lib.SpinalNode();
         const node2 = new lib.SpinalNode();
         const node3 = new lib.SpinalNode();
@@ -255,7 +357,7 @@ describe("SpinalRelationLstPtr", function() {
       });
 
       it("should delete the given children", async function() {
-        const rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
         const node1 = new lib.SpinalNode();
         const node2 = new lib.SpinalNode();
         const node3 = new lib.SpinalNode();
@@ -273,7 +375,7 @@ describe("SpinalRelationLstPtr", function() {
       });
 
       it("should delete some of the given children", async function() {
-        const rel = new SpinalRelationLstPtr(DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
         const node1 = new lib.SpinalNode("node1");
         const node2 = new lib.SpinalNode("node2");
         const node3 = new lib.SpinalNode("node3");

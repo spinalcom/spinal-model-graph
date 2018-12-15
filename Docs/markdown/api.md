@@ -1035,6 +1035,10 @@ Return all the children of the relation associated to a certain context.
 
 **Kind**: instance method of [<code>SpinalRelationLstPtr</code>](#SpinalRelationLstPtr)  
 **Returns**: <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code> - The children of the relation  
+**Throws**:
+
+- <code>TypeError</code> If the context is not a SpinalContext
+
 <a name="SpinalRelationLstPtr+getType"></a>
 
 ### spinalRelationLstPtr.getType() ⇒ <code>Number</code>

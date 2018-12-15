@@ -25,7 +25,10 @@ import BaseSpinalRelation from "./BaseSpinalRelation";
 import {
   SPINAL_RELATION_LST_PTR_TYPE
 } from "./SpinalRelationFactory";
-import SpinalNode from "../Nodes/SpinalNode";
+import {
+  SpinalNode,
+  SpinalContext
+} from "../index";
 import SpinalNodePointer from "../SpinalNodePointer";
 import spinalCore from "spinal-core-connectorjs";
 
@@ -78,10 +81,15 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
   /**
    * Return all the children of the relation associated to a certain context.
    * @returns {Promise<Array<SpinalNode>>} The children of the relation
+   * @throws {TypeError} If the context is not a SpinalContext
    */
   async getChildrenInContext(context) {
     const promises = [];
     let children;
+
+    if (!(context instanceof SpinalContext)) {
+      return Promise.reject(TypeError("context must be a SpinalContext"));
+    }
 
     for (let i = 0; i < this.children.length; i++) {
       let ptr = this.children[i];
@@ -142,7 +150,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
     }
 
     if (!found) {
-      return Promise.reject(Error("Invalid node"));
+      return Promise.reject(Error("The node is not a child"));
     }
 
     node._removeParent(this);

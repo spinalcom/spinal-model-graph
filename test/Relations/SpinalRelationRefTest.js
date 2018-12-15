@@ -185,7 +185,20 @@ describe("SpinalRelationRef", function() {
         assert.deepStrictEqual(children, [child1, child3]);
       });
 
-      it("should throw an error is not a SpinalContext", async function() {
+      it("should throw an error if the context is missing", async function() {
+        const relation = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        let error = false;
+
+        try {
+          await relation.getChildrenInContext();
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw an error if context is not a SpinalContext", async function() {
         const context1 = new globalType.Model();
         const relation = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
         let error = false;
