@@ -21,6 +21,7 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
+
 import spinalCore from "spinal-core-connectorjs";
 
 const globalType = typeof window === "undefined" ? global : window;
@@ -29,24 +30,30 @@ class SpinalSet extends globalType.Model {
   /**
    * Constructor for the SpinalSet class.
    * @param {Array<*>} init Array of values
+   * @throws {TypeError} If init is not iterable
+   * @throws {TypeError} If init[Symbol.iterator] doesn't return iterators
+   * @throws {TypeError} If the values of the iterators are not strings
    */
   constructor(init) {
     super();
 
-    if (!init) {
-      return;
-    }
-
-    for (let value of init) {
-      this.add(value);
+    if (init !== undefined) {
+      for (let value of init) {
+        this.add(value);
+      }
     }
   }
 
   /**
    * Appends a new element with the given value to the set.
    * @param {String} value Value to store in the set
+   * @throws {TypeError} If the value is not a string
    */
   add(value) {
+    if (typeof value !== "string") {
+      throw TypeError("The value must be a string");
+    }
+
     this.mod_attr(value, 0);
   }
 
@@ -54,8 +61,13 @@ class SpinalSet extends globalType.Model {
    * Returns a boolean asserting whether the value is in the set or not.
    * @param {String} value Value
    * @returns {Boolean} Return true if the value exists
+   * @throws {TypeError} If the value is not a string
    */
   has(value) {
+    if (typeof value !== "string") {
+      throw TypeError("The value must be a string");
+    }
+
     return this.hasOwnProperty(value);
   }
 
@@ -70,8 +82,14 @@ class SpinalSet extends globalType.Model {
   /**
    * Deletes an element.
    * @param {String} value Value to delete
+   * @throws {TypeError} If the value is not a string
+   * @throws {Error} If the value is not in the map
    */
   delete(value) {
+    if (!this.has(value)) {
+      throw Error("The value doesn't exist");
+    }
+
     this.rem_attr(value);
   }
 
@@ -97,8 +115,13 @@ class SpinalSet extends globalType.Model {
   /**
    * Applies a function to each of the values in the set.
    * @param {function} fun Funcion to apply
+   * @throws {TypeError} If fun is not a function
    */
   forEach(fun) {
+    if (typeof fun !== "function") {
+      throw TypeError("The callback must be a function");
+    }
+
     for (let i = 0; i < this._attribute_names.length; i++) {
       let value = this._attribute_names[i];
       fun(value);

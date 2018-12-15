@@ -5,21 +5,69 @@ const assert = require("assert");
 describe("SpinalSet", function() {
   describe("How to use the constructor", function() {
     it("should create an empty set", function() {
-      const map = new SpinalSet();
+      const set = new SpinalSet();
 
-      assert.strictEqual(map.size(), 0);
+      assert.strictEqual(set.size(), 0);
     });
 
     it("should create a set using an array", function() {
       const init = [
-        ["value"],
-        ["val"]
+        "value",
+        "val"
       ];
 
-      const map = new SpinalSet(init);
+      const set = new SpinalSet(init);
 
-      assert(map.has("value"));
-      assert(map.has("val"));
+      assert(set.has("value"));
+      assert(set.has("val"));
+    });
+
+    it("should throw an error if init is not iterable", function() {
+      const init = {}
+      let error = false;
+
+      try {
+        new SpinalSet(init);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+
+      init[Symbol.iterator] = null;
+
+      error = false;
+      try {
+        new SpinalSet(init);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+
+      init[Symbol.iterator] = () => {};
+
+      error = false;
+      try {
+        new SpinalSet(init);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
+
+    it("should throw an error if init has bad values", function() {
+      let init = [1]
+      let error = false;
+
+      try {
+        new SpinalSet(init);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
     });
   });
 
@@ -30,6 +78,32 @@ describe("SpinalSet", function() {
       set.add("value");
 
       assert(set.has("value"));
+    });
+
+    it("should throw an error if the value is missing", function() {
+      const set = new SpinalSet();
+      let error = false;
+
+      try {
+        set.setElement();
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
+
+    it("should throw an error if the value is not a string", function() {
+      const set = new SpinalSet();
+      let error = false;
+
+      try {
+        set.setElement(1);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
     });
   });
 
@@ -48,6 +122,19 @@ describe("SpinalSet", function() {
       set.add("val");
 
       assert(!set.has("value"));
+    });
+
+    it("should throw an error if the value is not a string", function() {
+      const set = new SpinalSet();
+      let error = false;
+
+      try {
+        set.has(1);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
     });
   });
 
@@ -81,12 +168,45 @@ describe("SpinalSet", function() {
       assert(!set.has("val"));
     });
 
-    it("should not delete a key that doesn't exist", function() {
+    it("should throw an error if the value is missing", function() {
       const set = new SpinalSet();
+      let error = false;
+
+      try {
+        set.delete();
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
+
+    it("should throw an error if the value is not a string", function() {
+      const set = new SpinalSet();
+      let error = false;
+
+      try {
+        set.delete(1);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
+
+    it("should throw an error if the value doesn't exist", function() {
+      const set = new SpinalSet();
+      let error = false;
 
       set.add("value");
 
-      set.delete("val");
+      try {
+        set.delete("val");
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
 
       assert(set.has("value"));
     });
@@ -133,6 +253,19 @@ describe("SpinalSet", function() {
       set.forEach(value => arr.push(value));
 
       assert.deepStrictEqual(arr, ["value", "val"]);
+    });
+
+    it("should throw an error if the callback is missing", function() {
+      const set = new SpinalSet();
+      let error = false;
+
+      try {
+        set.forEach();
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
     });
   });
 

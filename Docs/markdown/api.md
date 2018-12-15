@@ -621,6 +621,12 @@ Recursively applies a function to all the children nodes in the context and retu
 ### new SpinalSet(init)
 Constructor for the SpinalSet class.
 
+**Throws**:
+
+- <code>TypeError</code> If init is not iterable
+- <code>TypeError</code> If init[Symbol.iterator] doesn't return iterators
+- <code>TypeError</code> If the values of the iterators are not strings
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -632,6 +638,10 @@ Constructor for the SpinalSet class.
 Appends a new element with the given value to the set.
 
 **Kind**: instance method of [<code>SpinalSet</code>](#SpinalSet)  
+**Throws**:
+
+- <code>TypeError</code> If the value is not a string
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -644,6 +654,10 @@ Returns a boolean asserting whether the value is in the set or not.
 
 **Kind**: instance method of [<code>SpinalSet</code>](#SpinalSet)  
 **Returns**: <code>Boolean</code> - Return true if the value exists  
+**Throws**:
+
+- <code>TypeError</code> If the value is not a string
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -662,6 +676,11 @@ Returns an array that contains all the values of the set.
 Deletes an element.
 
 **Kind**: instance method of [<code>SpinalSet</code>](#SpinalSet)  
+**Throws**:
+
+- <code>TypeError</code> If the value is not a string
+- <code>Error</code> If the value is not in the map
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -686,6 +705,10 @@ Returns the number of values in the set.
 Applies a function to each of the values in the set.
 
 **Kind**: instance method of [<code>SpinalSet</code>](#SpinalSet)  
+**Throws**:
+
+- <code>TypeError</code> If fun is not a function
+
 
 | Param | Type | Description |
 | --- | --- | --- |
