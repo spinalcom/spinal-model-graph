@@ -29,29 +29,35 @@ class SpinalMap extends globalType.Model {
   /**
    * Constructor for the SpinalMap class.
    * @param {Array<Array<String, *>>} init Array of arrays of key-value pairs
+   * @throws {TypeError} If init is not iterable
+   * @throws {TypeError} If init[Symbol.iterator] doesn't return iterators
+   * @throws {TypeError} If the values of the iterators are not arrays of key values
+   * @throws {TypeError} If the keys of the values of the iterators are not strings
    */
   constructor(init) {
     super();
 
-    if (!init) {
-      return;
-    }
-
-    for (let [key, value] of init) {
-      this.setElement(key, value);
+    if (init !== undefined) {
+      for (let [key, value] of init) {
+        this.setElement(key, value);
+      }
     }
   }
 
   /**
    * Sets the value corresponding to the key.
    * @param {String} key Key to the value
-   * @param {*} value New value
+   * @param {*} value New value, can be omitted
+   * @throws {TypeError} If the key is not a string
    */
   setElement(key, value) {
+    if (typeof key !== "string") {
+      throw TypeError("The key must be a string");
+    }
+
     this.rem_attr(key);
     const attribute = {};
     attribute[key] = value;
-
     this.add_attr(attribute);
   }
 
@@ -68,8 +74,13 @@ class SpinalMap extends globalType.Model {
    * Returns a boolean asserting whether a value has been associated to the key or not.
    * @param key Key
    * @returns {Boolean} Return true if the key exists
+   * @throws {TypeError} If the key is not a string
    */
   has(key) {
+    if (typeof key !== "string") {
+      throw TypeError("The key must be a string");
+    }
+
     return this._attribute_names.includes(key);
   }
 
@@ -106,8 +117,14 @@ class SpinalMap extends globalType.Model {
   /**
    * Deletes an element.
    * @param key Key of the element
+   * @throws {TypeError} If the key is not a string
+   * @throws {Error} If the key is not in the map
    */
   delete(key) {
+    if (!this.has(key)) {
+      throw Error("The key doesn't exist");
+    }
+
     this.rem_attr(key);
   }
 
@@ -125,8 +142,13 @@ class SpinalMap extends globalType.Model {
   /**
    * Applies a function to each of the values in the map.
    * @param {function} fun Funcion to apply
+   * @throws {TypeError} If fun is not a function
    */
   forEach(fun) {
+    if (typeof fun !== "function") {
+      throw TypeError("The callback must be a function");
+    }
+
     for (let i = 0; i < this._attribute_names.length; i++) {
       let name = this._attribute_names[i];
       fun(this[name]);

@@ -640,11 +640,10 @@ class SpinalNode extends globalType.Model {
    * @private
    */
   _addParent(relation) {
-    const relationName = relation.getName();
+    const relationName = relation.getName().get();
 
-    if (this.parents.has(relationName.get())) {
-      this.parents.getElement(relationName).push(new SpinalNodePointer(
-        relation));
+    if (this.parents.has(relationName)) {
+      this.parents.getElement(relationName).push(new SpinalNodePointer(relation));
     } else {
       const list = new globalType.Lst();
       list.push(new SpinalNodePointer(relation));

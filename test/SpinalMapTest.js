@@ -23,6 +23,80 @@ describe("SpinalMap", function() {
       assert(map.has("hello"));
       assert.strictEqual(map.getElement("hello").get(), "world");
     });
+
+    it("should throw an error if init is not iterable", function() {
+      const init = {}
+      let error = false;
+
+      try {
+        new SpinalMap(init);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+
+      init[Symbol.iterator] = null;
+
+      error = false;
+      try {
+        new SpinalMap(init);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+
+      init[Symbol.iterator] = () => {};
+
+      error = false;
+      try {
+        new SpinalMap(init);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
+
+    it("should throw an error if init has bad values", function() {
+      let init = [1]
+      let error = false;
+
+      try {
+        new SpinalMap(init);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+
+      init = [
+        []
+      ]
+      error = false;
+
+      try {
+        new SpinalMap(init);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+
+      init = [
+        [1]
+      ]
+      error = false;
+
+      try {
+        new SpinalMap(init);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
   });
 
   describe("How to use setElement and getElement", function() {
@@ -34,13 +108,39 @@ describe("SpinalMap", function() {
       assert.strictEqual(map.getElement("hello").get(), "world");
     });
 
-    it("set an existing element", function() {
+    it("should set an existing element", function() {
       const map = new SpinalMap();
 
       map.setElement("hello", "world");
       map.setElement("hello", "everyone");
 
       assert.strictEqual(map.getElement("hello").get(), "everyone");
+    });
+
+    it("should throw an error if the key is missing", function() {
+      const map = new SpinalMap();
+      let error = false;
+
+      try {
+        map.setElement();
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
+
+    it("should throw an error if the key is not a string", function() {
+      const map = new SpinalMap();
+      let error = false;
+
+      try {
+        map.setElement(1);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
     });
   });
 
@@ -59,6 +159,19 @@ describe("SpinalMap", function() {
       map.setElement("howdy", "world");
 
       assert(!map.has("hello"));
+    });
+
+    it("should throw an error if the key is not a string", function() {
+      const map = new SpinalMap();
+      let error = false;
+
+      try {
+        map.has(1);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
     });
   });
 
@@ -128,12 +241,45 @@ describe("SpinalMap", function() {
       assert(!map.has("bye"));
     });
 
-    it("should not delete a key that doesn't exist", function() {
+    it("should throw an error if the key is missing", function() {
       const map = new SpinalMap();
+      let error = false;
+
+      try {
+        map.delete();
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
+
+    it("should throw an error if the key is not a string", function() {
+      const map = new SpinalMap();
+      let error = false;
+
+      try {
+        map.delete(1);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
+
+    it("should throw an error if the key doesn't exist", function() {
+      const map = new SpinalMap();
+      let error = false;
 
       map.setElement("hello", "world");
 
-      map.delete("bye");
+      try {
+        map.delete("bye");
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
 
       assert(map.has("hello"));
     });
@@ -163,6 +309,19 @@ describe("SpinalMap", function() {
       map.forEach(value => arr.push(value.get()));
 
       assert.deepStrictEqual(arr, ["world", "inexistance"]);
+    });
+
+    it("should throw an error if the callback is missing", function() {
+      const map = new SpinalMap();
+      let error = false;
+
+      try {
+        map.forEach();
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
     });
   });
 

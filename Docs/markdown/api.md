@@ -20,6 +20,13 @@
 ### new SpinalMap(init)
 Constructor for the SpinalMap class.
 
+**Throws**:
+
+- <code>TypeError</code> If init is not iterable
+- <code>TypeError</code> If init[Symbol.iterator] doesn't return iterators
+- <code>TypeError</code> If the values of the iterators are not arrays of key values
+- <code>TypeError</code> If the keys of the values of the iterators are not strings
+
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -31,11 +38,15 @@ Constructor for the SpinalMap class.
 Sets the value corresponding to the key.
 
 **Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
+**Throws**:
+
+- <code>TypeError</code> If the key is not a string
+
 
 | Param | Type | Description |
 | --- | --- | --- |
 | key | <code>String</code> | Key to the value |
-| value | <code>\*</code> | New value |
+| value | <code>\*</code> | New value, can be omitted |
 
 <a name="SpinalMap+getElement"></a>
 
@@ -56,6 +67,10 @@ Returns a boolean asserting whether a value has been associated to the key or no
 
 **Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
 **Returns**: <code>Boolean</code> - Return true if the key exists  
+**Throws**:
+
+- <code>TypeError</code> If the key is not a string
+
 
 | Param | Description |
 | --- | --- |
@@ -88,6 +103,11 @@ Returns an array that contains the keys and the values for each element in the m
 Deletes an element.
 
 **Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
+**Throws**:
+
+- <code>TypeError</code> If the key is not a string
+- <code>Error</code> If the key is not in the map
+
 
 | Param | Description |
 | --- | --- |
@@ -105,6 +125,10 @@ Deletes all elements.
 Applies a function to each of the values in the map.
 
 **Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
+**Throws**:
+
+- <code>TypeError</code> If fun is not a function
+
 
 | Param | Type | Description |
 | --- | --- | --- |
