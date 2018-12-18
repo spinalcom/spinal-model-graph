@@ -109,4 +109,26 @@ describe("SpinalGraph", function() {
       assert(error);
     });
   });
+
+  describe("How to use removeFromGraph", function() {
+    it("should do nothing", async function() {
+      const graph = new lib.SpinalGraph();
+
+      await graph.removeFromGraph();
+    });
+
+    it("shouldn't remove children", async function() {
+      const graph = new lib.SpinalGraph();
+      const context = new lib.SpinalContext();
+
+      await graph.addContext(context);
+      await graph.removeFromGraph();
+
+      const children = await graph.getChildren();
+      assert.deepStrictEqual(children, [context]);
+
+      const parents = await context.getParents();
+      assert.deepStrictEqual(parents, [graph]);
+    });
+  });
 });
