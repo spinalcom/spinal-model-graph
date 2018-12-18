@@ -792,7 +792,7 @@ describe("SpinalNode", function() {
     });
   });
 
-  describe("How to remove a node", function() {
+  describe("How to remove child(s)", function() {
     describe("How to use removeChild", function() {
       it("should remove the child", async function() {
         let node = new lib.SpinalNode();
@@ -843,7 +843,7 @@ describe("SpinalNode", function() {
         assert(error);
       });
 
-      it("should throw if the relation type is missing", async function() {
+      it("should throw if the relation type is invalid", async function() {
         const node = new lib.SpinalNode();
         let error = false;
 
@@ -983,6 +983,97 @@ describe("SpinalNode", function() {
           assert(e instanceof Error);
         }
         assert(error);
+      });
+    });
+
+    describe("How to use removeRelation", function() {
+      it("should remove the relation", async function() {
+        const parent = new lib.SpinalNode();
+        const child = new lib.SpinalNode();
+
+        await parent.addChild(child, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        await parent.removeRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+
+        assert(!parent.hasRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE));
+      });
+
+      it("should throw if the relation name is missing", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.removeRelation(undefined, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw if the relation name is not a string", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.removeRelation(node, 1, lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw if the relation type is missing", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.removeRelation(node, DEFAULT_RELATION_NAME);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw if the relation type is invalid", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        try {
+          await node.removeRelation(node, DEFAULT_RELATION_NAME, 1);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
+
+      it("should throw if the relation doesn't exist", async function() {
+        const node = new lib.SpinalNode();
+        let error = false;
+
+        await node.addChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+
+        try {
+          await node.removeRelation(DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_TYPE);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+
+        error = false;
+        try {
+          await node.removeRelation(DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE + "1");
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+
+        const children = await node.getChildren([]);
+        assert.deepStrictEqual(children, [node]);
       });
     });
 

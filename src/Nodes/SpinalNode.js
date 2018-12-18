@@ -365,6 +365,24 @@ class SpinalNode extends globalType.Model {
   }
 
   /**
+   * Removes a child relation of the node.
+   * @param {string} relationName Name of the relation to remove
+   * @param {string} relationType Type of the relation to remove
+   * @returns {Promise<nothing>} An empty promise
+   * @throws {TypeError} If the relationName is not a string
+   * @throws {Error} If the relationType is invalid
+   * @throws {Error} If the relation doesn't exist
+   */
+  removeRelation(relationName, relationType) {
+    if (!this.hasRelation(relationName, relationType)) {
+      throw Error("The relation doesn't exist");
+    }
+
+    const rel = this._getRelation(relationName, relationType);
+    return rel.removeFromGraph();
+  }
+
+  /**
    * Remove the node from the graph i.e remove the node from all the parent relations and remove all the children relations.
    * This operation might delete all the sub-graph under this node.
    * After this operation the node can be deleted without fear.
