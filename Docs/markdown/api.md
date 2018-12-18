@@ -295,7 +295,7 @@ Empty override of the SpinalNode method.
     * [.addChild(child, relationName, relationType)](#SpinalNode+addChild) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
     * [.addChildInContext(child, relationName, relationType, context)](#SpinalNode+addChildInContext) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
     * [.removeChild(node, relationName, relationType)](#SpinalNode+removeChild) ⇒ <code>Promise.&lt;nothing&gt;</code>
-    * [.removeChildren(relationNames)](#SpinalNode+removeChildren) ⇒ <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code>
+    * [.removeChildren(nodes, relationName, relationType)](#SpinalNode+removeChildren) ⇒ <code>Promise.&lt;nothing&gt;</code>
     * [.removeRelation(relationName, relationType)](#SpinalNode+removeRelation) ⇒ <code>Promise.&lt;nothing&gt;</code>
     * [.removeFromGraph()](#SpinalNode+removeFromGraph) ⇒ <code>Promise.&lt;nothing&gt;</code>
     * [.getChildren(relationNames)](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
@@ -513,20 +513,26 @@ Removes the node from the relation children.
 
 <a name="SpinalNode+removeChildren"></a>
 
-### spinalNode.removeChildren(relationNames) ⇒ <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code>
-Removes children with the relation names.
+### spinalNode.removeChildren(nodes, relationName, relationType) ⇒ <code>Promise.&lt;nothing&gt;</code>
+Removes children in the given relation.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Promise.&lt;Array.&lt;Boolean&gt;&gt;</code> - A promise containing an array of boolean  
+**Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
 **Throws**:
 
-- <code>TypeError</code> If relationNames is neither an array, a string or omitted
-- <code>TypeError</code> If an element of relationNames is not a string
+- <code>TypeError</code> If nodes is not an array
+- <code>TypeError</code> If an element of nodes is not a SpinalNode
+- <code>TypeError</code> If relation name is not a string
+- <code>Error</code> If relation type is invalid
+- <code>Error</code> If the relation doesn't exist
+- <code>Error</code> If one of the nodes is not a child
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| relationNames | <code>Array.&lt;String&gt;</code> \| <code>String</code> \| <code>undefined</code> | Names of the relations to empty |
+| nodes | [<code>Array.&lt;SpinalNode&gt;</code>](#SpinalNode) | Nodes to delete |
+| relationName | <code>string</code> | Name of the relation |
+| relationType | <code>string</code> | Type of the relation |
 
 <a name="SpinalNode+removeRelation"></a>
 

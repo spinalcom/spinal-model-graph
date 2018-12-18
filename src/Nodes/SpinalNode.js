@@ -331,37 +331,29 @@ class SpinalNode extends globalType.Model {
   }
 
   /**
-   * Removes children with the relation names.
-   * @param {Array<String> | String | undefined} relationNames Names of the relations to empty
-   * @returns {Promise<Array<Boolean>>} A promise containing an array of boolean
-   * @throws {TypeError} If relationNames is neither an array, a string or omitted
-   * @throws {TypeError} If an element of relationNames is not a string
+   * Removes children in the given relation.
+   * @param {Array<SpinalNode>} nodes Nodes to delete
+   * @param {string} relationName Name of the relation
+   * @param {string} relationType Type of the relation
+   * @returns {Promise<nothing>} An empty promise
+   * @throws {TypeError} If nodes is not an array
+   * @throws {TypeError} If an element of nodes is not a SpinalNode
+   * @throws {TypeError} If relation name is not a string
+   * @throws {Error} If relation type is invalid
+   * @throws {Error} If the relation doesn't exist
+   * @throws {Error} If one of the nodes is not a child
    */
-  async removeChildren(relationNames) {
-    if (Array.isArray(relationNames)) {
-      if (relationNames.length === 0) {
-        relationNames = this.getRelationNames();
-      }
-    } else if (relationNames === undefined) {
-      relationNames = this.getRelationNames();
-    } else if (typeof relationNames === "string") {
-      relationNames = [relationNames];
-    } else {
-      throw TypeError("relationNames must be an array, a string or omitted");
+  removeChildren(nodes, relationName, relationType) {
+    if (!Array.isArray(nodes)) {
+      throw TypeError("nodes must be an array");
     }
 
-    const promises = [];
-
-    for (let relationMap of this.children) {
-      for (let relationName of relationNames) {
-        if (relationMap.has(relationName)) {
-          const relation = relationMap.getElement(relationName);
-          promises.push(relation.removeChildren());
-        }
-      }
+    if (!this.hasRelation(relationName, relationType)) {
+      throw Error("The relation doesn't exist");
     }
 
-    await Promise.all(promises);
+    const rel = this._getRelation(relationName, relationType);
+    return rel.removeChildren(nodes);
   }
 
   /**
