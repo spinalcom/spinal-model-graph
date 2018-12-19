@@ -31,7 +31,6 @@ import {
 } from "../Utilities";
 import SpinalContext from "./SpinalContext";
 
-const globalType = typeof window === "undefined" ? global : window;
 const HAS_CONTEXT_RELATION_NAME = "hasContext";
 
 class SpinalGraph extends SpinalNode {

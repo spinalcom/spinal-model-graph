@@ -26,6 +26,7 @@ import spinalCore from "spinal-core-connectorjs";
 import {
   SpinalNode
 } from "./index";
+import BaseSpinalRelation from "../build/Relations/BaseSpinalRelation";
 
 const globalType = typeof window === "undefined" ? global : window;
 
@@ -59,7 +60,7 @@ class SpinalNodePointer extends globalType.Model {
       throw TypeError("The pointed value must be a Model");
     }
 
-    if (element instanceof SpinalNode) {
+    if (element instanceof SpinalNode || element instanceof BaseSpinalRelation) {
       this.info.mod_attr("pointedId", element.getId());
       this.info.mod_attr("pointedType", element.getType());
     }

@@ -1011,7 +1011,7 @@ describe("SpinalNode", function() {
         let error = false;
 
         try {
-          await node.removeChild(node, undefined, lib.SPINAL_RELATION_TYPE);
+          await node.removeChildren([], undefined, lib.SPINAL_RELATION_TYPE);
         } catch (e) {
           error = true;
           assert(e instanceof Error);
@@ -1024,7 +1024,7 @@ describe("SpinalNode", function() {
         let error = false;
 
         try {
-          await node.removeChild(node, 1, lib.SPINAL_RELATION_TYPE);
+          await node.removeChildren([], 1, lib.SPINAL_RELATION_TYPE);
         } catch (e) {
           error = true;
           assert(e instanceof Error);
@@ -1037,7 +1037,7 @@ describe("SpinalNode", function() {
         let error = false;
 
         try {
-          await node.removeChild(node, DEFAULT_RELATION_NAME);
+          await node.removeChildren([], DEFAULT_RELATION_NAME);
         } catch (e) {
           error = true;
           assert(e instanceof Error);
@@ -1050,7 +1050,7 @@ describe("SpinalNode", function() {
         let error = false;
 
         try {
-          await node.removeChild(node, DEFAULT_RELATION_NAME, 1);
+          await node.removeChildren([], DEFAULT_RELATION_NAME, 1);
         } catch (e) {
           error = true;
           assert(e instanceof Error);
@@ -1060,12 +1060,13 @@ describe("SpinalNode", function() {
 
       it("should throw if the relation doesn't exist", async function() {
         const node = new lib.SpinalNode();
+        const child = new lib.SpinalNode();
         let error = false;
 
-        await node.addChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
+        await node.addChild(child, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE);
 
         try {
-          await node.removeChild(node, DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_TYPE);
+          await node.removeChildren([], DEFAULT_RELATION_NAME + "1", lib.SPINAL_RELATION_TYPE);
         } catch (e) {
           error = true;
           assert(e instanceof Error);
@@ -1074,7 +1075,7 @@ describe("SpinalNode", function() {
 
         error = false;
         try {
-          await node.removeChild(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE + "1");
+          await node.removeChildren(node, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_LST_PTR_TYPE);
         } catch (e) {
           error = true;
           assert(e instanceof Error);
@@ -1082,7 +1083,7 @@ describe("SpinalNode", function() {
         assert(error);
 
         const children = await node.getChildren([]);
-        assert.deepStrictEqual(children, [node]);
+        assert.deepStrictEqual(children, [child]);
       });
     });
 
@@ -1372,6 +1373,20 @@ describe("SpinalNode", function() {
         ]);
 
         const parents = await childNode.getParents([DEFAULT_RELATION_NAME]);
+        assert.deepStrictEqual(parents, [parentNode1]);
+      });
+
+      it("should return one parents", async function() {
+        let parentNode1 = new lib.SpinalNode();
+        let parentNode2 = new lib.SpinalNode();
+        let childNode = new lib.SpinalNode();
+
+        await Promise.all([
+          parentNode1.addChild(childNode, DEFAULT_RELATION_NAME, lib.SPINAL_RELATION_TYPE),
+          parentNode2.addChild(childNode, DEFAULT_RELATION_NAME + "2", lib.SPINAL_RELATION_TYPE)
+        ]);
+
+        const parents = await childNode.getParents(DEFAULT_RELATION_NAME);
         assert.deepStrictEqual(parents, [parentNode1]);
       });
 

@@ -17,6 +17,7 @@ describe("BaseSpinalRelation", function() {
 
       assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
       assert.strictEqual(await rel.getParent(), parent);
+      assert(rel.getId() instanceof globalType.Str)
     });
 
     it("should create a new relation with a name and a context parent", async function() {
@@ -25,6 +26,7 @@ describe("BaseSpinalRelation", function() {
 
       assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
       assert.strictEqual(await rel.getParent(), parent);
+      assert(rel.getId() instanceof globalType.Str)
     });
 
     it("should create a new relation with a name and a graph parent", async function() {
@@ -33,6 +35,7 @@ describe("BaseSpinalRelation", function() {
 
       assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
       assert.strictEqual(await rel.getParent(), parent);
+      assert(rel.getId() instanceof globalType.Str)
     });
 
     it("should throw an error if the parent or the name is missing", async function() {
@@ -58,6 +61,18 @@ describe("BaseSpinalRelation", function() {
 
       try {
         new BaseSpinalRelation(parent2);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
+
+    it("should throw an error if the name is not a string", async function() {
+      let error = false;
+
+      try {
+        new BaseSpinalRelation(DEFAULT_NODE, 1);
       } catch (e) {
         error = true;
         assert(e instanceof Error);

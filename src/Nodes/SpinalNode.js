@@ -510,9 +510,11 @@ class SpinalNode extends globalType.Model {
    * @throws {TypeError} If the predicate is not a function
    */
   async find(relationNames, predicate = DEFAULT_PREDICATE) {
-    if (!Array.isArray(relationNames) &&
+    if (
+      !Array.isArray(relationNames) &&
       relationNames !== undefined &&
-      typeof relationNames !== "string") {
+      typeof relationNames !== "string"
+    ) {
       throw TypeError("relationNames must be an array, a string or omitted");
     }
 
@@ -716,11 +718,12 @@ class SpinalNode extends globalType.Model {
   _removeParent(relation) {
     const parentLst = this.parents.getElement(relation.getName().get());
 
-    const indexToRemove = parentLst.indexOf(
-      parentPtr => parentPtr.getId().get() === relation.getId().get()
-    );
-
-    parentLst.splice(indexToRemove);
+    for (let i = 0; i < parentLst.length; i++) {
+      if (parentLst[i].getId().get() === relation.getId().get()) {
+        parentLst.splice(i);
+        break;
+      }
+    }
   }
 
   /**
@@ -737,6 +740,7 @@ class SpinalNode extends globalType.Model {
         });
       }
     }
+
     await Promise.all(promises);
   }
 
@@ -793,6 +797,7 @@ class SpinalNode extends globalType.Model {
         promises.push(relation.removeFromGraph());
       }
     }
+
     await Promise.all(promises);
   }
 }
