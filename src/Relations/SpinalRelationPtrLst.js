@@ -21,6 +21,12 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
+import {
+  spinalCore,
+  Model,
+  Lst
+} from "spinal-core-connectorjs_type";
+
 import BaseSpinalRelation from "./BaseSpinalRelation";
 import {
   SPINAL_RELATION_PTR_LST_TYPE
@@ -30,9 +36,6 @@ import {
   SpinalContext
 } from "../index";
 import SpinalNodePointer from "../SpinalNodePointer";
-import spinalCore from "spinal-core-connectorjs";
-
-const globalType = typeof window === "undefined" ? global : window;
 
 class SpinalRelationPtrLst extends BaseSpinalRelation {
   /**
@@ -46,10 +49,10 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     super(parent, name);
 
     this.add_attr({
-      children: new SpinalNodePointer(new globalType.Lst())
+      children: new SpinalNodePointer(new Lst())
     });
 
-    this.children.info.add_attr("ids", new globalType.Lst());
+    this.children.info.add_attr("ids", new Lst());
   }
 
   /**
@@ -123,7 +126,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * @throws {Error} If the node is already a child of the relation
    */
   async addChild(node) {
-    if (!(node instanceof globalType.Model)) {
+    if (!(node instanceof Model)) {
       throw new Error(
         "Cannot add a child witch is not an instance of SpinalNode or Model."
       );

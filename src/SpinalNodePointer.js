@@ -22,18 +22,21 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import spinalCore from "spinal-core-connectorjs";
+import {
+  spinalCore,
+  Model,
+  Ptr
+} from "spinal-core-connectorjs_type";
+
 import {
   SpinalNode
 } from "./index";
 import BaseSpinalRelation from "../build/Relations/BaseSpinalRelation";
 
-const globalType = typeof window === "undefined" ? global : window;
-
 /**
  * Wrapper over SpinalNodePointer containing some information about the pointed element
  */
-class SpinalNodePointer extends globalType.Model {
+class SpinalNodePointer extends Model {
   /**
    * Constructor for the SpinalNodePointer class.
    * @param {SpinalNode | Model} element Element to wich the SpinalNodePointer will point
@@ -43,7 +46,7 @@ class SpinalNodePointer extends globalType.Model {
     super();
 
     this.add_attr({
-      ptr: new globalType.Ptr(),
+      ptr: new Ptr(),
       info: {}
     });
 
@@ -56,7 +59,7 @@ class SpinalNodePointer extends globalType.Model {
    * @throws {TypeError} If the element is not a Model
    */
   setElement(element) {
-    if (!(element instanceof globalType.Model)) {
+    if (!(element instanceof Model)) {
       throw TypeError("The pointed value must be a Model");
     }
 

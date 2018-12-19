@@ -21,10 +21,15 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-import spinalCore from "spinal-core-connectorjs";
+import {
+  spinalCore,
+  Model
+} from "spinal-core-connectorjs_type";
+
 import {
   guid
 } from "../Utilities";
+
 import {
   SpinalNode,
   SpinalContext
@@ -32,9 +37,7 @@ import {
 import SpinalNodePointer from "../SpinalNodePointer";
 import SpinalMap from "../SpinalMap";
 
-const globalType = typeof window === "undefined" ? global : window;
-
-class BaseSpinalRelation extends globalType.Model {
+class BaseSpinalRelation extends Model {
   /**
    * Constructor for the BaseSpinalRelation class.
    * @param {SpinalNode} parent Parent of the relation

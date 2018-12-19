@@ -1,5 +1,5 @@
 const lib = require("../build/index");
-const globalType = typeof window === "undefined" ? global : window;
+const globalType = require("spinal-core-connectorjs_type");
 const SpinalNodePointer = require("../build/SpinalNodePointer").default;
 
 const assert = require("assert");

@@ -22,11 +22,12 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import spinalCore from "spinal-core-connectorjs";
+import {
+  spinalCore,
+  Model
+} from "spinal-core-connectorjs_type";
 
-const globalType = typeof window === "undefined" ? global : window;
-
-class SpinalSet extends globalType.Model {
+class SpinalSet extends Model {
   /**
    * Constructor for the SpinalSet class.
    * @param {Array<*>} init Array of values

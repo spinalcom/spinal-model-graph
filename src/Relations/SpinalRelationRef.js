@@ -22,6 +22,12 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
+import {
+  spinalCore,
+  Model,
+  Lst
+} from "spinal-core-connectorjs_type";
+
 import BaseSpinalRelation from "./BaseSpinalRelation";
 import {
   SPINAL_RELATION_TYPE
@@ -30,9 +36,6 @@ import {
   SpinalNode,
   SpinalContext
 } from "../index";
-import spinalCore from "spinal-core-connectorjs";
-
-const globalType = typeof window === "undefined" ? global : window;
 
 class SpinalRelationRef extends BaseSpinalRelation {
   /**
@@ -46,7 +49,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
     super(parent, name);
 
     this.add_attr({
-      children: new globalType.Lst()
+      children: new Lst()
     });
   }
 
@@ -118,7 +121,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
    * @throws {Error} If the node is already a child of the relation
    */
   async addChild(node) {
-    if (!(node instanceof globalType.Model)) {
+    if (!(node instanceof Model)) {
       throw new TypeError(
         "Cannot add a child witch is not an instance of SpinalNode or Model."
       );

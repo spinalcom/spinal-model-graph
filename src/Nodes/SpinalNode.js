@@ -22,8 +22,11 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-const globalType = typeof window === "undefined" ? global : window;
-import spinalCore from "spinal-core-connectorjs";
+import {
+  spinalCore,
+  Model,
+  Lst
+} from "spinal-core-connectorjs_type";
 
 import {
   guid
@@ -45,7 +48,7 @@ import {
 
 const DEFAULT_PREDICATE = () => true;
 
-class SpinalNode extends globalType.Model {
+class SpinalNode extends Model {
   /**
    * Constructor for the SpinalNode class.
    * @param {string} name Name of the node
@@ -99,7 +102,7 @@ class SpinalNode extends globalType.Model {
    */
   getElement() {
     if (this.element === undefined) {
-      this.element = new SpinalNodePointer(new globalType.Model());
+      this.element = new SpinalNodePointer(new Model());
     }
 
     return this.element.load();
@@ -252,7 +255,7 @@ class SpinalNode extends globalType.Model {
   async addChild(child, relationName, relationType) {
     let relation;
 
-    if (!(child instanceof globalType.Model)) {
+    if (!(child instanceof Model)) {
       throw TypeError(
         "Cannot add a child witch is not an instance of SpinalNode or Model."
       );
@@ -289,7 +292,7 @@ class SpinalNode extends globalType.Model {
       throw TypeError("context must be a SpinaContext");
     }
 
-    if (!(child instanceof globalType.Model)) {
+    if (!(child instanceof Model)) {
       throw TypeError(
         "Cannot add a child witch is not an instance of SpinalNode or Model."
       );
@@ -757,7 +760,7 @@ class SpinalNode extends globalType.Model {
         .getElement(relationName)
         .push(new SpinalNodePointer(relation));
     } else {
-      const list = new globalType.Lst();
+      const list = new Lst();
       list.push(new SpinalNodePointer(relation));
       this.parents.setElement(relationName, list);
     }

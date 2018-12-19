@@ -12,7 +12,7 @@
   "author": "SpinalCom",
   "license": "SpinalCom Free Software License Agreement",
   "dependencies": {
-    "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git"
+    "spinal-core-connectorjs_type": "git+https://github.com/spinalcom/spinal-core-connectorjs_type.git"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",

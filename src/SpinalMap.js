@@ -21,11 +21,12 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-import spinalCore from "spinal-core-connectorjs";
+import {
+  spinalCore,
+  Model
+} from "spinal-core-connectorjs_type";
 
-const globalType = typeof window === "undefined" ? global : window;
-
-class SpinalMap extends globalType.Model {
+class SpinalMap extends Model {
   /**
    * Constructor for the SpinalMap class.
    * @param {Array<Array<String, *>>} init Array of arrays of key-value pairs
