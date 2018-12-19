@@ -163,13 +163,13 @@ class SpinalMap extends Model {
   /**
    * Function to iterate over the map object.
    * @generator
-   * @yields {string} All values in the map one by one
+   * @yields {Array<string, *>} Arrays of key and values
    */
   *[Symbol.iterator]() {
     const keys = this.keys();
 
     for (let key of keys) {
-      yield this[key];
+      yield [key, this[key]];
     }
   }
 }

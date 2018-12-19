@@ -119,8 +119,8 @@ class SpinalNode extends Model {
   getChildrenIds() {
     const nodeChildrenIds = [];
 
-    for (let relationMap of this.children) {
-      for (let relation of relationMap) {
+    for (let [, relationMap] of this.children) {
+      for (let [, relation] of relationMap) {
         let relChildrenIds = relation.getChildrenIds();
 
         for (let i = 0; i < relChildrenIds.length; i++) {
@@ -238,7 +238,7 @@ class SpinalNode extends Model {
   getRelationNames() {
     const names = [];
 
-    for (let relationMap of this.children) {
+    for (let [, relationMap] of this.children) {
       names.push(...relationMap.keys());
     }
 
@@ -416,7 +416,7 @@ class SpinalNode extends Model {
 
     const promises = [];
 
-    for (let relationMap of this.children) {
+    for (let [, relationMap] of this.children) {
       for (let j = 0; j < relationNames.length; j++) {
         if (relationMap.has(relationNames[j])) {
           const relation = relationMap.getElement(relationNames[j]);
@@ -450,8 +450,8 @@ class SpinalNode extends Model {
 
     const promises = [];
 
-    for (let relationMap of this.children) {
-      for (let relation of relationMap) {
+    for (let [, relationMap] of this.children) {
+      for (let [, relation] of relationMap) {
         if (relation.belongsToContext(context)) {
           promises.push(relation.getChildrenInContext(context));
         }
@@ -740,7 +740,7 @@ class SpinalNode extends Model {
   async _removeFromParents() {
     const promises = [];
 
-    for (let parent of this.parents) {
+    for (let [, parent] of this.parents) {
       for (let i = 0; i < parent.length; i++) {
         parent[i].load().then(parentRel => {
           promises.push(parentRel.removeChild(this));
@@ -799,8 +799,8 @@ class SpinalNode extends Model {
   async _removeFromChildren() {
     const promises = [];
 
-    for (let relationMap of this.children) {
-      for (let relation of relationMap) {
+    for (let [, relationMap] of this.children) {
+      for (let [, relation] of relationMap) {
         promises.push(relation.removeFromGraph());
       }
     }

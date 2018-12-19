@@ -326,18 +326,21 @@ describe("SpinalMap", function() {
   });
 
   describe("How to use Symbol.iterator", function() {
-    it("should iterate threw all the values of the map", function() {
+    it("should iterate threw all the keys and values of the map", function() {
       const map = new SpinalMap();
-      const arr = [];
+      const keys = [];
+      const values = [];
 
       map.setElement("hello", "world");
       map.setElement("bye", "inexistance");
 
-      for (let value of map) {
-        arr.push(value.get());
+      for (let [key, value] of map) {
+        keys.push(key);
+        values.push(value.get());
       }
 
-      assert.deepStrictEqual(arr, ["world", "inexistance"]);
+      assert.deepStrictEqual(keys, ["hello", "bye"]);
+      assert.deepStrictEqual(values, ["world", "inexistance"]);
     });
   });
 });
