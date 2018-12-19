@@ -135,12 +135,17 @@ class BaseSpinalRelation extends Model {
    * Removes children from the relation.
    * @param {Array<SpinalNode>} nodes Childs to remove
    * @returns {Promise<nothing>} An empty promise
+   * @throws {TypeError} If nodes is not an array
    * @throws {Error} If one of the nodes is not a child
    */
-  async removeChildren(nodes) {
+  async removeChildren(nodes = []) {
     const promises = [];
 
-    if (nodes === undefined || nodes.length === 0) {
+    if (!Array.isArray(nodes)) {
+      throw TypeError("node must be an array")
+    }
+
+    if (nodes.length === 0) {
       nodes = await this.getChildren();
     }
 
