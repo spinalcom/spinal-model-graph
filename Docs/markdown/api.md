@@ -7,8 +7,8 @@ Simple implementation of a map using a Model.
 **Extends**: <code>Model</code>  
 
 * [SpinalMap](#SpinalMap) ⇐ <code>Model</code>
-    * [new SpinalMap(init)](#new_SpinalMap_new)
-    * [.setElement(key, value)](#SpinalMap+setElement)
+    * [new SpinalMap([init])](#new_SpinalMap_new)
+    * [.setElement(key, [value])](#SpinalMap+setElement)
     * [.getElement(key)](#SpinalMap+getElement) ⇒ <code>\*</code>
     * [.has(key)](#SpinalMap+has) ⇒ <code>Boolean</code>
     * [.hasKey()](#SpinalMap+hasKey) ⇒ <code>Boolean</code>
@@ -20,17 +20,17 @@ Simple implementation of a map using a Model.
 
 <a name="new_SpinalMap_new"></a>
 
-### new SpinalMap(init)
+### new SpinalMap([init])
 Constructor for the SpinalMap class.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| init | <code>Array.&lt;Array.&lt;String, \*&gt;&gt;</code> | Array of arrays of key-value pairs |
+| [init] | <code>Array.&lt;Array.&lt;String, \*&gt;&gt;</code> | Array of arrays of key-value pairs |
 
 <a name="SpinalMap+setElement"></a>
 
-### spinalMap.setElement(key, value)
+### spinalMap.setElement(key, [value])
 Sets the value corresponding to the key.
 
 **Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
@@ -42,7 +42,7 @@ Sets the value corresponding to the key.
 | Param | Type | Description |
 | --- | --- | --- |
 | key | <code>String</code> | Key to the value |
-| value | <code>\*</code> | New value, can be omitted |
+| [value] | <code>\*</code> | New value |
 
 <a name="SpinalMap+getElement"></a>
 
@@ -723,7 +723,7 @@ Simple implementation of a set using a Model.
 **Extends**: <code>Model</code>  
 
 * [SpinalSet](#SpinalSet) ⇐ <code>Model</code>
-    * [new SpinalSet(init)](#new_SpinalSet_new)
+    * [new SpinalSet([init])](#new_SpinalSet_new)
     * [.add(value)](#SpinalSet+add)
     * [.has(value)](#SpinalSet+has) ⇒ <code>Boolean</code>
     * [.values()](#SpinalSet+values) ⇒ <code>Array.&lt;String&gt;</code>
@@ -734,13 +734,13 @@ Simple implementation of a set using a Model.
 
 <a name="new_SpinalSet_new"></a>
 
-### new SpinalSet(init)
+### new SpinalSet([init])
 Constructor for the SpinalSet class.
 
 
 | Param | Type | Description |
 | --- | --- | --- |
-| init | <code>Array.&lt;\*&gt;</code> | Array of values |
+| [init] | <code>Array.&lt;\*&gt;</code> | Array of values |
 
 <a name="SpinalSet+add"></a>
 
@@ -891,9 +891,9 @@ Sets pointer to point to an element.
 - <code>TypeError</code> If the element is not a Model
 
 
-| Param | Type |
-| --- | --- |
-| element | <code>SpinalNode</code> \| <code>Model</code> | 
+| Param | Type | Description |
+| --- | --- | --- |
+| element | <code>SpinalNode</code> \| <code>Model</code> | Element to point to |
 
 <a name="SpinalNodePointer+load"></a>
 
@@ -1020,6 +1020,7 @@ Removes children from the relation.
 **Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
 **Throws**:
 
+- <code>TypeError</code> If nodes is not an array or omitted
 - <code>Error</code> If one of the nodes is not a child
 
 
@@ -1141,6 +1142,7 @@ Removes children from the relation.
 **Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
 **Throws**:
 
+- <code>TypeError</code> If nodes is not an array or omitted
 - <code>Error</code> If one of the nodes is not a child
 
 

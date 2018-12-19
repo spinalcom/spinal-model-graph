@@ -56,7 +56,7 @@ class SpinalNodePointer extends Model {
 
   /**
    * Sets pointer to point to an element.
-   * @param {SpinalNode | Model} element
+   * @param {SpinalNode | Model} element Element to point to
    * @throws {TypeError} If the element is not a Model
    */
   setElement(element) {

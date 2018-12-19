@@ -334,6 +334,19 @@ describe("SpinalRelationPtrLst", function() {
         }
         assert(error);
       });
+
+      it("should throw an error if nodes is not an array", async function() {
+        const relation = new SpinalRelationPtrLst(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        let error = false;
+
+        try {
+          await relation.removeChildren({});
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
     });
 
     describe("How to use removeChildren", function() {

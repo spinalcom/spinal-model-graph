@@ -34,7 +34,7 @@ import {
 class SpinalSet extends Model {
   /**
    * Constructor for the SpinalSet class.
-   * @param {Array<*>} init Array of values
+   * @param {Array<*>} [init] Array of values
    * @throws {TypeError} If init is not iterable
    * @throws {TypeError} If init[Symbol.iterator] doesn't return iterators
    * @throws {TypeError} If the values of the iterators are not strings

@@ -33,7 +33,7 @@ import {
 class SpinalMap extends Model {
   /**
    * Constructor for the SpinalMap class.
-   * @param {Array<Array<String, *>>} init Array of arrays of key-value pairs
+   * @param {Array<Array<String, *>>} [init] Array of arrays of key-value pairs
    * @throws {TypeError} If init is not iterable
    * @throws {TypeError} If init[Symbol.iterator] doesn't return iterators
    * @throws {TypeError} If the values of the iterators are not arrays of key values
@@ -52,7 +52,7 @@ class SpinalMap extends Model {
   /**
    * Sets the value corresponding to the key.
    * @param {String} key Key to the value
-   * @param {*} value New value, can be omitted
+   * @param {*} [value] New value
    * @throws {TypeError} If the key is not a string
    */
   setElement(key, value) {
