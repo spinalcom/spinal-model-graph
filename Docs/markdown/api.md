@@ -118,7 +118,7 @@ Deletes all elements.
 <a name="SpinalMap+forEach"></a>
 
 ### spinalMap.forEach(fun)
-Applies a function to each of the values in the map.
+Applies a function to each of the keys and values in the map.
 
 **Kind**: instance method of [<code>SpinalMap</code>](#SpinalMap)  
 **Throws**:

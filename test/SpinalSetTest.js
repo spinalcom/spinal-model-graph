@@ -250,7 +250,13 @@ describe("SpinalSet", function() {
       set.add("value");
       set.add("val");
 
-      set.forEach(value => arr.push(value));
+      let i = 0;
+
+      set.forEach((value, index) => {
+        arr.push(value);
+        assert.strictEqual(index, i);
+        i++;
+      });
 
       assert.deepStrictEqual(arr, ["value", "val"]);
     });

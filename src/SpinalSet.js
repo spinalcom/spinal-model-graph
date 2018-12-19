@@ -127,9 +127,10 @@ class SpinalSet extends Model {
       throw TypeError("The callback must be a function");
     }
 
-    for (let i = 0; i < this._attribute_names.length; i++) {
-      let value = this._attribute_names[i];
-      fun(value);
+    const values = this.values();
+
+    for (let i = 0; i < this.size(); i++) {
+      fun(values[i], i);
     }
   }
 

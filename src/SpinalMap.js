@@ -145,7 +145,7 @@ class SpinalMap extends Model {
   }
 
   /**
-   * Applies a function to each of the values in the map.
+   * Applies a function to each of the keys and values in the map.
    * @param {function} fun Funcion to apply
    * @throws {TypeError} If fun is not a function
    */
