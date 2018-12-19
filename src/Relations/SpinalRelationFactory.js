@@ -35,6 +35,10 @@ const RELATION_TYPE_LIST = [
   SPINAL_RELATION_PTR_LST_TYPE
 ];
 
+/**
+ * Namespace for general relation functions.
+ * @abstract
+ */
 class SpinalRelationFactory {
   /**
    * Create a new relation of relationType with the relationName.

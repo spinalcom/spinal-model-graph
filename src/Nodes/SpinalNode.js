@@ -48,6 +48,10 @@ import {
 
 const DEFAULT_PREDICATE = () => true;
 
+/**
+ * Node of a graph.
+ * @extends Model
+ */
 class SpinalNode extends Model {
   /**
    * Constructor for the SpinalNode class.

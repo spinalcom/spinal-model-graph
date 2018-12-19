@@ -34,7 +34,8 @@ import {
 import BaseSpinalRelation from "../build/Relations/BaseSpinalRelation";
 
 /**
- * Wrapper over SpinalNodePointer containing some information about the pointed element
+ * Wrapper over Ptr containing some information about the pointed element.
+ * @extends Model
  */
 class SpinalNodePointer extends Model {
   /**

@@ -21,6 +21,7 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
+
 import {
   spinalCore,
   Model,
@@ -37,6 +38,10 @@ import {
 } from "../index";
 import SpinalNodePointer from "../SpinalNodePointer";
 
+/**
+ * Relation where the children are in Lst of Ptr.
+ * @extends BaseSpinalRelation
+ */
 class SpinalRelationLstPtr extends BaseSpinalRelation {
   /**
    * Constructor for the SpinalRelationLstPtr class.

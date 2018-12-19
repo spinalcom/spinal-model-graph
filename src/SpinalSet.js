@@ -27,6 +27,10 @@ import {
   Model
 } from "spinal-core-connectorjs_type";
 
+/**
+ * Simple implementation of a set using a Model.
+ * @extends Model
+ */
 class SpinalSet extends Model {
   /**
    * Constructor for the SpinalSet class.

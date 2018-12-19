@@ -37,6 +37,10 @@ import {
   SpinalContext
 } from "../index";
 
+/**
+ * Relation where the children are in a Lst.
+ * @abstract
+ */
 class SpinalRelationRef extends BaseSpinalRelation {
   /**
    * Constructor for the SpinalRelationRef class.

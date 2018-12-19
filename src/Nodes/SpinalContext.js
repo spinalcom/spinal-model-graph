@@ -30,6 +30,10 @@ import {
   guid
 } from "../Utilities";
 
+/**
+ * A SpinalContext is the statring node of a part of the graph.
+ * @extends SpinalNode
+ */
 class SpinalContext extends SpinalNode {
   /**
    * Constructor for the SpinalContext class.

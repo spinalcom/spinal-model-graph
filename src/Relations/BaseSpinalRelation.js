@@ -37,6 +37,11 @@ import {
 import SpinalNodePointer from "../SpinalNodePointer";
 import SpinalMap from "../SpinalMap";
 
+/**
+ * Base for all relation in a SpinalGraph.
+ * @extends Model
+ * @abstract
+ */
 class BaseSpinalRelation extends Model {
   /**
    * Constructor for the BaseSpinalRelation class.

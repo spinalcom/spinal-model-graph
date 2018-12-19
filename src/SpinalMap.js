@@ -26,6 +26,10 @@ import {
   Model
 } from "spinal-core-connectorjs_type";
 
+/**
+ * Simple implementation of a map using a Model.
+ * @extends Model
+ */
 class SpinalMap extends Model {
   /**
    * Constructor for the SpinalMap class.

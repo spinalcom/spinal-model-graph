@@ -33,6 +33,10 @@ import SpinalContext from "./SpinalContext";
 
 const HAS_CONTEXT_RELATION_NAME = "hasContext";
 
+/**
+ * Starting node of a graph.
+ * @extends SpinalNode
+ */
 class SpinalGraph extends SpinalNode {
   /**
    * Constructor for the SpinalGraph class.
