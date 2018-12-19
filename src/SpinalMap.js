@@ -154,9 +154,8 @@ class SpinalMap extends Model {
       throw TypeError("The callback must be a function");
     }
 
-    for (let i = 0; i < this._attribute_names.length; i++) {
-      let name = this._attribute_names[i];
-      fun(this[name]);
+    for (let [key, value] of this) {
+      fun(value, key);
     }
   }
 

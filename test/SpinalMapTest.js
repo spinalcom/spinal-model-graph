@@ -299,16 +299,21 @@ describe("SpinalMap", function() {
   });
 
   describe("How to use forEach", function() {
-    it("should apply a function to all the values in the map", function() {
+    it("should apply a function to all the values and keys in the map", function() {
       const map = new SpinalMap();
-      const arr = [];
+      const keys = [];
+      const values = [];
 
       map.setElement("hello", "world");
       map.setElement("bye", "inexistance");
 
-      map.forEach(value => arr.push(value.get()));
+      map.forEach((value, key) => {
+        keys.push(key);
+        values.push(value.get());
+      });
 
-      assert.deepStrictEqual(arr, ["world", "inexistance"]);
+      assert.deepStrictEqual(keys, ["hello", "bye"]);
+      assert.deepStrictEqual(values, ["world", "inexistance"]);
     });
 
     it("should throw an error if the callback is missing", function() {
