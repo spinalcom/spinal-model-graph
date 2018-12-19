@@ -135,6 +135,8 @@ class SpinalSet extends Model {
 
   /**
    * Function to iterate over the set object.
+   * @generator
+   * @yields {string} All values in the set one by one
    */
   *[Symbol.iterator]() {
     let values = this._attribute_names;

@@ -162,6 +162,8 @@ class SpinalMap extends Model {
 
   /**
    * Function to iterate over the map object.
+   * @generator
+   * @yields {string} All values in the map one by one
    */
   *[Symbol.iterator]() {
     const keys = this.keys();
