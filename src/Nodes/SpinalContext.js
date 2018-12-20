@@ -37,9 +37,9 @@ import {
 class SpinalContext extends SpinalNode {
   /**
    * Constructor for the SpinalContext class.
-   * @param {String} name Name of the context
-   * @param {String} type Type of the context, usually unused
-   * @param {SpinalNode | Model} element Element of the context
+   * @param {String} [name="undefined"] Name of the context
+   * @param {String} [type="SpinalContext"] Type of the context, usually unused
+   * @param {SpinalNode | Model} [element] Element of the context
    * @throws {TypeError} If the element is not a Model
    */
   constructor(name, type = "SpinalContext", element) {
@@ -53,7 +53,7 @@ class SpinalContext extends SpinalNode {
    * @override
    * @param {SpinalNode | Model} child Node to add as child
    * @param {String} relationName Name of the relation
-   * @param {String} relationType This parameter is here only to properly override the parent method
+   * @param {String} [relationType=SPINAL_RELATION_PTR_LST_TYPE] This parameter is here only to properly override the parent method
    * @returns {Promise<SpinalNode>} The child node in a promise
    * @throws {TypeError} If the child is not a model
    * @throws {TypeError} If the relation name is not a string
@@ -67,7 +67,7 @@ class SpinalContext extends SpinalNode {
    * @override
    * @param {SpinalNode | Model} child Node to add as child
    * @param {String} relationName Name of the relation
-   * @param {String} relationType This parameter is here only to properly override the parent method
+   * @param {String} [relationType=SPINAL_RELATION_PTR_LST_TYPE] This parameter is here only to properly override the parent method
    * @param {SpinalContext} context Context to update, usually unused
    * @returns {Promise<SpinalNode>} The child node in a promise
    */
@@ -78,7 +78,7 @@ class SpinalContext extends SpinalNode {
   /**
    * Return the children of the node that are registered in the context
    * @override
-   * @param {SpinalContext} context Context to use for the search, this by default
+   * @param {SpinalContext} [context=this] Context to use for the search, this by default
    * @returns {Promise<Array<SpinalNode>>} The children that were found
    */
   getChildrenInContext(context = this) {

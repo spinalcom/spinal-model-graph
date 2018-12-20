@@ -55,9 +55,9 @@ const DEFAULT_PREDICATE = () => true;
 class SpinalNode extends Model {
   /**
    * Constructor for the SpinalNode class.
-   * @param {string} name Name of the node
-   * @param {string} type Type of the node
-   * @param {SpinalNode | Model} element Element of the node
+   * @param {string} [name="undefined"] Name of the node
+   * @param {string} [type="undefined"] Type of the node
+   * @param {SpinalNode | Model} [element] Element of the node
    * @throws {TypeError} If the element is not a Model
    */
   constructor(name = "undefined", type = "SpinalNode", element) {
@@ -396,18 +396,16 @@ class SpinalNode extends Model {
 
   /**
    * Returns the children of the node for the relation names.
-   * @param {Array<String>} relationNames Array containing the relation names of the desired children
+   * @param {Array<String>} [relationNames=[]] Array containing the relation names of the desired children
    * @returns {Promise<Array<SpinalNode>>} The children that were found
    * @throws {TypeError} If relationNames is neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
    */
-  async getChildren(relationNames) {
+  async getChildren(relationNames = []) {
     if (Array.isArray(relationNames)) {
       if (relationNames.length === 0) {
         relationNames = this.getRelationNames();
       }
-    } else if (relationNames === undefined) {
-      relationNames = this.getRelationNames();
     } else if (typeof relationNames === "string") {
       relationNames = [relationNames];
     } else {
@@ -472,18 +470,16 @@ class SpinalNode extends Model {
 
   /**
    * Return all parents for the relation names no matter the type of relation
-   * @param {Array<String>} relationNames Array containing the relation names of the desired parents
+   * @param {Array<String>} [relationNames=[]] Array containing the relation names of the desired parents
    * @returns {Promise<Array<SpinalNode>>} Promise containing the parents that were found
    * @throws {TypeError} If the relationNames are neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
    */
-  getParents(relationNames) {
+  getParents(relationNames = []) {
     if (Array.isArray(relationNames)) {
       if (relationNames.length === 0) {
         relationNames = this.parents.keys();
       }
-    } else if (relationNames === undefined) {
-      relationNames = this.parents.keys();
     } else if (typeof relationNames === "string") {
       relationNames = [relationNames];
     } else {

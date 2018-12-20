@@ -40,9 +40,9 @@ const HAS_CONTEXT_RELATION_NAME = "hasContext";
 class SpinalGraph extends SpinalNode {
   /**
    * Constructor for the SpinalGraph class.
-   * @param {String} name Name of the graph, usually unused
-   * @param {String} type Type of the graph, usually unused
-   * @param {SpinalNode | Model} element Element of the graph
+   * @param {String} [name="undefined"] Name of the graph, usually unused
+   * @param {String} [type="SpinalGraph"] Type of the graph, usually unused
+   * @param {SpinalNode | Model} [element] Element of the graph
    * @throws {TypeError} If the element is not a Model
    */
   constructor(name, type = "SpinalGraph", element) {
