@@ -145,8 +145,14 @@ class SpinalMap extends Model {
   }
 
   /**
+   * Function that takes a value and a key of the map and returns nothing.
+   * @callback mapForEachCallback
+   * @param {*} [value] Value of the map
+   * @param {string} [key] Key of the map
+   */
+  /**
    * Applies a function to each of the keys and values in the map.
-   * @param {function} fun Funcion to apply
+   * @param {mapForEachCallback} fun Funcion to apply
    * @throws {TypeError} If fun is not a function
    */
   forEach(fun) {

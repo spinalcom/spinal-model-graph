@@ -118,8 +118,14 @@ class SpinalSet extends Model {
   }
 
   /**
+   * Function that takes a value and its index in the set and returns nothing.
+   * @callback setForEachCallback
+   * @param {string} [value] Value of the set
+   * @param {Number} [index] Index of the value in the set
+   */
+  /**
    * Applies a function to each of the values in the set.
-   * @param {function} fun Funcion to apply
+   * @param {setForEachCallback} fun Funcion to apply
    * @throws {TypeError} If fun is not a function
    */
   forEach(fun) {
