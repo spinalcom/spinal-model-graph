@@ -173,6 +173,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
   /**
    * Removes children from the relation.
+   * @override
    * @param {Array<SpinalNode>} nodes Childs to remove
    * @returns {Promise<nothing>} An empty promise
    * @throws {TypeError} If nodes is not an array or omitted

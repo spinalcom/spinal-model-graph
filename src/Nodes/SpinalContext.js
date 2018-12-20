@@ -50,6 +50,7 @@ class SpinalContext extends SpinalNode {
 
   /**
    * Adds a child with a SpinalRelationLstPtrType.
+   * @override
    * @param {SpinalNode | Model} child Node to add as child
    * @param {String} relationName Name of the relation
    * @param {String} relationType This parameter is here only to properly override the parent method
@@ -63,6 +64,7 @@ class SpinalContext extends SpinalNode {
 
   /**
    * Adds a child with a SpinalRelationLstPtrType and notices the context if a new relation was created.
+   * @override
    * @param {SpinalNode | Model} child Node to add as child
    * @param {String} relationName Name of the relation
    * @param {String} relationType This parameter is here only to properly override the parent method
@@ -75,6 +77,7 @@ class SpinalContext extends SpinalNode {
 
   /**
    * Return the children of the node that are registered in the context
+   * @override
    * @param {SpinalContext} context Context to use for the search, this by default
    * @returns {Promise<Array<SpinalNode>>} The children that were found
    */

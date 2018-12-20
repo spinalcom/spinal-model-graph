@@ -82,6 +82,7 @@ class SpinalGraph extends SpinalNode {
 
   /**
    * Empty override of the SpinalNode method.
+   * @override
    * @returns {Promise<nothing>} An empty promise
    */
   async removeFromGraph() {
