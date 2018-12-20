@@ -504,9 +504,15 @@ class SpinalNode extends Model {
   }
 
   /**
+   * Function that takes a node as argument and returns a boolean.
+   * @callback findPredicate
+   * @param {SpinalNode} node
+   * @returns {boolean}
+   */
+  /**
    * Recursively finds all the children nodes for which the predicate is true.
    * @param {Array<String>} relationNames Array containing the relation names to follow
-   * @param {function} predicate Function returning true if the node needs to be returned
+   * @param {findPredicate} predicate Function returning true if the node needs to be returned
    * @returns {Promise<Array<SpinalNode>>} The nodes that were found
    * @throws {TypeError} If the relationNames are neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
@@ -562,7 +568,7 @@ class SpinalNode extends Model {
   /**
    * Recursively finds all the children nodes in the context for which the predicate is true..
    * @param {SpinalContext} context Context to use for the search
-   * @param {function} predicate Function returning true if the node needs to be returned
+   * @param {findPredicate} predicate Function returning true if the node needs to be returned
    * @returns {Promise<Array<SpinalNode>>} The nodes that were found
    * @throws {TypeError} If context is not a SpinalContext
    * @throws {TypeError} If the predicate is not a function
@@ -607,9 +613,14 @@ class SpinalNode extends Model {
   }
 
   /**
+   * Function that takes a SpinalNode and returns nothing.
+   * @callback forEachCallback
+   * @param {SpinalNode} node
+   */
+  /**
    * Recursively applies a function to all the children nodes.
    * @param {Array<String>} relationNames Array containing the relation names to follow
-   * @param {function} callback Function to apply to the nodes
+   * @param {forEachCallback} callback Function to apply to the nodes
    * @throws {TypeError} If the relationNames are neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the callback is not a function
@@ -629,7 +640,7 @@ class SpinalNode extends Model {
   /**
    * Recursively applies a function to all the children nodes in the context.
    * @param {SpinalContext} context Context to use for the search
-   * @param {function} callback Function to apply to the nodes
+   * @param {forEachCallback} callback Function to apply to the nodes
    * @throws {TypeError} If context is not a SpinalContext
    * @throws {TypeError} If the callback is not a function
    */
@@ -645,6 +656,12 @@ class SpinalNode extends Model {
     }
   }
 
+  /**
+   * Function that takes a SpinalNode and returns a result.
+   * @callback mapCallback
+   * @param {SpinalNode} node
+   * @returns {*}
+   */
   /**
    * Recursively applies a function to all the children nodes and returns the results in an array.
    * @param {Array<String>} relationNames Array containing the relation names to follow
