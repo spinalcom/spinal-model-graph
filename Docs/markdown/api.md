@@ -1,3 +1,19 @@
+## Classes
+
+<dl>
+<dt><a href="#SpinalMap">SpinalMap</a> ⇐ <code>Model</code></dt>
+<dd><p>Simple implementation of a map using a Model.</p>
+</dd>
+</dl>
+
+## Typedefs
+
+<dl>
+<dt><a href="#mapForEachCallback">mapForEachCallback</a> : <code>function</code></dt>
+<dd><p>Function that takes a value and a key of the map and returns nothing.</p>
+</dd>
+</dl>
+
 <a name="SpinalMap"></a>
 
 ## SpinalMap ⇐ <code>Model</code>
@@ -128,7 +144,19 @@ Applies a function to each of the keys and values in the map.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| fun | <code>function</code> | Funcion to apply |
+| fun | [<code>mapForEachCallback</code>](#mapForEachCallback) | Funcion to apply |
+
+<a name="mapForEachCallback"></a>
+
+## mapForEachCallback : <code>function</code>
+Function that takes a value and a key of the map and returns nothing.
+
+**Kind**: global typedef  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [value] | <code>\*</code> | Value of the map |
+| [key] | <code>string</code> | Key of the map |
 
 <a name="SpinalContext"></a>
 
@@ -267,6 +295,31 @@ Empty override of the SpinalNode method.
 
 **Kind**: instance method of [<code>SpinalGraph</code>](#SpinalGraph)  
 **Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
+## Classes
+
+<dl>
+<dt><a href="#SpinalNode">SpinalNode</a> ⇐ <code>Model</code></dt>
+<dd><p>Node of a graph.</p>
+</dd>
+</dl>
+
+## Typedefs
+
+<dl>
+<dt><a href="#getChildPredicate">getChildPredicate</a> ⇒ <code>boolean</code></dt>
+<dd><p>A function that takes a node and returns a boolean.</p>
+</dd>
+<dt><a href="#findPredicate">findPredicate</a> ⇒ <code>boolean</code></dt>
+<dd><p>Function that takes a node as argument and returns a boolean.</p>
+</dd>
+<dt><a href="#forEachCallback">forEachCallback</a> : <code>function</code></dt>
+<dd><p>Function that takes a SpinalNode and returns nothing.</p>
+</dd>
+<dt><a href="#mapCallback">mapCallback</a> ⇒ <code>*</code></dt>
+<dd><p>Function that takes a SpinalNode and returns a result.</p>
+</dd>
+</dl>
+
 <a name="SpinalNode"></a>
 
 ## SpinalNode ⇐ <code>Model</code>
@@ -285,9 +338,9 @@ Node of a graph.
     * [.getNbChildren()](#SpinalNode+getNbChildren) ⇒ <code>Number</code>
     * [.addContextId(id)](#SpinalNode+addContextId)
     * [.getContextIds()](#SpinalNode+getContextIds) ⇒ <code>Array.&lt;String&gt;</code>
-    * [.belongsToContext(context)](#SpinalNode+belongsToContext) ⇒ <code>Boolean</code>
-    * [.hasRelation(relationName, relationType)](#SpinalNode+hasRelation) ⇒ <code>Boolean</code>
-    * [.hasRelations(relationNames, relationType)](#SpinalNode+hasRelations) ⇒ <code>Boolean</code>
+    * [.belongsToContext(context)](#SpinalNode+belongsToContext) ⇒ <code>boolean</code>
+    * [.hasRelation(relationName, relationType)](#SpinalNode+hasRelation) ⇒ <code>boolean</code>
+    * [.hasRelations(relationNames, relationType)](#SpinalNode+hasRelations) ⇒ <code>boolean</code>
     * [.getRelationNames()](#SpinalNode+getRelationNames) ⇒ <code>Array.&lt;String&gt;</code>
     * [.addChild(child, relationName, relationType)](#SpinalNode+addChild) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
     * [.addChildInContext(child, relationName, relationType, context)](#SpinalNode+addChildInContext) ⇒ [<code>Promise.&lt;SpinalNode&gt;</code>](#SpinalNode)
@@ -295,6 +348,7 @@ Node of a graph.
     * [.removeChildren(nodes, relationName, relationType)](#SpinalNode+removeChildren) ⇒ <code>Promise.&lt;nothing&gt;</code>
     * [.removeRelation(relationName, relationType)](#SpinalNode+removeRelation) ⇒ <code>Promise.&lt;nothing&gt;</code>
     * [.removeFromGraph()](#SpinalNode+removeFromGraph) ⇒ <code>Promise.&lt;nothing&gt;</code>
+    * [.getChild(predicate, relationName, relationType)](#SpinalNode+getChild) ⇒ [<code>SpinalNode</code>](#SpinalNode) \| <code>undefined</code>
     * [.getChildren([relationNames])](#SpinalNode+getChildren) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getChildrenInContext(context)](#SpinalNode+getChildrenInContext) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
     * [.getParents([relationNames])](#SpinalNode+getParents) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
@@ -383,11 +437,11 @@ Returns a list of the contexts the node is associated to.
 **Returns**: <code>Array.&lt;String&gt;</code> - An array of ids of the associated contexts  
 <a name="SpinalNode+belongsToContext"></a>
 
-### spinalNode.belongsToContext(context) ⇒ <code>Boolean</code>
+### spinalNode.belongsToContext(context) ⇒ <code>boolean</code>
 Returns true if the node belongs to the context.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Boolean</code> - A boolean  
+**Returns**: <code>boolean</code> - A boolean  
 **Throws**:
 
 - <code>TypeError</code> If context is not a SpinalContext
@@ -399,11 +453,11 @@ Returns true if the node belongs to the context.
 
 <a name="SpinalNode+hasRelation"></a>
 
-### spinalNode.hasRelation(relationName, relationType) ⇒ <code>Boolean</code>
+### spinalNode.hasRelation(relationName, relationType) ⇒ <code>boolean</code>
 Verify if the node contains the relation name.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Boolean</code> - Return true is the relation is contained in the node and false otherwise.  
+**Returns**: <code>boolean</code> - Return true is the relation is contained in the node and false otherwise.  
 **Throws**:
 
 - <code>TypeError</code> If the relation name is not a string
@@ -417,11 +471,11 @@ Verify if the node contains the relation name.
 
 <a name="SpinalNode+hasRelations"></a>
 
-### spinalNode.hasRelations(relationNames, relationType) ⇒ <code>Boolean</code>
+### spinalNode.hasRelations(relationNames, relationType) ⇒ <code>boolean</code>
 Verify if the node contains all the relation names.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
-**Returns**: <code>Boolean</code> - Return true if the node contains all the relations in relationNames, false otherwise.  
+**Returns**: <code>boolean</code> - Return true if the node contains all the relations in relationNames, false otherwise.  
 **Throws**:
 
 - <code>TypeError</code> If the relation names are not in an array
@@ -555,6 +609,27 @@ After this operation the node can be deleted without fear.
 
 **Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
 **Returns**: <code>Promise.&lt;nothing&gt;</code> - An empty promise  
+<a name="SpinalNode+getChild"></a>
+
+### spinalNode.getChild(predicate, relationName, relationType) ⇒ [<code>SpinalNode</code>](#SpinalNode) \| <code>undefined</code>
+Returns the first child in the given relation for which the predicate is true.
+
+**Kind**: instance method of [<code>SpinalNode</code>](#SpinalNode)  
+**Returns**: [<code>SpinalNode</code>](#SpinalNode) \| <code>undefined</code> - The first child for which the predicate is true or undefined  
+**Throws**:
+
+- <code>TypeError</code> If predicate is not a function
+- <code>TypeError</code> If relation name is not a string
+- <code>Error</code> If relation type is invalid
+- <code>Error</code> If relation doesn't exist
+
+
+| Param | Type | Description |
+| --- | --- | --- |
+| predicate | [<code>getChildPredicate</code>](#getChildPredicate) | Functions that takes a node and returns a boolean |
+| relationName | <code>string</code> | Name of the relation |
+| relationType | <code>string</code> | Type of the relation |
+
 <a name="SpinalNode+getChildren"></a>
 
 ### spinalNode.getChildren([relationNames]) ⇒ <code>Promise.&lt;Array.&lt;SpinalNode&gt;&gt;</code>
@@ -622,7 +697,7 @@ Recursively finds all the children nodes for which the predicate is true.
 | Param | Type | Description |
 | --- | --- | --- |
 | relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names to follow |
-| predicate | <code>function</code> | Function returning true if the node needs to be returned |
+| predicate | [<code>findPredicate</code>](#findPredicate) | Function returning true if the node needs to be returned |
 
 <a name="SpinalNode+findInContext"></a>
 
@@ -640,7 +715,7 @@ Recursively finds all the children nodes in the context for which the predicate 
 | Param | Type | Description |
 | --- | --- | --- |
 | context | <code>SpinalContext</code> | Context to use for the search |
-| predicate | <code>function</code> | Function returning true if the node needs to be returned |
+| predicate | [<code>findPredicate</code>](#findPredicate) | Function returning true if the node needs to be returned |
 
 <a name="SpinalNode+forEach"></a>
 
@@ -658,7 +733,7 @@ Recursively applies a function to all the children nodes.
 | Param | Type | Description |
 | --- | --- | --- |
 | relationNames | <code>Array.&lt;String&gt;</code> | Array containing the relation names to follow |
-| callback | <code>function</code> | Function to apply to the nodes |
+| callback | [<code>forEachCallback</code>](#forEachCallback) | Function to apply to the nodes |
 
 <a name="SpinalNode+forEachInContext"></a>
 
@@ -675,7 +750,7 @@ Recursively applies a function to all the children nodes in the context.
 | Param | Type | Description |
 | --- | --- | --- |
 | context | <code>SpinalContext</code> | Context to use for the search |
-| callback | <code>function</code> | Function to apply to the nodes |
+| callback | [<code>forEachCallback</code>](#forEachCallback) | Function to apply to the nodes |
 
 <a name="SpinalNode+map"></a>
 
@@ -713,6 +788,66 @@ Recursively applies a function to all the children nodes in the context and retu
 | --- | --- | --- |
 | context | <code>SpinalContext</code> | Context to use for the search |
 | callback | <code>function</code> | Function to apply to the nodes |
+
+<a name="getChildPredicate"></a>
+
+## getChildPredicate ⇒ <code>boolean</code>
+A function that takes a node and returns a boolean.
+
+**Kind**: global typedef  
+
+| Param | Type |
+| --- | --- |
+| node | [<code>SpinalNode</code>](#SpinalNode) | 
+
+<a name="findPredicate"></a>
+
+## findPredicate ⇒ <code>boolean</code>
+Function that takes a node as argument and returns a boolean.
+
+**Kind**: global typedef  
+
+| Param | Type |
+| --- | --- |
+| node | [<code>SpinalNode</code>](#SpinalNode) | 
+
+<a name="forEachCallback"></a>
+
+## forEachCallback : <code>function</code>
+Function that takes a SpinalNode and returns nothing.
+
+**Kind**: global typedef  
+
+| Param | Type |
+| --- | --- |
+| node | [<code>SpinalNode</code>](#SpinalNode) | 
+
+<a name="mapCallback"></a>
+
+## mapCallback ⇒ <code>\*</code>
+Function that takes a SpinalNode and returns a result.
+
+**Kind**: global typedef  
+
+| Param | Type |
+| --- | --- |
+| node | [<code>SpinalNode</code>](#SpinalNode) | 
+
+## Classes
+
+<dl>
+<dt><a href="#SpinalSet">SpinalSet</a> ⇐ <code>Model</code></dt>
+<dd><p>Simple implementation of a set using a Model.</p>
+</dd>
+</dl>
+
+## Typedefs
+
+<dl>
+<dt><a href="#setForEachCallback">setForEachCallback</a> : <code>function</code></dt>
+<dd><p>Function that takes a value and its index in the set and returns nothing.</p>
+</dd>
+</dl>
 
 <a name="SpinalSet"></a>
 
@@ -822,7 +957,19 @@ Applies a function to each of the values in the set.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| fun | <code>function</code> | Funcion to apply |
+| fun | [<code>setForEachCallback</code>](#setForEachCallback) | Funcion to apply |
+
+<a name="setForEachCallback"></a>
+
+## setForEachCallback : <code>function</code>
+Function that takes a value and its index in the set and returns nothing.
+
+**Kind**: global typedef  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [value] | <code>string</code> | Value of the set |
+| [index] | <code>Number</code> | Index of the value in the set |
 
 ## Functions
 

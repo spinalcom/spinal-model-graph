@@ -167,7 +167,7 @@ class SpinalNode extends Model {
   /**
    * Returns true if the node belongs to the context.
    * @param {SpinalContext} context The context that might own the node
-   * @returns {Boolean} A boolean
+   * @returns {boolean} A boolean
    * @throws {TypeError} If context is not a SpinalContext
    */
   belongsToContext(context) {
@@ -182,7 +182,7 @@ class SpinalNode extends Model {
    * Verify if the node contains the relation name.
    * @param {string} relationName Name of the relation
    * @param {string} relationType Type of the relation
-   * @returns {Boolean} Return true is the relation is contained in the node and false otherwise.
+   * @returns {boolean} Return true is the relation is contained in the node and false otherwise.
    * @throws {TypeError} If the relation name is not a string
    * @throws {Error} If the relation type doesn't exist
    */
@@ -208,7 +208,7 @@ class SpinalNode extends Model {
    * Verify if the node contains all the relation names.
    * @param {Array<String>} relationNames Array containing all the relation name
    * @param {string} relationType Type of the relations
-   * @returns {Boolean} Return true if the node contains all the relations in relationNames, false otherwise.
+   * @returns {boolean} Return true if the node contains all the relations in relationNames, false otherwise.
    * @throws {TypeError} If the relation names are not in an array
    * @throws {TypeError} If one of the relation names is not a string
    * @throws {Error} If the relation type doesn't exist
@@ -392,6 +392,42 @@ class SpinalNode extends Model {
       this._removeFromParents(),
       this._removeFromChildren()
     ]);
+  }
+
+  /**
+   * A function that takes a node and returns a boolean.
+   * @callback getChildPredicate
+   * @param {SpinalNode} node
+   * @returns {boolean}
+   */
+  /**
+   * Returns the first child in the given relation for which the predicate is true.
+   * @param {getChildPredicate} predicate Functions that takes a node and returns a boolean
+   * @param {string} relationName Name of the relation
+   * @param {string} relationType Type of the relation
+   * @returns {SpinalNode | undefined} The first child for which the predicate is true or undefined
+   * @throws {TypeError} If predicate is not a function
+   * @throws {TypeError} If relation name is not a string
+   * @throws {Error} If relation type is invalid
+   * @throws {Error} If relation doesn't exist
+   */
+  async getChild(predicate, relationName, relationType) {
+    if (typeof predicate !== "function") {
+      throw TypeError("the predicate must be a function");
+    }
+
+    if (!this.hasRelation(relationName, relationType)) {
+      throw Error("The relation doesn't exist");
+    }
+
+    const relation = this._getRelation(relationName, relationType)
+    const children = await relation.getChildren();
+
+    for (let child of children) {
+      if (predicate(child)) {
+        return child;
+      }
+    }
   }
 
   /**
