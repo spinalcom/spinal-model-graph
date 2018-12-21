@@ -32,57 +32,31 @@ describe("SpinalRelationPtrLst", function() {
     });
 
     it("should throw an error if the parent or the name is missing", async function() {
-      let error = false;
-
-      try {
+      assert.throws(() => {
         new SpinalRelationPtrLst();
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
 
-      error = false;
-
-      try {
+      assert.throws(() => {
         new SpinalRelationPtrLst(undefined, DEFAULT_RELATION_NAME);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
 
-      try {
-        new SpinalRelationPtrLst(parent2);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      assert.throws(() => {
+        new SpinalRelationPtrLst(DEFAULT_NODE);
+      }, TypeError);
     });
 
     it("should throw an error if the parent is not a SpinalNode", async function() {
       const parent1 = new Array();
-      let error = false;
 
-      try {
+      assert.throws(() => {
         new SpinalRelationPtrLst(parent1, DEFAULT_RELATION_NAME);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
 
       const parent2 = new globalType.Model();
-      error = false;
 
-      try {
+      assert.throws(() => {
         new SpinalRelationPtrLst(parent2, DEFAULT_RELATION_NAME);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
   });
 
@@ -161,8 +135,7 @@ describe("SpinalRelationPtrLst", function() {
         child.addContextId(context.getId().get());
         await relation.addChild(child);
 
-        const children = await relation.getChildrenInContext(
-          context);
+        const children = await relation.getChildrenInContext(context);
         assert.deepStrictEqual(children, [child]);
       });
 
@@ -249,24 +222,27 @@ describe("SpinalRelationPtrLst", function() {
         let error;
 
         await rel.addChild(DEFAULT_NODE);
-        await rel.addChild(DEFAULT_NODE).then(() => {
+
+        try {
+          await rel.addChild(DEFAULT_NODE);
+        } catch (e) {
           error = true;
-        }).catch(() => {
-          error = false;
-        });
-        assert(!error);
+          assert(e instanceof Error);
+        }
+        assert(error);
       });
 
       it("should throw an error when you pass it something that is not a model", async function() {
         const rel = new SpinalRelationPtrLst(DEFAULT_NODE, DEFAULT_RELATION_NAME);
         let error;
 
-        await rel.addChild(new Array()).then(() => {
+        try {
+          await rel.addChild(new Array());
+        } catch (e) {
           error = true;
-        }).catch(() => {
-          error = false;
-        });
-        assert(!error);
+          assert(e instanceof Error);
+        }
+        assert(error);
       });
 
       it("should return the node added to the relation", async function() {
@@ -327,7 +303,7 @@ describe("SpinalRelationPtrLst", function() {
         let error = false;
 
         try {
-          res = await rel.removeChild(childNode);
+          await rel.removeChild(childNode);
         } catch (e) {
           error = true;
           assert(e instanceof Error);

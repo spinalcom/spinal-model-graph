@@ -24,50 +24,30 @@ describe("SpinalSet", function() {
 
     it("should throw an error if init is not iterable", function() {
       const init = {}
-      let error = false;
 
-      try {
+      assert.throws(() => {
         new SpinalSet(init);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
 
       init[Symbol.iterator] = null;
 
-      error = false;
-      try {
+      assert.throws(() => {
         new SpinalSet(init);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
 
       init[Symbol.iterator] = () => {};
 
-      error = false;
-      try {
+      assert.throws(() => {
         new SpinalSet(init);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
 
     it("should throw an error if init has bad values", function() {
       let init = [1]
-      let error = false;
 
-      try {
+      assert.throws(() => {
         new SpinalSet(init);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
   });
 
@@ -82,28 +62,18 @@ describe("SpinalSet", function() {
 
     it("should throw an error if the value is missing", function() {
       const set = new SpinalSet();
-      let error = false;
 
-      try {
+      assert.throws(() => {
         set.setElement();
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
 
     it("should throw an error if the value is not a string", function() {
       const set = new SpinalSet();
-      let error = false;
 
-      try {
+      assert.throws(() => {
         set.setElement(1);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
   });
 
@@ -126,15 +96,10 @@ describe("SpinalSet", function() {
 
     it("should throw an error if the value is not a string", function() {
       const set = new SpinalSet();
-      let error = false;
 
-      try {
+      assert.throws(() => {
         set.has(1);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
   });
 
@@ -170,43 +135,28 @@ describe("SpinalSet", function() {
 
     it("should throw an error if the value is missing", function() {
       const set = new SpinalSet();
-      let error = false;
 
-      try {
+      assert.throws(() => {
         set.delete();
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
 
     it("should throw an error if the value is not a string", function() {
       const set = new SpinalSet();
-      let error = false;
 
-      try {
-        set.delete(1);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      assert.throws(() => {
+        set.delete();
+      }, TypeError);
     });
 
     it("should throw an error if the value doesn't exist", function() {
       const set = new SpinalSet();
-      let error = false;
 
       set.add("value");
 
-      try {
+      assert.throws(() => {
         set.delete("val");
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, Error);
 
       assert(set.has("value"));
     });
@@ -263,15 +213,10 @@ describe("SpinalSet", function() {
 
     it("should throw an error if the callback is missing", function() {
       const set = new SpinalSet();
-      let error = false;
 
-      try {
+      assert.throws(() => {
         set.forEach();
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
   });
 

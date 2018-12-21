@@ -29,15 +29,9 @@ describe("SpinalRelationFactory", function() {
     });
 
     it("should throw an error if the type is invalid", function() {
-      let error = false;
-
-      try {
+      assert.throws(() => {
         SpinalRelationFactory.getNewRelation(DEFAULT_NODE, DEFAULT_RELATION_NAME, -1);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, Error);
     });
   });
 });

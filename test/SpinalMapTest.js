@@ -26,76 +26,46 @@ describe("SpinalMap", function() {
 
     it("should throw an error if init is not iterable", function() {
       const init = {}
-      let error = false;
 
-      try {
+      assert.throws(() => {
         new SpinalMap(init);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
 
       init[Symbol.iterator] = null;
 
-      error = false;
-      try {
+      assert.throws(() => {
         new SpinalMap(init);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
 
       init[Symbol.iterator] = () => {};
 
-      error = false;
-      try {
+      assert.throws(() => {
         new SpinalMap(init);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
 
     it("should throw an error if init has bad values", function() {
       let init = [1]
-      let error = false;
 
-      try {
+      assert.throws(() => {
         new SpinalMap(init);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
 
       init = [
         []
-      ]
-      error = false;
+      ];
 
-      try {
+      assert.throws(() => {
         new SpinalMap(init);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
 
       init = [
         [1]
-      ]
-      error = false;
+      ];
 
-      try {
+      assert.throws(() => {
         new SpinalMap(init);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
   });
 
@@ -119,28 +89,18 @@ describe("SpinalMap", function() {
 
     it("should throw an error if the key is missing", function() {
       const map = new SpinalMap();
-      let error = false;
 
-      try {
-        map.setElement();
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      assert.throws(() => {
+        map.setElement()
+      }, TypeError);
     });
 
     it("should throw an error if the key is not a string", function() {
       const map = new SpinalMap();
-      let error = false;
 
-      try {
+      assert.throws(() => {
         map.setElement(1);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
   });
 
@@ -163,15 +123,10 @@ describe("SpinalMap", function() {
 
     it("should throw an error if the key is not a string", function() {
       const map = new SpinalMap();
-      let error = false;
 
-      try {
+      assert.throws(() => {
         map.has(1);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
   });
 
@@ -243,43 +198,28 @@ describe("SpinalMap", function() {
 
     it("should throw an error if the key is missing", function() {
       const map = new SpinalMap();
-      let error = false;
 
-      try {
+      assert.throws(() => {
         map.delete();
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
 
     it("should throw an error if the key is not a string", function() {
       const map = new SpinalMap();
-      let error = false;
 
-      try {
+      assert.throws(() => {
         map.delete(1);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
 
     it("should throw an error if the key doesn't exist", function() {
       const map = new SpinalMap();
-      let error = false;
 
       map.setElement("hello", "world");
 
-      try {
+      assert.throws(() => {
         map.delete("bye");
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, Error);
 
       assert(map.has("hello"));
     });
@@ -318,15 +258,10 @@ describe("SpinalMap", function() {
 
     it("should throw an error if the callback is missing", function() {
       const map = new SpinalMap();
-      let error = false;
 
-      try {
+      assert.throws(() => {
         map.forEach();
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
   });
 

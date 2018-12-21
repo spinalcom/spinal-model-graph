@@ -39,69 +39,37 @@ describe("BaseSpinalRelation", function() {
     });
 
     it("should throw an error if the parent or the name is missing", async function() {
-      let error = false;
-
-      try {
+      assert.throws(() => {
         new BaseSpinalRelation();
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
 
-      error = false;
-
-      try {
+      assert.throws(() => {
         new BaseSpinalRelation(undefined, DEFAULT_RELATION_NAME);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
 
-      try {
-        new BaseSpinalRelation(parent2);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      assert.throws(() => {
+        new BaseSpinalRelation(DEFAULT_NODE);
+      }, TypeError);
     });
 
     it("should throw an error if the name is not a string", async function() {
-      let error = false;
-
-      try {
+      assert.throws(() => {
         new BaseSpinalRelation(DEFAULT_NODE, 1);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
 
     it("should throw an error if the parent is not a SpinalNode", async function() {
       const parent1 = new Array();
-      let error = false;
 
-      try {
+      assert.throws(() => {
         new BaseSpinalRelation(parent1, DEFAULT_RELATION_NAME);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
 
       const parent2 = new globalType.Model();
-      error = false;
 
-      try {
+      assert.throws(() => {
         new BaseSpinalRelation(parent2, DEFAULT_RELATION_NAME);
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
   });
 
@@ -146,29 +114,19 @@ describe("BaseSpinalRelation", function() {
 
       it("should throw an error if the contextId is missing", function() {
         const relation = new BaseSpinalRelation(DEFAULT_NODE, DEFAULT_RELATION_NAME);
-        let error = false;
 
-        try {
+        assert.throws(() => {
           relation.addContextId();
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, TypeError);
       });
 
       it("should throw an error if the contextId is not a string", function() {
         const relation = new BaseSpinalRelation(DEFAULT_NODE, DEFAULT_RELATION_NAME);
         const badContextId1 = new lib.SpinalContext().getId();
-        let error = false;
 
-        try {
+        assert.throws(() => {
           relation.addContextId(badContextId1);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, TypeError);
       });
     });
 
@@ -191,40 +149,25 @@ describe("BaseSpinalRelation", function() {
 
       it("should throw an error if no context is passed", function() {
         const relation = new BaseSpinalRelation(DEFAULT_NODE, DEFAULT_RELATION_NAME);
-        let error = false;
 
-        try {
+        assert.throws(() => {
           relation.belongsToContext(context);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, TypeError);
       });
 
       it("should throw an error if the context as the wrong type", function() {
         const context1 = {};
         const relation = new BaseSpinalRelation(DEFAULT_NODE, DEFAULT_RELATION_NAME);
-        let error = false;
 
-        try {
+        assert.throws(() => {
           relation.belongsToContext(context1);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, TypeError);
 
         const context2 = new lib.SpinalNode();
-        error = false;
 
-        try {
+        assert.throws(() => {
           relation.belongsToContext(context2);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, TypeError);
       });
     });
   });

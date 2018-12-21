@@ -103,8 +103,7 @@ describe("SpinalNode", function() {
 
     describe("How to use getType", function() {
       it('should return the type CUSTOM_SPINAL_NODE_TYPE', function() {
-        let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME,
-          CUSTOM_SPINAL_NODE_TYPE);
+        let node = new lib.SpinalNode(CUSTOM_SPINAL_NODE_NAME, CUSTOM_SPINAL_NODE_TYPE);
         assert.strictEqual(
           node.getType().get(),
           CUSTOM_SPINAL_NODE_TYPE,
@@ -216,28 +215,19 @@ describe("SpinalNode", function() {
 
       it("should throw an error if the id is missing", function() {
         const node = new lib.SpinalNode();
-        let error = false;
 
-        try {
+        assert.throws(() => {
           node.addContextId();
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, TypeError);
       });
 
       it("should throw an error if the id is not a string", function() {
         const node = new lib.SpinalNode();
-        let error = false;
+        const context = new lib.SpinalContext();
 
-        try {
-          node.addContextId(contextId1.getId());
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        assert.throws(() => {
+          node.addContextId(context.getId());
+        }, TypeError);
       });
     });
 
@@ -261,28 +251,18 @@ describe("SpinalNode", function() {
 
       it("should throw an error if the context is missing", function() {
         const node = new lib.SpinalNode();
-        let error = false;
 
-        try {
-          assert(!node.belongsToContext(context));
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        assert.throws(() => {
+          node.belongsToContext(context);
+        }, TypeError);
       });
 
       it("should throw an error if the context is missing", function() {
         const node = new lib.SpinalNode();
-        let error = false;
 
-        try {
-          assert(!node.belongsToContext(1));
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        assert.throws(() => {
+          node.belongsToContext(1);
+        }, TypeError);
       });
     });
   });
@@ -305,54 +285,34 @@ describe("SpinalNode", function() {
 
       it("should throw an error if the relation name is missing", function() {
         const node = new lib.SpinalNode();
-        let error = false;
 
-        try {
+        assert.throws(() => {
           node.hasRelation(undefined, lib.SPINAL_RELATION_TYPE);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, TypeError);
       });
 
       it("should throw an error if the relation name is not a string", function() {
         const node = new lib.SpinalNode();
-        let error = false;
 
-        try {
+        assert.throws(() => {
           node.hasRelation(1, lib.SPINAL_RELATION_TYPE);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, TypeError);
       });
 
       it("should throw an error if the relation type is missing", function() {
         const node = new lib.SpinalNode();
-        let error = false;
 
-        try {
+        assert.throws(() => {
           node.hasRelation(DEFAULT_RELATION_NAME);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, Error);
       });
 
       it("should throw an error if the relation type is not valid", function() {
         const node = new lib.SpinalNode();
-        let error = false;
 
-        try {
+        assert.throws(() => {
           node.hasRelation(DEFAULT_RELATION_NAME, 1);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, Error);
       });
     });
 
@@ -381,67 +341,42 @@ describe("SpinalNode", function() {
 
       it("should throw an error if the relation name array is missing", function() {
         const node = new lib.SpinalNode();
-        let error = false;
 
-        try {
+        assert.throws(() => {
           node.hasRelations(undefined, lib.SPINAL_RELATION_TYPE);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, TypeError);
       });
 
       it("should throw an error if the relation name array is not an array", function() {
         const node = new lib.SpinalNode();
-        let error = false;
 
-        try {
+        assert.throws(() => {
           node.hasRelations(1, lib.SPINAL_RELATION_TYPE);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, TypeError);
       });
 
       it("should throw an error if the relation type is missing", function() {
         const node = new lib.SpinalNode();
-        let error = false;
 
-        try {
+        assert.throws(() => {
           node.hasRelations([]);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, Error);
       });
 
       it("should throw an error if the relation type is not valid", function() {
         const node = new lib.SpinalNode();
-        let error = false;
 
-        try {
+        assert.throws(() => {
           node.hasRelations([], 1);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, Error);
       });
 
       it("should throw an error if on of the relation names is not a string", function() {
         const node = new lib.SpinalNode();
-        let error = false;
 
-        try {
+        assert.throws(() => {
           node.hasRelations([1], lib.SPINAL_RELATION_TYPE);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+        }, TypeError);
       });
     });
 
@@ -764,7 +699,6 @@ describe("SpinalNode", function() {
 
       it("should throw an error if the context is missing", async function() {
         const node = new lib.SpinalNode();
-        const context = new lib.SpinalContext()
         let error = false;
 
         try {
@@ -778,7 +712,6 @@ describe("SpinalNode", function() {
 
       it("should throw an error if the context is not a SpinalContext", async function() {
         const node = new lib.SpinalNode();
-        const context = new lib.SpinalContext()
         let error = false;
 
         try {

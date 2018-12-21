@@ -24,22 +24,16 @@ describe("SpinalNodePointer", function() {
     });
 
     it("should throw an error if no element is given", function() {
-      let error = false;
-
-      try {
+      assert.throws(() => {
         new SpinalNodePointer();
-      } catch (e) {
-        error = true;
-        assert(e instanceof Error);
-      }
-      assert(error);
+      }, TypeError);
     });
   });
 
   describe("How to set/unset the pointer", function() {
     describe("How to use setElement", function() {
       it("should set an element and update pointedId and pointedType", async function() {
-        let ptr = new SpinalNodePointer(DEFAULT_NODE);
+        const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
         assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
         assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
@@ -49,7 +43,7 @@ describe("SpinalNodePointer", function() {
       });
 
       it("should set an element but not update pointedId and pointedType", async function() {
-        let ptr = new SpinalNodePointer(DEFAULT_MODEL);
+        const ptr = new SpinalNodePointer(DEFAULT_MODEL);
 
         assert.strictEqual(typeof ptr.getId(), "undefined");
         assert.strictEqual(typeof ptr.getType(), "undefined");
@@ -61,7 +55,7 @@ describe("SpinalNodePointer", function() {
 
     describe("How to use load", function() {
       it("should load the node to which the pointer is pointing", async function() {
-        let ptr = new SpinalNodePointer(DEFAULT_NODE);
+        const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
         const elem = await ptr.load();
         assert.strictEqual(elem, DEFAULT_NODE);
@@ -70,7 +64,7 @@ describe("SpinalNodePointer", function() {
 
     describe("How to use unset", function() {
       it("should unset the pointer", function() {
-        let ptr = new SpinalNodePointer(DEFAULT_NODE);
+        const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
         assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
         assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
@@ -87,7 +81,7 @@ describe("SpinalNodePointer", function() {
   describe("How to get information about the SpinalNodePointer", function() {
     describe("How to use getId", function() {
       it("should return the id of the pointed node", function() {
-        let ptr = new SpinalNodePointer(DEFAULT_NODE);
+        const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
         assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
       });
@@ -95,7 +89,7 @@ describe("SpinalNodePointer", function() {
 
     describe("How to use getType", function() {
       it("should return the type of the pointed node", function() {
-        let ptr = new SpinalNodePointer(DEFAULT_NODE);
+        const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
         assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
       });
