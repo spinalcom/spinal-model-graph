@@ -1,41 +1,30 @@
 {
   "name": "spinal-model-graph",
-  "version": "2.4.1",
+  "version": "2.0.0",
   "description": "The spinal graph is a data structure",
   "repository": "https://github.com/spinalcom/spinal-model-graph.git",
   "main": "build/index.js",
   "scripts": {
-    "test": "rm build -rf && tsc && nyc mocha --require ts-node/register test/**/*.ts test/*.ts",
-    "build": "babel src -d build",
-    "docs": "jsdoc2md --no-cache --files 'src/**/*.ts' --configure jsdoc2md.json --template 'Markdown Templates/README.hbs' > README.md && doctoc README.md"
+    "test": "mocha --recursive test",
+    "build": "babel src -d build -s inline",
+    "docs": "rm ./Docs/markdown/api.md && touch ./Docs/markdown/api.md && find ./src -name \"*.js\" -exec jsdoc2md {} >> ./Docs/markdown/api.md ';'"
   },
-  "types": "./build/index.d.ts",
   "author": "SpinalCom",
   "license": "SpinalCom Free Software License Agreement",
   "dependencies": {
+    "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git",
     "spinal-core-connectorjs_type": "git+https://github.com/spinalcom/spinal-core-connectorjs_type.git"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.2.2",
-    "@babel/plugin-proposal-class-properties": "^7.2.3",
-    "@babel/preset-env": "^7.2.3",
-    "@babel/preset-typescript": "^7.1.0",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.12.12",
-    "doctoc": "^1.4.0",
-    "jsdoc-babel": "^0.5.0",
-    "jsdoc-to-markdown": "^4.0.1",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.8",
-    "nyc": "^13.1.0",
     "ts-node": "^7.0.1",
+    "jsdoc-to-markdown": "^4.0.1",
     "tslint": "^5.11.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.2.2",
     "typescript-eslint-parser": "^21.0.2"
-  },
-  "peerDependencies": {
-    "@babel/core": "6 | ^7.0.0-0"
   }
 }

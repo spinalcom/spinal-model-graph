@@ -1,20 +1,5 @@
 "use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.SpinalRelationFactory = exports.RELATION_TYPE_LIST = exports.SPINAL_RELATION_PTR_LST_TYPE = exports.SPINAL_RELATION_LST_PTR_TYPE = exports.SPINAL_RELATION_TYPE = void 0;
-
-var _SpinalRelationRef = _interopRequireDefault(require("./SpinalRelationRef"));
-
-var _SpinalRelationLstPtr = _interopRequireDefault(require("./SpinalRelationLstPtr"));
-
-var _SpinalRelationPtrLst = _interopRequireDefault(require("./SpinalRelationPtrLst"));
-
-var _spinalCoreConnectorjs = _interopRequireDefault(require("spinal-core-connectorjs"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
+Object.defineProperty(exports, "__esModule", { value: true });
 /*
  * Copyright 2018 SpinalCom - www.spinalcom.com
  *
@@ -38,55 +23,54 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-const SPINAL_RELATION_TYPE = "Ref";
+const SpinalRelationRef_1 = require("./SpinalRelationRef");
+const SpinalRelationLstPtr_1 = require("./SpinalRelationLstPtr");
+const SpinalRelationPtrLst_1 = require("./SpinalRelationPtrLst");
+const spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
+const SPINAL_RELATION_TYPE = 'Ref';
 exports.SPINAL_RELATION_TYPE = SPINAL_RELATION_TYPE;
-const SPINAL_RELATION_LST_PTR_TYPE = "LstPtr";
+const SPINAL_RELATION_LST_PTR_TYPE = 'LstPtr';
 exports.SPINAL_RELATION_LST_PTR_TYPE = SPINAL_RELATION_LST_PTR_TYPE;
-const SPINAL_RELATION_PTR_LST_TYPE = "PtrLst";
+const SPINAL_RELATION_PTR_LST_TYPE = 'PtrLst';
 exports.SPINAL_RELATION_PTR_LST_TYPE = SPINAL_RELATION_PTR_LST_TYPE;
-const RELATION_TYPE_LIST = [SPINAL_RELATION_TYPE, SPINAL_RELATION_LST_PTR_TYPE, SPINAL_RELATION_PTR_LST_TYPE];
+const RELATION_TYPE_LIST = [
+    SPINAL_RELATION_TYPE,
+    SPINAL_RELATION_LST_PTR_TYPE,
+    SPINAL_RELATION_PTR_LST_TYPE,
+];
+exports.RELATION_TYPE_LIST = RELATION_TYPE_LIST;
 /**
  * Namespace for general relation functions.
  * @abstract
  */
-
-exports.RELATION_TYPE_LIST = RELATION_TYPE_LIST;
-
 class SpinalRelationFactory {
-  /**
-   * Create a new relation of relationType with the relationName.
-   * @param {SpinalNode} parent Parent of the relation
-   * @param {String} relationName Name of the relation
-   * @param {String} relationType Type of the relation
-   * @returns {SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst} A new SpinalRelation
-   * @static
-   */
-  static getNewRelation(parent, relationName, relationType) {
-    let relation;
-
-    switch (relationType) {
-      case SPINAL_RELATION_TYPE:
-        relation = new _SpinalRelationRef.default(parent, relationName);
-        break;
-
-      case SPINAL_RELATION_LST_PTR_TYPE:
-        relation = new _SpinalRelationLstPtr.default(parent, relationName);
-        break;
-
-      case SPINAL_RELATION_PTR_LST_TYPE:
-        relation = new _SpinalRelationPtrLst.default(parent, relationName);
-        break;
-
-      default:
-        throw new Error("Unknown relationType");
+    /**
+     * Create a new relation of relationType with the relationName.
+     * @param {SpinalNode} parent Parent of the relation
+     * @param {string} relationName Name of the relation
+     * @param {string} relationType Type of the relation
+     * @returns {SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst} A new SpinalRelation
+     * @static
+     * @memberof SpinalRelationFactory
+     */
+    static getNewRelation(parent, relationName, relationType) {
+        let relation;
+        switch (relationType) {
+            case SPINAL_RELATION_TYPE:
+                relation = new SpinalRelationRef_1.SpinalRelationRef(parent, relationName);
+                break;
+            case SPINAL_RELATION_LST_PTR_TYPE:
+                relation = new SpinalRelationLstPtr_1.SpinalRelationLstPtr(parent, relationName);
+                break;
+            case SPINAL_RELATION_PTR_LST_TYPE:
+                relation = new SpinalRelationPtrLst_1.SpinalRelationPtrLst(parent, relationName);
+                break;
+            default:
+                throw new Error('Unknown relationType');
+        }
+        return relation;
     }
-
-    return relation;
-  }
-
 }
-
 exports.SpinalRelationFactory = SpinalRelationFactory;
-
-_spinalCoreConnectorjs.default.register_models([SpinalRelationFactory]);
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9SZWxhdGlvbnMvU3BpbmFsUmVsYXRpb25GYWN0b3J5LmpzIl0sIm5hbWVzIjpbIlNQSU5BTF9SRUxBVElPTl9UWVBFIiwiU1BJTkFMX1JFTEFUSU9OX0xTVF9QVFJfVFlQRSIsIlNQSU5BTF9SRUxBVElPTl9QVFJfTFNUX1RZUEUiLCJSRUxBVElPTl9UWVBFX0xJU1QiLCJTcGluYWxSZWxhdGlvbkZhY3RvcnkiLCJnZXROZXdSZWxhdGlvbiIsInBhcmVudCIsInJlbGF0aW9uTmFtZSIsInJlbGF0aW9uVHlwZSIsInJlbGF0aW9uIiwiU3BpbmFsUmVsYXRpb25SZWYiLCJTcGluYWxSZWxhdGlvbkxzdFB0ciIsIlNwaW5hbFJlbGF0aW9uUHRyTHN0IiwiRXJyb3IiLCJzcGluYWxDb3JlIiwicmVnaXN0ZXJfbW9kZWxzIl0sIm1hcHBpbmdzIjoiOzs7Ozs7O0FBdUJBOztBQUNBOztBQUNBOztBQUNBOzs7O0FBMUJBOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQTRCQSxNQUFNQSxvQkFBb0IsR0FBRyxLQUE3Qjs7QUFDQSxNQUFNQyw0QkFBNEIsR0FBRyxRQUFyQzs7QUFDQSxNQUFNQyw0QkFBNEIsR0FBRyxRQUFyQzs7QUFDQSxNQUFNQyxrQkFBa0IsR0FBRyxDQUN6Qkgsb0JBRHlCLEVBRXpCQyw0QkFGeUIsRUFHekJDLDRCQUh5QixDQUEzQjtBQU1BOzs7Ozs7O0FBSUEsTUFBTUUscUJBQU4sQ0FBNEI7QUFDMUI7Ozs7Ozs7O0FBUUEsU0FBT0MsY0FBUCxDQUFzQkMsTUFBdEIsRUFBOEJDLFlBQTlCLEVBQTRDQyxZQUE1QyxFQUEwRDtBQUN4RCxRQUFJQyxRQUFKOztBQUVBLFlBQVFELFlBQVI7QUFDRSxXQUFLUixvQkFBTDtBQUNFUyxRQUFBQSxRQUFRLEdBQUcsSUFBSUMsMEJBQUosQ0FBc0JKLE1BQXRCLEVBQThCQyxZQUE5QixDQUFYO0FBQ0E7O0FBQ0YsV0FBS04sNEJBQUw7QUFDRVEsUUFBQUEsUUFBUSxHQUFHLElBQUlFLDZCQUFKLENBQXlCTCxNQUF6QixFQUFpQ0MsWUFBakMsQ0FBWDtBQUNBOztBQUNGLFdBQUtMLDRCQUFMO0FBQ0VPLFFBQUFBLFFBQVEsR0FBRyxJQUFJRyw2QkFBSixDQUF5Qk4sTUFBekIsRUFBaUNDLFlBQWpDLENBQVg7QUFDQTs7QUFDRjtBQUNFLGNBQU0sSUFBSU0sS0FBSixDQUFVLHNCQUFWLENBQU47QUFYSjs7QUFjQSxXQUFPSixRQUFQO0FBQ0Q7O0FBM0J5Qjs7OztBQThCNUJLLCtCQUFXQyxlQUFYLENBQTJCLENBQUNYLHFCQUFELENBQTNCIiwic291cmNlc0NvbnRlbnQiOlsiLypcbiAqIENvcHlyaWdodCAyMDE4IFNwaW5hbENvbSAtIHd3dy5zcGluYWxjb20uY29tXG4gKlxuICogVGhpcyBmaWxlIGlzIHBhcnQgb2YgU3BpbmFsQ29yZS5cbiAqXG4gKiBQbGVhc2UgcmVhZCBhbGwgb2YgdGhlIGZvbGxvd2luZyB0ZXJtcyBhbmQgY29uZGl0aW9uc1xuICogb2YgdGhlIEZyZWUgU29mdHdhcmUgbGljZW5zZSBBZ3JlZW1lbnQgKFwiQWdyZWVtZW50XCIpXG4gKiBjYXJlZnVsbHkuXG4gKlxuICogVGhpcyBBZ3JlZW1lbnQgaXMgYSBsZWdhbGx5IGJpbmRpbmcgY29udHJhY3QgYmV0d2VlblxuICogdGhlIExpY2Vuc2VlIChhcyBkZWZpbmVkIGJlbG93KSBhbmQgU3BpbmFsQ29tIHRoYXRcbiAqIHNldHMgZm9ydGggdGhlIHRlcm1zIGFuZCBjb25kaXRpb25zIHRoYXQgZ292ZXJuIHlvdXJcbiAqIHVzZSBvZiB0aGUgUHJvZ3JhbS4gQnkgaW5zdGFsbGluZyBhbmQvb3IgdXNpbmcgdGhlXG4gKiBQcm9ncmFtLCB5b3UgYWdyZWUgdG8gYWJpZGUgYnkgYWxsIHRoZSB0ZXJtcyBhbmRcbiAqIGNvbmRpdGlvbnMgc3RhdGVkIG9yIHJlZmVyZW5jZWQgaGVyZWluLlxuICpcbiAqIElmIHlvdSBkbyBub3QgYWdyZWUgdG8gYWJpZGUgYnkgdGhlc2UgdGVybXMgYW5kXG4gKiBjb25kaXRpb25zLCBkbyBub3QgZGVtb25zdHJhdGUgeW91ciBhY2NlcHRhbmNlIGFuZCBkb1xuICogbm90IGluc3RhbGwgb3IgdXNlIHRoZSBQcm9ncmFtLlxuICogWW91IHNob3VsZCBoYXZlIHJlY2VpdmVkIGEgY29weSBvZiB0aGUgbGljZW5zZSBhbG9uZ1xuICogd2l0aCB0aGlzIGZpbGUuIElmIG5vdCwgc2VlXG4gKiA8aHR0cDovL3Jlc291cmNlcy5zcGluYWxjb20uY29tL2xpY2Vuc2VzLnBkZj4uXG4gKi9cbmltcG9ydCBTcGluYWxSZWxhdGlvblJlZiBmcm9tIFwiLi9TcGluYWxSZWxhdGlvblJlZlwiO1xuaW1wb3J0IFNwaW5hbFJlbGF0aW9uTHN0UHRyIGZyb20gXCIuL1NwaW5hbFJlbGF0aW9uTHN0UHRyXCI7XG5pbXBvcnQgU3BpbmFsUmVsYXRpb25QdHJMc3QgZnJvbSBcIi4vU3BpbmFsUmVsYXRpb25QdHJMc3RcIjtcbmltcG9ydCBzcGluYWxDb3JlIGZyb20gXCJzcGluYWwtY29yZS1jb25uZWN0b3Jqc1wiO1xuXG5jb25zdCBTUElOQUxfUkVMQVRJT05fVFlQRSA9IFwiUmVmXCI7XG5jb25zdCBTUElOQUxfUkVMQVRJT05fTFNUX1BUUl9UWVBFID0gXCJMc3RQdHJcIjtcbmNvbnN0IFNQSU5BTF9SRUxBVElPTl9QVFJfTFNUX1RZUEUgPSBcIlB0ckxzdFwiO1xuY29uc3QgUkVMQVRJT05fVFlQRV9MSVNUID0gW1xuICBTUElOQUxfUkVMQVRJT05fVFlQRSxcbiAgU1BJTkFMX1JFTEFUSU9OX0xTVF9QVFJfVFlQRSxcbiAgU1BJTkFMX1JFTEFUSU9OX1BUUl9MU1RfVFlQRVxuXTtcblxuLyoqXG4gKiBOYW1lc3BhY2UgZm9yIGdlbmVyYWwgcmVsYXRpb24gZnVuY3Rpb25zLlxuICogQGFic3RyYWN0XG4gKi9cbmNsYXNzIFNwaW5hbFJlbGF0aW9uRmFjdG9yeSB7XG4gIC8qKlxuICAgKiBDcmVhdGUgYSBuZXcgcmVsYXRpb24gb2YgcmVsYXRpb25UeXBlIHdpdGggdGhlIHJlbGF0aW9uTmFtZS5cbiAgICogQHBhcmFtIHtTcGluYWxOb2RlfSBwYXJlbnQgUGFyZW50IG9mIHRoZSByZWxhdGlvblxuICAgKiBAcGFyYW0ge1N0cmluZ30gcmVsYXRpb25OYW1lIE5hbWUgb2YgdGhlIHJlbGF0aW9uXG4gICAqIEBwYXJhbSB7U3RyaW5nfSByZWxhdGlvblR5cGUgVHlwZSBvZiB0aGUgcmVsYXRpb25cbiAgICogQHJldHVybnMge1NwaW5hbFJlbGF0aW9uUmVmIHwgU3BpbmFsUmVsYXRpb25Mc3RQdHIgfCBTcGluYWxSZWxhdGlvblB0ckxzdH0gQSBuZXcgU3BpbmFsUmVsYXRpb25cbiAgICogQHN0YXRpY1xuICAgKi9cbiAgc3RhdGljIGdldE5ld1JlbGF0aW9uKHBhcmVudCwgcmVsYXRpb25OYW1lLCByZWxhdGlvblR5cGUpIHtcbiAgICBsZXQgcmVsYXRpb247XG5cbiAgICBzd2l0Y2ggKHJlbGF0aW9uVHlwZSkge1xuICAgICAgY2FzZSBTUElOQUxfUkVMQVRJT05fVFlQRTpcbiAgICAgICAgcmVsYXRpb24gPSBuZXcgU3BpbmFsUmVsYXRpb25SZWYocGFyZW50LCByZWxhdGlvbk5hbWUpO1xuICAgICAgICBicmVhaztcbiAgICAgIGNhc2UgU1BJTkFMX1JFTEFUSU9OX0xTVF9QVFJfVFlQRTpcbiAgICAgICAgcmVsYXRpb24gPSBuZXcgU3BpbmFsUmVsYXRpb25Mc3RQdHIocGFyZW50LCByZWxhdGlvbk5hbWUpO1xuICAgICAgICBicmVhaztcbiAgICAgIGNhc2UgU1BJTkFMX1JFTEFUSU9OX1BUUl9MU1RfVFlQRTpcbiAgICAgICAgcmVsYXRpb24gPSBuZXcgU3BpbmFsUmVsYXRpb25QdHJMc3QocGFyZW50LCByZWxhdGlvbk5hbWUpO1xuICAgICAgICBicmVhaztcbiAgICAgIGRlZmF1bHQ6XG4gICAgICAgIHRocm93IG5ldyBFcnJvcihcIlVua25vd24gcmVsYXRpb25UeXBlXCIpO1xuICAgIH1cblxuICAgIHJldHVybiByZWxhdGlvbjtcbiAgfVxufVxuXG5zcGluYWxDb3JlLnJlZ2lzdGVyX21vZGVscyhbU3BpbmFsUmVsYXRpb25GYWN0b3J5XSk7XG5leHBvcnQge1xuICBTUElOQUxfUkVMQVRJT05fVFlQRSxcbiAgU1BJTkFMX1JFTEFUSU9OX0xTVF9QVFJfVFlQRSxcbiAgU1BJTkFMX1JFTEFUSU9OX1BUUl9MU1RfVFlQRSxcbiAgUkVMQVRJT05fVFlQRV9MSVNULFxuICBTcGluYWxSZWxhdGlvbkZhY3Rvcnlcbn07XG4iXX0=
+spinal_core_connectorjs_type_1.spinalCore.register_models([SpinalRelationFactory]);
+//# sourceMappingURL=SpinalRelationFactory.js.map

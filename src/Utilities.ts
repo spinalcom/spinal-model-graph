@@ -1,4 +1,3 @@
-"use strict";
 /*
  * Copyright 2018 SpinalCom - www.spinalcom.com
  *
@@ -22,23 +21,27 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-Object.defineProperty(exports, "__esModule", { value: true });
+
 /**
  * Generates a random number and returns in a string.
  * @returns {String} Random number in a string
  */
-function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
+function s4(): string {
+  return Math.floor((1 + Math.random()) * 0x10000)
+    .toString(16)
+    .substring(1);
 }
+
 /**
  * Creates a unique id based on a name.
  * @param {string} name Name from wich the id is generated
  * @returns {string} Generated id
  */
-function guid(name) {
-    return `${name}-${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}-${Date.now().toString(16)}`;
+function guid(name: string): string {
+  return `${name}-${s4() + s4()}-${s4()}-${s4()}-${s4()}-${
+    s4() + s4() + s4()}-${Date.now().toString(16)}`;
 }
-exports.guid = guid;
-//# sourceMappingURL=Utilities.js.map
+
+export {
+  guid,
+};
