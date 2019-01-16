@@ -35,6 +35,10 @@ import {
   SPINAL_RELATION_PTR_LST_TYPE,
 } from './Relations/SpinalRelationFactory';
 
+import { SpinalMap } from './SpinalMap';
+import { SpinalNodePointer } from './SpinalNodePointer';
+import { SpinalSet } from './SpinalSet';
+
 export {
   SpinalGraph,
   SpinalNode,
@@ -46,4 +50,7 @@ export {
   SPINAL_RELATION_TYPE,
   SPINAL_RELATION_LST_PTR_TYPE,
   SPINAL_RELATION_PTR_LST_TYPE,
+  SpinalMap,
+  SpinalNodePointer,
+  SpinalSet,
 };
