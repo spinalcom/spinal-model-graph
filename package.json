@@ -5,24 +5,23 @@
   "repository": "https://github.com/spinalcom/spinal-model-graph.git",
   "main": "build/index.js",
   "scripts": {
-    "test": "nyc mocha --recursive test",
-    "build": "babel src -d build",
+    "test": "tsc && nyc mocha --require ts-node/register --recursive build/test",
+    "build": "tsc",
     "docs": "rm ./Docs/markdown/api.md && touch ./Docs/markdown/api.md && find ./src -name \"*.js\" -exec jsdoc2md {} >> ./Docs/markdown/api.md ';'"
   },
+  "types": "build/index.d.ts",
   "author": "SpinalCom",
   "license": "SpinalCom Free Software License Agreement",
   "dependencies": {
     "spinal-core-connectorjs_type": "git+https://github.com/spinalcom/spinal-core-connectorjs_type.git"
   },
   "devDependencies": {
-    "@babel/cli": "^7.1.2",
-    "@babel/core": "^7.1.2",
-    "@babel/preset-env": "^7.1.0",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^10.5.7",
     "jsdoc-to-markdown": "^5.0.0",
     "mocha": "^5.2.0",
-    "nyc": "^14.1.1"
-  },
-  "peerDependencies": {
-    "@babel/core": "6 | ^7.0.0-0"
+    "nyc": "^14.1.1",
+    "ts-node": "^8.2.0",
+    "typescript": "^3.5.1"
   }
 }

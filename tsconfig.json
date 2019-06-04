@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "commonjs",
+    "outDir": "build",
+    "declaration": true,
+    "sourceMap": true,
+    "lib": ["es2015"]
+  },
+  "files": [
+    "./node_modules/@types/node/index.d.ts",
+    "./node_modules/spinal-core-connectorjs_type/declarations/SpinalModel.d.ts"
+    ],
+  "include": [
+    "src/**/*.ts",
+    "test/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
