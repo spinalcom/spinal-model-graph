@@ -1,6 +1,6 @@
 {
   "name": "spinal-model-graph",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "description": "The spinal graph is a data structure",
   "repository": "https://github.com/spinalcom/spinal-model-graph.git",
   "main": "build/index.js",
@@ -18,9 +18,9 @@
     "@babel/cli": "^7.1.2",
     "@babel/core": "^7.1.2",
     "@babel/preset-env": "^7.1.0",
-    "jsdoc-to-markdown": "^4.0.1",
+    "jsdoc-to-markdown": "^5.0.0",
     "mocha": "^5.2.0",
-    "nyc": "^13.1.0"
+    "nyc": "^14.1.1"
   },
   "peerDependencies": {
     "@babel/core": "6 | ^7.0.0-0"

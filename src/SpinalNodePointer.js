@@ -43,15 +43,17 @@ class SpinalNodePointer extends Model {
    * @param {SpinalNode | Model} element Element to wich the SpinalNodePointer will point
    * @throws {TypeError} If the element is not a Model
    */
-  constructor(element) {
+  constructor(element, blockRights = false) {
     super();
 
     this.add_attr({
-      ptr: new Ptr(),
+      ptr: blockRights === true ? new globalType.Pbr() : new globalType.Ptr(),
       info: {}
     });
 
-    this.setElement(element);
+    if (typeof element !== "undefined") {
+      this.setElement(element);
+    }
   }
 
   /**

@@ -540,12 +540,6 @@ class SpinalNode extends Model {
   }
 
   /**
-   * Function that takes a node as argument and returns a boolean.
-   * @callback findPredicate
-   * @param {SpinalNode} node
-   * @returns {boolean}
-   */
-  /**
    * Recursively finds all the children nodes for which the predicate is true.
    * @param {Array<String>} relationNames Array containing the relation names to follow
    * @param {findPredicate} predicate Function returning true if the node needs to be returned
@@ -649,11 +643,6 @@ class SpinalNode extends Model {
   }
 
   /**
-   * Function that takes a SpinalNode and returns nothing.
-   * @callback forEachCallback
-   * @param {SpinalNode} node
-   */
-  /**
    * Recursively applies a function to all the children nodes.
    * @param {Array<String>} relationNames Array containing the relation names to follow
    * @param {forEachCallback} callback Function to apply to the nodes
@@ -685,7 +674,7 @@ class SpinalNode extends Model {
       throw TypeError("callback must be a function");
     }
 
-    const nodes = await this.findInContext(context);
+    let nodes = await this.findInContext(context);
 
     for (let node of nodes) {
       callback(node);
@@ -811,10 +800,10 @@ class SpinalNode extends Model {
     if (this.parents.has(relationName)) {
       this.parents
         .getElement(relationName)
-        .push(new SpinalNodePointer(relation));
+        .push(new SpinalNodePointer(relation, true));
     } else {
       const list = new Lst();
-      list.push(new SpinalNodePointer(relation));
+      list.push(new SpinalNodePointer(relation, true));
       this.parents.setElement(relationName, list);
     }
   }
