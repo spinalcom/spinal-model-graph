@@ -21,7 +21,7 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-import { FileSystem, spinalCore, Model, Ptr } from 'spinal-core-connectorjs_type';
+import { FileSystem, spinalCore, Model, Ptr, Pbr } from 'spinal-core-connectorjs_type';
 import { SpinalNode } from './Nodes/SpinalNode';
 import { BaseSpinalRelation } from './Relations/BaseSpinalRelation';
 
@@ -42,14 +42,15 @@ class SpinalNodePointer<T extends spinal.Model> extends Model {
   /**
    * Constructor for the SpinalNodePointer class.
    * @param {T} element Element to wich the SpinalNodePointer will point
+   * @param blockRights determine if the pointer is a pbr
    * @memberof SpinalNodePointer
    */
-  constructor(element: T) {
+  constructor(element: T, blockRights: boolean = false) {
     super();
     if (FileSystem._sig_server === false) return;
 
     this.add_attr({
-      ptr: new Ptr(0),
+      ptr: blockRights ? new Pbr() : new Ptr(),
       info: {},
     });
 

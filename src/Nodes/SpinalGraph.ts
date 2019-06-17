@@ -25,7 +25,7 @@ import { SpinalNode } from './SpinalNode';
 import { FileSystem, spinalCore } from 'spinal-core-connectorjs_type';
 import {
   SPINAL_RELATION_TYPE,
-} from '../Relations/SpinalRelationFactory';
+} from '..';
 import {
   guid,
 } from '../Utilities';

@@ -37,7 +37,7 @@ import {
 import {
   SpinalNode,
   SpinalContext,
-} from '../index';
+} from '..';
 import { SpinalNodePointer } from '../SpinalNodePointer';
 import { SpinalMap } from '../SpinalMap';
 

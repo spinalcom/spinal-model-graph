@@ -2,15 +2,14 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "commonjs",
-    "outDir": "build",
+    "outDir": "dist",
     "declaration": true,
+    "declarationDir": "./declarations",
+
     "sourceMap": true,
-    "lib": ["es2015"]
+    "lib": ["es2015"],
+    "types": ["node", "./node_modules/spinal-core-connectorjs_type/", "mocha"]
   },
-  "files": [
-    "./node_modules/@types/node/index.d.ts",
-    "./node_modules/spinal-core-connectorjs_type/declarations/SpinalModel.d.ts"
-    ],
   "include": [
     "src/**/*.ts",
     "test/**/*.ts"

@@ -21,13 +21,13 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-// tslint:disable:function-name
 
 import {
   FileSystem,
   spinalCore,
   Model,
   Lst,
+
 } from 'spinal-core-connectorjs_type';
 
 import {
@@ -37,9 +37,8 @@ import {
 import {
   SpinalContext,
 } from '../index';
-import { SpinalRelationRef } from '../Relations/SpinalRelationRef';
-import { SpinalRelationLstPtr } from '../Relations/SpinalRelationLstPtr';
-import { SpinalRelationPtrLst } from '../Relations/SpinalRelationPtrLst';
+import { SpinalRelationRef, SpinalRelationLstPtr, SpinalRelationPtrLst } from '..';
+
 import { SpinalNodePointer } from '../SpinalNodePointer';
 import {
   RELATION_TYPE_LIST,
@@ -47,7 +46,7 @@ import {
 } from '../Relations/SpinalRelationFactory';
 import { SpinalMap } from '../SpinalMap';
 import { SpinalSet } from '../SpinalSet';
-// import {BaseSpinalRelation} from '../Relations/BaseSpinalRelation';
+
 
 /**
  * A function that takes a node and returns a boolean.
@@ -58,8 +57,8 @@ import { SpinalSet } from '../SpinalSet';
 type SpinalNodeFindPredicateFunc = (node: SpinalNode<any>) => boolean;
 type SpinalNodeForEachFunc = (node: SpinalNode<any>) => void;
 type SpinalNodeMapFunc = (node: SpinalNode<any>) => any;
+type AnySpinalRelation = SpinalRelationRef | SpinalRelationLstPtr| SpinalRelationPtrLst;
 
-type AnySpinalRelation = SpinalRelationRef|SpinalRelationLstPtr| SpinalRelationPtrLst;
 const DEFAULT_PREDICATE: SpinalNodeFindPredicateFunc = () => true;
 
 interface SpinalNodeInfoModel extends spinal.Model {

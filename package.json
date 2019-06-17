@@ -9,7 +9,7 @@
     "build": "tsc",
     "docs": "rm ./Docs/markdown/api.md && touch ./Docs/markdown/api.md && find ./src -name \"*.js\" -exec jsdoc2md {} >> ./Docs/markdown/api.md ';'"
   },
-  "types": "build/index.d.ts",
+  "types": "declarations/index.d.ts",
   "author": "SpinalCom",
   "license": "SpinalCom Free Software License Agreement",
   "dependencies": {
