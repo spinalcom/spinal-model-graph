@@ -4,7 +4,7 @@
   "description": "The spinal graph is a data structure",
   "repository": "https://github.com/spinalcom/spinal-model-graph.git",
   "main": "dist/src/index.js",
-  "types": "declarations/index.d.ts",
+  "types": "declarations/src/index.d.ts",
   "scripts": {
     "test": "tsc && nyc mocha --require ts-node/register --recursive build/test",
     "build": "tsc",
