@@ -22,28 +22,28 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-const SpinalGraph_1 = require("./Nodes/SpinalGraph");
+exports.__esModule = true;
+var SpinalGraph_1 = require("./Nodes/SpinalGraph");
 exports.SpinalGraph = SpinalGraph_1.SpinalGraph;
-const SpinalNode_1 = require("./Nodes/SpinalNode");
+var SpinalNode_1 = require("./Nodes/SpinalNode");
 exports.SpinalNode = SpinalNode_1.SpinalNode;
-const SpinalContext_1 = require("./Nodes/SpinalContext");
+var SpinalContext_1 = require("./Nodes/SpinalContext");
 exports.SpinalContext = SpinalContext_1.SpinalContext;
-const SpinalRelationRef_1 = require("./Relations/SpinalRelationRef");
+var SpinalRelationRef_1 = require("./Relations/SpinalRelationRef");
 exports.SpinalRelationRef = SpinalRelationRef_1.SpinalRelationRef;
-const SpinalRelationLstPtr_1 = require("./Relations/SpinalRelationLstPtr");
+var SpinalRelationLstPtr_1 = require("./Relations/SpinalRelationLstPtr");
 exports.SpinalRelationLstPtr = SpinalRelationLstPtr_1.SpinalRelationLstPtr;
-const SpinalRelationPtrLst_1 = require("./Relations/SpinalRelationPtrLst");
+var SpinalRelationPtrLst_1 = require("./Relations/SpinalRelationPtrLst");
 exports.SpinalRelationPtrLst = SpinalRelationPtrLst_1.SpinalRelationPtrLst;
-const SpinalRelationFactory_1 = require("./Relations/SpinalRelationFactory");
+var SpinalRelationFactory_1 = require("./Relations/SpinalRelationFactory");
 exports.SpinalRelationFactory = SpinalRelationFactory_1.SpinalRelationFactory;
 exports.SPINAL_RELATION_TYPE = SpinalRelationFactory_1.SPINAL_RELATION_TYPE;
 exports.SPINAL_RELATION_LST_PTR_TYPE = SpinalRelationFactory_1.SPINAL_RELATION_LST_PTR_TYPE;
 exports.SPINAL_RELATION_PTR_LST_TYPE = SpinalRelationFactory_1.SPINAL_RELATION_PTR_LST_TYPE;
-const SpinalMap_1 = require("./SpinalMap");
+var SpinalMap_1 = require("./SpinalMap");
 exports.SpinalMap = SpinalMap_1.SpinalMap;
-const SpinalNodePointer_1 = require("./SpinalNodePointer");
+var SpinalNodePointer_1 = require("./SpinalNodePointer");
 exports.SpinalNodePointer = SpinalNodePointer_1.SpinalNodePointer;
-const SpinalSet_1 = require("./SpinalSet");
+var SpinalSet_1 = require("./SpinalSet");
 exports.SpinalSet = SpinalSet_1.SpinalSet;
 //# sourceMappingURL=index.js.map

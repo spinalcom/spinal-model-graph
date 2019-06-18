@@ -22,7 +22,7 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 /**
  * Generates a random number and returns in a string.
  * @returns {String} Random number in a string
@@ -38,7 +38,7 @@ function s4() {
  * @returns {string} Generated id
  */
 function guid(name) {
-    return `${name}-${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}-${Date.now().toString(16)}`;
+    return name + "-" + (s4() + s4()) + "-" + s4() + "-" + s4() + "-" + s4() + "-" + (s4() + s4() + s4()) + "-" + Date.now().toString(16);
 }
 exports.guid = guid;
 //# sourceMappingURL=Utilities.js.map

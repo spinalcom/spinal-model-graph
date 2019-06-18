@@ -1,5 +1,5 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+exports.__esModule = true;
 /*
  * Copyright 2018 SpinalCom - www.spinalcom.com
  *
@@ -23,17 +23,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-const SpinalRelationRef_1 = require("./SpinalRelationRef");
-const SpinalRelationLstPtr_1 = require("./SpinalRelationLstPtr");
-const SpinalRelationPtrLst_1 = require("./SpinalRelationPtrLst");
-const spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
-const SPINAL_RELATION_TYPE = 'Ref';
+var SpinalRelationRef_1 = require("./SpinalRelationRef");
+var SpinalRelationLstPtr_1 = require("./SpinalRelationLstPtr");
+var SpinalRelationPtrLst_1 = require("./SpinalRelationPtrLst");
+var spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
+var SPINAL_RELATION_TYPE = 'Ref';
 exports.SPINAL_RELATION_TYPE = SPINAL_RELATION_TYPE;
-const SPINAL_RELATION_LST_PTR_TYPE = 'LstPtr';
+var SPINAL_RELATION_LST_PTR_TYPE = 'LstPtr';
 exports.SPINAL_RELATION_LST_PTR_TYPE = SPINAL_RELATION_LST_PTR_TYPE;
-const SPINAL_RELATION_PTR_LST_TYPE = 'PtrLst';
+var SPINAL_RELATION_PTR_LST_TYPE = 'PtrLst';
 exports.SPINAL_RELATION_PTR_LST_TYPE = SPINAL_RELATION_PTR_LST_TYPE;
-const RELATION_TYPE_LIST = [
+var RELATION_TYPE_LIST = [
     SPINAL_RELATION_TYPE,
     SPINAL_RELATION_LST_PTR_TYPE,
     SPINAL_RELATION_PTR_LST_TYPE,
@@ -43,7 +43,9 @@ exports.RELATION_TYPE_LIST = RELATION_TYPE_LIST;
  * Namespace for general relation functions.
  * @abstract
  */
-class SpinalRelationFactory {
+var SpinalRelationFactory = /** @class */ (function () {
+    function SpinalRelationFactory() {
+    }
     /**
      * Create a new relation of relationType with the relationName.
      * @param {SpinalNode} parent Parent of the relation
@@ -53,8 +55,8 @@ class SpinalRelationFactory {
      * @static
      * @memberof SpinalRelationFactory
      */
-    static getNewRelation(parent, relationName, relationType) {
-        let relation;
+    SpinalRelationFactory.getNewRelation = function (parent, relationName, relationType) {
+        var relation;
         switch (relationType) {
             case SPINAL_RELATION_TYPE:
                 relation = new SpinalRelationRef_1.SpinalRelationRef(parent, relationName);
@@ -69,8 +71,9 @@ class SpinalRelationFactory {
                 throw new Error('Unknown relationType');
         }
         return relation;
-    }
-}
+    };
+    return SpinalRelationFactory;
+}());
 exports.SpinalRelationFactory = SpinalRelationFactory;
 spinal_core_connectorjs_type_1.spinalCore.register_models([SpinalRelationFactory]);
 //# sourceMappingURL=SpinalRelationFactory.js.map

@@ -1,5 +1,18 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+exports.__esModule = true;
 /*
  * Copyright 2018 SpinalCom - www.spinalcom.com
  *
@@ -23,17 +36,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-const SpinalNode_1 = require("./SpinalNode");
-const spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
-const __1 = require("..");
-const Utilities_1 = require("../Utilities");
+var SpinalNode_1 = require("./SpinalNode");
+var spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
+var __1 = require("..");
+var Utilities_1 = require("../Utilities");
 /**
  * A SpinalContext is the statring node of a part of the graph.
  * @class SpinalContext
  * @extends {SpinalNode<T>}
  * @template T
  */
-class SpinalContext extends SpinalNode_1.SpinalNode {
+var SpinalContext = /** @class */ (function (_super) {
+    __extends(SpinalContext, _super);
     /**
      * Constructor for the SpinalContext class.
      * @param {String} [name="undefined"] Name of the context
@@ -41,11 +55,14 @@ class SpinalContext extends SpinalNode_1.SpinalNode {
      * @param {SpinalNode | Model} [element] Element of the context
      * @throws {TypeError} If the element is not a Model
      */
-    constructor(name = 'undefined', type = 'SpinalContext', element) {
-        super(name, type, element);
+    function SpinalContext(name, type, element) {
+        if (name === void 0) { name = 'undefined'; }
+        if (type === void 0) { type = 'SpinalContext'; }
+        var _this = _super.call(this, name, type, element) || this;
         if (spinal_core_connectorjs_type_1.FileSystem._sig_server === false)
-            return;
-        this.info.id.set(Utilities_1.guid(this.constructor.name));
+            return _this;
+        _this.info.id.set(Utilities_1.guid(_this.constructor.name));
+        return _this;
     }
     /**
      * Adds a child with a SpinalRelationLstPtrType.
@@ -58,9 +75,10 @@ class SpinalContext extends SpinalNode_1.SpinalNode {
      * @throws {TypeError} If the child is not a model
      * @throws {TypeError} If the relation name is not a string
      */
-    addChild(child, relationName, relationType = __1.SPINAL_RELATION_PTR_LST_TYPE) {
-        return super.addChild(child, relationName, __1.SPINAL_RELATION_PTR_LST_TYPE);
-    }
+    SpinalContext.prototype.addChild = function (child, relationName, relationType) {
+        if (relationType === void 0) { relationType = __1.SPINAL_RELATION_PTR_LST_TYPE; }
+        return _super.prototype.addChild.call(this, child, relationName, __1.SPINAL_RELATION_PTR_LST_TYPE);
+    };
     /**
      * Adds a child with a SpinalRelationLstPtrType and notices
      * the context if a new relation was created.
@@ -72,20 +90,24 @@ class SpinalContext extends SpinalNode_1.SpinalNode {
      * @param {SpinalContext} context Context to update, usually unused
      * @returns {Promise<SpinalNode>} The child node in a promise
      */
-    addChildInContext(child, relationName, relationType = __1.SPINAL_RELATION_PTR_LST_TYPE, context = this) {
-        return super.addChildInContext(child, relationName, __1.SPINAL_RELATION_PTR_LST_TYPE, context);
-    }
+    SpinalContext.prototype.addChildInContext = function (child, relationName, relationType, context) {
+        if (relationType === void 0) { relationType = __1.SPINAL_RELATION_PTR_LST_TYPE; }
+        if (context === void 0) { context = this; }
+        return _super.prototype.addChildInContext.call(this, child, relationName, __1.SPINAL_RELATION_PTR_LST_TYPE, context);
+    };
     /**
      * Return the children of the node that are registered in the context
      * @override
      * @param {SpinalContext} [context=this] Context to use for the search, this by default
      * @returns {Promise<Array<SpinalNode>>} The children that were found
      */
-    getChildrenInContext(context = this) {
-        return super.getChildrenInContext(context);
-    }
-}
+    SpinalContext.prototype.getChildrenInContext = function (context) {
+        if (context === void 0) { context = this; }
+        return _super.prototype.getChildrenInContext.call(this, context);
+    };
+    return SpinalContext;
+}(SpinalNode_1.SpinalNode));
 exports.SpinalContext = SpinalContext;
 spinal_core_connectorjs_type_1.spinalCore.register_models([SpinalContext]);
-exports.default = SpinalContext;
+exports["default"] = SpinalContext;
 //# sourceMappingURL=SpinalContext.js.map
