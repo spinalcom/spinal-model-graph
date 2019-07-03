@@ -561,6 +561,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
     const tmpRelNames = <string[]>relNames;
     for (const name of tmpRelNames) {
       const list: spinal.Lst<SpinalNodePointer<AnySpinalRelation>> = this.parents.getElement(name);
+      if (list === undefined) continue;
 
       for (let i: number = 0; i < list.length; i += 1) {
         promises.push(
@@ -801,6 +802,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
   _removeParent(relation: AnySpinalRelation): void {
     const parentLst: spinal.Lst<SpinalNodePointer<AnySpinalRelation>>
       = this.parents.getElement(relation.getName().get());
+    if (parentLst === undefined) return;
 
     for (let i: number = 0; i < parentLst.length; i += 1) {
       if (parentLst[i].getId().get() === relation.getId().get()) {
