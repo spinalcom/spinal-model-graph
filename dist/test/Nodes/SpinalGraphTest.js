@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -34,7 +35,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 exports.__esModule = true;
 var src_1 = require("../../src");
 var spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
@@ -52,7 +52,7 @@ describe('SpinalGraph', function () {
             spinal_core_connectorjs_type_1.FileSystem._sig_server = true;
             assert(typeof node.element === 'undefined');
         });
-        it('should create a graph with default values', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('should create a graph with default values', function () { return __awaiter(void 0, void 0, void 0, function () {
             var context, element;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -70,7 +70,7 @@ describe('SpinalGraph', function () {
         }); });
     });
     describe('How to add a context to the graph', function () {
-        it('should add a context to the context relation of the graph', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('should add a context to the context relation of the graph', function () { return __awaiter(void 0, void 0, void 0, function () {
             var graph, context, children;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -88,7 +88,7 @@ describe('SpinalGraph', function () {
                 }
             });
         }); });
-        it('should throw an error if the context is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('should throw an error if the context is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
             var graph, error, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -113,7 +113,7 @@ describe('SpinalGraph', function () {
                 }
             });
         }); });
-        it('should throw an error if the context is not a SpinalContext', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('should throw an error if the context is not a SpinalContext', function () { return __awaiter(void 0, void 0, void 0, function () {
             var graph, context, error, e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -141,7 +141,7 @@ describe('SpinalGraph', function () {
         }); });
     });
     describe('How to use getContext', function () {
-        it('should get a context using its name', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('should get a context using its name', function () { return __awaiter(void 0, void 0, void 0, function () {
             var graph, context1, context2, context;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -163,7 +163,7 @@ describe('SpinalGraph', function () {
                 }
             });
         }); });
-        it("should return undefined if the context isn't found", function () { return __awaiter(_this, void 0, void 0, function () {
+        it("should return undefined if the context isn't found", function () { return __awaiter(void 0, void 0, void 0, function () {
             var graph, context;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -177,7 +177,7 @@ describe('SpinalGraph', function () {
                 }
             });
         }); });
-        it('should throw an error if the name is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('should throw an error if the name is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
             var graph, error, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -202,7 +202,7 @@ describe('SpinalGraph', function () {
                 }
             });
         }); });
-        it('should throw an error if the name is not a string', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('should throw an error if the name is not a string', function () { return __awaiter(void 0, void 0, void 0, function () {
             var graph, error, e_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -229,7 +229,7 @@ describe('SpinalGraph', function () {
         }); });
     });
     describe('How to use removeFromGraph', function () {
-        it('should do nothing', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('should do nothing', function () { return __awaiter(void 0, void 0, void 0, function () {
             var graph;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -242,7 +242,7 @@ describe('SpinalGraph', function () {
                 }
             });
         }); });
-        it("shouldn't remove children", function () { return __awaiter(_this, void 0, void 0, function () {
+        it("shouldn't remove children", function () { return __awaiter(void 0, void 0, void 0, function () {
             var graph, context, children, parents;
             return __generator(this, function (_a) {
                 switch (_a.label) {

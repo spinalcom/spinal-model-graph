@@ -8,7 +8,8 @@
     "downlevelIteration": true,
     "sourceMap": true,
     "lib": ["es2015"],
-    "types": ["node", "./node_modules/spinal-core-connectorjs_type/", "mocha"]
+    "types": ["node", "./node_modules/spinal-core-connectorjs_type",
+      "mocha"]
   },
   "include": [
     "src/**/*.ts",

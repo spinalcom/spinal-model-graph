@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -34,7 +35,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
 exports.__esModule = true;
 var src_1 = require("../../src");
 var spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
@@ -60,7 +60,7 @@ describe('SpinalNode', function () {
             spinal_core_connectorjs_type_1.FileSystem._sig_server = true;
             assert(typeof node.element === 'undefined');
         });
-        it('should create a new spinal node.', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('should create a new spinal node.', function () { return __awaiter(void 0, void 0, void 0, function () {
             var node, elt;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -85,7 +85,7 @@ describe('SpinalNode', function () {
             assert.strictEqual(node.getName().get(), CUSTOM_SPINAL_NODE_NAME, 'By setting the first argument of the construct the name should be setElement.');
             assert.strictEqual(node.getType().get(), CUSTOM_SPINAL_NODE_TYPE, 'By setting the second argument of the construct the type should be setElement.');
         });
-        it('should create a new SpinalNode with specific name, type and element', function () { return __awaiter(_this, void 0, void 0, function () {
+        it('should create a new SpinalNode with specific name, type and element', function () { return __awaiter(void 0, void 0, void 0, function () {
             var node, elt;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -116,7 +116,7 @@ describe('SpinalNode', function () {
             });
         });
         describe('How to getElement', function () {
-            it('should return the DEFAULT_ELEMENT', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return the DEFAULT_ELEMENT', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, elt;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -136,7 +136,7 @@ describe('SpinalNode', function () {
                 var node = new src_1.SpinalNode();
                 assert.deepStrictEqual(node.getChildrenIds(), []);
             });
-            it('should return all children ids', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return all children ids', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child1, child2, child3, childrenIds;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -180,7 +180,7 @@ describe('SpinalNode', function () {
                 var res = node.getNbChildren();
                 assert.strictEqual(res, 3);
             });
-            it('should return 2', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return 2', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, child1, child2, child3, res;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -236,7 +236,7 @@ describe('SpinalNode', function () {
             });
         });
         describe('How to use belongsToContext', function () {
-            it('should return true', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return true', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var context, parent, child;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -273,7 +273,7 @@ describe('SpinalNode', function () {
     });
     describe("How to get information about the node's relations", function () {
         describe('How to use hasRelation', function () {
-            it('should return true', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return true', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -287,7 +287,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should return false', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return false', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -327,7 +327,7 @@ describe('SpinalNode', function () {
             });
         });
         describe('How to use hasRelations', function () {
-            it('should return true the node contains all the relations', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return true the node contains all the relations', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -344,7 +344,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it("should return false if the node doesn't contain all the relations", function () { return __awaiter(_this, void 0, void 0, function () {
+            it("should return false if the node doesn't contain all the relations", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -397,7 +397,7 @@ describe('SpinalNode', function () {
                 var node = new src_1.SpinalNode();
                 assert.deepStrictEqual(node.getRelationNames(), []);
             });
-            it('should return all relation names', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return all relation names', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, child1, child2, child3, child4, child5;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -427,7 +427,7 @@ describe('SpinalNode', function () {
                 });
             }); });
             it("shouldn't return duplicates if there are different " +
-                'relation with the same names but different types', function () { return __awaiter(_this, void 0, void 0, function () {
+                'relation with the same names but different types', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, child1, child2, child3;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -452,7 +452,7 @@ describe('SpinalNode', function () {
     });
     describe('How to add a child to the node', function () {
         describe('How to use addChild', function () {
-            it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -472,7 +472,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -490,7 +490,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should add a child to the node with a relation type SPINAL_RELATION_LST_PTR_TYPE', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should add a child to the node with a relation type SPINAL_RELATION_LST_PTR_TYPE', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -510,7 +510,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should return the node added to the relation', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return the node added to the relation', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, childNode, childModel, res1, res2, res2Elem;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -533,7 +533,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if you try to add the same node twice', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if you try to add the same node twice', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_1;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -560,7 +560,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the child is not a model', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the child is not a model', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_2;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -585,7 +585,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the relation name is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the relation name is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_3;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -610,7 +610,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the relation name is not a string', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the relation name is not a string', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_4;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -635,7 +635,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the relation type is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the relation type is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_5;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -660,7 +660,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the relation type is invalid', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the relation type is invalid', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_6;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -687,7 +687,7 @@ describe('SpinalNode', function () {
             }); });
         });
         describe('How to use addChildInContext', function () {
-            it('Should add a child to a node', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('Should add a child to a node', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, context, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -708,7 +708,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('Shoud add a child and associate it to the context', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('Shoud add a child and associate it to the context', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var context, parent, child;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -724,7 +724,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should return the node added to the relation', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return the node added to the relation', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, context, childNode, childModel, res1, res2, res2Elem;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -748,7 +748,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if you try to add the same node twice', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if you try to add the same node twice', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, context, error, e_7;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -777,7 +777,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the child is not a model', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the child is not a model', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, context, error, e_8;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -803,7 +803,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the relation name is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the relation name is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, context, error, e_9;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -829,7 +829,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the relation name is not a string', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the relation name is not a string', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, context, error, e_10;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -855,7 +855,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the relation type is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the relation type is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, context, error, e_11;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -881,7 +881,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the relation type is invalid', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the relation type is invalid', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, context, error, e_12;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -907,7 +907,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the context is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the context is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_13;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -932,7 +932,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the context is not a SpinalContext', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the context is not a SpinalContext', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_14;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -961,7 +961,7 @@ describe('SpinalNode', function () {
     });
     describe('How to remove child(s)', function () {
         describe('How to use removeChild', function () {
-            it('should remove the child', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should remove the child', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -981,7 +981,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation name is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation name is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_15;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1006,7 +1006,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation name is not a string', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation name is not a string', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_16;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1031,7 +1031,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation type is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation type is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_17;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1056,7 +1056,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation type is invalid', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation type is invalid', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_18;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1081,7 +1081,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it("should throw if the relation doesn't exist", function () { return __awaiter(_this, void 0, void 0, function () {
+            it("should throw if the relation doesn't exist", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_19, e_20, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1128,7 +1128,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the node is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the node is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_21;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1153,7 +1153,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the node is not a child', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the node is not a child', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_22;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1180,7 +1180,7 @@ describe('SpinalNode', function () {
             }); });
         });
         describe('How to use removeChildren', function () {
-            it('should delete all of the children', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should delete all of the children', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, node1, node2, node3, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1207,7 +1207,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should delete the given children', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should delete the given children', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, node1, node2, node3, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1237,7 +1237,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if nodes is not an array', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if nodes is not an array', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, error, e_23;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1262,7 +1262,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if an element of nodes is not a SpinalNode', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if an element of nodes is not a SpinalNode', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, node1, error, e_24;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1296,7 +1296,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if an element of nodes is not a child', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if an element of nodes is not a child', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, node1, node2, error, e_25;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1331,7 +1331,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation name is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation name is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_26;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1356,7 +1356,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation name is not a string', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation name is not a string', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_27;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1381,7 +1381,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation type is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation type is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_28;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1406,7 +1406,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation type is invalid', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation type is invalid', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_29;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1431,7 +1431,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it("should throw if the relation doesn't exist", function () { return __awaiter(_this, void 0, void 0, function () {
+            it("should throw if the relation doesn't exist", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, child, error, e_30, e_31, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1481,7 +1481,7 @@ describe('SpinalNode', function () {
             }); });
         });
         describe('How to use removeRelation', function () {
-            it('should remove the relation', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should remove the relation', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1499,7 +1499,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation name is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation name is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_32;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1524,7 +1524,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation name is not a string', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation name is not a string', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_33;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1549,7 +1549,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation type is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation type is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_34;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1574,7 +1574,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation type is invalid', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation type is invalid', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_35;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1599,7 +1599,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it("should throw if the relation doesn't exist", function () { return __awaiter(_this, void 0, void 0, function () {
+            it("should throw if the relation doesn't exist", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, error, e_36, e_37, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1648,7 +1648,7 @@ describe('SpinalNode', function () {
             }); });
         });
         describe('How to use removeFromGraph', function () {
-            it('should remove the node from its parents', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should remove the node from its parents', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, parentNode, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1669,7 +1669,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should remove the node from its children', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should remove the node from its children', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, parentNode, parents;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1694,7 +1694,7 @@ describe('SpinalNode', function () {
     });
     describe('How to get related nodes', function () {
         describe('How to use getChild', function () {
-            it('should get the child', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should get the child', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child, res;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1712,7 +1712,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should use the relation name', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should use the relation name', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child1, child2, child3, child4, res;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1738,7 +1738,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should use the relation type', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should use the relation type', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child1, child2, child3, res;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1762,7 +1762,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it("should return undefined if the child doesn't exist", function () { return __awaiter(_this, void 0, void 0, function () {
+            it("should return undefined if the child doesn't exist", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child, res;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1780,7 +1780,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation name is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation name is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child, error, e_38;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1809,7 +1809,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation name is not a string', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation name is not a string', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child, error, e_39;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1838,7 +1838,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation type is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation type is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child, error, e_40;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1867,7 +1867,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the relation type is invalid', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the relation type is invalid', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child, error, e_41;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1896,7 +1896,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it("should throw if the relation doesn't exist", function () { return __awaiter(_this, void 0, void 0, function () {
+            it("should throw if the relation doesn't exist", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child, error, e_42, e_43;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1940,7 +1940,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the predicate is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the predicate is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child, error, e_44;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -1969,7 +1969,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw if the predicate is not a function', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw if the predicate is not a function', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child, error, e_45;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2000,7 +2000,7 @@ describe('SpinalNode', function () {
             }); });
         });
         describe('How to use getChildren', function () {
-            it('should return no children', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return no children', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2014,7 +2014,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should return some children', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return some children', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2034,7 +2034,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should return all children', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return all children', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2054,7 +2054,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should return all children also', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return all children also', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2074,7 +2074,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should return children for one relation name passed has string', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return children for one relation name passed has string', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2094,7 +2094,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if relationNames is neither an array, a string or omitted', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if relationNames is neither an array, a string or omitted', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, error, e_46;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2119,7 +2119,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if an element of relationNames is not a string', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if an element of relationNames is not a string', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, node1, error, e_47;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2155,7 +2155,7 @@ describe('SpinalNode', function () {
             }); });
         });
         describe('How to use getChildrenInContext', function () {
-            it("should return the node's child", function () { return __awaiter(_this, void 0, void 0, function () {
+            it("should return the node's child", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var context, parent, child, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2174,7 +2174,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it("should return the node's children associated to the context", function () { return __awaiter(_this, void 0, void 0, function () {
+            it("should return the node's children associated to the context", function () { return __awaiter(void 0, void 0, void 0, function () {
                 var context, parent, child1, child2, child3, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2199,7 +2199,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the context is missing', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the context is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, error, e_48;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2224,7 +2224,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if the context is not a SpinalContext', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if the context is not a SpinalContext', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, error, e_49;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2251,7 +2251,7 @@ describe('SpinalNode', function () {
             }); });
         });
         describe('How to use getParents', function () {
-            it('should return no parents', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return no parents', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var node, parents;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2265,7 +2265,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should return some parents', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return some parents', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parentNode1, parentNode2, childNode, parents;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2287,7 +2287,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should return one parents', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return one parents', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parentNode1, parentNode2, childNode, parents;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2309,7 +2309,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should return all parents', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return all parents', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parentNode1, parentNode2, childNode, parents;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2331,7 +2331,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should return all parents with a certain relation name', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should return all parents with a certain relation name', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parentNode1, parentNode2, childNode, parents;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2353,7 +2353,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if relationNames is neither an array, a string or omitted', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if relationNames is neither an array, a string or omitted', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, error, e_50;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -2378,7 +2378,7 @@ describe('SpinalNode', function () {
                     }
                 });
             }); });
-            it('should throw an error if an element of relationNames is not a string', function () { return __awaiter(_this, void 0, void 0, function () {
+            it('should throw an error if an element of relationNames is not a string', function () { return __awaiter(void 0, void 0, void 0, function () {
                 var parent, child, error, e_51;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
