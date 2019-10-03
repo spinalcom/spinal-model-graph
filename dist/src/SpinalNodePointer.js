@@ -60,7 +60,7 @@ var SpinalNodePointer = /** @class */ (function (_super) {
             return _this;
         _this.add_attr({
             ptr: blockRights ? new spinal_core_connectorjs_type_1.Pbr() : new spinal_core_connectorjs_type_1.Ptr(),
-            info: {}
+            info: {},
         });
         _this.setElement(element);
         return _this;

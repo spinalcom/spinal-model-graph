@@ -135,12 +135,12 @@ var SpinalNode = /** @class */ (function (_super) {
             info: {
                 name: name,
                 type: type,
-                id: Utilities_1.guid(_this.constructor.name)
+                id: Utilities_1.guid(_this.constructor.name),
             },
             parents: new SpinalMap_1.SpinalMap(),
             children: new SpinalMap_1.SpinalMap(),
             element: element !== undefined ? new SpinalNodePointer_1.SpinalNodePointer(element) : undefined,
-            contextIds: new SpinalSet_1.SpinalSet()
+            contextIds: new SpinalSet_1.SpinalSet(),
         });
         return _this;
     }
@@ -726,10 +726,12 @@ var SpinalNode = /** @class */ (function (_super) {
             for (var tmpRelNames_1 = __values(tmpRelNames), tmpRelNames_1_1 = tmpRelNames_1.next(); !tmpRelNames_1_1.done; tmpRelNames_1_1 = tmpRelNames_1.next()) {
                 var name = tmpRelNames_1_1.value;
                 var list = this.parents.getElement(name);
-                for (var i = 0; i < list.length; i += 1) {
-                    promises.push(list[i].load().then(function (relation) {
-                        return relation.getParent();
-                    }));
+                if (typeof list !== "undefined" && list !== null) {
+                    for (var i = 0; i < list.length; i += 1) {
+                        promises.push(list[i].load().then(function (relation) {
+                            return relation.getParent();
+                        }));
+                    }
                 }
             }
         }

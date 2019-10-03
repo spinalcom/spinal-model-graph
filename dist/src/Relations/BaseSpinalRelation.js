@@ -122,7 +122,7 @@ var BaseSpinalRelation = /** @class */ (function (_super) {
             name: name,
             id: Utilities_1.guid(name),
             parent: new SpinalNodePointer_1.SpinalNodePointer(parent),
-            contextIds: new SpinalMap_1.SpinalMap()
+            contextIds: new SpinalMap_1.SpinalMap(),
         });
         return _this;
     }
