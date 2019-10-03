@@ -562,14 +562,16 @@ class SpinalNode<T extends spinal.Model> extends Model {
     for (const name of tmpRelNames) {
       const list: spinal.Lst<SpinalNodePointer<AnySpinalRelation>> = this.parents.getElement(name);
 
-      for (let i: number = 0; i < list.length; i += 1) {
-        promises.push(
-          list[i].load().then(
-            (relation: AnySpinalRelation) => {
-              return relation.getParent();
-            },
-          ),
-        );
+      if (typeof list !== "undefined" && list !== null){
+        for (let i: number = 0; i < list.length; i += 1) {
+          promises.push(
+            list[i].load().then(
+              (relation: AnySpinalRelation) => {
+                return relation.getParent();
+              },
+            ),
+          );
+        }
       }
     }
 
