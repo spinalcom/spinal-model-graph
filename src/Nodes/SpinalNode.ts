@@ -841,10 +841,10 @@ class SpinalNode<T extends spinal.Model> extends Model {
     if (this.parents.has(relationName)) {
       this.parents
         .getElement(relationName)
-        .push(new SpinalNodePointer(relation));
+        .push(new SpinalNodePointer(relation, true));
     } else {
       const list = new Lst();
-      list.push(new SpinalNodePointer(relation));
+      list.push(new SpinalNodePointer(relation, true));
       this.parents.setElement(relationName, list);
     }
   }

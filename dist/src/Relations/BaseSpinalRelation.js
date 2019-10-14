@@ -121,8 +121,8 @@ var BaseSpinalRelation = /** @class */ (function (_super) {
         _this.add_attr({
             name: name,
             id: Utilities_1.guid(name),
-            parent: new SpinalNodePointer_1.SpinalNodePointer(parent),
-            contextIds: new SpinalMap_1.SpinalMap(),
+            parent: new SpinalNodePointer_1.SpinalNodePointer(parent, true),
+            contextIds: new SpinalMap_1.SpinalMap()
         });
         return _this;
     }

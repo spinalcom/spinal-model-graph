@@ -49,7 +49,7 @@ var CUSTOM_RELATION_NAME1 = 'custom relation';
 var CUSTOM_RELATION_NAME2 = 'custom relation 2';
 var DEFAULT_ELEMENT = new spinal_core_connectorjs_type_1.Model();
 DEFAULT_ELEMENT.add_attr({
-    name: DEFAULT_ELEMENT_NAME,
+    name: DEFAULT_ELEMENT_NAME
 });
 var DEFAULT_NODE = new src_1.SpinalNode(CUSTOM_SPINAL_NODE_NAME);
 describe('SpinalNode', function () {

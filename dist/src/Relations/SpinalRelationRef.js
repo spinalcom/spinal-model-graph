@@ -101,7 +101,7 @@ var SpinalRelationRef = /** @class */ (function (_super) {
         if (spinal_core_connectorjs_type_1.FileSystem._sig_server === false)
             return _this;
         _this.add_attr({
-            children: new spinal_core_connectorjs_type_1.Lst(),
+            children: new spinal_core_connectorjs_type_1.Lst()
         });
         return _this;
     }

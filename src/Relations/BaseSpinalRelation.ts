@@ -80,7 +80,7 @@ class BaseSpinalRelation extends Model {
     this.add_attr({
       name,
       id: guid(name),
-      parent: new SpinalNodePointer(parent),
+      parent: new SpinalNodePointer(parent, true),
       contextIds: new SpinalMap(),
     });
   }

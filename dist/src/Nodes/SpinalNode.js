@@ -135,12 +135,12 @@ var SpinalNode = /** @class */ (function (_super) {
             info: {
                 name: name,
                 type: type,
-                id: Utilities_1.guid(_this.constructor.name),
+                id: Utilities_1.guid(_this.constructor.name)
             },
             parents: new SpinalMap_1.SpinalMap(),
             children: new SpinalMap_1.SpinalMap(),
             element: element !== undefined ? new SpinalNodePointer_1.SpinalNodePointer(element) : undefined,
-            contextIds: new SpinalSet_1.SpinalSet(),
+            contextIds: new SpinalSet_1.SpinalSet()
         });
         return _this;
     }
@@ -1157,11 +1157,11 @@ var SpinalNode = /** @class */ (function (_super) {
         if (this.parents.has(relationName)) {
             this.parents
                 .getElement(relationName)
-                .push(new SpinalNodePointer_1.SpinalNodePointer(relation));
+                .push(new SpinalNodePointer_1.SpinalNodePointer(relation, true));
         }
         else {
             var list = new spinal_core_connectorjs_type_1.Lst();
-            list.push(new SpinalNodePointer_1.SpinalNodePointer(relation));
+            list.push(new SpinalNodePointer_1.SpinalNodePointer(relation, true));
             this.parents.setElement(relationName, list);
         }
     };

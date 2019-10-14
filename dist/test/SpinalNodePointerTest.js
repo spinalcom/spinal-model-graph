@@ -126,7 +126,7 @@ describe('SpinalNodePointer', function () {
                 assert.strictEqual(typeof ptr.getId(), 'undefined');
                 assert.strictEqual(typeof ptr.getType(), 'undefined');
                 assert.deepStrictEqual(ptr.ptr.data, {
-                    value: 0,
+                    value: 0
                 });
             });
         });
