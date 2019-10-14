@@ -64,8 +64,8 @@ class SpinalMap<T extends spinal.Model> extends Model {
    * @memberof SpinalMap
    */
   setElement(key: string, value: any): void {
-    if (typeof key !== 'string') {
-      throw TypeError('The key must be a string');
+    if (typeof key !== 'string' && typeof key !== 'number') {
+      throw TypeError('The key must be a string or a number');
     }
 
     this.rem_attr(key);
@@ -93,8 +93,8 @@ class SpinalMap<T extends spinal.Model> extends Model {
    * @memberof SpinalMap
    */
   has(key: string): boolean {
-    if (typeof key !== 'string') {
-      throw TypeError('The key must be a string');
+    if (typeof key !== 'string' && typeof key !== 'number') {
+      throw TypeError('The key must be a string or a number');
     }
 
     return this._attribute_names.includes(key);

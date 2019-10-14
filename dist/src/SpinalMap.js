@@ -137,8 +137,8 @@ var SpinalMap = /** @class */ (function (_super) {
      */
     SpinalMap.prototype.setElement = function (key, value) {
         var _a;
-        if (typeof key !== 'string') {
-            throw TypeError('The key must be a string');
+        if (typeof key !== 'string' && typeof key !== 'number') {
+            throw TypeError('The key must be a string or a number');
         }
         this.rem_attr(key);
         var attribute = (_a = {},
@@ -163,8 +163,8 @@ var SpinalMap = /** @class */ (function (_super) {
      * @memberof SpinalMap
      */
     SpinalMap.prototype.has = function (key) {
-        if (typeof key !== 'string') {
-            throw TypeError('The key must be a string');
+        if (typeof key !== 'string' && typeof key !== 'number') {
+            throw TypeError('The key must be a string or a number');
         }
         return this._attribute_names.includes(key);
     };
