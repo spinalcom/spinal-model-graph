@@ -37,11 +37,10 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -72,16 +71,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __values = (this && this.__values) || function(o) {
-    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
     if (m) return m.call(o);
-    if (o && typeof o.length === "number") return {
+    return {
         next: function () {
             if (o && i >= o.length) o = void 0;
             return { value: o && o[i++], done: !o };
         }
     };
-    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 exports.__esModule = true;
 var spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
@@ -196,8 +194,7 @@ var BaseSpinalRelation = /** @class */ (function (_super) {
     BaseSpinalRelation.prototype.removeChildren = function (nodesToDelete) {
         if (nodesToDelete === void 0) { nodesToDelete = []; }
         return __awaiter(this, void 0, void 0, function () {
-            var nodes, promises, nodes_1, nodes_1_1, node, _a;
-            var e_1, _b;
+            var e_1, _a, nodes, promises, nodes_1, nodes_1_1, node, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -221,7 +218,7 @@ var BaseSpinalRelation = /** @class */ (function (_super) {
                         catch (e_1_1) { e_1 = { error: e_1_1 }; }
                         finally {
                             try {
-                                if (nodes_1_1 && !nodes_1_1.done && (_b = nodes_1["return"])) _b.call(nodes_1);
+                                if (nodes_1_1 && !nodes_1_1.done && (_a = nodes_1["return"])) _a.call(nodes_1);
                             }
                             finally { if (e_1) throw e_1.error; }
                         }
@@ -233,7 +230,7 @@ var BaseSpinalRelation = /** @class */ (function (_super) {
                         _c.sent();
                         return [3 /*break*/, 6];
                     case 5:
-                        _a = _c.sent();
+                        _b = _c.sent();
                         throw Error('Could not remove all nodes');
                     case 6: return [2 /*return*/];
                 }

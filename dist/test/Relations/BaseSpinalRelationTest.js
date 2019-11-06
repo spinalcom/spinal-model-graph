@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -35,6 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _this = this;
 exports.__esModule = true;
 var src_1 = require("../../src");
 var BaseSpinalRelation_1 = require("../../src/Relations/BaseSpinalRelation");
@@ -44,7 +44,7 @@ var DEFAULT_RELATION_NAME = 'relationName';
 var DEFAULT_NODE = new src_1.SpinalNode();
 describe('BaseSpinalRelation', function () {
     describe('How to use the constructor', function () {
-        it('should create a new relation with a name and node parent', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should create a new relation with a name and node parent', function () { return __awaiter(_this, void 0, void 0, function () {
             var parent, rel, _a, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
@@ -61,7 +61,7 @@ describe('BaseSpinalRelation', function () {
                 }
             });
         }); });
-        it('should create a new relation with a name and a context parent', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should create a new relation with a name and a context parent', function () { return __awaiter(_this, void 0, void 0, function () {
             var parent, rel, _a, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
@@ -78,7 +78,7 @@ describe('BaseSpinalRelation', function () {
                 }
             });
         }); });
-        it('should create a new relation with a name and a graph parent', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should create a new relation with a name and a graph parent', function () { return __awaiter(_this, void 0, void 0, function () {
             var parent, rel, _a, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
@@ -95,7 +95,7 @@ describe('BaseSpinalRelation', function () {
                 }
             });
         }); });
-        it('should throw an error if the parent or the name is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the parent or the name is missing', function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 assert.throws(function () {
                     new BaseSpinalRelation_1.BaseSpinalRelation();
@@ -109,7 +109,7 @@ describe('BaseSpinalRelation', function () {
                 return [2 /*return*/];
             });
         }); });
-        it('should throw an error if the name is not a string', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the name is not a string', function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 assert.throws(function () {
                     new BaseSpinalRelation_1.BaseSpinalRelation(DEFAULT_NODE, 1);
@@ -117,7 +117,7 @@ describe('BaseSpinalRelation', function () {
                 return [2 /*return*/];
             });
         }); });
-        it('should throw an error if the parent is not a SpinalNode', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the parent is not a SpinalNode', function () { return __awaiter(_this, void 0, void 0, function () {
             var parent1, parent2;
             return __generator(this, function (_a) {
                 parent1 = [];
@@ -140,7 +140,7 @@ describe('BaseSpinalRelation', function () {
             });
         });
         describe('How to use getParent', function () {
-            it('should return the parent of the relation', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should return the parent of the relation', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, _a, _b;
                 return __generator(this, function (_c) {
                     switch (_c.label) {
@@ -185,7 +185,7 @@ describe('BaseSpinalRelation', function () {
             });
         });
         describe('How to use belongsToContext', function () {
-            it('should return true', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should return true', function () { return __awaiter(_this, void 0, void 0, function () {
                 var context, relation;
                 return __generator(this, function (_a) {
                     context = new src_1.SpinalContext();
@@ -221,7 +221,7 @@ describe('BaseSpinalRelation', function () {
     });
     describe('How to remove from the graph', function () {
         describe('How to use removeChildren', function () {
-            it('should delete all of the children', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should delete all of the children', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, node1, node2, node3, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -248,7 +248,7 @@ describe('BaseSpinalRelation', function () {
                     }
                 });
             }); });
-            it('should delete the given children', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should delete the given children', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, node1, node2, node3, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -275,7 +275,7 @@ describe('BaseSpinalRelation', function () {
                     }
                 });
             }); });
-            it('should delete some of the given children', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should delete some of the given children', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, node1, node2, node3, node4, error, e_1, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -315,7 +315,7 @@ describe('BaseSpinalRelation', function () {
                     }
                 });
             }); });
-            it('should throw an error if nodes is not an array', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should throw an error if nodes is not an array', function () { return __awaiter(_this, void 0, void 0, function () {
                 var relation, error, e_2;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -342,7 +342,7 @@ describe('BaseSpinalRelation', function () {
             }); });
         });
         describe('How to use removeFromGraph', function () {
-            it('should delete all of the children', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should delete all of the children', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, node1, node2, node3, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -369,7 +369,7 @@ describe('BaseSpinalRelation', function () {
                     }
                 });
             }); });
-            it('should the relation from the parent pointer', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should the relation from the parent pointer', function () { return __awaiter(_this, void 0, void 0, function () {
                 var parent, rel;
                 return __generator(this, function (_a) {
                     switch (_a.label) {

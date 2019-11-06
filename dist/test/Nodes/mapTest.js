@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -35,6 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _this = this;
 exports.__esModule = true;
 var src_1 = require("../../src");
 var assert = require("assert");
@@ -45,7 +45,7 @@ var DEFAULT_RELATION_TYPE = src_1.SPINAL_RELATION_LST_PTR_TYPE;
 var DEFAULT_FUN = function (node) { return node; };
 describe('How to use map', function () {
     describe('Error handling', function () {
-        it('should throw an error if relationNames is neither an array, a string or omitted', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if relationNames is neither an array, a string or omitted', function () { return __awaiter(_this, void 0, void 0, function () {
             var error, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -69,7 +69,7 @@ describe('How to use map', function () {
                 }
             });
         }); });
-        it('should throw an error if the callback function is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the callback function is missing', function () { return __awaiter(_this, void 0, void 0, function () {
             var error, e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -93,7 +93,7 @@ describe('How to use map', function () {
                 }
             });
         }); });
-        it('should throw an error if the callback function is not a function', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the callback function is not a function', function () { return __awaiter(_this, void 0, void 0, function () {
             var error, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -117,7 +117,7 @@ describe('How to use map', function () {
                 }
             });
         }); });
-        it('should not fall in infinite loops', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should not fall in infinite loops', function () { return __awaiter(_this, void 0, void 0, function () {
             var node1, node2, foundChild;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -140,7 +140,7 @@ describe('How to use map', function () {
         }); });
     });
     describe('Basic callback manipulation', function () {
-        it('should return the ids of all nodes', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should return the ids of all nodes', function () { return __awaiter(_this, void 0, void 0, function () {
             var parent, child1, child2, child3, ids;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -171,7 +171,7 @@ describe('How to use map', function () {
                 }
             });
         }); });
-        it('should return second gen and undefined for other nodes nodes', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should return second gen and undefined for other nodes nodes', function () { return __awaiter(_this, void 0, void 0, function () {
             var root, firstGen1, firstGen2, firstGen3, secondGen1, secondGen2, thirdGen1, secondGen;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -218,7 +218,7 @@ describe('How to use map', function () {
 });
 describe('How to use mapInContext', function () {
     describe('Error handling', function () {
-        it('should throw an error if the context is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the context is missing', function () { return __awaiter(_this, void 0, void 0, function () {
             var error, e_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -242,7 +242,7 @@ describe('How to use mapInContext', function () {
                 }
             });
         }); });
-        it('should throw an error if the context is not a SpinalContext', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the context is not a SpinalContext', function () { return __awaiter(_this, void 0, void 0, function () {
             var context, error, e_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -267,7 +267,7 @@ describe('How to use mapInContext', function () {
                 }
             });
         }); });
-        it('should throw an error if the callback is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the callback is missing', function () { return __awaiter(_this, void 0, void 0, function () {
             var error, testNode, e_6;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -292,7 +292,7 @@ describe('How to use mapInContext', function () {
                 }
             });
         }); });
-        it('should throw an error if the callback is not a function', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the callback is not a function', function () { return __awaiter(_this, void 0, void 0, function () {
             var error, e_7;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -316,7 +316,7 @@ describe('How to use mapInContext', function () {
                 }
             });
         }); });
-        it('should not fall in infinite loops', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should not fall in infinite loops', function () { return __awaiter(_this, void 0, void 0, function () {
             var context, node1, node2, foundChild;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -335,7 +335,7 @@ describe('How to use mapInContext', function () {
             });
         }); });
         describe('Basic callback manipulation', function () {
-            it('should return the names of all nodes in the context', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should return the names of all nodes in the context', function () { return __awaiter(_this, void 0, void 0, function () {
                 var context, child1, child2, child3, names;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -369,7 +369,7 @@ describe('How to use mapInContext', function () {
         });
     });
     describe('How to use context', function () {
-        it('should mapInContext all the nodes from the given relation names', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should mapInContext all the nodes from the given relation names', function () { return __awaiter(_this, void 0, void 0, function () {
             var context1, context2, parent, child1, child2, child3, child4, child5, child6, foundChildren;
             return __generator(this, function (_a) {
                 switch (_a.label) {

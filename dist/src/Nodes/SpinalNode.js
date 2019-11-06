@@ -36,11 +36,10 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -71,16 +70,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var __values = (this && this.__values) || function(o) {
-    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+var __values = (this && this.__values) || function (o) {
+    var m = typeof Symbol === "function" && o[Symbol.iterator], i = 0;
     if (m) return m.call(o);
-    if (o && typeof o.length === "number") return {
+    return {
         next: function () {
             if (o && i >= o.length) o = void 0;
             return { value: o && o[i++], done: !o };
         }
     };
-    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
@@ -186,7 +184,7 @@ var SpinalNode = /** @class */ (function (_super) {
             for (var _c = __values(this.children), _d = _c.next(); !_d.done; _d = _c.next()) {
                 var _e = __read(_d.value, 2), relationMap = _e[1];
                 try {
-                    for (var relationMap_1 = (e_2 = void 0, __values(relationMap)), relationMap_1_1 = relationMap_1.next(); !relationMap_1_1.done; relationMap_1_1 = relationMap_1.next()) {
+                    for (var relationMap_1 = __values(relationMap), relationMap_1_1 = relationMap_1.next(); !relationMap_1_1.done; relationMap_1_1 = relationMap_1.next()) {
                         var _f = __read(relationMap_1_1.value, 2), relation = _f[1];
                         var relChildrenIds = relation.getChildrenIds();
                         for (var i = 0; i < relChildrenIds.length; i += 1) {
@@ -223,7 +221,7 @@ var SpinalNode = /** @class */ (function (_super) {
             for (var _c = __values(this.children), _d = _c.next(); !_d.done; _d = _c.next()) {
                 var _e = __read(_d.value, 2), relationMap = _e[1];
                 try {
-                    for (var relationMap_2 = (e_4 = void 0, __values(relationMap)), relationMap_2_1 = relationMap_2.next(); !relationMap_2_1.done; relationMap_2_1 = relationMap_2.next()) {
+                    for (var relationMap_2 = __values(relationMap), relationMap_2_1 = relationMap_2.next(); !relationMap_2_1.done; relationMap_2_1 = relationMap_2.next()) {
                         var _f = __read(relationMap_2_1.value, 2), relation = _f[1];
                         count += relation.getNbChildren();
                     }
@@ -523,8 +521,7 @@ var SpinalNode = /** @class */ (function (_super) {
      */
     SpinalNode.prototype.getChild = function (predicate, relationName, relationType) {
         return __awaiter(this, void 0, void 0, function () {
-            var relation, children, children_1, children_1_1, child;
-            var e_7, _a;
+            var e_7, _a, relation, children, children_1, children_1_1, child;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -569,8 +566,7 @@ var SpinalNode = /** @class */ (function (_super) {
     SpinalNode.prototype.getChildren = function (relationNames) {
         if (relationNames === void 0) { relationNames = []; }
         return __awaiter(this, void 0, void 0, function () {
-            var relName, promises, tmpRelName, _a, _b, _c, relationMap, j, relation, childrenLst, res, children, childrenLst_1, childrenLst_1_1, i;
-            var e_8, _d, e_9, _e;
+            var e_8, _a, e_9, _b, relName, promises, tmpRelName, _c, _d, _e, relationMap, j, relation, childrenLst, res, children, childrenLst_1, childrenLst_1_1, i;
             return __generator(this, function (_f) {
                 switch (_f.label) {
                     case 0:
@@ -589,8 +585,8 @@ var SpinalNode = /** @class */ (function (_super) {
                         promises = [];
                         tmpRelName = relName;
                         try {
-                            for (_a = __values(this.children), _b = _a.next(); !_b.done; _b = _a.next()) {
-                                _c = __read(_b.value, 2), relationMap = _c[1];
+                            for (_c = __values(this.children), _d = _c.next(); !_d.done; _d = _c.next()) {
+                                _e = __read(_d.value, 2), relationMap = _e[1];
                                 for (j = 0; j < tmpRelName.length; j += 1) {
                                     if (relationMap.has(tmpRelName[j])) {
                                         relation = relationMap.getElement(tmpRelName[j]);
@@ -602,7 +598,7 @@ var SpinalNode = /** @class */ (function (_super) {
                         catch (e_8_1) { e_8 = { error: e_8_1 }; }
                         finally {
                             try {
-                                if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
+                                if (_d && !_d.done && (_a = _c["return"])) _a.call(_c);
                             }
                             finally { if (e_8) throw e_8.error; }
                         }
@@ -621,7 +617,7 @@ var SpinalNode = /** @class */ (function (_super) {
                         catch (e_9_1) { e_9 = { error: e_9_1 }; }
                         finally {
                             try {
-                                if (childrenLst_1_1 && !childrenLst_1_1.done && (_e = childrenLst_1["return"])) _e.call(childrenLst_1);
+                                if (childrenLst_1_1 && !childrenLst_1_1.done && (_b = childrenLst_1["return"])) _b.call(childrenLst_1);
                             }
                             finally { if (e_9) throw e_9.error; }
                         }
@@ -638,8 +634,7 @@ var SpinalNode = /** @class */ (function (_super) {
      */
     SpinalNode.prototype.getChildrenInContext = function (context) {
         return __awaiter(this, void 0, void 0, function () {
-            var promises, _a, _b, _c, relationMap, relationMap_3, relationMap_3_1, _d, relation, childrenLst, res, childrenLst_2, childrenLst_2_1, children, i;
-            var e_10, _e, e_11, _f, e_12, _g;
+            var e_10, _a, e_11, _b, e_12, _c, promises, _d, _e, _f, relationMap, relationMap_3, relationMap_3_1, _g, relation, childrenLst, res, childrenLst_2, childrenLst_2_1, children, i;
             return __generator(this, function (_h) {
                 switch (_h.label) {
                     case 0:
@@ -648,11 +643,11 @@ var SpinalNode = /** @class */ (function (_super) {
                         }
                         promises = [];
                         try {
-                            for (_a = __values(this.children), _b = _a.next(); !_b.done; _b = _a.next()) {
-                                _c = __read(_b.value, 2), relationMap = _c[1];
+                            for (_d = __values(this.children), _e = _d.next(); !_e.done; _e = _d.next()) {
+                                _f = __read(_e.value, 2), relationMap = _f[1];
                                 try {
-                                    for (relationMap_3 = (e_11 = void 0, __values(relationMap)), relationMap_3_1 = relationMap_3.next(); !relationMap_3_1.done; relationMap_3_1 = relationMap_3.next()) {
-                                        _d = __read(relationMap_3_1.value, 2), relation = _d[1];
+                                    for (relationMap_3 = __values(relationMap), relationMap_3_1 = relationMap_3.next(); !relationMap_3_1.done; relationMap_3_1 = relationMap_3.next()) {
+                                        _g = __read(relationMap_3_1.value, 2), relation = _g[1];
                                         if (relation.belongsToContext(context)) {
                                             promises.push(relation.getChildrenInContext(context));
                                         }
@@ -661,7 +656,7 @@ var SpinalNode = /** @class */ (function (_super) {
                                 catch (e_11_1) { e_11 = { error: e_11_1 }; }
                                 finally {
                                     try {
-                                        if (relationMap_3_1 && !relationMap_3_1.done && (_f = relationMap_3["return"])) _f.call(relationMap_3);
+                                        if (relationMap_3_1 && !relationMap_3_1.done && (_b = relationMap_3["return"])) _b.call(relationMap_3);
                                     }
                                     finally { if (e_11) throw e_11.error; }
                                 }
@@ -670,7 +665,7 @@ var SpinalNode = /** @class */ (function (_super) {
                         catch (e_10_1) { e_10 = { error: e_10_1 }; }
                         finally {
                             try {
-                                if (_b && !_b.done && (_e = _a["return"])) _e.call(_a);
+                                if (_e && !_e.done && (_a = _d["return"])) _a.call(_d);
                             }
                             finally { if (e_10) throw e_10.error; }
                         }
@@ -689,7 +684,7 @@ var SpinalNode = /** @class */ (function (_super) {
                         catch (e_12_1) { e_12 = { error: e_12_1 }; }
                         finally {
                             try {
-                                if (childrenLst_2_1 && !childrenLst_2_1.done && (_g = childrenLst_2["return"])) _g.call(childrenLst_2);
+                                if (childrenLst_2_1 && !childrenLst_2_1.done && (_c = childrenLst_2["return"])) _c.call(childrenLst_2);
                             }
                             finally { if (e_12) throw e_12.error; }
                         }
@@ -706,8 +701,8 @@ var SpinalNode = /** @class */ (function (_super) {
      * @throws {TypeError} If an element of relationNames is not a string
      */
     SpinalNode.prototype.getParents = function (relationNames) {
-        var e_13, _a;
         if (relationNames === void 0) { relationNames = []; }
+        var e_13, _a;
         var relNames = relationNames;
         if (Array.isArray(relationNames)) {
             if (relationNames.length === 0) {
@@ -757,8 +752,7 @@ var SpinalNode = /** @class */ (function (_super) {
     SpinalNode.prototype.find = function (relationNames, predicate) {
         if (predicate === void 0) { predicate = DEFAULT_PREDICATE; }
         return __awaiter(this, void 0, void 0, function () {
-            var seen, promises, nextGen, currentGen, found, currentGen_1, currentGen_1_1, node, childrenArrays, childrenArrays_1, childrenArrays_1_1, children, children_2, children_2_1, child;
-            var e_14, _a, e_15, _b, e_16, _c;
+            var e_14, _a, e_15, _b, e_16, _c, seen, promises, nextGen, currentGen, found, currentGen_1, currentGen_1_1, node, childrenArrays, childrenArrays_1, childrenArrays_1_1, children, children_2, children_2_1, child;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
@@ -782,7 +776,7 @@ var SpinalNode = /** @class */ (function (_super) {
                         promises = [];
                         nextGen = [];
                         try {
-                            for (currentGen_1 = (e_14 = void 0, __values(currentGen)), currentGen_1_1 = currentGen_1.next(); !currentGen_1_1.done; currentGen_1_1 = currentGen_1.next()) {
+                            for (currentGen_1 = __values(currentGen), currentGen_1_1 = currentGen_1.next(); !currentGen_1_1.done; currentGen_1_1 = currentGen_1.next()) {
                                 node = currentGen_1_1.value;
                                 promises.push(node.getChildren(relationNames));
                                 if (predicate(node)) {
@@ -801,10 +795,10 @@ var SpinalNode = /** @class */ (function (_super) {
                     case 2:
                         childrenArrays = _d.sent();
                         try {
-                            for (childrenArrays_1 = (e_15 = void 0, __values(childrenArrays)), childrenArrays_1_1 = childrenArrays_1.next(); !childrenArrays_1_1.done; childrenArrays_1_1 = childrenArrays_1.next()) {
+                            for (childrenArrays_1 = __values(childrenArrays), childrenArrays_1_1 = childrenArrays_1.next(); !childrenArrays_1_1.done; childrenArrays_1_1 = childrenArrays_1.next()) {
                                 children = childrenArrays_1_1.value;
                                 try {
-                                    for (children_2 = (e_16 = void 0, __values(children)), children_2_1 = children_2.next(); !children_2_1.done; children_2_1 = children_2.next()) {
+                                    for (children_2 = __values(children), children_2_1 = children_2.next(); !children_2_1.done; children_2_1 = children_2.next()) {
                                         child = children_2_1.value;
                                         if (!seen.has(child)) {
                                             nextGen.push(child);
@@ -845,8 +839,7 @@ var SpinalNode = /** @class */ (function (_super) {
     SpinalNode.prototype.findInContext = function (context, predicate) {
         if (predicate === void 0) { predicate = DEFAULT_PREDICATE; }
         return __awaiter(this, void 0, void 0, function () {
-            var seen, promises, nextGen, currentGen, found, currentGen_2, currentGen_2_1, node, childrenArrays, childrenArrays_2, childrenArrays_2_1, children, children_3, children_3_1, child;
-            var e_17, _a, e_18, _b, e_19, _c;
+            var e_17, _a, e_18, _b, e_19, _c, seen, promises, nextGen, currentGen, found, currentGen_2, currentGen_2_1, node, childrenArrays, childrenArrays_2, childrenArrays_2_1, children, children_3, children_3_1, child;
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
@@ -865,7 +858,7 @@ var SpinalNode = /** @class */ (function (_super) {
                         promises = [];
                         nextGen = [];
                         try {
-                            for (currentGen_2 = (e_17 = void 0, __values(currentGen)), currentGen_2_1 = currentGen_2.next(); !currentGen_2_1.done; currentGen_2_1 = currentGen_2.next()) {
+                            for (currentGen_2 = __values(currentGen), currentGen_2_1 = currentGen_2.next(); !currentGen_2_1.done; currentGen_2_1 = currentGen_2.next()) {
                                 node = currentGen_2_1.value;
                                 promises.push(node.getChildrenInContext(context));
                                 if (predicate(node)) {
@@ -884,10 +877,10 @@ var SpinalNode = /** @class */ (function (_super) {
                     case 2:
                         childrenArrays = _d.sent();
                         try {
-                            for (childrenArrays_2 = (e_18 = void 0, __values(childrenArrays)), childrenArrays_2_1 = childrenArrays_2.next(); !childrenArrays_2_1.done; childrenArrays_2_1 = childrenArrays_2.next()) {
+                            for (childrenArrays_2 = __values(childrenArrays), childrenArrays_2_1 = childrenArrays_2.next(); !childrenArrays_2_1.done; childrenArrays_2_1 = childrenArrays_2.next()) {
                                 children = childrenArrays_2_1.value;
                                 try {
-                                    for (children_3 = (e_19 = void 0, __values(children)), children_3_1 = children_3.next(); !children_3_1.done; children_3_1 = children_3.next()) {
+                                    for (children_3 = __values(children), children_3_1 = children_3.next(); !children_3_1.done; children_3_1 = children_3.next()) {
                                         child = children_3_1.value;
                                         if (!seen.has(child)) {
                                             nextGen.push(child);
@@ -927,8 +920,7 @@ var SpinalNode = /** @class */ (function (_super) {
      */
     SpinalNode.prototype.forEach = function (relationNames, callback) {
         return __awaiter(this, void 0, void 0, function () {
-            var nodes, nodes_1, nodes_1_1, node;
-            var e_20, _a;
+            var e_20, _a, nodes, nodes_1, nodes_1_1, node;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -965,8 +957,7 @@ var SpinalNode = /** @class */ (function (_super) {
      */
     SpinalNode.prototype.forEachInContext = function (context, callback) {
         return __awaiter(this, void 0, void 0, function () {
-            var nodes, nodes_2, nodes_2_1, node;
-            var e_21, _a;
+            var e_21, _a, nodes, nodes_2, nodes_2_1, node;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -1005,8 +996,7 @@ var SpinalNode = /** @class */ (function (_super) {
      */
     SpinalNode.prototype.map = function (relationNames, callback) {
         return __awaiter(this, void 0, void 0, function () {
-            var nodes, results, nodes_3, nodes_3_1, node;
-            var e_22, _a;
+            var e_22, _a, nodes, results, nodes_3, nodes_3_1, node;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -1046,8 +1036,7 @@ var SpinalNode = /** @class */ (function (_super) {
      */
     SpinalNode.prototype.mapInContext = function (context, callback) {
         return __awaiter(this, void 0, void 0, function () {
-            var nodes, results, nodes_4, nodes_4_1, node;
-            var e_23, _a;
+            var e_23, _a, nodes, results, nodes_4, nodes_4_1, node;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -1115,16 +1104,15 @@ var SpinalNode = /** @class */ (function (_super) {
      */
     SpinalNode.prototype._removeFromParents = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var promises, _a, _b, _c, parent, i;
-            var e_24, _d;
+            var e_24, _a, promises, _b, _c, _d, parent, i;
             var _this = this;
             return __generator(this, function (_e) {
                 switch (_e.label) {
                     case 0:
                         promises = [];
                         try {
-                            for (_a = __values(this.parents), _b = _a.next(); !_b.done; _b = _a.next()) {
-                                _c = __read(_b.value, 2), parent = _c[1];
+                            for (_b = __values(this.parents), _c = _b.next(); !_c.done; _c = _b.next()) {
+                                _d = __read(_c.value, 2), parent = _d[1];
                                 for (i = 0; i < parent.length; i += 1) {
                                     parent[i].load().then(function (parentRel) {
                                         promises.push(parentRel.removeChild(_this));
@@ -1135,7 +1123,7 @@ var SpinalNode = /** @class */ (function (_super) {
                         catch (e_24_1) { e_24 = { error: e_24_1 }; }
                         finally {
                             try {
-                                if (_b && !_b.done && (_d = _a["return"])) _d.call(_a);
+                                if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
                             }
                             finally { if (e_24) throw e_24.error; }
                         }
@@ -1186,25 +1174,24 @@ var SpinalNode = /** @class */ (function (_super) {
      */
     SpinalNode.prototype._removeFromChildren = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var promises, _a, _b, _c, relationMap, relationMap_4, relationMap_4_1, _d, relation;
-            var e_25, _e, e_26, _f;
+            var e_25, _a, e_26, _b, promises, _c, _d, _e, relationMap, relationMap_4, relationMap_4_1, _f, relation;
             return __generator(this, function (_g) {
                 switch (_g.label) {
                     case 0:
                         promises = [];
                         try {
-                            for (_a = __values(this.children), _b = _a.next(); !_b.done; _b = _a.next()) {
-                                _c = __read(_b.value, 2), relationMap = _c[1];
+                            for (_c = __values(this.children), _d = _c.next(); !_d.done; _d = _c.next()) {
+                                _e = __read(_d.value, 2), relationMap = _e[1];
                                 try {
-                                    for (relationMap_4 = (e_26 = void 0, __values(relationMap)), relationMap_4_1 = relationMap_4.next(); !relationMap_4_1.done; relationMap_4_1 = relationMap_4.next()) {
-                                        _d = __read(relationMap_4_1.value, 2), relation = _d[1];
+                                    for (relationMap_4 = __values(relationMap), relationMap_4_1 = relationMap_4.next(); !relationMap_4_1.done; relationMap_4_1 = relationMap_4.next()) {
+                                        _f = __read(relationMap_4_1.value, 2), relation = _f[1];
                                         promises.push(relation.removeFromGraph());
                                     }
                                 }
                                 catch (e_26_1) { e_26 = { error: e_26_1 }; }
                                 finally {
                                     try {
-                                        if (relationMap_4_1 && !relationMap_4_1.done && (_f = relationMap_4["return"])) _f.call(relationMap_4);
+                                        if (relationMap_4_1 && !relationMap_4_1.done && (_b = relationMap_4["return"])) _b.call(relationMap_4);
                                     }
                                     finally { if (e_26) throw e_26.error; }
                                 }
@@ -1213,7 +1200,7 @@ var SpinalNode = /** @class */ (function (_super) {
                         catch (e_25_1) { e_25 = { error: e_25_1 }; }
                         finally {
                             try {
-                                if (_b && !_b.done && (_e = _a["return"])) _e.call(_a);
+                                if (_d && !_d.done && (_a = _c["return"])) _a.call(_c);
                             }
                             finally { if (e_25) throw e_25.error; }
                         }

@@ -81,6 +81,17 @@ class SpinalNodePointer<T extends spinal.Model> extends Model {
    */
   load(): Promise<T> {
     return new Promise((resolve) => {
+      if (this.ptr) {
+        if (this.ptr.data.model) return resolve(this.ptr.data.model);
+        if (this.ptr.data.value) {
+          if (typeof FileSystem._objects[this.ptr.data.value] !== 'undefined') {
+            return resolve(<T>FileSystem._objects[this.ptr.data.value]);
+          }
+          if (typeof FileSystem._tmp_objects[this.ptr.data.value] !== 'undefined') {
+            return resolve(<T>FileSystem._tmp_objects[this.ptr.data.value]);
+          }
+        }
+      }
       this.ptr.load(resolve);
     });
   }

@@ -175,8 +175,8 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
    * @memberof SpinalRelationPtrLst
    */
-  async addChild<T extends spinal.Model>(node: T|SpinalNode<T>): Promise<SpinalNode<T>> {
-    let nodeCreate: SpinalNode<T>|spinal.Model = node;
+  async addChild<T extends spinal.Model>(node: T | SpinalNode<T>): Promise<SpinalNode<T>> {
+    let nodeCreate: SpinalNode<T> | spinal.Model = node;
     if (!(node instanceof Model)) {
       throw new Error(
         'Cannot add a child witch is not an instance of SpinalNode or Model.',
@@ -190,10 +190,9 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
       throw new Error('Cannot add a child twice to the same relation.');
     }
 
-    this.children.info.ids.push(tmpNodeCreate.getId());
-    tmpNodeCreate._addParent(this);
-
     await this.children.load().then((children) => {
+      this.children.info.ids.push(tmpNodeCreate.getId());
+      tmpNodeCreate._addParent(this);
       children.push(tmpNodeCreate);
     });
 

@@ -89,6 +89,18 @@ var SpinalNodePointer = /** @class */ (function (_super) {
     SpinalNodePointer.prototype.load = function () {
         var _this = this;
         return new Promise(function (resolve) {
+            if (_this.ptr) {
+                if (_this.ptr.data.model)
+                    return resolve(_this.ptr.data.model);
+                if (_this.ptr.data.value) {
+                    if (typeof spinal_core_connectorjs_type_1.FileSystem._objects[_this.ptr.data.value] !== 'undefined') {
+                        return resolve(spinal_core_connectorjs_type_1.FileSystem._objects[_this.ptr.data.value]);
+                    }
+                    if (typeof spinal_core_connectorjs_type_1.FileSystem._tmp_objects[_this.ptr.data.value] !== 'undefined') {
+                        return resolve(spinal_core_connectorjs_type_1.FileSystem._tmp_objects[_this.ptr.data.value]);
+                    }
+                }
+            }
             _this.ptr.load(resolve);
         });
     };

@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -35,6 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _this = this;
 exports.__esModule = true;
 var src_1 = require("../../src");
 var spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
@@ -53,7 +53,7 @@ describe('SpinalRelationLstPtr', function () {
             var rel = new src_1.SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
             assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
         });
-        it('should create a new relation with a name and a context parent', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should create a new relation with a name and a context parent', function () { return __awaiter(_this, void 0, void 0, function () {
             var parent, rel, _a, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
@@ -69,7 +69,7 @@ describe('SpinalRelationLstPtr', function () {
                 }
             });
         }); });
-        it('should create a new relation with a name and a graph parent', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should create a new relation with a name and a graph parent', function () { return __awaiter(_this, void 0, void 0, function () {
             var parent, rel, _a, _b;
             return __generator(this, function (_c) {
                 switch (_c.label) {
@@ -85,7 +85,7 @@ describe('SpinalRelationLstPtr', function () {
                 }
             });
         }); });
-        it('should throw an error if the parent or the name is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the parent or the name is missing', function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 assert.throws(function () {
                     new src_1.SpinalRelationLstPtr();
@@ -99,7 +99,7 @@ describe('SpinalRelationLstPtr', function () {
                 return [2 /*return*/];
             });
         }); });
-        it('should throw an error if the parent is not a SpinalNode', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the parent is not a SpinalNode', function () { return __awaiter(_this, void 0, void 0, function () {
             var parent1, parent2;
             return __generator(this, function (_a) {
                 parent1 = [];
@@ -116,7 +116,7 @@ describe('SpinalRelationLstPtr', function () {
     });
     describe('How to get informations about the relation', function () {
         describe('How to use getChildrenIds', function () {
-            it('should return the ids of all children', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should return the ids of all children', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -132,7 +132,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it('should return the ids of all children', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should return the ids of all children', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, node1, node2, node3, nodeIds;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -161,7 +161,7 @@ describe('SpinalRelationLstPtr', function () {
             }); });
         });
         describe('How to use getChildren', function () {
-            it("should return the relation's child", function () { return __awaiter(void 0, void 0, void 0, function () {
+            it("should return the relation's child", function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -178,7 +178,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it("should return the relation's children", function () { return __awaiter(void 0, void 0, void 0, function () {
+            it("should return the relation's children", function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, node1, node2, node3, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -202,7 +202,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it('should return an empty array', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should return an empty array', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -218,7 +218,7 @@ describe('SpinalRelationLstPtr', function () {
             }); });
         });
         describe('How to use getChildrenInContext', function () {
-            it("should return the relation's child", function () { return __awaiter(void 0, void 0, void 0, function () {
+            it("should return the relation's child", function () { return __awaiter(_this, void 0, void 0, function () {
                 var context, relation, child, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -238,7 +238,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it("should return the relation's children associated to the context", function () { return __awaiter(void 0, void 0, void 0, function () {
+            it("should return the relation's children associated to the context", function () { return __awaiter(_this, void 0, void 0, function () {
                 var context, relation, child1, child2, child3, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -265,7 +265,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it('should throw an error if the context is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should throw an error if the context is missing', function () { return __awaiter(_this, void 0, void 0, function () {
                 var relation, error, e_1;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -290,7 +290,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it('should throw an error if context is not a SpinalContext', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should throw an error if context is not a SpinalContext', function () { return __awaiter(_this, void 0, void 0, function () {
                 var context1, relation, error, e_2, context2, e_3;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -342,7 +342,7 @@ describe('SpinalRelationLstPtr', function () {
     });
     describe('How to add children', function () {
         describe('How to use addChild', function () {
-            it('should add a child to the children of the relation', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should add a child to the children of the relation', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -359,7 +359,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it('should throw an error if you try to add the same node twice', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should throw an error if you try to add the same node twice', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, error, e_4;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -386,7 +386,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it('should throw an error when you pass it something that is not a model', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should throw an error when you pass it something that is not a model', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, error, array, e_5;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -411,7 +411,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it('should return the node added to the relation', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should return the node added to the relation', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, node, model, res1, res2, res2Elem;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -438,7 +438,7 @@ describe('SpinalRelationLstPtr', function () {
     });
     describe('How to remove children', function () {
         describe('How to use removeChild', function () {
-            it('should remove a child from the children of the relation', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should remove a child from the children of the relation', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -458,7 +458,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it('should remove a child and update the children ids of the relation', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should remove a child and update the children ids of the relation', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, ids;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -476,7 +476,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it("should remove a child and remove the relation the node's parents", function () { return __awaiter(void 0, void 0, void 0, function () {
+            it("should remove a child and remove the relation the node's parents", function () { return __awaiter(_this, void 0, void 0, function () {
                 var parentNode, rel, childNode, parents;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -498,7 +498,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it('should throw an error if the node is not a child', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should throw an error if the node is not a child', function () { return __awaiter(_this, void 0, void 0, function () {
                 var parentNode, rel, childNode, error, e_6;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -527,7 +527,7 @@ describe('SpinalRelationLstPtr', function () {
             }); });
         });
         describe('How to use removeChildren', function () {
-            it('should delete all of the children', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should delete all of the children', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, node1, node2, node3, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -554,7 +554,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it('should delete the given children', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should delete the given children', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, node1, node2, node3, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {
@@ -581,7 +581,7 @@ describe('SpinalRelationLstPtr', function () {
                     }
                 });
             }); });
-            it('should delete some of the given children', function () { return __awaiter(void 0, void 0, void 0, function () {
+            it('should delete some of the given children', function () { return __awaiter(_this, void 0, void 0, function () {
                 var rel, node1, node2, node3, node4, error, e_7, children;
                 return __generator(this, function (_a) {
                     switch (_a.label) {

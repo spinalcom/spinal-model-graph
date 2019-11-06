@@ -1,10 +1,9 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -35,6 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _this = this;
 exports.__esModule = true;
 var src_1 = require("../../src");
 var assert = require('assert');
@@ -44,7 +44,7 @@ var DEFAULT_RELATION_TYPE = src_1.SPINAL_RELATION_LST_PTR_TYPE;
 var DEFAULT_NODE_NAME = 'nodeName';
 describe('How to use find', function () {
     describe('Error handling', function () {
-        it('should throw an error if relationNames is neither an array, a string or omitted', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if relationNames is neither an array, a string or omitted', function () { return __awaiter(_this, void 0, void 0, function () {
             var error, e_1;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -68,7 +68,7 @@ describe('How to use find', function () {
                 }
             });
         }); });
-        it('should throw an error if the predicate is not a function', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the predicate is not a function', function () { return __awaiter(_this, void 0, void 0, function () {
             var error, e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -92,7 +92,7 @@ describe('How to use find', function () {
                 }
             });
         }); });
-        it('should not fall in infinite loops', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should not fall in infinite loops', function () { return __awaiter(_this, void 0, void 0, function () {
             var node1, node2, foundChild;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -115,7 +115,7 @@ describe('How to use find', function () {
         }); });
     });
     describe('Basic predicate manipulation', function () {
-        it('should return all contexts', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should return all contexts', function () { return __awaiter(_this, void 0, void 0, function () {
             var graph, context1, context2, context3, contexts;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -143,7 +143,7 @@ describe('How to use find', function () {
                 }
             });
         }); });
-        it('should return all contexts but not their nodes', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should return all contexts but not their nodes', function () { return __awaiter(_this, void 0, void 0, function () {
             var graph, context1, context2, context3, promises, i, contexts;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -178,7 +178,7 @@ describe('How to use find', function () {
                 }
             });
         }); });
-        it('should return a node with a certain name', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should return a node with a certain name', function () { return __awaiter(_this, void 0, void 0, function () {
             var parent, child1, child2, child3, foundChild;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -210,7 +210,7 @@ describe('How to use find', function () {
                 }
             });
         }); });
-        it('should return nodes with a certain type', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should return nodes with a certain type', function () { return __awaiter(_this, void 0, void 0, function () {
             var parent, child1, child2, child3, child4, child5, child6, foundChildren;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -250,7 +250,7 @@ describe('How to use find', function () {
         }); });
     });
     describe('How to use relationNames', function () {
-        it('should find all the nodes from the given relation names', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should find all the nodes from the given relation names', function () { return __awaiter(_this, void 0, void 0, function () {
             var parent, child1, child2, child3, child4, child5, child6, foundChildren;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -288,7 +288,7 @@ describe('How to use find', function () {
 });
 describe('How to use findInContext', function () {
     describe('Error handling', function () {
-        it('should throw an error if the context is missing', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the context is missing', function () { return __awaiter(_this, void 0, void 0, function () {
             var error, e_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -312,7 +312,7 @@ describe('How to use findInContext', function () {
                 }
             });
         }); });
-        it('should throw an error if the context is not a SpinalContext', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the context is not a SpinalContext', function () { return __awaiter(_this, void 0, void 0, function () {
             var context, error, e_4;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -337,7 +337,7 @@ describe('How to use findInContext', function () {
                 }
             });
         }); });
-        it('should throw an error if the predicate is not a function', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should throw an error if the predicate is not a function', function () { return __awaiter(_this, void 0, void 0, function () {
             var context, error, e_5;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -362,7 +362,7 @@ describe('How to use findInContext', function () {
                 }
             });
         }); });
-        it('should not fall in infinite loops', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should not fall in infinite loops', function () { return __awaiter(_this, void 0, void 0, function () {
             var context, node1, node2, foundChild;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -386,7 +386,7 @@ describe('How to use findInContext', function () {
         }); });
     });
     describe('Basic predicate manipulation', function () {
-        it('should return all nodes', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should return all nodes', function () { return __awaiter(_this, void 0, void 0, function () {
             var context, node1, node2, node3, contexts;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -412,7 +412,7 @@ describe('How to use findInContext', function () {
                 }
             });
         }); });
-        it('should return all direct children', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should return all direct children', function () { return __awaiter(_this, void 0, void 0, function () {
             var context, node1, node2, node3, promises, i, directs;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -447,7 +447,7 @@ describe('How to use findInContext', function () {
                 }
             });
         }); });
-        it('should return a node with a certain name', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should return a node with a certain name', function () { return __awaiter(_this, void 0, void 0, function () {
             var context, child1, child2, child3, foundChild;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -479,7 +479,7 @@ describe('How to use findInContext', function () {
                 }
             });
         }); });
-        it('should return nodes with a certain type', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should return nodes with a certain type', function () { return __awaiter(_this, void 0, void 0, function () {
             var context, child1, child2, child3, child4, child5, child6, foundChildren;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -521,7 +521,7 @@ describe('How to use findInContext', function () {
         }); });
     });
     describe('How to use context', function () {
-        it('should findInContext all the nodes from the given relation names', function () { return __awaiter(void 0, void 0, void 0, function () {
+        it('should findInContext all the nodes from the given relation names', function () { return __awaiter(_this, void 0, void 0, function () {
             var context1, context2, parent, child1, child2, child3, child4, child5, child6, foundChildren;
             return __generator(this, function (_a) {
                 switch (_a.label) {
