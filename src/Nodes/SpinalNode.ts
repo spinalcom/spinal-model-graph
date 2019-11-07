@@ -57,7 +57,7 @@ import { SpinalSet } from '../SpinalSet';
 type SpinalNodeFindPredicateFunc = (node: SpinalNode<any>) => boolean;
 type SpinalNodeForEachFunc = (node: SpinalNode<any>) => void;
 type SpinalNodeMapFunc = (node: SpinalNode<any>) => any;
-type AnySpinalRelation = SpinalRelationRef | SpinalRelationLstPtr| SpinalRelationPtrLst;
+type AnySpinalRelation = SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst;
 
 const DEFAULT_PREDICATE: SpinalNodeFindPredicateFunc = () => true;
 
@@ -132,9 +132,10 @@ class SpinalNode<T extends spinal.Model> extends Model {
    */
   getElement(): Promise<T> {
     if (this.element === undefined) {
-      this.element = <SpinalNodePointer<T>>(new SpinalNodePointer(new Model()));
+      const model = new Model();
+      this.add_attr('element', <SpinalNodePointer<T>>(new SpinalNodePointer(model)));
+      return new Promise(<any>model);
     }
-
     return this.element.load();
   }
 
@@ -289,9 +290,9 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {Error} If the relation type is invalid
    */
   async addChild<K extends spinal.Model>(
-    child: K|SpinalNode<K>, relationName: string,
+    child: K | SpinalNode<K>, relationName: string,
     relationType: string): Promise<SpinalNode<K>> {
-    let relation : AnySpinalRelation;
+    let relation: AnySpinalRelation;
     if (!(child instanceof Model)) {
       throw TypeError(
         'Cannot add a child witch is not an instance of SpinalNode or Model.',
@@ -319,10 +320,10 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {Error} If the relation type is invalid
    */
   async addChildInContext<K extends spinal.Model>(
-      child: K|SpinalNode<K>, relationName: string,
-      relationType: string, context: SpinalContext<any>): Promise<SpinalNode<K>> {
-    let relation : AnySpinalRelation;
-    let childCreate: K|SpinalNode<K> = child;
+    child: K | SpinalNode<K>, relationName: string,
+    relationType: string, context: SpinalContext<any>): Promise<SpinalNode<K>> {
+    let relation: AnySpinalRelation;
+    let childCreate: K | SpinalNode<K> = child;
 
     if (!(context instanceof SpinalContext)) {
       throw TypeError('context must be a SpinaContext');
@@ -383,8 +384,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {Error} If the relation doesn't exist
    * @throws {Error} If one of the nodes is not a child
    */
-  removeChildren(nodes: SpinalNode< any>[], relationName: string,
-                 relationType: string): Promise <void> {
+  removeChildren(nodes: SpinalNode<any>[], relationName: string,
+    relationType: string): Promise<void> {
     if (!Array.isArray(nodes)) {
       throw TypeError('nodes must be an array');
     }
@@ -406,7 +407,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {Error} If the relationType is invalid
    * @throws {Error} If the relation doesn't exist
    */
-  removeRelation(relationName: string , relationType: string): Promise<void> {
+  removeRelation(relationName: string, relationType: string): Promise<void> {
     if (!this.hasRelation(relationName, relationType)) {
       throw Error("The relation doesn't exist");
     }
@@ -443,7 +444,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {Error} If relation doesn't exist
    */
   async getChild(predicate: SpinalNodeFindPredicateFunc,
-                 relationName: string, relationType: string): Promise<SpinalNode<any>> {
+    relationName: string, relationType: string): Promise<SpinalNode<any>> {
     if (typeof predicate !== 'function') {
       throw TypeError('the predicate must be a function');
     }
@@ -470,8 +471,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If relationNames is neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
    */
-  async getChildren(relationNames: string|string[] = []): Promise<SpinalNode<any>[]> {
-    let relName: string|string[] = relationNames;
+  async getChildren(relationNames: string | string[] = []): Promise<SpinalNode<any>[]> {
+    let relName: string | string[] = relationNames;
     if (Array.isArray(relationNames)) {
       if (relationNames.length === 0) {
         relName = this.getRelationNames();
@@ -546,8 +547,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If the relationNames are neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
    */
-  getParents(relationNames: string|string[] = []): Promise<SpinalNode<any>[]> {
-    let relNames: string|string[] = relationNames;
+  getParents(relationNames: string | string[] = []): Promise<SpinalNode<any>[]> {
+    let relNames: string | string[] = relationNames;
     if (Array.isArray(relationNames)) {
       if (relationNames.length === 0) {
         relNames = this.parents.keys();
@@ -557,12 +558,12 @@ class SpinalNode<T extends spinal.Model> extends Model {
     } else {
       throw TypeError('relationNames must be an array, a string or omitted');
     }
-    const promises:Promise<SpinalNode<any>>[] = [];
+    const promises: Promise<SpinalNode<any>>[] = [];
     const tmpRelNames = <string[]>relNames;
     for (const name of tmpRelNames) {
       const list: spinal.Lst<SpinalNodePointer<AnySpinalRelation>> = this.parents.getElement(name);
 
-      if (typeof list !== "undefined" && list !== null){
+      if (typeof list !== "undefined" && list !== null) {
         for (let i: number = 0; i < list.length; i += 1) {
           promises.push(
             list[i].load().then(
@@ -588,11 +589,11 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the predicate is not a function
    */
-  async find(relationNames: string|string[],
-             predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE)
-             : Promise<SpinalNode<any>[]> {
+  async find(relationNames: string | string[],
+    predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE)
+    : Promise<SpinalNode<any>[]> {
     if (
-      ! Array.isArray(relationNames) &&
+      !Array.isArray(relationNames) &&
       relationNames !== undefined &&
       typeof relationNames !== 'string'
     ) {
@@ -646,8 +647,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If the predicate is not a function
    */
   async findInContext(context: SpinalContext<any>,
-                      predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE,
-                      ): Promise<SpinalNode<any>[]> {
+    predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE,
+  ): Promise<SpinalNode<any>[]> {
     if (typeof predicate !== 'function') {
       throw new Error('The predicate function must be a function');
     }
@@ -694,7 +695,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the callback is not a function
    */
-  async forEach(relationNames: string|string[], callback: SpinalNodeForEachFunc): Promise<void> {
+  async forEach(relationNames: string | string[], callback: SpinalNodeForEachFunc): Promise<void> {
     if (typeof callback !== 'function') {
       throw TypeError('callback must be a function');
     }
@@ -714,7 +715,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If the callback is not a function
    */
   async forEachInContext(context: SpinalContext<any>,
-                         callback: SpinalNodeForEachFunc): Promise<void> {
+    callback: SpinalNodeForEachFunc): Promise<void> {
     if (typeof callback !== 'function') {
       throw TypeError('callback must be a function');
     }
@@ -735,7 +736,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the callback is not a function
    */
-  async map(relationNames: string|string[], callback: SpinalNodeMapFunc): Promise<any[]> {
+  async map(relationNames: string | string[], callback: SpinalNodeMapFunc): Promise<any[]> {
     if (typeof callback !== 'function') {
       throw TypeError('The callback function must be a function');
     }

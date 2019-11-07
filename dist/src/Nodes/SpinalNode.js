@@ -169,7 +169,9 @@ var SpinalNode = /** @class */ (function (_super) {
      */
     SpinalNode.prototype.getElement = function () {
         if (this.element === undefined) {
-            this.element = (new SpinalNodePointer_1.SpinalNodePointer(new spinal_core_connectorjs_type_1.Model()));
+            var model = new spinal_core_connectorjs_type_1.Model();
+            this.add_attr('element', (new SpinalNodePointer_1.SpinalNodePointer(model)));
+            return new Promise(model);
         }
         return this.element.load();
     };
