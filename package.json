@@ -1,6 +1,6 @@
 {
   "name": "spinal-model-graph",
-  "version": "2.5.2",
+  "version": "2.5.3",
   "description": "The spinal graph is a data structure",
   "repository": "https://github.com/spinalcom/spinal-model-graph.git",
   "main": "dist/src/index.js",
