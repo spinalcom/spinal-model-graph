@@ -638,6 +638,59 @@ class SpinalNode<T extends spinal.Model> extends Model {
     return found;
   }
 
+
+  /**
+   * Recursively finds all the children nodes with type "nodeType".
+   * @param {string|string[]} relationNames Array containing the relation names to follow
+   * @param {string} nodeType Type of node to find in children
+   * @returns {Promise<Array<SpinalNode<any>>>} The nodes that were found
+   * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+   * @throws {TypeError} If an element of relationNames is not a string
+   * @throws {TypeError} If the predicate is not a function
+   */
+  findByType(relationNames: string | string[], nodeType: string): Promise<any> {
+    return this.find(relationNames, (node) => {
+      return node.getType().get() === nodeType;
+    })
+  }
+
+
+  /**
+  * Recursively finds all the children nodes and classify them by type.
+  * @param {string|string[]} relationNames Array containing the relation names to follow
+  * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
+  * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+  * @throws {TypeError} If an element of relationNames is not a string
+  * @throws {TypeError} If the predicate is not a function
+  */
+  async findAndClassifyByType(relationNames: string | string[]): Promise<any> {
+    let dataStructure = {
+      types: [],
+      data: {}
+    };
+
+    await this.find(relationNames, (node) => {
+      let type = node.getType().get();
+
+      if (dataStructure.types.indexOf(type) === -1) {
+        dataStructure.types.push(type);
+      }
+
+      if (typeof dataStructure.data[type] === "undefined") {
+        dataStructure.data[type] = [];
+      }
+
+      dataStructure.data[type].push(node);
+
+      return false;
+
+    })
+
+    return dataStructure;
+
+  }
+
+
   /**
    * Recursively finds all the children nodes in the context for which the predicate is true..
    * @param {SpinalContext} context Context to use for the search
@@ -686,6 +739,57 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
     return found;
   }
+
+
+  /**
+   * Recursively finds all the children nodes in the context for which the predicate is true..
+   * @param {SpinalContext} context Context to use for the search
+   * @param {string} nodeType Type of node to find in children
+   * @returns {Promise<Array<SpinalNode>>} The nodes that were found
+   * @throws {TypeError} If context is not a SpinalContext
+   * @throws {TypeError} If the predicate is not a function
+   */
+  findByTypeInContext(context: SpinalContext<any>, nodeType: string): Promise<any> {
+    return this.findInContext(context, (node) => {
+      return node.getType().get() === nodeType
+    })
+  }
+
+
+  /**
+ * Recursively finds all the children nodes in the context and classify them by type.
+ * @param {SpinalContext} context Context to use for the search
+ * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
+ * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+ * @throws {TypeError} If an element of relationNames is not a string
+ * @throws {TypeError} If the predicate is not a function
+ */
+  async findAndClassifyByTypeInContext(context: SpinalContext<any>): Promise<any> {
+    let dataStructure = {
+      types: [],
+      data: {}
+    };
+
+    await this.findInContext(context, (node) => {
+      let type = node.getType().get();
+
+      if (dataStructure.types.indexOf(type) === -1) {
+        dataStructure.types.push(type);
+      }
+
+      if (typeof dataStructure.data[type] === "undefined") {
+        dataStructure.data[type] = [];
+      }
+
+      dataStructure.data[type].push(node);
+
+      return false;
+
+    })
+
+    return dataStructure;
+  }
+
 
   /**
    * Recursively applies a function to all the children nodes.

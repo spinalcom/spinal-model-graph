@@ -229,6 +229,25 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      */
     find(relationNames: string | string[], predicate?: SpinalNodeFindPredicateFunc): Promise<SpinalNode<any>[]>;
     /**
+     * Recursively finds all the children nodes with type "nodeType".
+     * @param {string|string[]} relationNames Array containing the relation names to follow
+     * @param {string} nodeType Type of node to find in children
+     * @returns {Promise<Array<SpinalNode<any>>>} The nodes that were found
+     * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+     * @throws {TypeError} If an element of relationNames is not a string
+     * @throws {TypeError} If the predicate is not a function
+     */
+    findByType(relationNames: string | string[], nodeType: string): Promise<any>;
+    /**
+    * Recursively finds all the children nodes and classify them by type.
+    * @param {string|string[]} relationNames Array containing the relation names to follow
+    * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
+    * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+    * @throws {TypeError} If an element of relationNames is not a string
+    * @throws {TypeError} If the predicate is not a function
+    */
+    findAndClassifyByType(relationNames: string | string[]): Promise<any>;
+    /**
      * Recursively finds all the children nodes in the context for which the predicate is true..
      * @param {SpinalContext} context Context to use for the search
      * @param {findPredicate} predicate Function returning true if the node needs to be returned
@@ -237,6 +256,24 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @throws {TypeError} If the predicate is not a function
      */
     findInContext(context: SpinalContext<any>, predicate?: SpinalNodeFindPredicateFunc): Promise<SpinalNode<any>[]>;
+    /**
+     * Recursively finds all the children nodes in the context for which the predicate is true..
+     * @param {SpinalContext} context Context to use for the search
+     * @param {string} nodeType Type of node to find in children
+     * @returns {Promise<Array<SpinalNode>>} The nodes that were found
+     * @throws {TypeError} If context is not a SpinalContext
+     * @throws {TypeError} If the predicate is not a function
+     */
+    findByTypeInContext(context: SpinalContext<any>, nodeType: string): Promise<any>;
+    /**
+   * Recursively finds all the children nodes in the context and classify them by type.
+   * @param {SpinalContext} context Context to use for the search
+   * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
+   * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+   * @throws {TypeError} If an element of relationNames is not a string
+   * @throws {TypeError} If the predicate is not a function
+   */
+    findAndClassifyByTypeInContext(context: SpinalContext<any>): Promise<any>;
     /**
      * Recursively applies a function to all the children nodes.
      * @param {string|string[]} relationNames Array containing the relation names to follow
