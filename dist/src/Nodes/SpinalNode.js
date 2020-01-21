@@ -858,7 +858,7 @@ var SpinalNode = /** @class */ (function (_super) {
     * @throws {TypeError} If an element of relationNames is not a string
     * @throws {TypeError} If the predicate is not a function
     */
-    SpinalNode.prototype.findAndClassifyByType = function (relationNames) {
+    SpinalNode.prototype.browseAnClassifyByType = function (relationNames) {
         return __awaiter(this, void 0, void 0, function () {
             var dataStructure;
             return __generator(this, function (_a) {
@@ -977,7 +977,7 @@ var SpinalNode = /** @class */ (function (_super) {
      * @throws {TypeError} If context is not a SpinalContext
      * @throws {TypeError} If the predicate is not a function
      */
-    SpinalNode.prototype.findByTypeInContext = function (context, nodeType) {
+    SpinalNode.prototype.findInContextByType = function (context, nodeType) {
         return this.findInContext(context, function (node) {
             return node.getType().get() === nodeType;
         });
@@ -990,7 +990,7 @@ var SpinalNode = /** @class */ (function (_super) {
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the predicate is not a function
    */
-    SpinalNode.prototype.findAndClassifyByTypeInContext = function (context) {
+    SpinalNode.prototype.browseAndClassifyByTypeInContext = function (context) {
         return __awaiter(this, void 0, void 0, function () {
             var dataStructure;
             return __generator(this, function (_a) {

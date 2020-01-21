@@ -246,7 +246,7 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
     * @throws {TypeError} If an element of relationNames is not a string
     * @throws {TypeError} If the predicate is not a function
     */
-    findAndClassifyByType(relationNames: string | string[]): Promise<any>;
+    browseAnClassifyByType(relationNames: string | string[]): Promise<any>;
     /**
      * Recursively finds all the children nodes in the context for which the predicate is true..
      * @param {SpinalContext} context Context to use for the search
@@ -264,7 +264,7 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @throws {TypeError} If context is not a SpinalContext
      * @throws {TypeError} If the predicate is not a function
      */
-    findByTypeInContext(context: SpinalContext<any>, nodeType: string): Promise<any>;
+    findInContextByType(context: SpinalContext<any>, nodeType: string): Promise<any>;
     /**
    * Recursively finds all the children nodes in the context and classify them by type.
    * @param {SpinalContext} context Context to use for the search
@@ -273,7 +273,7 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the predicate is not a function
    */
-    findAndClassifyByTypeInContext(context: SpinalContext<any>): Promise<any>;
+    browseAndClassifyByTypeInContext(context: SpinalContext<any>): Promise<any>;
     /**
      * Recursively applies a function to all the children nodes.
      * @param {string|string[]} relationNames Array containing the relation names to follow

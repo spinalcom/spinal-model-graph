@@ -663,7 +663,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
   * @throws {TypeError} If an element of relationNames is not a string
   * @throws {TypeError} If the predicate is not a function
   */
-  async findAndClassifyByType(relationNames: string | string[]): Promise<any> {
+  async browseAnClassifyByType(relationNames: string | string[]): Promise<any> {
     let dataStructure = {
       types: [],
       data: {}
@@ -749,7 +749,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If context is not a SpinalContext
    * @throws {TypeError} If the predicate is not a function
    */
-  findByTypeInContext(context: SpinalContext<any>, nodeType: string): Promise<any> {
+  findInContextByType(context: SpinalContext<any>, nodeType: string): Promise<any> {
     return this.findInContext(context, (node) => {
       return node.getType().get() === nodeType
     })
@@ -764,7 +764,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
  * @throws {TypeError} If an element of relationNames is not a string
  * @throws {TypeError} If the predicate is not a function
  */
-  async findAndClassifyByTypeInContext(context: SpinalContext<any>): Promise<any> {
+  async browseAndClassifyByTypeInContext(context: SpinalContext<any>): Promise<any> {
     let dataStructure = {
       types: [],
       data: {}
