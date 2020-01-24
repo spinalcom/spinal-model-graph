@@ -201,7 +201,7 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @throws {TypeError} If relationNames is neither an array, a string or omitted
      * @throws {TypeError} If an element of relationNames is not a string
      */
-    getChildren(relationNames?: string | string[]): Promise<SpinalNode<any>[]>;
+    getChildren(relationNames?: string | RegExp | (string | RegExp)[]): Promise<SpinalNode<any>[]>;
     /**
      * Return the children of the node that are registered in the context
      * @param {SpinalContext} context Context to use for the search
@@ -210,13 +210,26 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      */
     getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
     /**
-     * Return all parents for the relation names no matter the type of relation
-     * @param {String[]} [relationNames=[]] Array containing the relation names of the desired parents
-     * @returns {Promise<Array<SpinalNode<any>>>} Promise containing the parents that were found
-     * @throws {TypeError} If the relationNames are neither an array, a string or omitted
-     * @throws {TypeError} If an element of relationNames is not a string
-     */
-    getParents(relationNames?: string | string[]): Promise<SpinalNode<any>[]>;
+    //  * Return all parents for the relation names no matter the type of relation
+    //  * @param {String[]} [relationNames=[]] Array containing the relation names of the desired parents
+    //  * @returns {Promise<Array<SpinalNode<any>>>} Promise containing the parents that were found
+    //  * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+    //  * @throws {TypeError} If an element of relationNames is not a string
+    //  */
+    getParents(relationNames?: string | RegExp | (string | RegExp)[]): Promise<SpinalNode<any>[]>;
+    /**
+   * Recursively finds and return the FIRST FOUND parent nodes for which the predicate is true
+   * @param {string[]} relationNames Arry of relation
+   * @param {(node)=> boolean} predicate function stop search if return true
+   */
+    findOneParent(relationNames?: string | RegExp | (string | RegExp)[], predicate?: SpinalNodeFindPredicateFunc): Promise<any>;
+    /**
+   * Recursively finds all the parent nodes for which the predicate is true
+   * @export
+   * @param {string[]} relationNames Arry of relation
+   * @param {(node)=> boolean} predicate Function returning true if the node needs to be returned
+   */
+    findParents(relationNames?: string | RegExp | (string | RegExp)[], predicate?: SpinalNodeFindPredicateFunc): Promise<any>;
     /**
      * Recursively finds all the children nodes for which the predicate is true.
      * @param {string|string[]} relationNames Array containing the relation names to follow
@@ -356,6 +369,11 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @protected
      */
     _removeFromChildren(): Promise<void>;
+    /**
+     *
+     * @param relationNames
+     */
+    private _getValidRelations;
 }
 export default SpinalNode;
 export { SpinalNode };

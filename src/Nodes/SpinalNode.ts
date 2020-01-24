@@ -32,6 +32,7 @@ import {
 
 import {
   guid,
+  loadRelation
 } from '../Utilities';
 
 import {
@@ -471,17 +472,19 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If relationNames is neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
    */
-  async getChildren(relationNames: string | string[] = []): Promise<SpinalNode<any>[]> {
-    let relName: string | string[] = relationNames;
-    if (Array.isArray(relationNames)) {
-      if (relationNames.length === 0) {
-        relName = this.getRelationNames();
-      }
-    } else if (typeof relationNames === 'string') {
-      relName = [relationNames];
-    } else {
-      throw TypeError('relationNames must be an array, a string or omitted');
-    }
+  async getChildren(relationNames: string | RegExp | (string | RegExp)[] = []): Promise<SpinalNode<any>[]> {
+    // let relName: string | string[] = relationNames;
+    // if (Array.isArray(relationNames)) {
+    //   if (relationNames.length === 0) {
+    //     relName = this.getRelationNames();
+    //   }
+    // } else if (typeof relationNames === 'string') {
+    //   relName = [relationNames];
+    // } else {
+    //   throw TypeError('relationNames must be an array, a string or omitted');
+    // }
+
+    let relName = this._getValidRelations(relationNames);
 
     const promises: Promise<SpinalNode<any>[]>[] = [];
     const tmpRelName: string[] = <string[]>relName;
@@ -540,44 +543,166 @@ class SpinalNode<T extends spinal.Model> extends Model {
     return res;
   }
 
-  /**
-   * Return all parents for the relation names no matter the type of relation
-   * @param {String[]} [relationNames=[]] Array containing the relation names of the desired parents
-   * @returns {Promise<Array<SpinalNode<any>>>} Promise containing the parents that were found
-   * @throws {TypeError} If the relationNames are neither an array, a string or omitted
-   * @throws {TypeError} If an element of relationNames is not a string
-   */
-  getParents(relationNames: string | string[] = []): Promise<SpinalNode<any>[]> {
-    let relNames: string | string[] = relationNames;
-    if (Array.isArray(relationNames)) {
-      if (relationNames.length === 0) {
-        relNames = this.parents.keys();
-      }
-    } else if (typeof relationNames === 'string') {
-      relNames = [relationNames];
-    } else {
-      throw TypeError('relationNames must be an array, a string or omitted');
-    }
-    const promises: Promise<SpinalNode<any>>[] = [];
-    const tmpRelNames = <string[]>relNames;
-    for (const name of tmpRelNames) {
-      const list: spinal.Lst<SpinalNodePointer<AnySpinalRelation>> = this.parents.getElement(name);
+  // /**
+  //  * Return all parents for the relation names no matter the type of relation
+  //  * @param {String[]} [relationNames=[]] Array containing the relation names of the desired parents
+  //  * @returns {Promise<Array<SpinalNode<any>>>} Promise containing the parents that were found
+  //  * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+  //  * @throws {TypeError} If an element of relationNames is not a string
+  //  */
+  // getParents(relationNames: string | string[] = []): Promise<SpinalNode<any>[]> {
+  //   let relNames: string | string[] = relationNames;
+  //   if (Array.isArray(relationNames)) {
+  //     if (relationNames.length === 0) {
+  //       relNames = this.parents.keys();
+  //     }
+  //   } else if (typeof relationNames === 'string') {
+  //     relNames = [relationNames];
+  //   } else {
+  //     throw TypeError('relationNames must be an array, a string or omitted');
+  //   }
+  //   const promises: Promise<SpinalNode<any>>[] = [];
+  //   const tmpRelNames = <string[]>relNames;
+  //   for (const name of tmpRelNames) {
+  //     const list: spinal.Lst<SpinalNodePointer<AnySpinalRelation>> = this.parents.getElement(name);
 
-      if (typeof list !== "undefined" && list !== null) {
-        for (let i: number = 0; i < list.length; i += 1) {
-          promises.push(
-            list[i].load().then(
-              (relation: AnySpinalRelation) => {
-                return relation.getParent();
-              },
-            ),
-          );
+  //     if (typeof list !== "undefined" && list !== null) {
+  //       for (let i: number = 0; i < list.length; i += 1) {
+  //         promises.push(
+  //           list[i].load().then(
+  //             (relation: AnySpinalRelation) => {
+  //               return relation.getParent();
+  //             },
+  //           ),
+  //         );
+  //       }
+  //     }
+  //   }
+
+  //   return Promise.all(promises);
+  // }
+
+  /**
+  //  * Return all parents for the relation names no matter the type of relation
+  //  * @param {String[]} [relationNames=[]] Array containing the relation names of the desired parents
+  //  * @returns {Promise<Array<SpinalNode<any>>>} Promise containing the parents that were found
+  //  * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+  //  * @throws {TypeError} If an element of relationNames is not a string
+  //  */
+
+  public getParents(relationNames: string | RegExp | (string | RegExp)[] = []): Promise<SpinalNode<any>[]> {
+
+    const relNames = this._getValidRelations(relationNames);
+
+    const prom = [];
+
+    for (const nodeRelation of this.parents._attribute_names) {
+      for (const searchRelation of relNames) {
+        if (nodeRelation === searchRelation) {
+          const lst = this.parents[nodeRelation];
+          for (var i = 0; i < lst.length; i++) {
+            prom.push(loadRelation(lst[i]));
+          }
         }
       }
     }
-
-    return Promise.all(promises);
+    return Promise.all(prom);
   }
+
+
+  /**
+ * Recursively finds and return the FIRST FOUND parent nodes for which the predicate is true
+ * @param {string[]} relationNames Arry of relation
+ * @param {(node)=> boolean} predicate function stop search if return true
+ */
+  public async findOneParent(relationNames: string | RegExp | (string | RegExp)[] = [], predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE): Promise<any> {
+    let relNames = this._getValidRelations(relationNames);
+
+    if (predicate(this)) {
+      return this;
+    }
+
+    const seen = new Set([this]);
+    let promises = [];
+    let nextGen = [this];
+    let currentGen = [];
+
+    while (nextGen.length) {
+      currentGen = nextGen;
+      promises = [];
+      nextGen = [];
+
+      for (const node of currentGen) {
+        promises.push(node.getParents(relNames));
+
+        if (predicate(node)) {
+          return node;
+        }
+      }
+
+      // eslint-disable-next-line no-await-in-loop
+      const childrenArrays = await Promise.all(promises);
+
+      for (const children of childrenArrays) {
+        for (const child of children) {
+          if (!seen.has(child)) {
+            nextGen.push(child);
+            seen.add(child);
+          }
+        }
+      }
+    }
+  }
+
+
+  /**
+ * Recursively finds all the parent nodes for which the predicate is true
+ * @export
+ * @param {string[]} relationNames Arry of relation
+ * @param {(node)=> boolean} predicate Function returning true if the node needs to be returned
+ */
+  public async findParents(relationNames: string | RegExp | (string | RegExp)[] = [], predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE): Promise<any> {
+
+    const relNames = this._getValidRelations(relationNames);
+
+    let found = [];
+    if (predicate(this)) {
+      found.push(this);
+    }
+
+    const seen = new Set([this]);
+    let promises = [];
+    let nextGen = [this];
+    let currentGen = [];
+
+    while (nextGen.length) {
+      currentGen = nextGen;
+      promises = [];
+      nextGen = [];
+
+      for (const node of currentGen) {
+        promises.push(node.getParents(node, relNames));
+
+        if (predicate(node)) {
+          found.push(node);
+        }
+      }
+
+      // eslint-disable-next-line no-await-in-loop
+      const childrenArrays = await Promise.all(promises);
+
+      for (const children of childrenArrays) {
+        for (const child of children) {
+          if (!seen.has(child)) {
+            nextGen.push(child);
+            seen.add(child);
+          }
+        }
+      }
+    }
+    return found;
+  }
+
 
   /**
    * Recursively finds all the children nodes for which the predicate is true.
@@ -991,6 +1116,64 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
     await Promise.all(promises);
   }
+
+  /**
+   * 
+   * @param relationNames 
+   */
+  private _getValidRelations(relationNames: string | RegExp | (string | RegExp)[] = []): string[] {
+    // let relName: string | string[] = relationNames;
+    // if (Array.isArray(relationNames)) {
+    //   if (relationNames.length === 0) {
+    //     relName = this.getRelationNames();
+    //   }
+    // } else if (typeof relationNames === 'string') {
+    //   relName = [relationNames];
+    // } else {
+    //   throw TypeError('relationNames must be an array, a string or omitted');
+    // }
+
+    let nodeRelations = this.getRelationNames();
+
+    if (!Array.isArray(relationNames)) {
+
+      if (relationNames instanceof RegExp) {
+
+        return nodeRelations.filter(relationName => {
+          return relationName.match(relationNames);
+        })
+
+      }
+
+      return [relationNames]
+
+
+    } else if (Array.isArray(relationNames) && relationNames.length === 0) {
+
+      return nodeRelations;
+
+    } else if (Array.isArray(relationNames) && relationNames.length > 0) {
+
+      return nodeRelations.filter(relationName => {
+        for (let index = 0; index < relationNames.length; index++) {
+          const regex = relationNames[index];
+          if (relationName.match(regex)) {
+            return true;
+          }
+        }
+
+        return false;
+      })
+
+    }
+
+
+  }
+
+
+
+
+
 }
 
 spinalCore.register_models([SpinalNode]);

@@ -42,6 +42,15 @@ function guid(name: string): string {
     s4() + s4() + s4()}-${Date.now().toString(16)}`;
 }
 
+
+async function loadRelation(spinalNodePointer) {
+  return spinalNodePointer.load().then(
+    (relation) => {
+      return relation.parent.load();
+    });
+}
+
+
 export {
-  guid,
+  guid, loadRelation
 };

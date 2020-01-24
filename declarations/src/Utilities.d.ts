@@ -4,4 +4,5 @@
  * @returns {string} Generated id
  */
 declare function guid(name: string): string;
-export { guid, };
+declare function loadRelation(spinalNodePointer: any): Promise<any>;
+export { guid, loadRelation };
