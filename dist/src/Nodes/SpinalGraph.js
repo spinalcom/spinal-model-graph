@@ -98,6 +98,7 @@ var SpinalGraph = /** @class */ (function (_super) {
         if (spinal_core_connectorjs_type_1.FileSystem._sig_server === false)
             return _this;
         _this.info.id.set(Utilities_1.guid(_this.constructor.name));
+        _this.info.add_attr({ graph_types: new spinal_core_connectorjs_type_1.Lst() });
         return _this;
     }
     /**
@@ -150,6 +151,15 @@ var SpinalGraph = /** @class */ (function (_super) {
                 return [2 /*return*/];
             });
         });
+    };
+    SpinalGraph.prototype.addTypeToGraph = function (type) {
+        if (typeof this.info.graph_types === "undefined")
+            this.info.add_attr({ graph_types: new spinal_core_connectorjs_type_1.Lst() });
+        if (this.info.graph_types && this.info.graph_types.indexOf(type) !== -1)
+            this.info.graph_types.push(type);
+    };
+    SpinalGraph.prototype.getGraphTypes = function () {
+        return this.info.graph_types;
     };
     return SpinalGraph;
 }(SpinalNode_1.SpinalNode));

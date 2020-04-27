@@ -735,7 +735,7 @@ var SpinalNode = /** @class */ (function (_super) {
     SpinalNode.prototype.getParents = function (relationNames) {
         var e_13, _a, e_14, _b;
         if (relationNames === void 0) { relationNames = []; }
-        var relNames = this._getValidRelations(relationNames);
+        var relNames = this._getValidRelations(relationNames, true);
         var prom = [];
         try {
             for (var _c = __values(this.parents._attribute_names), _d = _c.next(); !_d.done; _d = _c.next()) {
@@ -783,7 +783,7 @@ var SpinalNode = /** @class */ (function (_super) {
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
-                        relNames = this._getValidRelations(relationNames);
+                        relNames = this._getValidRelations(relationNames, true);
                         if (predicate(this)) {
                             return [2 /*return*/, this];
                         }
@@ -865,7 +865,7 @@ var SpinalNode = /** @class */ (function (_super) {
             return __generator(this, function (_d) {
                 switch (_d.label) {
                     case 0:
-                        relNames = this._getValidRelations(relationNames);
+                        relNames = this._getValidRelations(relationNames, true);
                         found = [];
                         if (predicate(this)) {
                             found.push(this);
@@ -1517,7 +1517,7 @@ var SpinalNode = /** @class */ (function (_super) {
      *
      * @param relationNames
      */
-    SpinalNode.prototype._getValidRelations = function (relationNames) {
+    SpinalNode.prototype._getValidRelations = function (relationNames, getParent) {
         // let relName: string | string[] = relationNames;
         // if (Array.isArray(relationNames)) {
         //   if (relationNames.length === 0) {
@@ -1529,7 +1529,8 @@ var SpinalNode = /** @class */ (function (_super) {
         //   throw TypeError('relationNames must be an array, a string or omitted');
         // }
         if (relationNames === void 0) { relationNames = []; }
-        var nodeRelations = this.getRelationNames();
+        if (getParent === void 0) { getParent = false; }
+        var nodeRelations = !getParent ? this.getRelationNames() : this.parents.keys();
         if (!Array.isArray(relationNames)) {
             if (relationNames instanceof RegExp) {
                 return nodeRelations.filter(function (relationName) {

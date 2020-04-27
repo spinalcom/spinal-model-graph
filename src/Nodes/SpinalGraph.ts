@@ -22,7 +22,7 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 import { SpinalNode } from './SpinalNode';
-import { FileSystem, spinalCore } from 'spinal-core-connectorjs_type';
+import { FileSystem, Lst, spinalCore } from 'spinal-core-connectorjs_type';
 import {
   SPINAL_RELATION_TYPE,
 } from '..';
@@ -50,6 +50,7 @@ class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
     if (FileSystem._sig_server === false) return;
 
     this.info.id.set(guid(this.constructor.name));
+    this.info.add_attr({ graph_types: new Lst() });
   }
 
   /**
@@ -89,6 +90,19 @@ class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
   async removeFromGraph() {
 
   }
+
+  addTypeToGraph(type: String) {
+    if (typeof this.info.graph_types === "undefined") this.info.add_attr({ graph_types: new Lst() });
+
+    if (this.info.graph_types && this.info.graph_types.indexOf(type) !== -1)
+      this.info.graph_types.push(type);
+
+  }
+
+  getGraphTypes() {
+    return this.info.graph_types;
+  }
+
 }
 
 spinalCore.register_models([SpinalGraph]);

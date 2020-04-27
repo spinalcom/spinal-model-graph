@@ -197,6 +197,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
     return this.contextIds.values();
   }
 
+
   /**
    * Returns true if the node belongs to the context.
    * @param {SpinalContext} context The context that might own the node
@@ -592,7 +593,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
   public getParents(relationNames: string | RegExp | (string | RegExp)[] = []): Promise<SpinalNode<any>[]> {
 
-    const relNames = this._getValidRelations(relationNames);
+    const relNames = this._getValidRelations(relationNames, true);
 
     const prom = [];
 
@@ -616,7 +617,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
  * @param {(node)=> boolean} predicate function stop search if return true
  */
   public async findOneParent(relationNames: string | RegExp | (string | RegExp)[] = [], predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE): Promise<any> {
-    let relNames = this._getValidRelations(relationNames);
+    let relNames = this._getValidRelations(relationNames, true);
 
     if (predicate(this)) {
       return this;
@@ -663,7 +664,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
  */
   public async findParents(relationNames: string | RegExp | (string | RegExp)[] = [], predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE): Promise<any> {
 
-    const relNames = this._getValidRelations(relationNames);
+    const relNames = this._getValidRelations(relationNames, true);
 
     let found = [];
     if (predicate(this)) {
@@ -1121,7 +1122,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * 
    * @param relationNames 
    */
-  private _getValidRelations(relationNames: string | RegExp | (string | RegExp)[] = []): string[] {
+  private _getValidRelations(relationNames: string | RegExp | (string | RegExp)[] = [], getParent: boolean = false): string[] {
     // let relName: string | string[] = relationNames;
     // if (Array.isArray(relationNames)) {
     //   if (relationNames.length === 0) {
@@ -1133,7 +1134,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
     //   throw TypeError('relationNames must be an array, a string or omitted');
     // }
 
-    let nodeRelations = this.getRelationNames();
+    let nodeRelations = !getParent ? this.getRelationNames() : this.parents.keys();
 
     if (!Array.isArray(relationNames)) {
 
@@ -1171,8 +1172,12 @@ class SpinalNode<T extends spinal.Model> extends Model {
   }
 
 
-
-
+  /**
+  * 
+  */
+  private _addTypeToGraph() {
+    let contextId
+  }
 
 }
 
