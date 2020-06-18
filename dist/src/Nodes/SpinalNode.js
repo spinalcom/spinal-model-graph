@@ -1554,6 +1554,12 @@ var SpinalNode = /** @class */ (function (_super) {
             });
         }
     };
+    /**
+    *
+    */
+    SpinalNode.prototype._addTypeToGraph = function () {
+        var contextId;
+    };
     return SpinalNode;
 }(spinal_core_connectorjs_type_1.Model));
 exports.SpinalNode = SpinalNode;

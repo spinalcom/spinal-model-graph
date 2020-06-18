@@ -33,8 +33,6 @@ declare class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
      * @returns {Promise<nothing>} An empty promise
      */
     removeFromGraph(): Promise<void>;
-    addTypeToGraph(type: String): void;
-    getGraphTypes(): any;
 }
 export default SpinalGraph;
 export { SpinalGraph };

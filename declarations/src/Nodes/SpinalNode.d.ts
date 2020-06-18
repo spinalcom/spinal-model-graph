@@ -374,6 +374,10 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @param relationNames
      */
     private _getValidRelations;
+    /**
+    *
+    */
+    private _addTypeToGraph;
 }
 export default SpinalNode;
 export { SpinalNode };

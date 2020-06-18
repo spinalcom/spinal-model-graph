@@ -50,7 +50,7 @@ class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
     if (FileSystem._sig_server === false) return;
 
     this.info.id.set(guid(this.constructor.name));
-    this.info.add_attr({ graph_types: new Lst() });
+    // this.info.add_attr({ graph_types: new Lst() });
   }
 
   /**
@@ -91,17 +91,17 @@ class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
 
   }
 
-  addTypeToGraph(type: String) {
-    if (typeof this.info.graph_types === "undefined") this.info.add_attr({ graph_types: new Lst() });
+  // addTypeToGraph(type: String) {
+  //   if (typeof this.info.graph_types === "undefined") this.info.add_attr({ graph_types: new Lst() });
 
-    if (this.info.graph_types && this.info.graph_types.indexOf(type) !== -1)
-      this.info.graph_types.push(type);
+  //   if (this.info.graph_types && this.info.graph_types.indexOf(type) !== -1)
+  //     this.info.graph_types.push(type);
 
-  }
+  // }
 
-  getGraphTypes() {
-    return this.info.graph_types;
-  }
+  // getGraphTypes() {
+  //   return this.info.graph_types;
+  // }
 
 }
 
