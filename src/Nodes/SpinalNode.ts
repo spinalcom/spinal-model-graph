@@ -135,7 +135,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
     if (this.element === undefined) {
       const model = new Model();
       this.add_attr('element', <SpinalNodePointer<T>>(new SpinalNodePointer(model)));
-      return new Promise(<any>model);
+      return Promise.resolve(<any>model);
     }
     return this.element.load();
   }
