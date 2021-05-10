@@ -173,7 +173,7 @@ var SpinalNode = /** @class */ (function (_super) {
         if (this.element === undefined) {
             var model = new spinal_core_connectorjs_type_1.Model();
             this.add_attr('element', (new SpinalNodePointer_1.SpinalNodePointer(model)));
-            return new Promise(model);
+            return Promise.resolve(model);
         }
         return this.element.load();
     };
