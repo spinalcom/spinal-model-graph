@@ -66,6 +66,8 @@ interface SpinalNodeInfoModel extends spinal.Model {
   id: spinal.Str;
   name: spinal.Str;
   type: spinal.Str;
+  directModificationDate: spinal.Val
+  indirectModificationDate: spinal.Val
 }
 
 /**
@@ -83,6 +85,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * Constructor for the SpinalNode class.
    * @param {string} [name="undefined"] Name of the node
    * @param {string} [type="undefined"] Type of the node
+   * @param {date} [directModificationDate="undefined"] Type of the node
+   * @param {date} [indirectModificationDate="undefined"] Type of the node
    * @param {spinal.Model} [element] Element of the node
    * @throws {TypeError} If the element is not a Model
    */
@@ -95,11 +99,15 @@ class SpinalNode<T extends spinal.Model> extends Model {
         name,
         type,
         id: guid(this.constructor.name),
+        directModificationDate : Date.now(),
+        indirectModificationDate: Date.now(),
+        // new attr
       },
       parents: new SpinalMap(),
       children: new SpinalMap(),
       element: element !== undefined ? new SpinalNodePointer(element) : undefined,
       contextIds: new SpinalSet(),
+    
     });
   }
 
@@ -126,6 +134,48 @@ class SpinalNode<T extends spinal.Model> extends Model {
   getType(): spinal.Str {
     return this.info.type;
   }
+
+  /**
+ * Returns the DirectModificationDate.
+ * @returns {Date} Direct Modification Date of the node
+ */
+   getDirectModificationDate(): spinal.Val {
+    return this.info.directModificationDate;
+  }
+  /**
+ * Returns the IndirectModificationDate.
+ * @returns {Date} Indirect Modification Date of the node
+ */
+   getIndirectModificationDate(): spinal.Val {
+    return this.info.indirectModificationDate;
+  }
+ /**
+   * Sets the value corresponding to the key.
+   * @param {Date} date Key to the value
+   * @throws {TypeError} If the date is not of type Date
+   * @memberof SpinalNode
+   */
+  setIndirectModificationDate(date: number = Date.now()): void{
+    if ( typeof date !== 'number') {
+      throw TypeError('The date must be a number');
+    }if (this.info.directModificationDate) {
+      this.info.directModificationDate.set(date)
+    }else this.info.add_attr("directModificationDate",date);
+  }
+   /**
+   * Sets the value corresponding to the key.
+   * @param {Date} date Key to the value
+   * @throws {TypeError} If the date is not of type Date
+   * @memberof SpinalNode
+   */
+    setDirectModificationDate(date: number = Date.now()): void{
+      if ( typeof date !== 'number') {
+        throw TypeError('The date must be a number');
+      }if (this.info.directModificationDate) {
+        this.info.directModificationDate.set(date)
+      }else this.info.add_attr("directModificationDate",date);
+    }
+    
 
   /**
    * Returns the element.
@@ -186,6 +236,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
     if (!this.contextIds.has(id)) {
       this.contextIds.add(id);
+      this.setDirectModificationDate();
     }
   }
 
@@ -302,11 +353,14 @@ class SpinalNode<T extends spinal.Model> extends Model {
     }
     if (!this.hasRelation(relationName, relationType)) {
       relation = this._createRelation(relationName, relationType);
+      this.setDirectModificationDate();
     } else {
       relation = this._getRelation(relationName, relationType);
     }
-
-    return relation.addChild(child);
+    //change the return way
+    let res = relation.addChild(child);
+    this.setDirectModificationDate();
+    return res;
   }
 
   /**
@@ -350,6 +404,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
     relation.addContextId(context.getId().get());
 
     await relation.addChild(tmpchildCreate);
+    this.setDirectModificationDate();
     return tmpchildCreate;
   }
 
@@ -370,7 +425,10 @@ class SpinalNode<T extends spinal.Model> extends Model {
     }
 
     const rel = this._getRelation(relationName, relationType);
-    return rel.removeChild(node);
+    let res = rel.removeChild(node);
+    // change the res way
+    this.setDirectModificationDate();
+    return res;
   }
 
   /**
@@ -397,7 +455,10 @@ class SpinalNode<T extends spinal.Model> extends Model {
     }
 
     const rel = this._getRelation(relationName, relationType);
-    return rel.removeChildren(nodes);
+    let res = rel.removeChildren(nodes);
+    // change the res way
+    this.setDirectModificationDate(); 
+    return res
   }
 
   /**
@@ -415,8 +476,11 @@ class SpinalNode<T extends spinal.Model> extends Model {
     }
 
     const rel = this._getRelation(relationName, relationType);
-    return rel.removeFromGraph();
-  }
+    let res  = rel.removeFromGraph();
+    // change the res way
+    this.setDirectModificationDate(); 
+    return res
+    }
 
   /**
    * Remove the node from the graph
@@ -1038,6 +1102,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
     for (let i: number = 0; i < parentLst.length; i += 1) {
       if (parentLst[i].getId().get() === relation.getId().get()) {
         parentLst.splice(i);
+         // change the res way
+        this.setDirectModificationDate(); 
         break;
       }
     }
@@ -1077,6 +1143,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
       const list = new Lst();
       list.push(new SpinalNodePointer(relation, true));
       this.parents.setElement(relationName, list);
+      // change the res way
+      this.setDirectModificationDate(); 
     }
   }
 
@@ -1095,9 +1163,13 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
     if (!this.children.has(relationType)) {
       this.children.setElement(relationType, new SpinalMap());
+          // change the res way
+    this.setDirectModificationDate(); 
     }
 
     this._getChildrenType(relationType).setElement(relationName, relation);
+        // change the res way
+        this.setDirectModificationDate(); 
     return relation;
   }
 

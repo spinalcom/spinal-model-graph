@@ -122,6 +122,8 @@ var SpinalNode = /** @class */ (function (_super) {
      * Constructor for the SpinalNode class.
      * @param {string} [name="undefined"] Name of the node
      * @param {string} [type="undefined"] Type of the node
+     * @param {date} [directModificationDate="undefined"] Type of the node
+     * @param {date} [indirectModificationDate="undefined"] Type of the node
      * @param {spinal.Model} [element] Element of the node
      * @throws {TypeError} If the element is not a Model
      */
@@ -135,7 +137,9 @@ var SpinalNode = /** @class */ (function (_super) {
             info: {
                 name: name,
                 type: type,
-                id: Utilities_1.guid(_this.constructor.name)
+                id: Utilities_1.guid(_this.constructor.name),
+                directModificationDate: Date.now(),
+                indirectModificationDate: Date.now()
             },
             parents: new SpinalMap_1.SpinalMap(),
             children: new SpinalMap_1.SpinalMap(),
@@ -164,6 +168,54 @@ var SpinalNode = /** @class */ (function (_super) {
      */
     SpinalNode.prototype.getType = function () {
         return this.info.type;
+    };
+    /**
+   * Returns the DirectModificationDate.
+   * @returns {Date} Direct Modification Date of the node
+   */
+    SpinalNode.prototype.getDirectModificationDate = function () {
+        return this.info.directModificationDate;
+    };
+    /**
+   * Returns the IndirectModificationDate.
+   * @returns {Date} Indirect Modification Date of the node
+   */
+    SpinalNode.prototype.getIndirectModificationDate = function () {
+        return this.info.indirectModificationDate;
+    };
+    /**
+      * Sets the value corresponding to the key.
+      * @param {Date} date Key to the value
+      * @throws {TypeError} If the date is not of type Date
+      * @memberof SpinalNode
+      */
+    SpinalNode.prototype.setIndirectModificationDate = function (date) {
+        if (date === void 0) { date = Date.now(); }
+        if (typeof date !== 'number') {
+            throw TypeError('The date must be a number');
+        }
+        if (this.info.directModificationDate) {
+            this.info.directModificationDate.set(date);
+        }
+        else
+            this.info.add_attr("directModificationDate", date);
+    };
+    /**
+    * Sets the value corresponding to the key.
+    * @param {Date} date Key to the value
+    * @throws {TypeError} If the date is not of type Date
+    * @memberof SpinalNode
+    */
+    SpinalNode.prototype.setDirectModificationDate = function (date) {
+        if (date === void 0) { date = Date.now(); }
+        if (typeof date !== 'number') {
+            throw TypeError('The date must be a number');
+        }
+        if (this.info.directModificationDate) {
+            this.info.directModificationDate.set(date);
+        }
+        else
+            this.info.add_attr("directModificationDate", date);
     };
     /**
      * Returns the element.
@@ -259,6 +311,7 @@ var SpinalNode = /** @class */ (function (_super) {
         }
         if (!this.contextIds.has(id)) {
             this.contextIds.add(id);
+            this.setDirectModificationDate();
         }
     };
     /**
@@ -371,18 +424,21 @@ var SpinalNode = /** @class */ (function (_super) {
      */
     SpinalNode.prototype.addChild = function (child, relationName, relationType) {
         return __awaiter(this, void 0, void 0, function () {
-            var relation;
+            var relation, res;
             return __generator(this, function (_a) {
                 if (!(child instanceof spinal_core_connectorjs_type_1.Model)) {
                     throw TypeError('Cannot add a child witch is not an instance of SpinalNode or Model.');
                 }
                 if (!this.hasRelation(relationName, relationType)) {
                     relation = this._createRelation(relationName, relationType);
+                    this.setDirectModificationDate();
                 }
                 else {
                     relation = this._getRelation(relationName, relationType);
                 }
-                return [2 /*return*/, relation.addChild(child)];
+                res = relation.addChild(child);
+                this.setDirectModificationDate();
+                return [2 /*return*/, res];
             });
         });
     };
@@ -426,6 +482,7 @@ var SpinalNode = /** @class */ (function (_super) {
                         return [4 /*yield*/, relation.addChild(tmpchildCreate)];
                     case 1:
                         _a.sent();
+                        this.setDirectModificationDate();
                         return [2 /*return*/, tmpchildCreate];
                 }
             });
@@ -447,7 +504,10 @@ var SpinalNode = /** @class */ (function (_super) {
             throw Error("The relation doesn't exist");
         }
         var rel = this._getRelation(relationName, relationType);
-        return rel.removeChild(node);
+        var res = rel.removeChild(node);
+        // change the res way
+        this.setDirectModificationDate();
+        return res;
     };
     /**
      * Removes children in the given relation.
@@ -470,7 +530,10 @@ var SpinalNode = /** @class */ (function (_super) {
             throw Error("The relation doesn't exist");
         }
         var rel = this._getRelation(relationName, relationType);
-        return rel.removeChildren(nodes);
+        var res = rel.removeChildren(nodes);
+        // change the res way
+        this.setDirectModificationDate();
+        return res;
     };
     /**
      * Removes a child relation of the node.
@@ -486,7 +549,10 @@ var SpinalNode = /** @class */ (function (_super) {
             throw Error("The relation doesn't exist");
         }
         var rel = this._getRelation(relationName, relationType);
-        return rel.removeFromGraph();
+        var res = rel.removeFromGraph();
+        // change the res way
+        this.setDirectModificationDate();
+        return res;
     };
     /**
      * Remove the node from the graph
@@ -1393,6 +1459,8 @@ var SpinalNode = /** @class */ (function (_super) {
         for (var i = 0; i < parentLst.length; i += 1) {
             if (parentLst[i].getId().get() === relation.getId().get()) {
                 parentLst.splice(i);
+                // change the res way
+                this.setDirectModificationDate();
                 break;
             }
         }
@@ -1451,6 +1519,8 @@ var SpinalNode = /** @class */ (function (_super) {
             var list = new spinal_core_connectorjs_type_1.Lst();
             list.push(new SpinalNodePointer_1.SpinalNodePointer(relation, true));
             this.parents.setElement(relationName, list);
+            // change the res way
+            this.setDirectModificationDate();
         }
     };
     /**
@@ -1463,8 +1533,12 @@ var SpinalNode = /** @class */ (function (_super) {
         var relation = SpinalRelationFactory_1.SpinalRelationFactory.getNewRelation(this, relationName, relationType);
         if (!this.children.has(relationType)) {
             this.children.setElement(relationType, new SpinalMap_1.SpinalMap());
+            // change the res way
+            this.setDirectModificationDate();
         }
         this._getChildrenType(relationType).setElement(relationName, relation);
+        // change the res way
+        this.setDirectModificationDate();
         return relation;
     };
     /**

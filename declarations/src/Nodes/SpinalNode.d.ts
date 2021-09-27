@@ -18,6 +18,8 @@ interface SpinalNodeInfoModel extends spinal.Model {
     id: spinal.Str;
     name: spinal.Str;
     type: spinal.Str;
+    directModificationDate: spinal.Val;
+    indirectModificationDate: spinal.Val;
 }
 /**
  * Node of a graph.
@@ -34,6 +36,8 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * Constructor for the SpinalNode class.
      * @param {string} [name="undefined"] Name of the node
      * @param {string} [type="undefined"] Type of the node
+     * @param {date} [directModificationDate="undefined"] Type of the node
+     * @param {date} [indirectModificationDate="undefined"] Type of the node
      * @param {spinal.Model} [element] Element of the node
      * @throws {TypeError} If the element is not a Model
      */
@@ -53,6 +57,30 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @returns {spinal.Str} Type of the node
      */
     getType(): spinal.Str;
+    /**
+   * Returns the DirectModificationDate.
+   * @returns {Date} Direct Modification Date of the node
+   */
+    getDirectModificationDate(): spinal.Val;
+    /**
+   * Returns the IndirectModificationDate.
+   * @returns {Date} Indirect Modification Date of the node
+   */
+    getIndirectModificationDate(): spinal.Val;
+    /**
+      * Sets the value corresponding to the key.
+      * @param {Date} date Key to the value
+      * @throws {TypeError} If the date is not of type Date
+      * @memberof SpinalNode
+      */
+    setIndirectModificationDate(date?: number): void;
+    /**
+    * Sets the value corresponding to the key.
+    * @param {Date} date Key to the value
+    * @throws {TypeError} If the date is not of type Date
+    * @memberof SpinalNode
+    */
+    setDirectModificationDate(date?: number): void;
     /**
      * Returns the element.
      * @returns {Promise<T>} A promise where the parameter of the resolve method is the element
