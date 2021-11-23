@@ -23,22 +23,13 @@
  */
 
 import {
-  FileSystem,
-  spinalCore,
-  Model,
-  Lst,
+  FileSystem, Lst, Model, spinalCore
 } from 'spinal-core-connectorjs_type';
-
+import type { SpinalNodeAny } from "../interfaces/SpinalNodeAny";
+import { SpinalContext } from '../Nodes/SpinalContext';
+import { SpinalNode } from '../Nodes/SpinalNode';
 import { BaseSpinalRelation } from './BaseSpinalRelation';
-import {
-  SPINAL_RELATION_TYPE,
-} from './SpinalRelationFactory';
-import {
-  SpinalNode,
-  SpinalContext,
-} from '../index';
-
-type SpinalNodeAny = SpinalNode<any>;
+import { SPINAL_RELATION_TYPE } from './SpinalRelationFactory';
 
 /**
  * Relation where the children are in a Lst.
@@ -84,11 +75,11 @@ class SpinalRelationRef extends BaseSpinalRelation {
     return res;
   }
 
-    /**
-   * returns the number of children of the relation.
-   * @returns {number}
-   * @memberof SpinalRelationRef
-   */
+  /**
+ * returns the number of children of the relation.
+ * @returns {number}
+ * @memberof SpinalRelationRef
+ */
   getNbChildren(): number {
     return this.children.length;
   }
@@ -150,8 +141,8 @@ class SpinalRelationRef extends BaseSpinalRelation {
    * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
    * @memberof SpinalRelationRef
    */
-  async addChild<T extends spinal.Model>(node: T|SpinalNode<T>): Promise<SpinalNode<T>> {
-    let nodeCreate: T|SpinalNode<T> = node;
+  async addChild<T extends spinal.Model>(node: T | SpinalNode<T>): Promise<SpinalNode<T>> {
+    let nodeCreate: T | SpinalNode<T> = node;
     if (!(node instanceof Model)) {
       throw new TypeError(
         'Cannot add a child witch is not an instance of SpinalNode or Model.',

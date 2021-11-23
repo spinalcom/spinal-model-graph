@@ -24,22 +24,14 @@
 // tslint:disable:function-name
 
 import {
-  FileSystem,
-  spinalCore,
-  Model,
-  Val,
+  FileSystem, Model, spinalCore, Val
 } from 'spinal-core-connectorjs_type';
-
-import {
-  guid,
-} from '../Utilities';
-
-import {
-  SpinalNode,
-  SpinalContext,
-} from '..';
-import { SpinalNodePointer } from '../SpinalNodePointer';
+import type { SpinalNodeAny } from "../interfaces/SpinalNodeAny";
+import { SpinalContext } from '../Nodes/SpinalContext';
+import { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalMap } from '../SpinalMap';
+import { SpinalNodePointer } from '../SpinalNodePointer';
+import { guid } from '../Utilities';
 
 /**
  * Base for all relation in a SpinalGraph.
@@ -53,7 +45,7 @@ import { SpinalMap } from '../SpinalMap';
 class BaseSpinalRelation extends Model {
   name: spinal.Str;
   id: spinal.Str;
-  parent: SpinalNodePointer<SpinalNode<any>>;
+  parent: SpinalNodePointer<SpinalNodeAny>;
   contextIds: SpinalMap<spinal.Val>;
 
   /**
@@ -63,7 +55,7 @@ class BaseSpinalRelation extends Model {
    * @throws {TypeError} If the parent is not a node
    * @throws {TypeError} If the name is not a string
    */
-  constructor(parent?: SpinalNode<any>, name?: string) {
+  constructor(parent?: SpinalNodeAny, name?: string) {
     super();
 
     if (FileSystem._sig_server === false) return;
@@ -79,7 +71,7 @@ class BaseSpinalRelation extends Model {
 
     this.add_attr({
       name,
-      id: guid(name),
+      id: guid(),
       parent: new SpinalNodePointer(parent, true),
       contextIds: new SpinalMap(),
     });
@@ -103,12 +95,17 @@ class BaseSpinalRelation extends Model {
     return this.name;
   }
 
+  // /**
+  //  * @returns {Promise<SpinalNode<spinal.Model>>} Returns a promise where the resolve is the parent
+  //  * @memberof BaseSpinalRelation
+  //  */
   /**
    * Returns the parent of the relation.
-   * @returns {Promise<SpinalNode<spinal.Model>>} Returns a promise where the resolve is the parent
+   * @template T
+   * @return {*}  {Promise<SpinalNode<T>>} Returns a promise where the resolve is the parent
    * @memberof BaseSpinalRelation
    */
-  getParent(): Promise<SpinalNode<spinal.Model>> {
+  getParent<T extends spinal.Model>(): Promise<SpinalNode<T>> {
     return this.parent.load();
   }
 
@@ -160,8 +157,8 @@ class BaseSpinalRelation extends Model {
    * @throws {Error} If one of the nodes is not a child
    * @memberof BaseSpinalRelation
    */
-  async removeChildren(nodesToDelete: SpinalNode<any>[] = []): Promise<void> {
-    let nodes: SpinalNode<any>[] = nodesToDelete;
+  async removeChildren(nodesToDelete: SpinalNodeAny[] = []): Promise<void> {
+    let nodes: SpinalNodeAny[] = nodesToDelete;
     const promises: Promise<void>[] = [];
 
     if (!Array.isArray(nodes)) {

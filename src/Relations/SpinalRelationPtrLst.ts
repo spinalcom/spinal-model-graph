@@ -23,40 +23,15 @@
  */
 
 import {
-  FileSystem,
-  spinalCore,
-  Model,
-  Lst,
+  FileSystem, Lst, Model, spinalCore
 } from 'spinal-core-connectorjs_type';
-
-import { BaseSpinalRelation } from './BaseSpinalRelation';
-import {
-  SPINAL_RELATION_PTR_LST_TYPE,
-} from './SpinalRelationFactory';
-import {
-  SpinalNode,
-  SpinalContext,
-} from '../index';
+import type { SpinalNodeAny } from "../interfaces/SpinalNodeAny";
+import type { SpinalRelationPtrLstNodePointer } from '../interfaces/SpinalRelationPtrLstNodePointer';
+import { SpinalContext } from '../Nodes/SpinalContext';
+import { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalNodePointer } from '../SpinalNodePointer';
-
-type SpinalNodeAny = SpinalNode<any>;
-
-/**
- * @interface SpinalRelationPtrLstNodePointerInfoModel
- * @extends {InfoModel}
- */
-interface SpinalRelationPtrLstNodePointerInfoModel extends spinal.Model {
-  pointedId?: spinal.Str;
-  pointedType?: spinal.Str;
-  ids: spinal.Lst<spinal.Str>;
-}
-/**
- * @interface SpinalRelationPtrLstNodePointer
- * @extends {SpinalNodePointer<spinal.Lst<SpinalNodeAny>>}
- */
-interface SpinalRelationPtrLstNodePointer extends SpinalNodePointer<spinal.Lst<SpinalNodeAny>> {
-  info: SpinalRelationPtrLstNodePointerInfoModel;
-}
+import { BaseSpinalRelation } from './BaseSpinalRelation';
+import { SPINAL_RELATION_PTR_LST_TYPE } from './SpinalRelationFactory';
 
 /**
  * Relation where the children are in Ptr to a Lst.

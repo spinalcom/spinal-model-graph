@@ -22,35 +22,34 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import { SpinalGraph } from './Nodes/SpinalGraph';
-import { SpinalNode } from './Nodes/SpinalNode';
-import { SpinalContext } from './Nodes/SpinalContext';
-import { SpinalRelationRef } from './Relations/SpinalRelationRef';
-import { SpinalRelationLstPtr } from './Relations/SpinalRelationLstPtr';
-import { SpinalRelationPtrLst } from './Relations/SpinalRelationPtrLst';
-import {
-  SpinalRelationFactory,
-  SPINAL_RELATION_TYPE,
-  SPINAL_RELATION_LST_PTR_TYPE,
-  SPINAL_RELATION_PTR_LST_TYPE,
-} from './Relations/SpinalRelationFactory';
-
-import { SpinalMap } from './SpinalMap';
-import { SpinalNodePointer } from './SpinalNodePointer';
-import { SpinalSet } from './SpinalSet';
-
+export type { AnySpinalRelation } from "./interfaces/AnySpinalRelation";
+export type { ArrayPairStringAny } from "./interfaces/ArrayPairStringAny";
+export type { SpinalMapForEachFunc } from "./interfaces/SpinalMapForEachFunc";
+export type { SpinalMapItem } from "./interfaces/SpinalMapItem";
+export type { SpinalNodeAny } from "./interfaces/SpinalNodeAny";
+export type { SpinalNodeFindPredicateFunc } from "./interfaces/SpinalNodeFindPredicateFunc";
+export type { SpinalNodeForEachFunc } from "./interfaces/SpinalNodeForEachFunc";
+export type { SpinalNodeInfoModel } from "./interfaces/SpinalNodeInfoModel";
+export type { SpinalNodeMapFunc } from "./interfaces/SpinalNodeMapFunc";
+export type { SpinalNodePointerInfoModel } from "./interfaces/SpinalNodePointerInfoModel";
+export type { SpinalRelationPtrLstNodePointer } from "./interfaces/SpinalRelationPtrLstNodePointer";
+export type { SpinalRelationPtrLstNodePointerInfoModel } from "./interfaces/SpinalRelationPtrLstNodePointerInfoModel";
+export type { SpinalSetForEachFunc } from "./interfaces/SpinalSetForEachFunc";
+export { SpinalContext } from './Nodes/SpinalContext';
+export { SpinalGraph } from './Nodes/SpinalGraph';
 export {
-  SpinalGraph,
-  SpinalNode,
-  SpinalContext,
-  SpinalRelationRef,
-  SpinalRelationLstPtr,
-  SpinalRelationPtrLst,
-  SpinalRelationFactory,
-  SPINAL_RELATION_TYPE,
-  SPINAL_RELATION_LST_PTR_TYPE,
-  SPINAL_RELATION_PTR_LST_TYPE,
-  SpinalMap,
-  SpinalNodePointer,
-  SpinalSet,
-};
+  DEFAULT_PREDICATE, SpinalNode
+} from './Nodes/SpinalNode';
+export {
+  SpinalRelationFactory, SPINAL_RELATION_LST_PTR_TYPE,
+  SPINAL_RELATION_PTR_LST_TYPE, SPINAL_RELATION_TYPE
+} from './Relations/SpinalRelationFactory';
+export { SpinalRelationLstPtr } from './Relations/SpinalRelationLstPtr';
+export { SpinalRelationPtrLst } from './Relations/SpinalRelationPtrLst';
+export { SpinalRelationRef } from './Relations/SpinalRelationRef';
+export { SpinalMap } from './SpinalMap';
+export { SpinalNodePointer } from './SpinalNodePointer';
+export { SpinalSet } from './SpinalSet';
+
+
+

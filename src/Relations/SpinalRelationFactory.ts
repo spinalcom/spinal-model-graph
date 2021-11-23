@@ -21,20 +21,15 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-import { SpinalRelationRef } from './SpinalRelationRef';
+import { spinalCore } from 'spinal-core-connectorjs_type';
+import {
+  RELATION_TYPE_LIST, SPINAL_RELATION_LST_PTR_TYPE,
+  SPINAL_RELATION_PTR_LST_TYPE, SPINAL_RELATION_TYPE
+} from "../constants";
+import type { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalRelationLstPtr } from './SpinalRelationLstPtr';
 import { SpinalRelationPtrLst } from './SpinalRelationPtrLst';
-import { spinalCore } from 'spinal-core-connectorjs_type';
-import { SpinalNode } from '..';
-const SPINAL_RELATION_TYPE = 'Ref';
-const SPINAL_RELATION_LST_PTR_TYPE = 'LstPtr';
-const SPINAL_RELATION_PTR_LST_TYPE = 'PtrLst';
-const RELATION_TYPE_LIST = [
-  SPINAL_RELATION_TYPE,
-  SPINAL_RELATION_LST_PTR_TYPE,
-  SPINAL_RELATION_PTR_LST_TYPE,
-];
-
+import { SpinalRelationRef } from './SpinalRelationRef';
 /**
  * Namespace for general relation functions.
  * @abstract
@@ -49,26 +44,18 @@ class SpinalRelationFactory {
    * @static
    * @memberof SpinalRelationFactory
    */
-  static getNewRelation(parent: SpinalNode<spinal.Model>,
-                        relationName: string, relationType: string)
-  : SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst {
-    let relation: SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst;
-
+  static getNewRelation(parent: SpinalNode<spinal.Model>, relationName: string, relationType: string)
+    : SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst {
     switch (relationType) {
       case SPINAL_RELATION_TYPE:
-        relation = new SpinalRelationRef(parent, relationName);
-        break;
+        return new SpinalRelationRef(parent, relationName);
       case SPINAL_RELATION_LST_PTR_TYPE:
-        relation = new SpinalRelationLstPtr(parent, relationName);
-        break;
+        return new SpinalRelationLstPtr(parent, relationName);
       case SPINAL_RELATION_PTR_LST_TYPE:
-        relation = new SpinalRelationPtrLst(parent, relationName);
-        break;
+        return new SpinalRelationPtrLst(parent, relationName);
       default:
         throw new Error('Unknown relationType');
     }
-
-    return relation;
   }
 }
 

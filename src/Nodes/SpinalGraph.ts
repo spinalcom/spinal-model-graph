@@ -21,17 +21,12 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-import { SpinalNode } from './SpinalNode';
-import { FileSystem, Lst, spinalCore } from 'spinal-core-connectorjs_type';
-import {
-  SPINAL_RELATION_TYPE,
-} from '..';
-import {
-  guid,
-} from '../Utilities';
+import { FileSystem, spinalCore } from 'spinal-core-connectorjs_type';
+import { HAS_CONTEXT_RELATION_NAME } from '../constants';
+import { SPINAL_RELATION_TYPE } from '../Relations/SpinalRelationFactory';
+import { guid } from '../Utilities';
 import { SpinalContext } from './SpinalContext';
-
-const HAS_CONTEXT_RELATION_NAME = 'hasContext';
+import { SpinalNode } from './SpinalNode';
 
 /**
  * Starting node of a graph.
@@ -49,8 +44,7 @@ class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
     super(name, type, element);
     if (FileSystem._sig_server === false) return;
 
-    this.info.id.set(guid(this.constructor.name));
-    // this.info.add_attr({ graph_types: new Lst() });
+    this.info.id.set(guid());
   }
 
   /**
@@ -90,18 +84,6 @@ class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
   async removeFromGraph() {
 
   }
-
-  // addTypeToGraph(type: String) {
-  //   if (typeof this.info.graph_types === "undefined") this.info.add_attr({ graph_types: new Lst() });
-
-  //   if (this.info.graph_types && this.info.graph_types.indexOf(type) !== -1)
-  //     this.info.graph_types.push(type);
-
-  // }
-
-  // getGraphTypes() {
-  //   return this.info.graph_types;
-  // }
 
 }
 

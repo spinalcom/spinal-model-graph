@@ -1,27 +1,54 @@
 {
   "name": "spinal-model-graph",
-  "version": "2.5.3",
+  "version": "2.5.4",
   "description": "The spinal graph is a data structure",
-  "repository": "https://github.com/spinalcom/spinal-model-graph.git",
-  "main": "dist/src/index.js",
-  "types": "declarations/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "declarations/index.d.ts",
   "scripts": {
-    "test": "tsc && nyc mocha --require ts-node/register --recursive dist/test",
-    "build": "tsc",
-    "docs": "rm ./Docs/markdown/api.md && touch ./Docs/markdown/api.md && find ./src -name \"*.js\" -exec jsdoc2md {} >> ./Docs/markdown/api.md ';'"
+    "test": "rm -rf dist && tsc && nyc mocha --require ts-node/register test/**/*.ts",
+    "build": "rm -rf declarations dist && tsc",
+    "dev": "rm -rf declarations dist && tsc -w",
+    "docs": "rm -rf docs && typedoc --excludeExternals --readme README.md src",
+    "prepare": "npm run build && npm run docs"
   },
   "author": "SpinalCom",
   "license": "SpinalCom Free Software License Agreement",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spinalcom/spinal-model-graph.git"
+  },
+  "keywords": [
+    "spinal",
+    "spinalcom",
+    "spinalgraph",
+    "spinal-model-graph",
+    "spinalnode",
+    "spinalcontext"
+  ],
+  "bugs": {
+    "url": "https://github.com/spinalcom/spinal-model-graph/issues"
+  },
+  "homepage": "https://github.com/spinalcom/spinal-model-graph#readme",
   "dependencies": {
     "spinal-core-connectorjs_type": "git+https://github.com/spinalcom/spinal-core-connectorjs_type.git"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",
     "@types/node": "^10.5.7",
-    "jsdoc-to-markdown": "^5.0.0",
-    "mocha": "^5.2.0",
-    "nyc": "^14.1.1",
-    "ts-node": "^8.2.0",
-    "typescript": "^3.5.1"
+    "mocha": "^9.1.3",
+    "nyc": "^15.1.0",
+    "ts-node": "^10.2.1",
+    "typedoc": "^0.22.4",
+    "typedoc-plugin-rename-defaults": "^0.4.0",
+    "typescript": "^4.4.3"
+  },
+  "nyc": {
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "exclude": [
+      "**/*.d.ts"
+    ]
   }
 }

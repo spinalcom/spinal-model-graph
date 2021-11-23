@@ -22,6 +22,11 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
+import type { } from 'spinal-core-connectorjs_type';
+import type SpinalNode from "../src/Nodes/SpinalNode";
+import type { AnySpinalRelation } from "./interfaces/AnySpinalRelation";
+import type { SpinalNodePointer } from "./SpinalNodePointer";
+
 /**
  * Generates a random number and returns in a string.
  * @returns {String} Random number in a string
@@ -37,20 +42,20 @@ function s4(): string {
  * @param {string} name Name from wich the id is generated
  * @returns {string} Generated id
  */
-function guid(name: string): string {
-  return `${name}-${s4() + s4()}-${s4()}-${s4()}-${s4()}-${
-    s4() + s4() + s4()}-${Date.now().toString(16)}`;
+function guid(): string {
+  return `${s4()}-${s4()}-${s4()}-${Date.now().toString(16)}`;
 }
 
-
-async function loadRelation(spinalNodePointer) {
-  return spinalNodePointer.load().then(
-    (relation) => {
-      return relation.parent.load();
-    });
+async function loadParentRelation<T extends spinal.Model>(spinalNodePointer: SpinalNodePointer<AnySpinalRelation>)
+  : Promise<SpinalNode<T>> {
+  try {
+    const relation = await spinalNodePointer.load();
+    return relation.getParent();
+  } catch (e) {
+    return undefined;
+  }
 }
-
 
 export {
-  guid, loadRelation
+  guid, loadParentRelation
 };

@@ -23,32 +23,23 @@
  */
 
 import {
-  FileSystem,
-  spinalCore,
-  Model,
-  Lst,
+  FileSystem, Lst, Model, spinalCore
 } from 'spinal-core-connectorjs_type';
-
-import { BaseSpinalRelation } from './BaseSpinalRelation';
-import {
-  SPINAL_RELATION_LST_PTR_TYPE,
-} from './SpinalRelationFactory';
-import {
-  SpinalNode,
-  SpinalContext,
-} from '../index';
+import type { SpinalNodeAny } from "../interfaces/SpinalNodeAny";
+import { SpinalContext } from '../Nodes/SpinalContext';
+import { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalNodePointer } from '../SpinalNodePointer';
-
-type SpinalNodeAny = SpinalNode<any>;
+import { BaseSpinalRelation } from './BaseSpinalRelation';
+import { SPINAL_RELATION_LST_PTR_TYPE } from './SpinalRelationFactory';
 
 /**
  * Relation where the children are in Lst of Ptr.
  * @extends BaseSpinalRelation
  * @property {spinal.Str} name
  * @property {spinal.Str} id
- * @property {SpinalNodePointer<SpinalNode>} parent
+ * @property {SpinalNodePointer<SpinalNodeAny>} parent
  * @property {SpinalMap<spinal.Val>} contextIds
- * @property {spinal.Lst<SpinalNodePointer<SpinalNode>>} children
+ * @property {spinal.Lst<SpinalNodePointer<SpinalNodeAny>>} children
  */
 class SpinalRelationLstPtr extends BaseSpinalRelation {
   children: spinal.Lst<SpinalNodePointer<SpinalNodeAny>>;
@@ -85,11 +76,11 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
     return res;
   }
 
-    /**
-   * returns the number of children of the relation.
-   * @returns {number}
-   * @memberof SpinalRelationLstPtr
-   */
+  /**
+ * returns the number of children of the relation.
+ * @returns {number}
+ * @memberof SpinalRelationLstPtr
+ */
   getNbChildren(): number {
     return this.children.length;
   }
@@ -151,8 +142,8 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
    * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
    * @memberof SpinalRelationLstPtr
    */
-  async addChild<T extends spinal.Model>(node: T|SpinalNode<T>): Promise<SpinalNode<T>> {
-    let nodeCreate: T|SpinalNode<T> = node;
+  async addChild<T extends spinal.Model>(node: T | SpinalNode<T>): Promise<SpinalNode<T>> {
+    let nodeCreate: T | SpinalNode<T> = node;
     if (!(node instanceof Model)) {
       throw new Error(
         'Cannot add a child witch is not an instance of SpinalNode or Model.',
@@ -177,7 +168,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
    * @throws {Error} If the given node is not a child
    * @memberof SpinalRelationLstPtr
    */
-  removeChild(node: SpinalNodeAny) : Promise<void> {
+  removeChild(node: SpinalNodeAny): Promise<void> {
     let found: boolean = false;
 
     for (let i: number = 0; i < this.children.length; i += 1) {

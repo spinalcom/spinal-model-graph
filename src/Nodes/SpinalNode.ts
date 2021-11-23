@@ -23,52 +23,24 @@
  */
 
 import {
-  FileSystem,
-  spinalCore,
-  Model,
-  Lst,
-
+  FileSystem, Lst, Model, spinalCore
 } from 'spinal-core-connectorjs_type';
-
-import {
-  guid,
-  loadRelation
-} from '../Utilities';
-
-import {
-  SpinalContext,
-} from '../index';
-import { SpinalRelationRef, SpinalRelationLstPtr, SpinalRelationPtrLst } from '..';
-
-import { SpinalNodePointer } from '../SpinalNodePointer';
+import type { AnySpinalRelation } from "../interfaces/AnySpinalRelation";
+import type { SpinalNodeFindPredicateFunc } from '../interfaces/SpinalNodeFindPredicateFunc';
+import type { SpinalNodeForEachFunc } from '../interfaces/SpinalNodeForEachFunc';
+import type { SpinalNodeInfoModel } from '../interfaces/SpinalNodeInfoModel';
+import type { SpinalNodeMapFunc } from '../interfaces/SpinalNodeMapFunc';
 import {
   RELATION_TYPE_LIST,
-  SpinalRelationFactory,
+  SpinalRelationFactory
 } from '../Relations/SpinalRelationFactory';
 import { SpinalMap } from '../SpinalMap';
+import { SpinalNodePointer } from '../SpinalNodePointer';
 import { SpinalSet } from '../SpinalSet';
+import { guid, loadParentRelation } from '../Utilities';
+import { SpinalContext } from './SpinalContext';
 
-
-/**
- * A function that takes a node and returns a boolean.
- * @callback SpinalNodeFindPredicateFunc
- * @param {SpinalNode<any>} node
- * @returns {boolean}
- */
-type SpinalNodeFindPredicateFunc = (node: SpinalNode<any>) => boolean;
-type SpinalNodeForEachFunc = (node: SpinalNode<any>) => void;
-type SpinalNodeMapFunc = (node: SpinalNode<any>) => any;
-type AnySpinalRelation = SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst;
-
-const DEFAULT_PREDICATE: SpinalNodeFindPredicateFunc = () => true;
-
-interface SpinalNodeInfoModel extends spinal.Model {
-  id: spinal.Str;
-  name: spinal.Str;
-  type: spinal.Str;
-  directModificationDate: spinal.Val
-  indirectModificationDate: spinal.Val
-}
+export const DEFAULT_PREDICATE: SpinalNodeFindPredicateFunc = () => true;
 
 /**
  * Node of a graph.
@@ -98,8 +70,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
       info: {
         name,
         type,
-        id: guid(this.constructor.name),
-        directModificationDate : Date.now(),
+        id: guid(),
+        directModificationDate: Date.now(),
         indirectModificationDate: Date.now(),
         // new attr
       },
@@ -107,7 +79,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
       children: new SpinalMap(),
       element: element !== undefined ? new SpinalNodePointer(element) : undefined,
       contextIds: new SpinalSet(),
-    
+
     });
   }
 
@@ -139,43 +111,43 @@ class SpinalNode<T extends spinal.Model> extends Model {
  * Returns the DirectModificationDate.
  * @returns {Date} Direct Modification Date of the node
  */
-   getDirectModificationDate(): spinal.Val {
+  getDirectModificationDate(): spinal.Val {
     return this.info.directModificationDate;
   }
   /**
  * Returns the IndirectModificationDate.
  * @returns {Date} Indirect Modification Date of the node
  */
-   getIndirectModificationDate(): spinal.Val {
+  getIndirectModificationDate(): spinal.Val {
     return this.info.indirectModificationDate;
   }
- /**
-   * Sets the value corresponding to the key.
-   * @param {Date} date Key to the value
-   * @throws {TypeError} If the date is not of type Date
-   * @memberof SpinalNode
-   */
-  setIndirectModificationDate(date: number = Date.now()): void{
-    if ( typeof date !== 'number') {
+  /**
+    * Sets the value corresponding to the key.
+    * @param {Date} date Key to the value
+    * @throws {TypeError} If the date is not of type Date
+    * @memberof SpinalNode
+    */
+  setIndirectModificationDate(date: number = Date.now()): void {
+    if (typeof date !== 'number') {
       throw TypeError('The date must be a number');
-    }if (this.info.directModificationDate) {
+    } if (this.info.directModificationDate) {
       this.info.directModificationDate.set(date)
-    }else this.info.add_attr("directModificationDate",date);
+    } else this.info.add_attr("directModificationDate", date);
   }
-   /**
-   * Sets the value corresponding to the key.
-   * @param {Date} date Key to the value
-   * @throws {TypeError} If the date is not of type Date
-   * @memberof SpinalNode
-   */
-    setDirectModificationDate(date: number = Date.now()): void{
-      if ( typeof date !== 'number') {
-        throw TypeError('The date must be a number');
-      }if (this.info.directModificationDate) {
-        this.info.directModificationDate.set(date)
-      }else this.info.add_attr("directModificationDate",date);
-    }
-    
+  /**
+  * Sets the value corresponding to the key.
+  * @param {Date} date Key to the value
+  * @throws {TypeError} If the date is not of type Date
+  * @memberof SpinalNode
+  */
+  setDirectModificationDate(date: number = Date.now()): void {
+    if (typeof date !== 'number') {
+      throw TypeError('The date must be a number');
+    } if (this.info.directModificationDate) {
+      this.info.directModificationDate.set(date)
+    } else this.info.add_attr("directModificationDate", date);
+  }
+
 
   /**
    * Returns the element.
@@ -457,7 +429,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
     const rel = this._getRelation(relationName, relationType);
     let res = rel.removeChildren(nodes);
     // change the res way
-    this.setDirectModificationDate(); 
+    this.setDirectModificationDate();
     return res
   }
 
@@ -476,11 +448,11 @@ class SpinalNode<T extends spinal.Model> extends Model {
     }
 
     const rel = this._getRelation(relationName, relationType);
-    let res  = rel.removeFromGraph();
+    let res = rel.removeFromGraph();
     // change the res way
-    this.setDirectModificationDate(); 
+    this.setDirectModificationDate();
     return res
-    }
+  }
 
   /**
    * Remove the node from the graph
@@ -608,45 +580,6 @@ class SpinalNode<T extends spinal.Model> extends Model {
     return res;
   }
 
-  // /**
-  //  * Return all parents for the relation names no matter the type of relation
-  //  * @param {String[]} [relationNames=[]] Array containing the relation names of the desired parents
-  //  * @returns {Promise<Array<SpinalNode<any>>>} Promise containing the parents that were found
-  //  * @throws {TypeError} If the relationNames are neither an array, a string or omitted
-  //  * @throws {TypeError} If an element of relationNames is not a string
-  //  */
-  // getParents(relationNames: string | string[] = []): Promise<SpinalNode<any>[]> {
-  //   let relNames: string | string[] = relationNames;
-  //   if (Array.isArray(relationNames)) {
-  //     if (relationNames.length === 0) {
-  //       relNames = this.parents.keys();
-  //     }
-  //   } else if (typeof relationNames === 'string') {
-  //     relNames = [relationNames];
-  //   } else {
-  //     throw TypeError('relationNames must be an array, a string or omitted');
-  //   }
-  //   const promises: Promise<SpinalNode<any>>[] = [];
-  //   const tmpRelNames = <string[]>relNames;
-  //   for (const name of tmpRelNames) {
-  //     const list: spinal.Lst<SpinalNodePointer<AnySpinalRelation>> = this.parents.getElement(name);
-
-  //     if (typeof list !== "undefined" && list !== null) {
-  //       for (let i: number = 0; i < list.length; i += 1) {
-  //         promises.push(
-  //           list[i].load().then(
-  //             (relation: AnySpinalRelation) => {
-  //               return relation.getParent();
-  //             },
-  //           ),
-  //         );
-  //       }
-  //     }
-  //   }
-
-  //   return Promise.all(promises);
-  // }
-
   /**
   //  * Return all parents for the relation names no matter the type of relation
   //  * @param {String[]} [relationNames=[]] Array containing the relation names of the desired parents
@@ -664,9 +597,9 @@ class SpinalNode<T extends spinal.Model> extends Model {
     for (const nodeRelation of this.parents._attribute_names) {
       for (const searchRelation of relNames) {
         if (nodeRelation === searchRelation) {
-          const lst = this.parents[nodeRelation];
+          const lst: spinal.Lst<SpinalNodePointer<AnySpinalRelation>> = this.parents[nodeRelation];
           for (var i = 0; i < lst.length; i++) {
-            prom.push(loadRelation(lst[i]));
+            prom.push(loadParentRelation(lst[i]));
           }
         }
       }
@@ -681,8 +614,6 @@ class SpinalNode<T extends spinal.Model> extends Model {
  * @param {(node)=> boolean} predicate function stop search if return true
  */
   public async findOneParent(relationNames: string | RegExp | (string | RegExp)[] = [], predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE): Promise<any> {
-    let relNames = this._getValidRelations(relationNames, true);
-
     if (predicate(this)) {
       return this;
     }
@@ -698,7 +629,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
       nextGen = [];
 
       for (const node of currentGen) {
-        promises.push(node.getParents(relNames));
+        promises.push(node.getParents(relationNames));
 
         if (predicate(node)) {
           return node;
@@ -727,18 +658,15 @@ class SpinalNode<T extends spinal.Model> extends Model {
  * @param {(node)=> boolean} predicate Function returning true if the node needs to be returned
  */
   public async findParents(relationNames: string | RegExp | (string | RegExp)[] = [], predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE): Promise<any> {
-
-    const relNames = this._getValidRelations(relationNames, true);
-
     let found = [];
-    if (predicate(this)) {
-      found.push(this);
-    }
-
     const seen = new Set([this]);
     let promises = [];
     let nextGen = [this];
     let currentGen = [];
+
+    if (predicate(this)) {
+      found.push(this);
+    }
 
     while (nextGen.length) {
       currentGen = nextGen;
@@ -746,7 +674,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
       nextGen = [];
 
       for (const node of currentGen) {
-        promises.push(node.getParents(node, relNames));
+        promises.push(node.getParents(node, relationNames));
 
         if (predicate(node)) {
           found.push(node);
@@ -1102,8 +1030,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
     for (let i: number = 0; i < parentLst.length; i += 1) {
       if (parentLst[i].getId().get() === relation.getId().get()) {
         parentLst.splice(i);
-         // change the res way
-        this.setDirectModificationDate(); 
+        // change the res way
+        this.setDirectModificationDate();
         break;
       }
     }
@@ -1144,7 +1072,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
       list.push(new SpinalNodePointer(relation, true));
       this.parents.setElement(relationName, list);
       // change the res way
-      this.setDirectModificationDate(); 
+      this.setDirectModificationDate();
     }
   }
 
@@ -1163,13 +1091,13 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
     if (!this.children.has(relationType)) {
       this.children.setElement(relationType, new SpinalMap());
-          // change the res way
-    this.setDirectModificationDate(); 
+      // change the res way
+      this.setDirectModificationDate();
     }
 
     this._getChildrenType(relationType).setElement(relationName, relation);
-        // change the res way
-        this.setDirectModificationDate(); 
+    // change the res way
+    this.setDirectModificationDate();
     return relation;
   }
 

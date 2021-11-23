@@ -22,14 +22,8 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-// tslint:disable:function-name
-
-import { spinalCore, Model } from 'spinal-core-connectorjs_type';
-
-/**
- * @type SpinalSetForEachFunc
- */
-type SpinalSetForEachFunc = (value: string, index?: number) => void;
+import { Model, spinalCore } from 'spinal-core-connectorjs_type';
+import type { SpinalSetForEachFunc } from './interfaces/SpinalSetForEachFunc';
 
 /**
  * @class SpinalSet
@@ -44,7 +38,7 @@ class SpinalSet extends Model {
    * @throws {TypeError} If the values of the iterators are not strings
    * @memberof SpinalSet
    */
-  constructor(init?: string[]|IterableIterator<string>) {
+  constructor(init?: string[] | IterableIterator<string>) {
     super();
     if (init !== undefined) {
       for (const value of init) {
