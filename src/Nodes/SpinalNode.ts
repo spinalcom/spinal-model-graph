@@ -38,7 +38,7 @@ import {
 import { SpinalMap } from '../SpinalMap';
 import { SpinalNodePointer } from '../SpinalNodePointer';
 import { SpinalSet } from '../SpinalSet';
-import { guid, loadParentRelation } from '../Utilities';
+import { consumeBatch, guid, loadParentRelation } from '../Utilities';
 import { SpinalContext } from './SpinalContext';
 
 export const DEFAULT_FIND_PREDICATE: SpinalNodeFindPredicateFunc = () => true;
@@ -566,13 +566,11 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
     const childrenLst: (SpinalNode<spinal.Model>[])[] = await Promise.all(promises);
     const res: SpinalNode<any>[] = [];
-
     for (const children of childrenLst) {
       for (let i = 0; i < children.length; i += 1) {
         res.push(children[i]);
       }
     }
-
     return res;
   }
 
@@ -659,10 +657,10 @@ class SpinalNode<T extends spinal.Model> extends Model {
       stop = true;
     }
     let found = [];
-    const seen = new Set([this]);
-    let promises = [];
-    let nextGen = [this];
-    let currentGen = [];
+    const seen: Set<SpinalNode<any>> = new Set([this]);
+    let promises: Promise<SpinalNode<any>[]>[] = [];
+    let nextGen: SpinalNode<any>[] = [this];
+    let currentGen: SpinalNode<any>[] = [];
 
     if (predicate(this, stopFct)) {
       found.push(this);
@@ -674,7 +672,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
       nextGen = [];
 
       for (const node of currentGen) {
-        promises.push(node.getParents(node, relationNames));
+        promises.push(node.getParents(relationNames));
         if (predicate(node, stopFct)) {
           found.push(node);
         }
@@ -725,7 +723,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
       stop = true;
     }
     const seen: Set<SpinalNode<any>> = new Set([this]);
-    let promises: Promise<SpinalNode<any>[]>[] = [];
+    let promises: (() => Promise<SpinalNode<any>[]>)[] = [];
     let nextGen: SpinalNode<any>[] = [this];
     let currentGen: SpinalNode<any>[] = [];
     const found: SpinalNode<any>[] = [];
@@ -736,14 +734,14 @@ class SpinalNode<T extends spinal.Model> extends Model {
       nextGen = [];
 
       for (const node of currentGen) {
-        promises.push(node.getChildren(relationNames));
+        promises.push((): Promise<SpinalNode<any>[]> => node.getChildren(relationNames));
 
         if (predicate(node, stopFct)) {
           found.push(node);
         }
       }
 
-      const childrenArrays: SpinalNode<any>[][] = await Promise.all(promises);
+      const childrenArrays: SpinalNode<any>[][] = await consumeBatch(promises, 30);
 
       for (const children of childrenArrays) {
         for (const child of children) {
@@ -754,8 +752,116 @@ class SpinalNode<T extends spinal.Model> extends Model {
         }
       }
     }
-
     return found;
+  }
+
+  /**
+   *
+   * @param {string[]} relations
+   * @param {(node: SpinalNode<any>, stopFct: () => void) => Promise<boolean>} predicate
+   * @return {*}  {Promise<SpinalNode<any>[]>}
+   * @memberof SpinalNode
+   */
+  async findAsyncPredicate(
+    relations: string[],
+    predicate: (node: SpinalNode<any>, stopFct: () => void) => Promise<boolean>
+  ): Promise<SpinalNode<any>[]> {
+    const seen: Set<SpinalNode<any>> = new Set([this]);
+    let promises: (() => Promise<SpinalNode<any>[]>)[] = [];
+    let nextGen: SpinalNode<any>[] = [this];
+    let currentGen: SpinalNode<any>[] = [];
+    const result = []
+    let stop = false
+    function stopFct(): void {
+      stop = true
+    }
+    if (await predicate(this, stopFct)) {
+      result.push(this);
+    }
+
+    while (!stop && nextGen.length) {
+      currentGen = nextGen;
+      promises = [];
+      nextGen = [];
+
+      for (const cuurNode of currentGen) {
+        promises.push(async (): Promise<SpinalNode<any>[]> => {
+          const arr = await cuurNode.getChildren(relations);
+          const resProm = [];
+          for (const child of arr) {
+            resProm.push(async (): Promise<void> => {
+              const res = await predicate(child, stopFct);
+              if (res) result.push(child);
+            });
+          }
+          await consumeBatch(resProm, 30);
+          return arr;
+        });
+      }
+      const childrenArrays = await consumeBatch(promises, 30);
+      for (const children of childrenArrays) {
+        for (const child of children) {
+          if (!seen.has(child)) {
+            nextGen.push(child);
+            seen.add(child);
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   *
+   * @param {SpinalContext<any>} context
+   * @param {(node: SpinalNode<any>) => Promise<boolean>} predicate
+   * @return {*}  {Promise<SpinalNode<any>[]>}
+   * @memberof SpinalNode
+   */
+  async findInContextAsyncPredicate(
+    context: SpinalContext<any>,
+    predicate: (node: SpinalNode<any>) => Promise<boolean>
+  ): Promise<SpinalNode<any>[]> {
+    const seen: Set<SpinalNode<any>> = new Set([this]);
+    let promises: (() => Promise<SpinalNode<any>[]>)[] = [];
+    let nextGen: SpinalNode<any>[] = [this];
+    let currentGen: SpinalNode<any>[] = [];
+    const result = []
+    if (await predicate(this)) {
+      result.push(this);
+    }
+
+    while (nextGen.length) {
+      currentGen = nextGen;
+      promises = [];
+      nextGen = [];
+
+      for (const cuurNode of currentGen) {
+        promises.push(async (): Promise<SpinalNode<any>[]> => {
+          const arr = await cuurNode.getChildrenInContext(context);
+          const resProm = [];
+          for (const child of arr) {
+            resProm.push(async (): Promise<void> => {
+              const res = await predicate(child);
+              if (res)
+                result.push(child);
+            });
+          }
+          await consumeBatch(resProm);
+          return arr;
+        });
+      }
+      const childrenArrays = await consumeBatch(promises);
+      for (const children of childrenArrays) {
+        for (const child of children) {
+          if (!seen.has(child)) {
+            nextGen.push(child);
+            seen.add(child);
+          }
+        }
+      }
+    }
+    return result;
   }
 
 

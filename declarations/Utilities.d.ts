@@ -6,6 +6,8 @@ import type { SpinalNodePointer } from "./SpinalNodePointer";
  * @param {string} name Name from wich the id is generated
  * @returns {string} Generated id
  */
-declare function guid(): string;
-declare function loadParentRelation<T extends spinal.Model>(spinalNodePointer: SpinalNodePointer<AnySpinalRelation>): Promise<SpinalNode<T>>;
-export { guid, loadParentRelation };
+export declare function guid(): string;
+export declare function loadParentRelation<T extends spinal.Model>(spinalNodePointer: SpinalNodePointer<AnySpinalRelation>): Promise<SpinalNode<T>>;
+declare type Consumedfunction<T> = () => Promise<T>;
+export declare function consumeBatch<T>(promises: (Consumedfunction<T>)[], batchSize?: number): Promise<T[]>;
+export {};

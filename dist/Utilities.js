@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loadParentRelation = exports.guid = void 0;
+exports.consumeBatch = exports.loadParentRelation = exports.guid = void 0;
 /**
  * Generates a random number and returns in a string.
  * @returns {String} Random number in a string
@@ -69,4 +69,21 @@ function loadParentRelation(spinalNodePointer) {
     });
 }
 exports.loadParentRelation = loadParentRelation;
+function consumeBatch(promises, batchSize = 10) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let index = 0;
+        const result = [];
+        while (index < promises.length) {
+            let endIndex = index + batchSize;
+            if (promises.length <= endIndex)
+                endIndex = promises.length;
+            const slice = promises.slice(index, endIndex);
+            const resProm = yield Promise.all(slice.map((e) => e()));
+            result.push(...resProm);
+            index = endIndex;
+        }
+        return result;
+    });
+}
+exports.consumeBatch = consumeBatch;
 //# sourceMappingURL=Utilities.js.map

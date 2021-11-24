@@ -263,6 +263,22 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      */
     find(relationNames: string | string[], predicate?: SpinalNodeFindPredicateFunc): Promise<SpinalNode<any>[]>;
     /**
+     *
+     * @param {string[]} relations
+     * @param {(node: SpinalNode<any>, stopFct: () => void) => Promise<boolean>} predicate
+     * @return {*}  {Promise<SpinalNode<any>[]>}
+     * @memberof SpinalNode
+     */
+    findAsyncPredicate(relations: string[], predicate: (node: SpinalNode<any>, stopFct: () => void) => Promise<boolean>): Promise<SpinalNode<any>[]>;
+    /**
+     *
+     * @param {SpinalContext<any>} context
+     * @param {(node: SpinalNode<any>) => Promise<boolean>} predicate
+     * @return {*}  {Promise<SpinalNode<any>[]>}
+     * @memberof SpinalNode
+     */
+    findInContextAsyncPredicate(context: SpinalContext<any>, predicate: (node: SpinalNode<any>) => Promise<boolean>): Promise<SpinalNode<any>[]>;
+    /**
      * Recursively finds all the children nodes with type "nodeType".
      * @param {string|string[]} relationNames Array containing the relation names to follow
      * @param {string} nodeType Type of node to find in children

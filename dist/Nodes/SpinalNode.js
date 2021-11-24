@@ -614,7 +614,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
                 promises = [];
                 nextGen = [];
                 for (const node of currentGen) {
-                    promises.push(node.getParents(node, relationNames));
+                    promises.push(node.getParents(relationNames));
                     if (predicate(node, stopFct)) {
                         found.push(node);
                     }
@@ -667,12 +667,12 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
                 promises = [];
                 nextGen = [];
                 for (const node of currentGen) {
-                    promises.push(node.getChildren(relationNames));
+                    promises.push(() => node.getChildren(relationNames));
                     if (predicate(node, stopFct)) {
                         found.push(node);
                     }
                 }
-                const childrenArrays = yield Promise.all(promises);
+                const childrenArrays = yield (0, Utilities_1.consumeBatch)(promises, 30);
                 for (const children of childrenArrays) {
                     for (const child of children) {
                         if (!seen.has(child)) {
@@ -683,6 +683,108 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
                 }
             }
             return found;
+        });
+    }
+    /**
+     *
+     * @param {string[]} relations
+     * @param {(node: SpinalNode<any>, stopFct: () => void) => Promise<boolean>} predicate
+     * @return {*}  {Promise<SpinalNode<any>[]>}
+     * @memberof SpinalNode
+     */
+    findAsyncPredicate(relations, predicate) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const seen = new Set([this]);
+            let promises = [];
+            let nextGen = [this];
+            let currentGen = [];
+            const result = [];
+            let stop = false;
+            function stopFct() {
+                stop = true;
+            }
+            if (yield predicate(this, stopFct)) {
+                result.push(this);
+            }
+            while (!stop && nextGen.length) {
+                currentGen = nextGen;
+                promises = [];
+                nextGen = [];
+                for (const cuurNode of currentGen) {
+                    promises.push(() => __awaiter(this, void 0, void 0, function* () {
+                        const arr = yield cuurNode.getChildren(relations);
+                        const resProm = [];
+                        for (const child of arr) {
+                            resProm.push(() => __awaiter(this, void 0, void 0, function* () {
+                                const res = yield predicate(child, stopFct);
+                                if (res)
+                                    result.push(child);
+                            }));
+                        }
+                        yield (0, Utilities_1.consumeBatch)(resProm, 30);
+                        return arr;
+                    }));
+                }
+                const childrenArrays = yield (0, Utilities_1.consumeBatch)(promises, 30);
+                for (const children of childrenArrays) {
+                    for (const child of children) {
+                        if (!seen.has(child)) {
+                            nextGen.push(child);
+                            seen.add(child);
+                        }
+                    }
+                }
+            }
+            return result;
+        });
+    }
+    /**
+     *
+     * @param {SpinalContext<any>} context
+     * @param {(node: SpinalNode<any>) => Promise<boolean>} predicate
+     * @return {*}  {Promise<SpinalNode<any>[]>}
+     * @memberof SpinalNode
+     */
+    findInContextAsyncPredicate(context, predicate) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const seen = new Set([this]);
+            let promises = [];
+            let nextGen = [this];
+            let currentGen = [];
+            const result = [];
+            if (yield predicate(this)) {
+                result.push(this);
+            }
+            while (nextGen.length) {
+                currentGen = nextGen;
+                promises = [];
+                nextGen = [];
+                for (const cuurNode of currentGen) {
+                    promises.push(() => __awaiter(this, void 0, void 0, function* () {
+                        const arr = yield cuurNode.getChildrenInContext(context);
+                        const resProm = [];
+                        for (const child of arr) {
+                            resProm.push(() => __awaiter(this, void 0, void 0, function* () {
+                                const res = yield predicate(child);
+                                if (res)
+                                    result.push(child);
+                            }));
+                        }
+                        yield (0, Utilities_1.consumeBatch)(resProm);
+                        return arr;
+                    }));
+                }
+                const childrenArrays = yield (0, Utilities_1.consumeBatch)(promises);
+                for (const children of childrenArrays) {
+                    for (const child of children) {
+                        if (!seen.has(child)) {
+                            nextGen.push(child);
+                            seen.add(child);
+                        }
+                    }
+                }
+            }
+            return result;
         });
     }
     /**

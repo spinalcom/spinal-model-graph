@@ -42,11 +42,11 @@ function s4(): string {
  * @param {string} name Name from wich the id is generated
  * @returns {string} Generated id
  */
-function guid(): string {
+export function guid(): string {
   return `${s4()}-${s4()}-${s4()}-${Date.now().toString(16)}`;
 }
 
-async function loadParentRelation<T extends spinal.Model>(spinalNodePointer: SpinalNodePointer<AnySpinalRelation>)
+export async function loadParentRelation<T extends spinal.Model>(spinalNodePointer: SpinalNodePointer<AnySpinalRelation>)
   : Promise<SpinalNode<T>> {
   try {
     const relation = await spinalNodePointer.load();
@@ -61,6 +61,20 @@ async function loadParentRelation<T extends spinal.Model>(spinalNodePointer: Spi
   }
 }
 
-export {
-  guid, loadParentRelation
-};
+type Consumedfunction<T> = () => Promise<T>;
+export async function consumeBatch<T>(
+  promises: (Consumedfunction<T>)[],
+  batchSize = 10
+): Promise<T[]> {
+  let index = 0;
+  const result = [];
+  while (index < promises.length) {
+    let endIndex = index + batchSize;
+    if (promises.length <= endIndex) endIndex = promises.length;
+    const slice = promises.slice(index, endIndex);
+    const resProm = await Promise.all(slice.map((e: Consumedfunction<T>): Promise<T> => e()));
+    result.push(...resProm);
+    index = endIndex;
+  }
+  return result;
+}
