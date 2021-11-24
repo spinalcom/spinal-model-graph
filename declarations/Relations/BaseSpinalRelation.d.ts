@@ -77,8 +77,51 @@ declare abstract class BaseSpinalRelation extends Model {
      * @memberof BaseSpinalRelation
      */
     removeChildren(nodesToDelete?: SpinalNodeAny[]): Promise<void>;
+    /**
+     * Removes a child from the relation.
+     * @abstract
+     * @param {SpinalNodeAny} node Child to remove
+     * @return {*}  {Promise<void>} An empty promise
+     * @memberof BaseSpinalRelation
+     */
     abstract removeChild(node: SpinalNodeAny): Promise<void>;
+    /**
+     * Return all the children of the relation.
+     * @abstract
+     * @return {*}  {Promise<SpinalNodeAny[]>} The children of the relation
+     * @memberof BaseSpinalRelation
+     */
     abstract getChildren(): Promise<SpinalNodeAny[]>;
+    /**
+     * Return all the children of the relation associated to a certain context.
+     * @abstract
+     * @param {SpinalContext<any>} context
+     * @return {*}  {Promise<SpinalNodeAny[]>} The children of the relation
+     * @throws {TypeError} If the context is not a SpinalContext
+     * @memberof BaseSpinalRelation
+     */
+    abstract getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNodeAny[]>;
+    /**
+     * Returns the type of the relation.
+     * @abstract
+     * @return {*}  {string} Type of the relation
+     * @memberof BaseSpinalRelation
+     */
+    abstract getType(): string;
+    /**
+     * returns the number of children of the relation.
+     * @abstract
+     * @return {*}  {number}
+     * @memberof BaseSpinalRelation
+     */
+    abstract getNbChildren(): number;
+    /**
+     * Retrieves all the ids of the children of the relation and return them inside an array.
+     * @abstract
+     * @return {*}  {string[]} Array containing all the children ids of the relation
+     * @memberof BaseSpinalRelation
+     */
+    abstract getChildrenIds(): string[];
     /**
      * Removes the relation from the graph.
      * @returns {Promise<void>} An empty promise
