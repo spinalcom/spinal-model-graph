@@ -608,7 +608,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
  * @param {(node)=> boolean} predicate function stop search if return true
  */
   public async findOneParent(relationNames: string | RegExp | (string | RegExp)[] = [],
-    predicate: SpinalNodeFindPredicateFunc = DEFAULT_FINDONE_PREDICATE): Promise<SpinalNode<any>> {
+    predicate: SpinalNodeFindOnePredicateFunc = DEFAULT_FINDONE_PREDICATE): Promise<SpinalNode<any>> {
 
     if (predicate(this)) {
       return this;
@@ -652,26 +652,30 @@ class SpinalNode<T extends spinal.Model> extends Model {
  * @param {string[]} relationNames Arry of relation
  * @param {(node)=> boolean} predicate Function returning true if the node needs to be returned
  */
-  public async findParents(relationNames: string | RegExp | (string | RegExp)[] = [], predicate: SpinalNodeFindPredicateFunc = DEFAULT_FIND_PREDICATE): Promise<any> {
+  public async findParents(relationNames: string | RegExp | (string | RegExp)[] = [],
+    predicate: SpinalNodeFindPredicateFunc = DEFAULT_FIND_PREDICATE): Promise<any> {
+    let stop = false;
+    function stopFct(): void {
+      stop = true;
+    }
     let found = [];
     const seen = new Set([this]);
     let promises = [];
     let nextGen = [this];
     let currentGen = [];
 
-    if (predicate(this)) {
+    if (predicate(this, stopFct)) {
       found.push(this);
     }
 
-    while (nextGen.length) {
+    while (!stop && nextGen.length) {
       currentGen = nextGen;
       promises = [];
       nextGen = [];
 
       for (const node of currentGen) {
         promises.push(node.getParents(node, relationNames));
-
-        if (predicate(node)) {
+        if (predicate(node, stopFct)) {
           found.push(node);
         }
       }
@@ -716,14 +720,17 @@ class SpinalNode<T extends spinal.Model> extends Model {
     if (typeof predicate !== 'function') {
       throw TypeError('predicate must be a function');
     }
-
+    let stop = false;
+    function stopFct(): void {
+      stop = true;
+    }
     const seen: Set<SpinalNode<any>> = new Set([this]);
     let promises: Promise<SpinalNode<any>[]>[] = [];
     let nextGen: SpinalNode<any>[] = [this];
     let currentGen: SpinalNode<any>[] = [];
     const found: SpinalNode<any>[] = [];
 
-    while (nextGen.length) {
+    while (!stop && nextGen.length) {
       currentGen = nextGen;
       promises = [];
       nextGen = [];
@@ -731,7 +738,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
       for (const node of currentGen) {
         promises.push(node.getChildren(relationNames));
 
-        if (predicate(node)) {
+        if (predicate(node, stopFct)) {
           found.push(node);
         }
       }
@@ -762,7 +769,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If the predicate is not a function
    */
   findByType(relationNames: string | string[], nodeType: string): Promise<any> {
-    return this.find(relationNames, (node) => {
+    return this.find(relationNames, (node: SpinalNode<any>): boolean => {
       return node.getType().get() === nodeType;
     })
   }
@@ -811,6 +818,10 @@ class SpinalNode<T extends spinal.Model> extends Model {
     if (typeof predicate !== 'function') {
       throw new Error('The predicate function must be a function');
     }
+    let stop = false;
+    function stopFct(): void {
+      stop = true;
+    }
 
     const seen: Set<SpinalNode<any>> = new Set([this]);
     let promises: Promise<SpinalNode<any>[]>[] = [];
@@ -818,7 +829,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
     let currentGen: SpinalNode<any>[] = [];
     const found: SpinalNode<any>[] = [];
 
-    while (nextGen.length) {
+    while (!stop && nextGen.length) {
       currentGen = nextGen;
       promises = [];
       nextGen = [];
@@ -826,7 +837,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
       for (const node of currentGen) {
         promises.push(node.getChildrenInContext(context));
 
-        if (predicate(node)) {
+        if (predicate(node, stopFct)) {
           found.push(node);
         }
       }

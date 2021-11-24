@@ -243,7 +243,7 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
    * @param {string[]} relationNames Arry of relation
    * @param {(node)=> boolean} predicate function stop search if return true
    */
-    findOneParent(relationNames?: string | RegExp | (string | RegExp)[], predicate?: SpinalNodeFindPredicateFunc): Promise<SpinalNode<any>>;
+    findOneParent(relationNames?: string | RegExp | (string | RegExp)[], predicate?: SpinalNodeFindOnePredicateFunc): Promise<SpinalNode<any>>;
     /**
    * Recursively finds all the parent nodes for which the predicate is true
    * @export

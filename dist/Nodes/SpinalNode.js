@@ -597,21 +597,25 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
    */
     findParents(relationNames = [], predicate = exports.DEFAULT_FIND_PREDICATE) {
         return __awaiter(this, void 0, void 0, function* () {
+            let stop = false;
+            function stopFct() {
+                stop = true;
+            }
             let found = [];
             const seen = new Set([this]);
             let promises = [];
             let nextGen = [this];
             let currentGen = [];
-            if (predicate(this)) {
+            if (predicate(this, stopFct)) {
                 found.push(this);
             }
-            while (nextGen.length) {
+            while (!stop && nextGen.length) {
                 currentGen = nextGen;
                 promises = [];
                 nextGen = [];
                 for (const node of currentGen) {
                     promises.push(node.getParents(node, relationNames));
-                    if (predicate(node)) {
+                    if (predicate(node, stopFct)) {
                         found.push(node);
                     }
                 }
@@ -649,18 +653,22 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             if (typeof predicate !== 'function') {
                 throw TypeError('predicate must be a function');
             }
+            let stop = false;
+            function stopFct() {
+                stop = true;
+            }
             const seen = new Set([this]);
             let promises = [];
             let nextGen = [this];
             let currentGen = [];
             const found = [];
-            while (nextGen.length) {
+            while (!stop && nextGen.length) {
                 currentGen = nextGen;
                 promises = [];
                 nextGen = [];
                 for (const node of currentGen) {
                     promises.push(node.getChildren(relationNames));
-                    if (predicate(node)) {
+                    if (predicate(node, stopFct)) {
                         found.push(node);
                     }
                 }
@@ -732,18 +740,22 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             if (typeof predicate !== 'function') {
                 throw new Error('The predicate function must be a function');
             }
+            let stop = false;
+            function stopFct() {
+                stop = true;
+            }
             const seen = new Set([this]);
             let promises = [];
             let nextGen = [this];
             let currentGen = [];
             const found = [];
-            while (nextGen.length) {
+            while (!stop && nextGen.length) {
                 currentGen = nextGen;
                 promises = [];
                 nextGen = [];
                 for (const node of currentGen) {
                     promises.push(node.getChildrenInContext(context));
-                    if (predicate(node)) {
+                    if (predicate(node, stopFct)) {
                         found.push(node);
                     }
                 }
