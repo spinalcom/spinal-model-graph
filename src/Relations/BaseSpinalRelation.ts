@@ -24,7 +24,10 @@
 // tslint:disable:function-name
 
 import {
-  FileSystem, Model, spinalCore, Val
+  FileSystem,
+  Model,
+  spinalCore,
+  Val,
 } from 'spinal-core-connectorjs_type';
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
@@ -202,7 +205,7 @@ abstract class BaseSpinalRelation extends Model {
    * @abstract
    * @param {SpinalNode<any>} node Child to remove
    * @return {*}  {Promise<void>} An empty promise
-   * @memberof BaseSpinalRelation 
+   * @memberof BaseSpinalRelation
    */
   abstract removeChild(node: SpinalNode<any>): Promise<void>;
 
@@ -217,12 +220,14 @@ abstract class BaseSpinalRelation extends Model {
   /**
    * Return all the children of the relation associated to a certain context.
    * @abstract
-   * @param {SpinalContext<any>} context 
+   * @param {SpinalContext<any>} context
    * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
    * @throws {TypeError} If the context is not a SpinalContext
    * @memberof BaseSpinalRelation
    */
-  abstract getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
+  abstract getChildrenInContext(
+    context: SpinalContext<any>
+  ): Promise<SpinalNode<any>[]>;
 
   /**
    * Returns the type of the relation.
@@ -254,10 +259,7 @@ abstract class BaseSpinalRelation extends Model {
    * @memberof BaseSpinalRelation
    */
   async removeFromGraph(): Promise<void> {
-    await Promise.all([
-      this._removeFromParent(),
-      this.removeChildren(),
-    ]);
+    await Promise.all([this._removeFromParent(), this.removeChildren()]);
   }
 
   /**
@@ -274,7 +276,7 @@ abstract class BaseSpinalRelation extends Model {
       relationMap.delete(this.getName().get());
       this.parent.unset();
     } catch (e) {
-      return undefined
+      return undefined;
     }
   }
 }

@@ -22,15 +22,4 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-/**
- * @export
- * @interface SpinalNodeInfoModel
- * @extends {spinal.Model}
- */
-export interface SpinalNodeInfoModel extends spinal.Model {
-  id: spinal.Str;
-  name: spinal.Str;
-  type: spinal.Str;
-  directModificationDate: spinal.Val;
-  indirectModificationDate: spinal.Val;
-}
+export type RelationSearch = string | RegExp | (string | RegExp)[];

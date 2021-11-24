@@ -40,7 +40,11 @@ class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
    * @param {SpinalNode | Model} [element] Element of the graph
    * @throws {TypeError} If the element is not a Model
    */
-  constructor(name: string = 'undefined', type: string = 'SpinalGraph', element?: T) {
+  constructor(
+    name: string = 'undefined',
+    type: string = 'SpinalGraph',
+    element?: T
+  ) {
     super(name, type, element);
     if (FileSystem._sig_server === false) return;
 
@@ -53,12 +57,18 @@ class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
    * @returns {Promise<SpinalContext>} The added context
    * @throws {TypeError} If the context is not a context
    */
-  async addContext<K extends spinal.Model>(context: SpinalContext<K>): Promise<SpinalContext<K>> {
+  async addContext<K extends spinal.Model>(
+    context: SpinalContext<K>
+  ): Promise<SpinalContext<K>> {
     if (!(context instanceof SpinalContext)) {
       throw new TypeError('context must be a context');
     }
 
-    return this.addChild(context, HAS_CONTEXT_RELATION_NAME, SPINAL_RELATION_TYPE);
+    return this.addChild(
+      context,
+      HAS_CONTEXT_RELATION_NAME,
+      SPINAL_RELATION_TYPE
+    );
   }
 
   /**
@@ -73,7 +83,7 @@ class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
     }
 
     const children = await this.getChildren([HAS_CONTEXT_RELATION_NAME]);
-    return children.find(child => child.info.name.get() === name);
+    return children.find((child) => child.info.name.get() === name);
   }
 
   /**
@@ -81,10 +91,7 @@ class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
    * @override
    * @returns {Promise<nothing>} An empty promise
    */
-  async removeFromGraph() {
-
-  }
-
+  async removeFromGraph() {}
 }
 
 spinalCore.register_models([SpinalGraph]);

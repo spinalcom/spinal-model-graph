@@ -1,19 +1,19 @@
 /*
  * Copyright 2021 SpinalCom - www.spinalcom.com
- * 
+ *
  * This file is part of SpinalCore.
- * 
+ *
  * Please read all of the following terms and conditions
  * of the Free Software license Agreement ("Agreement")
  * carefully.
- * 
+ *
  * This Agreement is a legally binding contract between
  * the Licensee (as defined below) and SpinalCom that
  * sets forth the terms and conditions that govern your
  * use of the Program. By installing and/or using the
  * Program, you agree to abide by all the terms and
  * conditions stated or referenced herein.
- * 
+ *
  * If you do not agree to abide by these terms and
  * conditions, do not demonstrate your acceptance and do
  * not install or use the Program.
@@ -28,7 +28,7 @@ import {
   SPINAL_RELATION_LST_PTR_TYPE,
   SpinalGraph,
 } from '../../src';
-import "mocha"
+import 'mocha';
 
 const assert = require('assert');
 
@@ -39,18 +39,17 @@ const DEFAULT_NODE_NAME = 'nodeName';
 
 describe('How to use find', () => {
   describe('Error handling', () => {
-    it('should throw an error if relationNames is neither an array, a string or omitted',
-      async () => {
-        let error = false;
+    it('should throw an error if relationNames is neither an array, a string or omitted', async () => {
+      let error = false;
 
-        try {
-          await DEFAULT_NODE.find(<any>1);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
-      });
+      try {
+        await DEFAULT_NODE.find(<any>1);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
 
     it('should throw an error if the predicate is not a function', async () => {
       let error = false;
@@ -96,9 +95,7 @@ describe('How to use find', () => {
         return node.getType().get() === 'SpinalContext';
       });
 
-      assert.deepStrictEqual(contexts, [context1, context2,
-        context3,
-      ]);
+      assert.deepStrictEqual(contexts, [context1, context2, context3]);
     });
 
     it('should return all contexts but not their nodes', async () => {
@@ -115,9 +112,15 @@ describe('How to use find', () => {
 
       const promises = [];
       for (let i = 0; i < 3; i += 1) {
-        promises.push(context1.addChildInContext(new SpinalNode(), DEFAULT_RELATION_NAME));
-        promises.push(context2.addChildInContext(new SpinalNode(), DEFAULT_RELATION_NAME));
-        promises.push(context3.addChildInContext(new SpinalNode(), DEFAULT_RELATION_NAME));
+        promises.push(
+          context1.addChildInContext(new SpinalNode(), DEFAULT_RELATION_NAME)
+        );
+        promises.push(
+          context2.addChildInContext(new SpinalNode(), DEFAULT_RELATION_NAME)
+        );
+        promises.push(
+          context3.addChildInContext(new SpinalNode(), DEFAULT_RELATION_NAME)
+        );
       }
 
       await Promise.all(promises);
@@ -197,12 +200,36 @@ describe('How to use find', () => {
       const child6 = new SpinalNode();
 
       await Promise.all([
-        parent.addChild(child1, `${DEFAULT_RELATION_NAME}1`, DEFAULT_RELATION_TYPE),
-        parent.addChild(child2, `${DEFAULT_RELATION_NAME}2`, DEFAULT_RELATION_TYPE),
-        parent.addChild(child3, `${DEFAULT_RELATION_NAME}2`, DEFAULT_RELATION_TYPE),
-        child2.addChild(child4, `${DEFAULT_RELATION_NAME}2`, DEFAULT_RELATION_TYPE),
-        child3.addChild(child5, `${DEFAULT_RELATION_NAME}1`, DEFAULT_RELATION_TYPE),
-        child5.addChild(child6, `${DEFAULT_RELATION_NAME}2`, DEFAULT_RELATION_TYPE),
+        parent.addChild(
+          child1,
+          `${DEFAULT_RELATION_NAME}1`,
+          DEFAULT_RELATION_TYPE
+        ),
+        parent.addChild(
+          child2,
+          `${DEFAULT_RELATION_NAME}2`,
+          DEFAULT_RELATION_TYPE
+        ),
+        parent.addChild(
+          child3,
+          `${DEFAULT_RELATION_NAME}2`,
+          DEFAULT_RELATION_TYPE
+        ),
+        child2.addChild(
+          child4,
+          `${DEFAULT_RELATION_NAME}2`,
+          DEFAULT_RELATION_TYPE
+        ),
+        child3.addChild(
+          child5,
+          `${DEFAULT_RELATION_NAME}1`,
+          DEFAULT_RELATION_TYPE
+        ),
+        child5.addChild(
+          child6,
+          `${DEFAULT_RELATION_NAME}2`,
+          DEFAULT_RELATION_TYPE
+        ),
       ]);
 
       let foundChildren = await parent.find(`${DEFAULT_RELATION_NAME}2`);
@@ -262,8 +289,18 @@ describe('How to use findInContext', () => {
       const node2 = new SpinalNode();
 
       await Promise.all([
-        node1.addChildInContext(node2, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context),
-        node2.addChildInContext(node1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context),
+        node1.addChildInContext(
+          node2,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context
+        ),
+        node2.addChildInContext(
+          node1,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context
+        ),
       ]);
 
       const foundChild = await node1.findInContext(context);
@@ -306,12 +343,27 @@ describe('How to use findInContext', () => {
 
       const promises = [];
       for (let i = 0; i < 3; i += 1) {
-        promises.push(node1.addChild(new SpinalNode(),
-          DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE));
-        promises.push(node2.addChild(new SpinalNode(),
-          DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE));
-        promises.push(node3.addChild(new SpinalNode(),
-          DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE));
+        promises.push(
+          node1.addChild(
+            new SpinalNode(),
+            DEFAULT_RELATION_NAME,
+            DEFAULT_RELATION_TYPE
+          )
+        );
+        promises.push(
+          node2.addChild(
+            new SpinalNode(),
+            DEFAULT_RELATION_NAME,
+            DEFAULT_RELATION_TYPE
+          )
+        );
+        promises.push(
+          node3.addChild(
+            new SpinalNode(),
+            DEFAULT_RELATION_NAME,
+            DEFAULT_RELATION_TYPE
+          )
+        );
       }
 
       await Promise.all(promises);
@@ -361,18 +413,31 @@ describe('How to use findInContext', () => {
         context.addChildInContext(child1, DEFAULT_RELATION_NAME),
         context.addChildInContext(child2, DEFAULT_RELATION_NAME),
         context.addChildInContext(child3, DEFAULT_RELATION_NAME),
-        child2.addChildInContext(child4, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context),
-        child3.addChildInContext(child5, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context),
-        child5.addChildInContext(child6, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context),
+        child2.addChildInContext(
+          child4,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context
+        ),
+        child3.addChildInContext(
+          child5,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context
+        ),
+        child5.addChildInContext(
+          child6,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context
+        ),
       ]);
 
       let foundChildren = await context.findInContext(context, (node) => {
         return node.getType().get() === 'type1';
       });
 
-      assert.deepStrictEqual(foundChildren, [child1, child3,
-        child4, child6,
-      ]);
+      assert.deepStrictEqual(foundChildren, [child1, child3, child4, child6]);
 
       foundChildren = await context.findInContext(context, (node) => {
         return node.getType().get() === 'type2';
@@ -395,12 +460,42 @@ describe('How to use findInContext', () => {
       const child6 = new SpinalNode();
 
       await Promise.all([
-        parent.addChildInContext(child1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context1),
-        parent.addChildInContext(child2, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context2),
-        parent.addChildInContext(child3, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context2),
-        child2.addChildInContext(child4, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context2),
-        child3.addChildInContext(child5, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context1),
-        child5.addChildInContext(child6, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context2),
+        parent.addChildInContext(
+          child1,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context1
+        ),
+        parent.addChildInContext(
+          child2,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context2
+        ),
+        parent.addChildInContext(
+          child3,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context2
+        ),
+        child2.addChildInContext(
+          child4,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context2
+        ),
+        child3.addChildInContext(
+          child5,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context1
+        ),
+        child5.addChildInContext(
+          child6,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context2
+        ),
       ]);
 
       let foundChildren = await parent.findInContext(context2);

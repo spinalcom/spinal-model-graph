@@ -28,10 +28,10 @@ import {
   SpinalContext,
   SPINAL_RELATION_LST_PTR_TYPE,
   SpinalRelationLstPtr,
-  SpinalRelationRef
+  SpinalRelationRef,
 } from '../../src';
 import { Model, Str } from 'spinal-core-connectorjs_type';
-import "mocha"
+import 'mocha';
 
 import * as assert from 'assert';
 
@@ -106,10 +106,7 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
     describe('How to use getName', () => {
       it('should return the name DEFAULT_RELATION_NAME', () => {
         const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
-        assert.strictEqual(
-          rel.getName().get(),
-          DEFAULT_RELATION_NAME,
-        );
+        assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
       });
     });
 
@@ -123,26 +120,31 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
 
     describe('How to use addContextIds and getContextIds', () => {
       it('should get the ids of the associated contexts', () => {
-        const relation = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation = new SpinalRelationRef(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const contextId1 = new SpinalContext().getId().get();
         const contextId2 = new SpinalContext().getId().get();
 
         relation.addContextId(contextId1);
 
-        assert.deepStrictEqual(relation.getContextIds(), [
-          contextId1,
-        ]);
+        assert.deepStrictEqual(relation.getContextIds(), [contextId1]);
 
         relation.addContextId(contextId1);
         relation.addContextId(contextId2);
 
         assert.deepStrictEqual(relation.getContextIds(), [
-          contextId1, contextId2,
+          contextId1,
+          contextId2,
         ]);
       });
 
       it('should throw an error if the contextId is missing', () => {
-        const relation: any = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation: any = new SpinalRelationRef(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
 
         assert.throws(() => {
           relation.addContextId();
@@ -150,7 +152,10 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
       });
 
       it('should throw an error if the contextId is not a string', () => {
-        const relation = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation = new SpinalRelationRef(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const badContextId1 = new SpinalContext().getId();
 
         assert.throws(() => {
@@ -162,7 +167,10 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
     describe('How to use belongsToContext', () => {
       it('should return true', async () => {
         const context = new SpinalContext();
-        const relation = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation = new SpinalRelationRef(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
 
         relation.addContextId(context.getId().get());
 
@@ -171,13 +179,19 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
 
       it('should return false', () => {
         const context = new SpinalContext();
-        const relation = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation = new SpinalRelationRef(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
 
         assert(!relation.belongsToContext(context));
       });
 
       it('should throw an error if no context is passed', () => {
-        const relation = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation = new SpinalRelationRef(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
 
         assert.throws(() => {
           relation.belongsToContext(<any>context);
@@ -186,7 +200,10 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
 
       it('should throw an error if the context as the wrong type', () => {
         const context1 = {};
-        const relation = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation = new SpinalRelationRef(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
 
         assert.throws(() => {
           relation.belongsToContext(<any>context1);
@@ -204,7 +221,10 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
   describe('How to remove from the graph', () => {
     describe('How to use removeChildren', () => {
       it('should delete all of the children', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const node1 = new SpinalNode();
         const node2 = new SpinalNode();
         const node3 = new SpinalNode();
@@ -222,7 +242,10 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
       });
 
       it('should delete the given children', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const node1 = new SpinalNode();
         const node2 = new SpinalNode();
         const node3 = new SpinalNode();
@@ -240,7 +263,10 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
       });
 
       it('should delete some of the given children', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const node1 = new SpinalNode();
         const node2 = new SpinalNode();
         const node3 = new SpinalNode();
@@ -266,7 +292,10 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
       });
 
       it('should throw an error if nodes is not an array', async () => {
-        const relation = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation = new SpinalRelationRef(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         let error = false;
 
         try {
@@ -281,7 +310,10 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
 
     describe('How to use removeFromGraph', () => {
       it('should delete all of the children', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const node1 = new SpinalNode();
         const node2 = new SpinalNode();
         const node3 = new SpinalNode();
@@ -301,11 +333,17 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
       it('should the relation from the parent pointer', async () => {
         const parent = new SpinalNode();
         const rel = parent._createRelation(
-          DEFAULT_RELATION_NAME, SPINAL_RELATION_LST_PTR_TYPE,
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_LST_PTR_TYPE
         );
 
         await rel.removeFromGraph();
-        assert(!parent.hasRelation(DEFAULT_RELATION_NAME, SPINAL_RELATION_LST_PTR_TYPE));
+        assert(
+          !parent.hasRelation(
+            DEFAULT_RELATION_NAME,
+            SPINAL_RELATION_LST_PTR_TYPE
+          )
+        );
       });
     });
   });

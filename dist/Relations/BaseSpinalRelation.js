@@ -191,10 +191,7 @@ class BaseSpinalRelation extends spinal_core_connectorjs_type_1.Model {
      */
     removeFromGraph() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield Promise.all([
-                this._removeFromParent(),
-                this.removeChildren(),
-            ]);
+            yield Promise.all([this._removeFromParent(), this.removeChildren()]);
         });
     }
     /**

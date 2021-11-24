@@ -1,19 +1,19 @@
 /*
  * Copyright 2021 SpinalCom - www.spinalcom.com
- * 
+ *
  * This file is part of SpinalCore.
- * 
+ *
  * Please read all of the following terms and conditions
  * of the Free Software license Agreement ("Agreement")
  * carefully.
- * 
+ *
  * This Agreement is a legally binding contract between
  * the Licensee (as defined below) and SpinalCom that
  * sets forth the terms and conditions that govern your
  * use of the Program. By installing and/or using the
  * Program, you agree to abide by all the terms and
  * conditions stated or referenced herein.
- * 
+ *
  * If you do not agree to abide by these terms and
  * conditions, do not demonstrate your acceptance and do
  * not install or use the Program.
@@ -22,9 +22,15 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import { SpinalGraph, SpinalNode, SpinalContext, SPINAL_RELATION_TYPE, SpinalRelationRef } from '../../src';
+import {
+  SpinalGraph,
+  SpinalNode,
+  SpinalContext,
+  SPINAL_RELATION_TYPE,
+  SpinalRelationRef,
+} from '../../src';
 import { FileSystem, Model } from 'spinal-core-connectorjs_type';
-import "mocha"
+import 'mocha';
 
 import * as assert from 'assert';
 
@@ -161,7 +167,10 @@ describe('SpinalRelationRef', () => {
     describe('How to use getChildrenInContext', () => {
       it("should return the relation's child", async () => {
         const context = new SpinalContext();
-        const relation = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation = new SpinalRelationRef(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const child = new SpinalNode();
 
         child.addContextId(context.getId().get());
@@ -173,7 +182,10 @@ describe('SpinalRelationRef', () => {
 
       it("should return the relation's children associated to the context", async () => {
         const context = new SpinalContext();
-        const relation = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation = new SpinalRelationRef(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const child1 = new SpinalNode();
         const child2 = new SpinalNode();
         const child3 = new SpinalNode();
@@ -191,7 +203,10 @@ describe('SpinalRelationRef', () => {
       });
 
       it('should throw an error if the context is missing', async () => {
-        const relation: any = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation: any = new SpinalRelationRef(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         let error = false;
 
         try {
@@ -205,7 +220,10 @@ describe('SpinalRelationRef', () => {
 
       it('should throw an error if context is not a SpinalContext', async () => {
         const context1: any = new Model();
-        const relation = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation = new SpinalRelationRef(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         let error = false;
 
         try {
@@ -240,14 +258,13 @@ describe('SpinalRelationRef', () => {
 
   describe('How to add children', () => {
     describe('How to use addChild', () => {
-      it('should add a child to the children of the relation',
-        async () => {
-          const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+      it('should add a child to the children of the relation', async () => {
+        const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
-          await rel.addChild(DEFAULT_NODE);
-          const children = await rel.getChildren();
-          assert.deepStrictEqual(children, [DEFAULT_NODE]);
-        });
+        await rel.addChild(DEFAULT_NODE);
+        const children = await rel.getChildren();
+        assert.deepStrictEqual(children, [DEFAULT_NODE]);
+      });
 
       it('should throw an error if you try to add the same node twice', async () => {
         const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
@@ -319,7 +336,10 @@ describe('SpinalRelationRef', () => {
 
       it("should remove a child and remove the relation the node's parents", async () => {
         const parentNode = new SpinalNode();
-        const rel = parentNode._createRelation(DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE);
+        const rel = parentNode._createRelation(
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_TYPE
+        );
         const childNode = new SpinalNode();
 
         await rel.addChild(childNode);
@@ -331,7 +351,10 @@ describe('SpinalRelationRef', () => {
 
       it('should throw an error if the node is not a child', async () => {
         const parentNode = new SpinalNode();
-        const rel = parentNode._createRelation(DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE);
+        const rel = parentNode._createRelation(
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_TYPE
+        );
         const childNode = new SpinalNode();
         let error = false;
 

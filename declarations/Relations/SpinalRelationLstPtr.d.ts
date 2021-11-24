@@ -29,10 +29,10 @@ declare class SpinalRelationLstPtr extends BaseSpinalRelation {
      */
     getChildrenIds(): string[];
     /**
-   * returns the number of children of the relation.
-   * @returns {number}
-   * @memberof SpinalRelationLstPtr
-   */
+     * returns the number of children of the relation.
+     * @returns {number}
+     * @memberof SpinalRelationLstPtr
+     */
     getNbChildren(): number;
     /**
      * Return all the children of the relation.

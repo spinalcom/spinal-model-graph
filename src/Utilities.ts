@@ -22,11 +22,11 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import type { } from 'spinal-core-connectorjs_type';
+import type {} from 'spinal-core-connectorjs_type';
+import type { AnySpinalRelation } from './interfaces/AnySpinalRelation';
 import type { SpinalContext } from './Nodes/SpinalContext';
-import type SpinalNode from "./Nodes/SpinalNode";
-import type { AnySpinalRelation } from "./interfaces/AnySpinalRelation";
-import type { SpinalNodePointer } from "./SpinalNodePointer";
+import type SpinalNode from './Nodes/SpinalNode';
+import type { SpinalNodePointer } from './SpinalNodePointer';
 
 /**
  * Generates a random number and returns in a string.
@@ -47,20 +47,23 @@ export function guid(): string {
   return `${s4()}-${s4()}-${s4()}-${Date.now().toString(16)}`;
 }
 
-export async function loadParentRelation<T extends spinal.Model>(spinalNodePointer: SpinalNodePointer<AnySpinalRelation>, context?: SpinalContext<any>)
-  : Promise<SpinalNode<T>> {
+export async function loadParentRelation<T extends spinal.Model>(
+  spinalNodePointer: SpinalNodePointer<AnySpinalRelation>,
+  context?: SpinalContext<any>
+): Promise<SpinalNode<T>> {
   try {
     const relation = await spinalNodePointer.load();
     if (relation && context && relation.belongsToContext(context) === false) {
-      return undefined
+      return undefined;
     }
 
     try {
       const parent = await relation.getParent<T>();
-      if (context && parent.belongsToContext(context) === false) return undefined
+      if (context && parent.belongsToContext(context) === false)
+        return undefined;
       return parent;
     } catch (e) {
-      relation.removeFromGraph()
+      relation.removeFromGraph();
       return undefined;
     }
   } catch (e) {
@@ -70,7 +73,7 @@ export async function loadParentRelation<T extends spinal.Model>(spinalNodePoint
 
 type Consumedfunction<T> = () => Promise<T>;
 export async function consumeBatch<T>(
-  promises: (Consumedfunction<T>)[],
+  promises: Consumedfunction<T>[],
   batchSize = 10
 ): Promise<T[]> {
   let index = 0;
@@ -79,7 +82,9 @@ export async function consumeBatch<T>(
     let endIndex = index + batchSize;
     if (promises.length <= endIndex) endIndex = promises.length;
     const slice = promises.slice(index, endIndex);
-    const resProm = await Promise.all(slice.map((e: Consumedfunction<T>): Promise<T> => e()));
+    const resProm = await Promise.all(
+      slice.map((e: Consumedfunction<T>): Promise<T> => e())
+    );
     result.push(...resProm);
     index = endIndex;
   }

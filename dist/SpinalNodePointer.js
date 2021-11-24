@@ -60,7 +60,8 @@ class SpinalNodePointer extends spinal_core_connectorjs_type_1.Model {
         if (!(element instanceof spinal_core_connectorjs_type_1.Model)) {
             throw TypeError('The pointed value must be a Model');
         }
-        if (element instanceof SpinalNode_1.SpinalNode || element instanceof BaseSpinalRelation_1.BaseSpinalRelation) {
+        if (element instanceof SpinalNode_1.SpinalNode ||
+            element instanceof BaseSpinalRelation_1.BaseSpinalRelation) {
             this.info.mod_attr('pointedId', element.getId());
             this.info.mod_attr('pointedType', element.getType());
         }

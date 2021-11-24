@@ -1,3 +1,4 @@
+"use strict";
 /*
  * Copyright 2021 SpinalCom - www.spinalcom.com
  *
@@ -21,16 +22,5 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-
-/**
- * @export
- * @interface SpinalNodeInfoModel
- * @extends {spinal.Model}
- */
-export interface SpinalNodeInfoModel extends spinal.Model {
-  id: spinal.Str;
-  name: spinal.Str;
-  type: spinal.Str;
-  directModificationDate: spinal.Val;
-  indirectModificationDate: spinal.Val;
-}
+Object.defineProperty(exports, "__esModule", { value: true });
+//# sourceMappingURL=RelationSearch.js.map

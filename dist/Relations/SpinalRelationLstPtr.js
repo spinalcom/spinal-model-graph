@@ -78,10 +78,10 @@ class SpinalRelationLstPtr extends BaseSpinalRelation_1.BaseSpinalRelation {
         return res;
     }
     /**
-   * returns the number of children of the relation.
-   * @returns {number}
-   * @memberof SpinalRelationLstPtr
-   */
+     * returns the number of children of the relation.
+     * @returns {number}
+     * @memberof SpinalRelationLstPtr
+     */
     getNbChildren() {
         return this.children.length;
     }
@@ -115,7 +115,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation_1.BaseSpinalRelation {
                 promises.push(ptr.load());
             }
             const children = yield Promise.all(promises);
-            return children.filter(child => child.belongsToContext(context));
+            return children.filter((child) => child.belongsToContext(context));
         });
     }
     /**

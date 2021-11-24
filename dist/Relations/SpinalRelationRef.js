@@ -78,10 +78,10 @@ class SpinalRelationRef extends BaseSpinalRelation_1.BaseSpinalRelation {
         return res;
     }
     /**
-   * returns the number of children of the relation.
-   * @returns {number}
-   * @memberof SpinalRelationRef
-   */
+     * returns the number of children of the relation.
+     * @returns {number}
+     * @memberof SpinalRelationRef
+     */
     getNbChildren() {
         return this.children.length;
     }

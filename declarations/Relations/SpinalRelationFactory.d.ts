@@ -1,4 +1,4 @@
-import { RELATION_TYPE_LIST, SPINAL_RELATION_LST_PTR_TYPE, SPINAL_RELATION_PTR_LST_TYPE, SPINAL_RELATION_TYPE } from "../constants";
+import { RELATION_TYPE_LIST, SPINAL_RELATION_LST_PTR_TYPE, SPINAL_RELATION_PTR_LST_TYPE, SPINAL_RELATION_TYPE } from '../constants';
 import type { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalRelationLstPtr } from './SpinalRelationLstPtr';
 import { SpinalRelationPtrLst } from './SpinalRelationPtrLst';

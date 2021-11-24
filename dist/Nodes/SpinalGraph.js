@@ -83,7 +83,7 @@ class SpinalGraph extends SpinalNode_1.SpinalNode {
                 throw TypeError('name must be string');
             }
             const children = yield this.getChildren([constants_1.HAS_CONTEXT_RELATION_NAME]);
-            return children.find(child => child.info.name.get() === name);
+            return children.find((child) => child.info.name.get() === name);
         });
     }
     /**
@@ -92,8 +92,7 @@ class SpinalGraph extends SpinalNode_1.SpinalNode {
      * @returns {Promise<nothing>} An empty promise
      */
     removeFromGraph() {
-        return __awaiter(this, void 0, void 0, function* () {
-        });
+        return __awaiter(this, void 0, void 0, function* () { });
     }
 }
 exports.SpinalGraph = SpinalGraph;

@@ -40,7 +40,11 @@ class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
    * @param {SpinalNode | Model} [element] Element of the context
    * @throws {TypeError} If the element is not a Model
    */
-  constructor(name: string = 'undefined', type: string = 'SpinalContext', element?: T) {
+  constructor(
+    name: string = 'undefined',
+    type: string = 'SpinalContext',
+    element?: T
+  ) {
     super(name, type, element);
     if (FileSystem._sig_server === false) return;
 
@@ -58,9 +62,10 @@ class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
    * @throws {TypeError} If the child is not a model
    * @throws {TypeError} If the relation name is not a string
    */
-  addChild<K extends spinal.Model>(child: K | SpinalNode<K>,
+  addChild<K extends spinal.Model>(
+    child: K | SpinalNode<K>,
     relationName: string,
-    _relationType: string = SPINAL_RELATION_PTR_LST_TYPE,
+    _relationType: string = SPINAL_RELATION_PTR_LST_TYPE
   ): Promise<SpinalNode<K>> {
     return super.addChild(child, relationName, SPINAL_RELATION_PTR_LST_TYPE);
   }
@@ -76,13 +81,18 @@ class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
    * @param {SpinalContext} context Context to update, usually unused
    * @returns {Promise<SpinalNode>} The child node in a promise
    */
-  addChildInContext<K extends spinal.Model>(child: K | SpinalNode<K>,
+  addChildInContext<K extends spinal.Model>(
+    child: K | SpinalNode<K>,
     relationName: string,
     _relationType: string = SPINAL_RELATION_PTR_LST_TYPE,
-    context: SpinalContext<T> = this,
+    context: SpinalContext<T> = this
   ): Promise<SpinalNode<K>> {
-
-    return super.addChildInContext(child, relationName, SPINAL_RELATION_PTR_LST_TYPE, context);
+    return super.addChildInContext(
+      child,
+      relationName,
+      SPINAL_RELATION_PTR_LST_TYPE,
+      context
+    );
   }
 
   /**
@@ -92,7 +102,8 @@ class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
    * @returns {Promise<Array<SpinalNode>>} The children that were found
    */
   getChildrenInContext<K extends spinal.Model>(
-    context: SpinalContext<T> = this): Promise<SpinalNode<K>[]> {
+    context: SpinalContext<T> = this
+  ): Promise<SpinalNode<K>[]> {
     return super.getChildrenInContext(context);
   }
 }

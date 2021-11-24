@@ -31,6 +31,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
+var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpinalNode = exports.DEFAULT_FIND_PREDICATE = void 0;
 const spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
@@ -97,25 +109,25 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
         return this.info.type;
     }
     /**
-   * Returns the DirectModificationDate.
-   * @returns {Date} Direct Modification Date of the node
-   */
+     * Returns the DirectModificationDate.
+     * @returns {Date} Direct Modification Date of the node
+     */
     getDirectModificationDate() {
         return this.info.directModificationDate;
     }
     /**
-   * Returns the IndirectModificationDate.
-   * @returns {Date} Indirect Modification Date of the node
-   */
+     * Returns the IndirectModificationDate.
+     * @returns {Date} Indirect Modification Date of the node
+     */
     getIndirectModificationDate() {
         return this.info.indirectModificationDate;
     }
     /**
-      * Sets the value corresponding to the key.
-      * @param {Date} date Key to the value
-      * @throws {TypeError} If the date is not of type Date
-      * @memberof SpinalNode
-      */
+     * Sets the value corresponding to the key.
+     * @param {Date} date Key to the value
+     * @throws {TypeError} If the date is not of type Date
+     * @memberof SpinalNode
+     */
     setIndirectModificationDate(date = Date.now()) {
         if (typeof date !== 'number') {
             throw TypeError('The date must be a number');
@@ -124,14 +136,14 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             this.info.directModificationDate.set(date);
         }
         else
-            this.info.add_attr("directModificationDate", date);
+            this.info.add_attr('directModificationDate', date);
     }
     /**
-    * Sets the value corresponding to the key.
-    * @param {Date} date Key to the value
-    * @throws {TypeError} If the date is not of type Date
-    * @memberof SpinalNode
-    */
+     * Sets the value corresponding to the key.
+     * @param {Date} date Key to the value
+     * @throws {TypeError} If the date is not of type Date
+     * @memberof SpinalNode
+     */
     setDirectModificationDate(date = Date.now()) {
         if (typeof date !== 'number') {
             throw TypeError('The date must be a number');
@@ -140,7 +152,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             this.info.directModificationDate.set(date);
         }
         else
-            this.info.add_attr("directModificationDate", date);
+            this.info.add_attr('directModificationDate', date);
     }
     /**
      * Returns the element. if not present will create one
@@ -153,7 +165,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             if (noCreate === true)
                 return undefined;
             const model = new spinal_core_connectorjs_type_1.Model();
-            this.add_attr('element', (new SpinalNodePointer_1.SpinalNodePointer(model)));
+            this.add_attr('element', new SpinalNodePointer_1.SpinalNodePointer(model));
             return Promise.resolve(model);
         }
         return this.element.load();
@@ -257,7 +269,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             return typeMap.has(relationName);
         }
         for (const [, relationMap] of this.children) {
-            for (const [relname,] of relationMap) {
+            for (const [relname] of relationMap) {
                 if (relname === relationName)
                     return true;
             }
@@ -443,10 +455,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
      */
     removeFromGraph() {
         return __awaiter(this, void 0, void 0, function* () {
-            yield Promise.all([
-                this._removeFromParents(),
-                this._removeFromChildren(),
-            ]);
+            yield Promise.all([this._removeFromParents(), this._removeFromChildren()]);
         });
     }
     /**
@@ -577,10 +586,10 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
         });
     }
     /**
-   * Recursively finds and return the FIRST FOUND parent nodes for which the predicate is true
-   * @param {string[]} relationNames Arry of relation
-   * @param {(node)=> boolean} predicate function stop search if return true
-   */
+     * Recursively finds and return the FIRST FOUND parent nodes for which the predicate is true
+     * @param {string[]} relationNames Arry of relation
+     * @param {(node)=> boolean} predicate function stop search if return true
+     */
     findOneParent(relationNames = [], predicate = exports.DEFAULT_FIND_PREDICATE) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.findParents(relationNames, (node, stopFct) => {
@@ -592,7 +601,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
         });
     }
     /**
-   * Recursively finds all the parent nodes for which the predicate is true
+     * Recursively finds all the parent nodes for which the predicate is true
      * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Arry of relation
      * @param {SpinalNodeFindPredicateFunc} [predicate=DEFAULT_FIND_PREDICATE]
      * @return {*}  {Promise<SpinalNode<any>[]>}
@@ -609,19 +618,22 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             let promises = [];
             let nextGen = [this];
             let currentGen = [];
-            if (predicate(this, stopFct)) {
-                found.push(this);
-            }
-            while (!stop && nextGen.length) {
+            while (nextGen.length) {
                 currentGen = nextGen;
                 promises = [];
                 nextGen = [];
                 for (const node of currentGen) {
-                    promises.push(node.getParents(relationNames));
                     if (predicate(node, stopFct)) {
                         found.push(node);
                     }
+                    // @ts-ignore
+                    if (stop === true)
+                        break;
+                    promises.push(node.getParents(relationNames));
                 }
+                // @ts-ignore
+                if (stop === true)
+                    break;
                 // eslint-disable-next-line no-await-in-loop
                 const childrenArrays = yield Promise.all(promises);
                 for (const children of childrenArrays) {
@@ -639,27 +651,28 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
     findParentsInContext(context, predicate = exports.DEFAULT_FIND_PREDICATE) {
         return __awaiter(this, void 0, void 0, function* () {
             let stop = false;
-            function stopFct() {
-                stop = true;
-            }
             let found = [];
             const seen = new Set([this]);
             let promises = [];
             let nextGen = [this];
             let currentGen = [];
-            if (predicate(this, stopFct)) {
-                found.push(this);
-            }
-            while (!stop && nextGen.length) {
+            while (nextGen.length) {
                 currentGen = nextGen;
                 promises = [];
                 nextGen = [];
                 for (const node of currentGen) {
-                    promises.push(node.getParentsInContext(context));
-                    if (predicate(node, stopFct)) {
+                    if (predicate(node, () => {
+                        stop = true;
+                    }))
                         found.push(node);
-                    }
+                    // @ts-ignore
+                    if (stop === true)
+                        break;
+                    promises.push(node.getParentsInContext(context));
                 }
+                // @ts-ignore
+                if (stop === true)
+                    break;
                 // eslint-disable-next-line no-await-in-loop
                 const childrenArrays = yield Promise.all(promises);
                 for (const children of childrenArrays) {
@@ -688,7 +701,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
         return __awaiter(this, void 0, void 0, function* () {
             if (!Array.isArray(relationNames) &&
                 relationNames !== undefined &&
-                typeof relationNames !== 'string') {
+                !(typeof relationNames === 'string' || relationNames instanceof RegExp)) {
                 throw TypeError('relationNames must be an array, a string or omitted');
             }
             if (typeof predicate !== 'function') {
@@ -703,16 +716,22 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             let nextGen = [this];
             let currentGen = [];
             const found = [];
-            while (!stop && nextGen.length) {
+            while (nextGen.length) {
                 currentGen = nextGen;
                 promises = [];
                 nextGen = [];
                 for (const node of currentGen) {
-                    promises.push(() => node.getChildren(relationNames));
                     if (predicate(node, stopFct)) {
                         found.push(node);
                     }
+                    // @ts-ignore
+                    if (stop === true)
+                        break;
+                    promises.push(() => node.getChildren(relationNames));
                 }
+                // @ts-ignore
+                if (stop === true)
+                    break;
                 const childrenArrays = yield (0, Utilities_1.consumeBatch)(promises, 30);
                 for (const children of childrenArrays) {
                     for (const child of children) {
@@ -728,8 +747,9 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
     }
     /**
      *
-     * @param {string[]} relations
-     * @param {(node: SpinalNode<any>, stopFct: () => void) => Promise<boolean>} predicate
+     *
+     * @param {RelationSearch} relations
+     * @param {(node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>} predicate
      * @return {*}  {Promise<SpinalNode<any>[]>}
      * @memberof SpinalNode
      */
@@ -744,19 +764,22 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             function stopFct() {
                 stop = true;
             }
-            if (yield predicate(this, stopFct)) {
-                result.push(this);
-            }
-            while (!stop && nextGen.length) {
+            while (nextGen.length) {
                 currentGen = nextGen;
                 promises = [];
                 nextGen = [];
-                for (const cuurNode of currentGen) {
+                for (const curNode of currentGen) {
                     promises.push(() => __awaiter(this, void 0, void 0, function* () {
-                        const arr = yield cuurNode.getChildren(relations);
+                        const arr = yield curNode.getChildren(relations);
                         const resProm = [];
                         for (const child of arr) {
+                            // @ts-ignore
+                            if (stop === true)
+                                break;
                             resProm.push(() => __awaiter(this, void 0, void 0, function* () {
+                                // @ts-ignore
+                                if (stop === true)
+                                    return;
                                 const res = yield predicate(child, stopFct);
                                 if (res)
                                     result.push(child);
@@ -767,6 +790,9 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
                     }));
                 }
                 const childrenArrays = yield (0, Utilities_1.consumeBatch)(promises, 30);
+                // @ts-ignore
+                if (stop === true)
+                    break;
                 for (const children of childrenArrays) {
                     for (const child of children) {
                         if (!seen.has(child)) {
@@ -780,9 +806,8 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
         });
     }
     /**
-     *
      * @param {SpinalContext<any>} context
-     * @param {(node: SpinalNode<any>) => Promise<boolean>} predicate
+     * @param {(node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>} predicate
      * @return {*}  {Promise<SpinalNode<any>[]>}
      * @memberof SpinalNode
      */
@@ -793,20 +818,24 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             let nextGen = [this];
             let currentGen = [];
             const result = [];
-            if (yield predicate(this)) {
-                result.push(this);
+            let stop = false;
+            function stopFct() {
+                stop = true;
             }
             while (nextGen.length) {
                 currentGen = nextGen;
                 promises = [];
                 nextGen = [];
-                for (const cuurNode of currentGen) {
+                for (const curNode of currentGen) {
                     promises.push(() => __awaiter(this, void 0, void 0, function* () {
-                        const arr = yield cuurNode.getChildrenInContext(context);
+                        const arr = yield curNode.getChildrenInContext(context);
                         const resProm = [];
                         for (const child of arr) {
                             resProm.push(() => __awaiter(this, void 0, void 0, function* () {
-                                const res = yield predicate(child);
+                                // @ts-ignore
+                                if (stop === true)
+                                    return;
+                                const res = yield predicate(child, stopFct);
                                 if (res)
                                     result.push(child);
                             }));
@@ -815,7 +844,10 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
                         return arr;
                     }));
                 }
-                const childrenArrays = yield (0, Utilities_1.consumeBatch)(promises);
+                const childrenArrays = yield (0, Utilities_1.consumeBatch)(promises, 30);
+                // @ts-ignore
+                if (stop === true)
+                    break;
                 for (const children of childrenArrays) {
                     for (const child of children) {
                         if (!seen.has(child)) {
@@ -843,25 +875,25 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
         });
     }
     /**
-    * Recursively finds all the children nodes and classify them by type.
-    * @param {string|string[]} relationNames Array containing the relation names to follow
-    * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
-    * @throws {TypeError} If the relationNames are neither an array, a string or omitted
-    * @throws {TypeError} If an element of relationNames is not a string
-    * @throws {TypeError} If the predicate is not a function
-    */
+     * Recursively finds all the children nodes and classify them by type.
+     * @param {string|string[]} relationNames Array containing the relation names to follow
+     * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
+     * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+     * @throws {TypeError} If an element of relationNames is not a string
+     * @throws {TypeError} If the predicate is not a function
+     */
     browseAnClassifyByType(relationNames) {
         return __awaiter(this, void 0, void 0, function* () {
             let dataStructure = {
                 types: [],
-                data: {}
+                data: {},
             };
             yield this.find(relationNames, (node) => {
                 let type = node.getType().get();
                 if (dataStructure.types.indexOf(type) === -1) {
                     dataStructure.types.push(type);
                 }
-                if (typeof dataStructure.data[type] === "undefined") {
+                if (typeof dataStructure.data[type] === 'undefined') {
                     dataStructure.data[type] = [];
                 }
                 dataStructure.data[type].push(node);
@@ -929,25 +961,25 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
         });
     }
     /**
-   * Recursively finds all the children nodes in the context and classify them by type.
-   * @param {SpinalContext} context Context to use for the search
-   * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
-   * @throws {TypeError} If the relationNames are neither an array, a string or omitted
-   * @throws {TypeError} If an element of relationNames is not a string
-   * @throws {TypeError} If the predicate is not a function
-   */
+     * Recursively finds all the children nodes in the context and classify them by type.
+     * @param {SpinalContext} context Context to use for the search
+     * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
+     * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+     * @throws {TypeError} If an element of relationNames is not a string
+     * @throws {TypeError} If the predicate is not a function
+     */
     browseAndClassifyByTypeInContext(context) {
         return __awaiter(this, void 0, void 0, function* () {
             let dataStructure = {
                 types: [],
-                data: {}
+                data: {},
             };
             yield this.findInContext(context, (node) => {
                 let type = node.getType().get();
                 if (dataStructure.types.indexOf(type) === -1) {
                     dataStructure.types.push(type);
                 }
-                if (typeof dataStructure.data[type] === "undefined") {
+                if (typeof dataStructure.data[type] === 'undefined') {
                     dataStructure.data[type] = [];
                 }
                 dataStructure.data[type].push(node);
@@ -1035,6 +1067,128 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
                 results.push(callback(node));
             }
             return results;
+        });
+    }
+    /**
+     * @param {RelationSearch} relationNames
+     * @memberof SpinalNode
+     */
+    visitParents(relationNames) {
+        return __asyncGenerator(this, arguments, function* visitParents_1() {
+            const seen = new Set([this]);
+            let promises = [];
+            let nextGen = [this];
+            let currentGen = [];
+            while (nextGen.length) {
+                currentGen = nextGen;
+                promises = [];
+                nextGen = [];
+                for (const node of currentGen) {
+                    yield yield __await(node);
+                    promises.push(node.getParents(relationNames));
+                }
+                // eslint-disable-next-line no-await-in-loop
+                const childrenArrays = yield __await(Promise.all(promises));
+                for (const children of childrenArrays) {
+                    for (const child of children) {
+                        if (!seen.has(child)) {
+                            nextGen.push(child);
+                            seen.add(child);
+                        }
+                    }
+                }
+            }
+        });
+    }
+    /**
+     * @param {SpinalContext<any>} context
+     * @memberof SpinalNode
+     */
+    visitParentInContext(context) {
+        return __asyncGenerator(this, arguments, function* visitParentInContext_1() {
+            const seen = new Set([this]);
+            let promises = [];
+            let nextGen = [this];
+            let currentGen = [];
+            while (nextGen.length) {
+                currentGen = nextGen;
+                promises = [];
+                nextGen = [];
+                for (const node of currentGen) {
+                    yield yield __await(node);
+                    promises.push(node.getParentsInContext(context));
+                }
+                // eslint-disable-next-line no-await-in-loop
+                const childrenArrays = yield __await(Promise.all(promises));
+                for (const children of childrenArrays) {
+                    for (const child of children) {
+                        if (!seen.has(child)) {
+                            nextGen.push(child);
+                            seen.add(child);
+                        }
+                    }
+                }
+            }
+        });
+    }
+    /**
+     * @param {RelationSearch} relationNames
+     * @memberof SpinalNode
+     */
+    visitChildren(relationNames) {
+        return __asyncGenerator(this, arguments, function* visitChildren_1() {
+            const seen = new Set([this]);
+            let promises = [];
+            let nextGen = [this];
+            let currentGen = [];
+            while (!stop && nextGen.length) {
+                currentGen = nextGen;
+                promises = [];
+                nextGen = [];
+                for (const node of currentGen) {
+                    yield yield __await(node);
+                    promises.push(() => node.getChildren(relationNames));
+                }
+                const childrenArrays = yield __await((0, Utilities_1.consumeBatch)(promises, 30));
+                for (const children of childrenArrays) {
+                    for (const child of children) {
+                        if (!seen.has(child)) {
+                            nextGen.push(child);
+                            seen.add(child);
+                        }
+                    }
+                }
+            }
+        });
+    }
+    /**
+     * @param {SpinalContext<any>} context
+     * @memberof SpinalNode
+     */
+    visitChildrenInContext(context) {
+        return __asyncGenerator(this, arguments, function* visitChildrenInContext_1() {
+            const seen = new Set([this]);
+            let promises = [];
+            let nextGen = [this];
+            let currentGen = [];
+            while (!stop && nextGen.length) {
+                currentGen = nextGen;
+                promises = [];
+                nextGen = [];
+                for (const node of currentGen) {
+                    yield yield __await(node);
+                    promises.push(() => node.getChildrenInContext(context));
+                }
+                const childrenArrays = yield __await((0, Utilities_1.consumeBatch)(promises, 30));
+                for (const children of childrenArrays) {
+                    for (const child of children) {
+                        if (!seen.has(child)) {
+                            nextGen.push(child);
+                            seen.add(child);
+                        }
+                    }
+                }
+            }
         });
     }
     /**
@@ -1151,14 +1305,16 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
      * @memberof SpinalNode
      */
     _getValidRelations(relationNames = [], getParent = false) {
-        let nodeRelations = !getParent ? this.getRelationNames() : this.parents.keys();
+        let nodeRelations = !getParent
+            ? this.getRelationNames()
+            : this.parents.keys();
         if (!Array.isArray(relationNames)) {
             if (relationNames instanceof RegExp) {
                 return nodeRelations.filter((relationName) => {
                     return relationName.match(relationNames);
                 });
             }
-            else if (typeof relationNames === "string") {
+            else if (typeof relationNames === 'string') {
                 if (nodeRelations.includes(relationNames))
                     return [relationNames];
                 return [];
@@ -1172,7 +1328,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             const res = [];
             for (const relationName of nodeRelations) {
                 for (const regOrStr of relationNames) {
-                    if (typeof regOrStr === "string") {
+                    if (typeof regOrStr === 'string') {
                         if (regOrStr === relationName)
                             res.push(relationName);
                     }

@@ -1,19 +1,19 @@
 /*
  * Copyright 2021 SpinalCom - www.spinalcom.com
- * 
+ *
  * This file is part of SpinalCore.
- * 
+ *
  * Please read all of the following terms and conditions
  * of the Free Software license Agreement ("Agreement")
  * carefully.
- * 
+ *
  * This Agreement is a legally binding contract between
  * the Licensee (as defined below) and SpinalCom that
  * sets forth the terms and conditions that govern your
  * use of the Program. By installing and/or using the
  * Program, you agree to abide by all the terms and
  * conditions stated or referenced herein.
- * 
+ *
  * If you do not agree to abide by these terms and
  * conditions, do not demonstrate your acceptance and do
  * not install or use the Program.
@@ -27,29 +27,28 @@ import {
   SpinalContext,
   SPINAL_RELATION_LST_PTR_TYPE,
 } from '../../src';
-import "mocha"
+import 'mocha';
 
 import * as assert from 'assert';
 const DEFAULT_NODE = new SpinalNode();
 const DEFAULT_CONTEXT = new SpinalContext();
 const DEFAULT_RELATION_NAME = 'relationName';
 const DEFAULT_RELATION_TYPE = SPINAL_RELATION_LST_PTR_TYPE;
-const DEFAULT_FUN = node => node;
+const DEFAULT_FUN = (node) => node;
 
 describe('How to use map', () => {
   describe('Error handling', () => {
-    it('should throw an error if relationNames is neither an array, a string or omitted',
-      async () => {
-        let error = false;
+    it('should throw an error if relationNames is neither an array, a string or omitted', async () => {
+      let error = false;
 
-        try {
-          await DEFAULT_NODE.map(<any>1, DEFAULT_FUN);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
-      });
+      try {
+        await DEFAULT_NODE.map(<any>1, DEFAULT_FUN);
+      } catch (e) {
+        error = true;
+        assert(e instanceof Error);
+      }
+      assert(error);
+    });
 
     it('should throw an error if the callback function is missing', async () => {
       let error = false;
@@ -107,15 +106,12 @@ describe('How to use map', () => {
         return node.getId();
       });
 
-      assert.deepStrictEqual(
-        ids,
-        [
-          parent.getId(),
-          child1.getId(),
-          child2.getId(),
-          child3.getId(),
-        ],
-      );
+      assert.deepStrictEqual(ids, [
+        parent.getId(),
+        child1.getId(),
+        child2.getId(),
+        child3.getId(),
+      ]);
     });
 
     it('should return second gen and undefined for other nodes nodes', async () => {
@@ -131,9 +127,21 @@ describe('How to use map', () => {
         root.addChild(firstGen1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
         root.addChild(firstGen2, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
         root.addChild(firstGen3, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
-        firstGen2.addChild(secondGen1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
-        firstGen3.addChild(secondGen2, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
-        secondGen2.addChild(thirdGen1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
+        firstGen2.addChild(
+          secondGen1,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE
+        ),
+        firstGen3.addChild(
+          secondGen2,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE
+        ),
+        secondGen2.addChild(
+          thirdGen1,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE
+        ),
       ]);
 
       const secondGen = await root.map(undefined, (node) => {
@@ -213,13 +221,20 @@ describe('How to use mapInContext', () => {
       const node1 = new SpinalNode();
       const node2 = new SpinalNode();
 
-      node1.addChildInContext(node2, DEFAULT_RELATION_NAME,
-        DEFAULT_RELATION_TYPE, context);
-      node2.addChildInContext(node1, DEFAULT_RELATION_NAME,
-        DEFAULT_RELATION_TYPE, context);
+      node1.addChildInContext(
+        node2,
+        DEFAULT_RELATION_NAME,
+        DEFAULT_RELATION_TYPE,
+        context
+      );
+      node2.addChildInContext(
+        node1,
+        DEFAULT_RELATION_NAME,
+        DEFAULT_RELATION_TYPE,
+        context
+      );
 
-      const foundChild = await node1.mapInContext(context,
-        DEFAULT_FUN);
+      const foundChild = await node1.mapInContext(context, DEFAULT_FUN);
 
       assert.deepStrictEqual(foundChild, [node1, node2]);
     });
@@ -241,15 +256,12 @@ describe('How to use mapInContext', () => {
           return node.getName().get();
         });
 
-        assert.deepStrictEqual(
-          names,
-          [
-            'context',
-            'child1',
-            'child2',
-            'child3',
-          ],
-        );
+        assert.deepStrictEqual(names, [
+          'context',
+          'child1',
+          'child2',
+          'child3',
+        ]);
       });
     });
   });
@@ -267,12 +279,42 @@ describe('How to use mapInContext', () => {
       const child6 = new SpinalNode();
 
       await Promise.all([
-        parent.addChildInContext(child1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context1),
-        parent.addChildInContext(child2, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context2),
-        parent.addChildInContext(child3, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context2),
-        child2.addChildInContext(child4, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context2),
-        child3.addChildInContext(child5, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context1),
-        child5.addChildInContext(child6, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE, context2),
+        parent.addChildInContext(
+          child1,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context1
+        ),
+        parent.addChildInContext(
+          child2,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context2
+        ),
+        parent.addChildInContext(
+          child3,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context2
+        ),
+        child2.addChildInContext(
+          child4,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context2
+        ),
+        child3.addChildInContext(
+          child5,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context1
+        ),
+        child5.addChildInContext(
+          child6,
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_TYPE,
+          context2
+        ),
       ]);
 
       let foundChildren = await parent.mapInContext(context2, DEFAULT_FUN);

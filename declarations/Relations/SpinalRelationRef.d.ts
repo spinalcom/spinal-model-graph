@@ -29,10 +29,10 @@ declare class SpinalRelationRef extends BaseSpinalRelation {
      */
     getChildrenIds(): string[];
     /**
-   * returns the number of children of the relation.
-   * @returns {number}
-   * @memberof SpinalRelationRef
-   */
+     * returns the number of children of the relation.
+     * @returns {number}
+     * @memberof SpinalRelationRef
+     */
     getNbChildren(): number;
     /**
      * Return all the children of the relation.

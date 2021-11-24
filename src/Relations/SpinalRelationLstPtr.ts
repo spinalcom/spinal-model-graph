@@ -23,7 +23,10 @@
  */
 
 import {
-  FileSystem, Lst, Model, spinalCore
+  FileSystem,
+  Lst,
+  Model,
+  spinalCore,
 } from 'spinal-core-connectorjs_type';
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
@@ -76,10 +79,10 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
   }
 
   /**
- * returns the number of children of the relation.
- * @returns {number}
- * @memberof SpinalRelationLstPtr
- */
+   * returns the number of children of the relation.
+   * @returns {number}
+   * @memberof SpinalRelationLstPtr
+   */
   getNbChildren(): number {
     return this.children.length;
   }
@@ -106,7 +109,9 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
    * @throws {TypeError} If the context is not a SpinalContext
    * @memberof SpinalRelationLstPtr
    */
-  async getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]> {
+  async getChildrenInContext(
+    context: SpinalContext<any>
+  ): Promise<SpinalNode<any>[]> {
     const promises: Promise<SpinalNode<any>>[] = [];
 
     if (!(context instanceof SpinalContext)) {
@@ -120,7 +125,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
     }
 
     const children: SpinalNode<any>[] = await Promise.all(promises);
-    return children.filter(child => child.belongsToContext(context));
+    return children.filter((child) => child.belongsToContext(context));
   }
 
   /**
@@ -141,11 +146,13 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
    * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
    * @memberof SpinalRelationLstPtr
    */
-  async addChild<T extends spinal.Model>(node: T | SpinalNode<T>): Promise<SpinalNode<T>> {
+  async addChild<T extends spinal.Model>(
+    node: T | SpinalNode<T>
+  ): Promise<SpinalNode<T>> {
     let nodeCreate: T | SpinalNode<T> = node;
     if (!(node instanceof Model)) {
       throw new Error(
-        'Cannot add a child witch is not an instance of SpinalNode or Model.',
+        'Cannot add a child witch is not an instance of SpinalNode or Model.'
       );
     } else if (!(node instanceof SpinalNode)) {
       nodeCreate = new SpinalNode(undefined, undefined, node);

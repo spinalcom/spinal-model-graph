@@ -84,4 +84,4 @@ declare class SpinalRelationPtrLst extends BaseSpinalRelation {
     removeChildren(nodes?: SpinalNode<any>[]): Promise<void>;
 }
 export default SpinalRelationPtrLst;
-export { SpinalRelationPtrLst, };
+export { SpinalRelationPtrLst };

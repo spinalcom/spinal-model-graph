@@ -1,5 +1,6 @@
 import { Model } from 'spinal-core-connectorjs_type';
-import type { AnySpinalRelation } from "../interfaces/AnySpinalRelation";
+import type { AnySpinalRelation } from '../interfaces/AnySpinalRelation';
+import { RelationSearch } from '../interfaces/RelationSearch';
 import type { SpinalNodeFindOnePredicateFunc } from '../interfaces/SpinalNodeFindOnePredicateFunc';
 import type { SpinalNodeFindPredicateFunc } from '../interfaces/SpinalNodeFindPredicateFunc';
 import type { SpinalNodeForEachFunc } from '../interfaces/SpinalNodeForEachFunc';
@@ -47,28 +48,28 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      */
     getType(): spinal.Str;
     /**
-   * Returns the DirectModificationDate.
-   * @returns {Date} Direct Modification Date of the node
-   */
+     * Returns the DirectModificationDate.
+     * @returns {Date} Direct Modification Date of the node
+     */
     getDirectModificationDate(): spinal.Val;
     /**
-   * Returns the IndirectModificationDate.
-   * @returns {Date} Indirect Modification Date of the node
-   */
+     * Returns the IndirectModificationDate.
+     * @returns {Date} Indirect Modification Date of the node
+     */
     getIndirectModificationDate(): spinal.Val;
     /**
-      * Sets the value corresponding to the key.
-      * @param {Date} date Key to the value
-      * @throws {TypeError} If the date is not of type Date
-      * @memberof SpinalNode
-      */
+     * Sets the value corresponding to the key.
+     * @param {Date} date Key to the value
+     * @throws {TypeError} If the date is not of type Date
+     * @memberof SpinalNode
+     */
     setIndirectModificationDate(date?: number): void;
     /**
-    * Sets the value corresponding to the key.
-    * @param {Date} date Key to the value
-    * @throws {TypeError} If the date is not of type Date
-    * @memberof SpinalNode
-    */
+     * Sets the value corresponding to the key.
+     * @param {Date} date Key to the value
+     * @throws {TypeError} If the date is not of type Date
+     * @memberof SpinalNode
+     */
     setDirectModificationDate(date?: number): void;
     /**
      * Returns the element. if not present will create one
@@ -245,13 +246,13 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
     getParents(relationNames?: string | RegExp | (string | RegExp)[]): Promise<SpinalNode<any>[]>;
     getParentsInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
     /**
-   * Recursively finds and return the FIRST FOUND parent nodes for which the predicate is true
-   * @param {string[]} relationNames Arry of relation
-   * @param {(node)=> boolean} predicate function stop search if return true
-   */
+     * Recursively finds and return the FIRST FOUND parent nodes for which the predicate is true
+     * @param {string[]} relationNames Arry of relation
+     * @param {(node)=> boolean} predicate function stop search if return true
+     */
     findOneParent(relationNames?: string | RegExp | (string | RegExp)[], predicate?: SpinalNodeFindOnePredicateFunc): Promise<SpinalNode<any>>;
     /**
-   * Recursively finds all the parent nodes for which the predicate is true
+     * Recursively finds all the parent nodes for which the predicate is true
      * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Arry of relation
      * @param {SpinalNodeFindPredicateFunc} [predicate=DEFAULT_FIND_PREDICATE]
      * @return {*}  {Promise<SpinalNode<any>[]>}
@@ -269,23 +270,23 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @throws {TypeError} If an element of relationNames is not a string
      * @throws {TypeError} If the predicate is not a function
      */
-    find(relationNames: string | string[], predicate?: SpinalNodeFindPredicateFunc): Promise<SpinalNode<any>[]>;
+    find(relationNames: RelationSearch, predicate?: SpinalNodeFindPredicateFunc): Promise<SpinalNode<any>[]>;
     /**
      *
-     * @param {string[]} relations
-     * @param {(node: SpinalNode<any>, stopFct: () => void) => Promise<boolean>} predicate
+     *
+     * @param {RelationSearch} relations
+     * @param {(node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>} predicate
      * @return {*}  {Promise<SpinalNode<any>[]>}
      * @memberof SpinalNode
      */
-    findAsyncPredicate(relations: string[], predicate: (node: SpinalNode<any>, stopFct: () => void) => Promise<boolean>): Promise<SpinalNode<any>[]>;
+    findAsyncPredicate(relations: RelationSearch, predicate: (node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>): Promise<SpinalNode<any>[]>;
     /**
-     *
      * @param {SpinalContext<any>} context
-     * @param {(node: SpinalNode<any>) => Promise<boolean>} predicate
+     * @param {(node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>} predicate
      * @return {*}  {Promise<SpinalNode<any>[]>}
      * @memberof SpinalNode
      */
-    findInContextAsyncPredicate(context: SpinalContext<any>, predicate: (node: SpinalNode<any>) => Promise<boolean>): Promise<SpinalNode<any>[]>;
+    findInContextAsyncPredicate(context: SpinalContext<any>, predicate: (node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>): Promise<SpinalNode<any>[]>;
     /**
      * Recursively finds all the children nodes with type "nodeType".
      * @param {string|string[]} relationNames Array containing the relation names to follow
@@ -297,13 +298,13 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      */
     findByType(relationNames: string | string[], nodeType: string): Promise<any>;
     /**
-    * Recursively finds all the children nodes and classify them by type.
-    * @param {string|string[]} relationNames Array containing the relation names to follow
-    * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
-    * @throws {TypeError} If the relationNames are neither an array, a string or omitted
-    * @throws {TypeError} If an element of relationNames is not a string
-    * @throws {TypeError} If the predicate is not a function
-    */
+     * Recursively finds all the children nodes and classify them by type.
+     * @param {string|string[]} relationNames Array containing the relation names to follow
+     * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
+     * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+     * @throws {TypeError} If an element of relationNames is not a string
+     * @throws {TypeError} If the predicate is not a function
+     */
     browseAnClassifyByType(relationNames: string | string[]): Promise<any>;
     /**
      * Recursively finds all the children nodes in the context for which the predicate is true..
@@ -324,13 +325,13 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      */
     findInContextByType(context: SpinalContext<any>, nodeType: string): Promise<any>;
     /**
-   * Recursively finds all the children nodes in the context and classify them by type.
-   * @param {SpinalContext} context Context to use for the search
-   * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
-   * @throws {TypeError} If the relationNames are neither an array, a string or omitted
-   * @throws {TypeError} If an element of relationNames is not a string
-   * @throws {TypeError} If the predicate is not a function
-   */
+     * Recursively finds all the children nodes in the context and classify them by type.
+     * @param {SpinalContext} context Context to use for the search
+     * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
+     * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+     * @throws {TypeError} If an element of relationNames is not a string
+     * @throws {TypeError} If the predicate is not a function
+     */
     browseAndClassifyByTypeInContext(context: SpinalContext<any>): Promise<any>;
     /**
      * Recursively applies a function to all the children nodes.
@@ -369,6 +370,26 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @throws {TypeError} If the callback is not a function
      */
     mapInContext(context: SpinalContext<any>, callback: SpinalNodeMapFunc): Promise<any[]>;
+    /**
+     * @param {RelationSearch} relationNames
+     * @memberof SpinalNode
+     */
+    visitParents(relationNames: RelationSearch): AsyncGenerator<SpinalNode<any>, void, unknown>;
+    /**
+     * @param {SpinalContext<any>} context
+     * @memberof SpinalNode
+     */
+    visitParentInContext(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, unknown>;
+    /**
+     * @param {RelationSearch} relationNames
+     * @memberof SpinalNode
+     */
+    visitChildren(relationNames: RelationSearch): AsyncGenerator<SpinalNode<any>, void, unknown>;
+    /**
+     * @param {SpinalContext<any>} context
+     * @memberof SpinalNode
+     */
+    visitChildrenInContext(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, unknown>;
     /**
      * Return the relation list corresponding to the relation type.
      * @param {string} relationType Type of the relation
