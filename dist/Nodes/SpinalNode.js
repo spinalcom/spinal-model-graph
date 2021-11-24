@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SpinalNode = exports.DEFAULT_FINDONE_PREDICATE = exports.DEFAULT_FIND_PREDICATE = void 0;
+exports.SpinalNode = exports.DEFAULT_FIND_PREDICATE = void 0;
 const spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
 const SpinalRelationFactory_1 = require("../Relations/SpinalRelationFactory");
 const SpinalMap_1 = require("../SpinalMap");
@@ -42,8 +42,6 @@ const Utilities_1 = require("../Utilities");
 const SpinalContext_1 = require("./SpinalContext");
 const DEFAULT_FIND_PREDICATE = () => true;
 exports.DEFAULT_FIND_PREDICATE = DEFAULT_FIND_PREDICATE;
-const DEFAULT_FINDONE_PREDICATE = () => true;
-exports.DEFAULT_FINDONE_PREDICATE = DEFAULT_FINDONE_PREDICATE;
 /**
  * Node of a graph.
  * @extends Model
@@ -200,6 +198,20 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
         }
         if (!this.contextIds.has(id)) {
             this.contextIds.add(id);
+            this.setDirectModificationDate();
+        }
+    }
+    /**
+     * Remove an id to the context ids of the node.
+     * @param {string} id
+     * @memberof SpinalNode
+     */
+    removeContextId(id) {
+        if (typeof id !== 'string') {
+            throw TypeError('id must be a string');
+        }
+        if (this.contextIds.has(id)) {
+            this.contextIds.delete(id);
             this.setDirectModificationDate();
         }
     }
@@ -553,48 +565,40 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             return res.filter((e) => e !== undefined);
         });
     }
+    getParentsInContext(context) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const prom = [];
+            for (const [, nodeRelationLst] of this.parents) {
+                for (let idx = 0; idx < nodeRelationLst.length; idx++) {
+                    prom.push((0, Utilities_1.loadParentRelation)(nodeRelationLst[idx], context));
+                }
+            }
+            const res = yield Promise.all(prom);
+            return res.filter((e) => e !== undefined);
+        });
+    }
     /**
    * Recursively finds and return the FIRST FOUND parent nodes for which the predicate is true
    * @param {string[]} relationNames Arry of relation
    * @param {(node)=> boolean} predicate function stop search if return true
    */
-    findOneParent(relationNames = [], predicate = exports.DEFAULT_FINDONE_PREDICATE) {
+    findOneParent(relationNames = [], predicate = exports.DEFAULT_FIND_PREDICATE) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (predicate(this)) {
-                return this;
-            }
-            const seen = new Set([this]);
-            let promises = [];
-            let nextGen = [this];
-            let currentGen = [];
-            while (nextGen.length) {
-                currentGen = nextGen;
-                promises = [];
-                nextGen = [];
-                for (const node of currentGen) {
-                    promises.push(node.getParents(relationNames));
-                    if (predicate(node)) {
-                        return node;
-                    }
-                }
-                const childrenArrays = yield Promise.all(promises);
-                for (const children of childrenArrays) {
-                    for (const child of children) {
-                        if (!seen.has(child)) {
-                            nextGen.push(child);
-                            seen.add(child);
-                        }
-                    }
-                }
-            }
+            return this.findParents(relationNames, (node, stopFct) => {
+                const res = predicate(node);
+                if (res)
+                    stopFct();
+                return res;
+            }).then((e) => e[0]); // can do that because it stop to fist find
         });
     }
     /**
    * Recursively finds all the parent nodes for which the predicate is true
-   * @export
-   * @param {string[]} relationNames Arry of relation
-   * @param {(node)=> boolean} predicate Function returning true if the node needs to be returned
-   */
+     * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Arry of relation
+     * @param {SpinalNodeFindPredicateFunc} [predicate=DEFAULT_FIND_PREDICATE]
+     * @return {*}  {Promise<SpinalNode<any>[]>}
+     * @memberof SpinalNode
+     */
     findParents(relationNames = [], predicate = exports.DEFAULT_FIND_PREDICATE) {
         return __awaiter(this, void 0, void 0, function* () {
             let stop = false;
@@ -615,6 +619,44 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
                 nextGen = [];
                 for (const node of currentGen) {
                     promises.push(node.getParents(relationNames));
+                    if (predicate(node, stopFct)) {
+                        found.push(node);
+                    }
+                }
+                // eslint-disable-next-line no-await-in-loop
+                const childrenArrays = yield Promise.all(promises);
+                for (const children of childrenArrays) {
+                    for (const child of children) {
+                        if (!seen.has(child)) {
+                            nextGen.push(child);
+                            seen.add(child);
+                        }
+                    }
+                }
+            }
+            return found;
+        });
+    }
+    findParentsInContext(context, predicate = exports.DEFAULT_FIND_PREDICATE) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let stop = false;
+            function stopFct() {
+                stop = true;
+            }
+            let found = [];
+            const seen = new Set([this]);
+            let promises = [];
+            let nextGen = [this];
+            let currentGen = [];
+            if (predicate(this, stopFct)) {
+                found.push(this);
+            }
+            while (!stop && nextGen.length) {
+                currentGen = nextGen;
+                promises = [];
+                nextGen = [];
+                for (const node of currentGen) {
+                    promises.push(node.getParentsInContext(context));
                     if (predicate(node, stopFct)) {
                         found.push(node);
                     }

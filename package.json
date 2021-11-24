@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "types": "declarations/index.d.ts",
   "scripts": {
-    "test": "rm -rf dist && tsc && nyc mocha --require ts-node/register test/**/*.ts",
+    "test": "rm -rf dist && tsc && mocha --require ts-node/register test/**/*.ts",
+    "test:ncy": "rm -rf dist && tsc && nyc mocha --require ts-node/register test/**/*.ts",
     "build": "rm -rf declarations dist && tsc",
     "dev": "rm -rf declarations dist && tsc -w",
     "docs": "rm -rf docs && typedoc --excludeExternals --readme README.md src",

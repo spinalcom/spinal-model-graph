@@ -10,7 +10,6 @@ import { SpinalNodePointer } from '../SpinalNodePointer';
 import { SpinalSet } from '../SpinalSet';
 import { SpinalContext } from './SpinalContext';
 export declare const DEFAULT_FIND_PREDICATE: SpinalNodeFindPredicateFunc;
-export declare const DEFAULT_FINDONE_PREDICATE: SpinalNodeFindOnePredicateFunc;
 /**
  * Node of a graph.
  * @extends Model
@@ -94,6 +93,12 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @throws {TypeError} If the id is not a string
      */
     addContextId(id: string): void;
+    /**
+     * Remove an id to the context ids of the node.
+     * @param {string} id
+     * @memberof SpinalNode
+     */
+    removeContextId(id: string): void;
     /**
      * Returns a list of the contexts the node is associated to.
      * @returns {string[]} An array of ids of the associated contexts
@@ -238,6 +243,7 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @memberof SpinalNode
      */
     getParents(relationNames?: string | RegExp | (string | RegExp)[]): Promise<SpinalNode<any>[]>;
+    getParentsInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
     /**
    * Recursively finds and return the FIRST FOUND parent nodes for which the predicate is true
    * @param {string[]} relationNames Arry of relation
@@ -246,11 +252,13 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
     findOneParent(relationNames?: string | RegExp | (string | RegExp)[], predicate?: SpinalNodeFindOnePredicateFunc): Promise<SpinalNode<any>>;
     /**
    * Recursively finds all the parent nodes for which the predicate is true
-   * @export
-   * @param {string[]} relationNames Arry of relation
-   * @param {(node)=> boolean} predicate Function returning true if the node needs to be returned
-   */
-    findParents(relationNames?: string | RegExp | (string | RegExp)[], predicate?: SpinalNodeFindPredicateFunc): Promise<any>;
+     * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Arry of relation
+     * @param {SpinalNodeFindPredicateFunc} [predicate=DEFAULT_FIND_PREDICATE]
+     * @return {*}  {Promise<SpinalNode<any>[]>}
+     * @memberof SpinalNode
+     */
+    findParents(relationNames?: string | RegExp | (string | RegExp)[], predicate?: SpinalNodeFindPredicateFunc): Promise<SpinalNode<any>[]>;
+    findParentsInContext(context: SpinalContext<any>, predicate?: SpinalNodeFindPredicateFunc): Promise<SpinalNode<any>[]>;
     /**
      * Recursively finds all the children nodes for which the predicate is true.
      * @param {string|string[]} relationNames Array containing the relation names to follow

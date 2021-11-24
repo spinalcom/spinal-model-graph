@@ -28,7 +28,7 @@ import type { SpinalNode } from '../Nodes/SpinalNode';
  * A function that takes a node and returns a boolean.
  * @callback SpinalNodeFindPredicateFunc
  * @param {SpinalNode<any>} node
- * @param {SpinalNode<any>} [stopCallback]
+ * @param {() => void} [stopCallback] callback to stop the find
  * @returns {boolean}
  */
 export type SpinalNodeFindPredicateFunc = (node: SpinalNode<any>, stopCallback?: () => void) => boolean;

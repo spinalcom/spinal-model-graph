@@ -23,13 +23,12 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SpinalSet = exports.SpinalNodePointer = exports.SpinalMap = exports.SpinalRelationRef = exports.SpinalRelationPtrLst = exports.SpinalRelationLstPtr = exports.SPINAL_RELATION_TYPE = exports.SPINAL_RELATION_PTR_LST_TYPE = exports.SPINAL_RELATION_LST_PTR_TYPE = exports.SpinalRelationFactory = exports.SpinalNode = exports.DEFAULT_FIND_PREDICATE = exports.DEFAULT_FINDONE_PREDICATE = exports.SpinalGraph = exports.SpinalContext = void 0;
+exports.SpinalSet = exports.SpinalNodePointer = exports.SpinalMap = exports.SpinalRelationRef = exports.SpinalRelationPtrLst = exports.SpinalRelationLstPtr = exports.SPINAL_RELATION_TYPE = exports.SPINAL_RELATION_PTR_LST_TYPE = exports.SPINAL_RELATION_LST_PTR_TYPE = exports.SpinalRelationFactory = exports.SpinalNode = exports.DEFAULT_FIND_PREDICATE = exports.SpinalGraph = exports.SpinalContext = void 0;
 var SpinalContext_1 = require("./Nodes/SpinalContext");
 Object.defineProperty(exports, "SpinalContext", { enumerable: true, get: function () { return SpinalContext_1.SpinalContext; } });
 var SpinalGraph_1 = require("./Nodes/SpinalGraph");
 Object.defineProperty(exports, "SpinalGraph", { enumerable: true, get: function () { return SpinalGraph_1.SpinalGraph; } });
 var SpinalNode_1 = require("./Nodes/SpinalNode");
-Object.defineProperty(exports, "DEFAULT_FINDONE_PREDICATE", { enumerable: true, get: function () { return SpinalNode_1.DEFAULT_FINDONE_PREDICATE; } });
 Object.defineProperty(exports, "DEFAULT_FIND_PREDICATE", { enumerable: true, get: function () { return SpinalNode_1.DEFAULT_FIND_PREDICATE; } });
 Object.defineProperty(exports, "SpinalNode", { enumerable: true, get: function () { return SpinalNode_1.SpinalNode; } });
 var SpinalRelationFactory_1 = require("./Relations/SpinalRelationFactory");

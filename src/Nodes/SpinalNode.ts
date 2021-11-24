@@ -42,7 +42,6 @@ import { consumeBatch, guid, loadParentRelation } from '../Utilities';
 import { SpinalContext } from './SpinalContext';
 
 export const DEFAULT_FIND_PREDICATE: SpinalNodeFindPredicateFunc = () => true;
-export const DEFAULT_FINDONE_PREDICATE: SpinalNodeFindOnePredicateFunc = () => true;
 
 /**
  * Node of a graph.
@@ -215,6 +214,23 @@ class SpinalNode<T extends spinal.Model> extends Model {
       this.setDirectModificationDate();
     }
   }
+
+  /**
+   * Remove an id to the context ids of the node.
+   * @param {string} id
+   * @memberof SpinalNode
+   */
+  removeContextId(id: string): void {
+    if (typeof id !== 'string') {
+      throw TypeError('id must be a string');
+    }
+
+    if (this.contextIds.has(id)) {
+      this.contextIds.delete(id);
+      this.setDirectModificationDate();
+    }
+  }
+
 
   /**
    * Returns a list of the contexts the node is associated to.
@@ -599,6 +615,17 @@ class SpinalNode<T extends spinal.Model> extends Model {
     return res.filter((e: SpinalNode<spinal.Model>): boolean => e !== undefined);
   }
 
+  public async getParentsInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]> {
+    const prom: Promise<SpinalNode<spinal.Model>>[] = [];
+
+    for (const [, nodeRelationLst] of this.parents) {
+      for (let idx = 0; idx < nodeRelationLst.length; idx++) {
+        prom.push(loadParentRelation(nodeRelationLst[idx], context));
+      }
+    }
+    const res = await Promise.all(prom);
+    return res.filter((e: SpinalNode<spinal.Model>): boolean => e !== undefined);
+  }
 
   /**
  * Recursively finds and return the FIRST FOUND parent nodes for which the predicate is true
@@ -606,52 +633,24 @@ class SpinalNode<T extends spinal.Model> extends Model {
  * @param {(node)=> boolean} predicate function stop search if return true
  */
   public async findOneParent(relationNames: string | RegExp | (string | RegExp)[] = [],
-    predicate: SpinalNodeFindOnePredicateFunc = DEFAULT_FINDONE_PREDICATE): Promise<SpinalNode<any>> {
-
-    if (predicate(this)) {
-      return this;
-    }
-
-    const seen: Set<SpinalNode<any>> = new Set([this]);
-    let promises: Promise<SpinalNode<any>[]>[] = [];
-    let nextGen: SpinalNode<any>[] = [this];
-    let currentGen: SpinalNode<any>[] = [];
-
-    while (nextGen.length) {
-      currentGen = nextGen;
-      promises = [];
-      nextGen = [];
-
-      for (const node of currentGen) {
-        promises.push(node.getParents(relationNames));
-
-        if (predicate(node)) {
-          return node;
-        }
-      }
-
-      const childrenArrays = await Promise.all(promises);
-
-      for (const children of childrenArrays) {
-        for (const child of children) {
-          if (!seen.has(child)) {
-            nextGen.push(child);
-            seen.add(child);
-          }
-        }
-      }
-    }
+    predicate: SpinalNodeFindOnePredicateFunc = DEFAULT_FIND_PREDICATE): Promise<SpinalNode<any>> {
+    return this.findParents(relationNames,
+      (node: SpinalNode<any>, stopFct: () => void): boolean => {
+        const res = predicate(node)
+        if (res) stopFct();
+        return res;
+      }).then((e: SpinalNode<any>[]): SpinalNode<any> => e[0]) // can do that because it stop to fist find
   }
-
 
   /**
  * Recursively finds all the parent nodes for which the predicate is true
- * @export
- * @param {string[]} relationNames Arry of relation
- * @param {(node)=> boolean} predicate Function returning true if the node needs to be returned
- */
+   * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Arry of relation
+   * @param {SpinalNodeFindPredicateFunc} [predicate=DEFAULT_FIND_PREDICATE]
+   * @return {*}  {Promise<SpinalNode<any>[]>}
+   * @memberof SpinalNode
+   */
   public async findParents(relationNames: string | RegExp | (string | RegExp)[] = [],
-    predicate: SpinalNodeFindPredicateFunc = DEFAULT_FIND_PREDICATE): Promise<any> {
+    predicate: SpinalNodeFindPredicateFunc = DEFAULT_FIND_PREDICATE): Promise<SpinalNode<any>[]> {
     let stop = false;
     function stopFct(): void {
       stop = true;
@@ -673,6 +672,49 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
       for (const node of currentGen) {
         promises.push(node.getParents(relationNames));
+        if (predicate(node, stopFct)) {
+          found.push(node);
+        }
+      }
+
+      // eslint-disable-next-line no-await-in-loop
+      const childrenArrays = await Promise.all(promises);
+
+      for (const children of childrenArrays) {
+        for (const child of children) {
+          if (!seen.has(child)) {
+            nextGen.push(child);
+            seen.add(child);
+          }
+        }
+      }
+    }
+    return found;
+  }
+
+  public async findParentsInContext(context: SpinalContext<any>,
+    predicate: SpinalNodeFindPredicateFunc = DEFAULT_FIND_PREDICATE): Promise<SpinalNode<any>[]> {
+    let stop = false;
+    function stopFct(): void {
+      stop = true;
+    }
+    let found = [];
+    const seen: Set<SpinalNode<any>> = new Set([this]);
+    let promises: Promise<SpinalNode<any>[]>[] = [];
+    let nextGen: SpinalNode<any>[] = [this];
+    let currentGen: SpinalNode<any>[] = [];
+
+    if (predicate(this, stopFct)) {
+      found.push(this);
+    }
+
+    while (!stop && nextGen.length) {
+      currentGen = nextGen;
+      promises = [];
+      nextGen = [];
+
+      for (const node of currentGen) {
+        promises.push(node.getParentsInContext(context));
         if (predicate(node, stopFct)) {
           found.push(node);
         }

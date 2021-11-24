@@ -51,12 +51,18 @@ function guid() {
     return `${s4()}-${s4()}-${s4()}-${Date.now().toString(16)}`;
 }
 exports.guid = guid;
-function loadParentRelation(spinalNodePointer) {
+function loadParentRelation(spinalNodePointer, context) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const relation = yield spinalNodePointer.load();
+            if (relation && context && relation.belongsToContext(context) === false) {
+                return undefined;
+            }
             try {
-                return relation.getParent();
+                const parent = yield relation.getParent();
+                if (context && parent.belongsToContext(context) === false)
+                    return undefined;
+                return parent;
             }
             catch (e) {
                 relation.removeFromGraph();

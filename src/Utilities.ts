@@ -23,7 +23,8 @@
  */
 
 import type { } from 'spinal-core-connectorjs_type';
-import type SpinalNode from "../src/Nodes/SpinalNode";
+import type { SpinalContext } from './Nodes/SpinalContext';
+import type SpinalNode from "./Nodes/SpinalNode";
 import type { AnySpinalRelation } from "./interfaces/AnySpinalRelation";
 import type { SpinalNodePointer } from "./SpinalNodePointer";
 
@@ -46,12 +47,18 @@ export function guid(): string {
   return `${s4()}-${s4()}-${s4()}-${Date.now().toString(16)}`;
 }
 
-export async function loadParentRelation<T extends spinal.Model>(spinalNodePointer: SpinalNodePointer<AnySpinalRelation>)
+export async function loadParentRelation<T extends spinal.Model>(spinalNodePointer: SpinalNodePointer<AnySpinalRelation>, context?: SpinalContext<any>)
   : Promise<SpinalNode<T>> {
   try {
     const relation = await spinalNodePointer.load();
+    if (relation && context && relation.belongsToContext(context) === false) {
+      return undefined
+    }
+
     try {
-      return relation.getParent();
+      const parent = await relation.getParent<T>();
+      if (context && parent.belongsToContext(context) === false) return undefined
+      return parent;
     } catch (e) {
       relation.removeFromGraph()
       return undefined;
