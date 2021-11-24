@@ -415,8 +415,11 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      */
     _removeFromChildren(): Promise<void>;
     /**
-     *
-     * @param relationNames
+     * @private
+     * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]]
+     * @param {boolean} [getParent=false]
+     * @return {*}  {string[]}
+     * @memberof SpinalNode
      */
     private _getValidRelations;
 }

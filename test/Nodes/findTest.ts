@@ -1,9 +1,34 @@
+/*
+ * Copyright 2021 SpinalCom - www.spinalcom.com
+ * 
+ * This file is part of SpinalCore.
+ * 
+ * Please read all of the following terms and conditions
+ * of the Free Software license Agreement ("Agreement")
+ * carefully.
+ * 
+ * This Agreement is a legally binding contract between
+ * the Licensee (as defined below) and SpinalCom that
+ * sets forth the terms and conditions that govern your
+ * use of the Program. By installing and/or using the
+ * Program, you agree to abide by all the terms and
+ * conditions stated or referenced herein.
+ * 
+ * If you do not agree to abide by these terms and
+ * conditions, do not demonstrate your acceptance and do
+ * not install or use the Program.
+ * You should have received a copy of the license along
+ * with this file. If not, see
+ * <http://resources.spinalcom.com/licenses.pdf>.
+ */
+
 import {
   SpinalNode,
   SpinalContext,
   SPINAL_RELATION_LST_PTR_TYPE,
   SpinalGraph,
 } from '../../src';
+import "mocha"
 
 const assert = require('assert');
 
@@ -15,17 +40,17 @@ const DEFAULT_NODE_NAME = 'nodeName';
 describe('How to use find', () => {
   describe('Error handling', () => {
     it('should throw an error if relationNames is neither an array, a string or omitted',
-       async () => {
-         let error = false;
+      async () => {
+        let error = false;
 
-         try {
-           await DEFAULT_NODE.find(<any>1);
-         } catch (e) {
-           error = true;
-           assert(e instanceof Error);
-         }
-         assert(error);
-       });
+        try {
+          await DEFAULT_NODE.find(<any>1);
+        } catch (e) {
+          error = true;
+          assert(e instanceof Error);
+        }
+        assert(error);
+      });
 
     it('should throw an error if the predicate is not a function', async () => {
       let error = false;
@@ -282,11 +307,11 @@ describe('How to use findInContext', () => {
       const promises = [];
       for (let i = 0; i < 3; i += 1) {
         promises.push(node1.addChild(new SpinalNode(),
-                                     DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE));
+          DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE));
         promises.push(node2.addChild(new SpinalNode(),
-                                     DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE));
+          DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE));
         promises.push(node3.addChild(new SpinalNode(),
-                                     DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE));
+          DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE));
       }
 
       await Promise.all(promises);

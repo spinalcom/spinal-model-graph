@@ -142,6 +142,20 @@ class BaseSpinalRelation extends spinal_core_connectorjs_type_1.Model {
         return this.contextIds.has(context.getId().get());
     }
     /**
+     * Remove an id to the context ids of the relation.
+     * @param {string} id Id of the context
+     * @throws {TypeError} If the id is not a string
+     * @memberof BaseSpinalRelation
+     */
+    removeContextId(id) {
+        if (typeof id !== 'string') {
+            throw TypeError('id must be a string');
+        }
+        if (this.contextIds.has(id)) {
+            this.contextIds.delete(id);
+        }
+    }
+    /**
      * Removes children from the relation.
      * @param {Array<SpinalNode<spinal.Model>>} [nodesToDelete=[]] Childs to remove
      * @returns {Promise<void>} An empty promise

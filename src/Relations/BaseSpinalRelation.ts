@@ -26,7 +26,6 @@
 import {
   FileSystem, Model, spinalCore, Val
 } from 'spinal-core-connectorjs_type';
-import type { SpinalNodeAny } from "../interfaces/SpinalNodeAny";
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalMap } from '../SpinalMap';
@@ -47,7 +46,7 @@ import { guid } from '../Utilities';
 abstract class BaseSpinalRelation extends Model {
   name: spinal.Str;
   id: spinal.Str;
-  parent: SpinalNodePointer<SpinalNodeAny>;
+  parent: SpinalNodePointer<SpinalNode<any>>;
   contextIds: SpinalMap<spinal.Val>;
 
   /**
@@ -57,7 +56,7 @@ abstract class BaseSpinalRelation extends Model {
    * @throws {TypeError} If the parent is not a node
    * @throws {TypeError} If the name is not a string
    */
-  constructor(parent?: SpinalNodeAny, name?: string) {
+  constructor(parent?: SpinalNode<any>, name?: string) {
     super();
 
     if (FileSystem._sig_server === false) return;
@@ -152,6 +151,22 @@ abstract class BaseSpinalRelation extends Model {
   }
 
   /**
+   * Remove an id to the context ids of the relation.
+   * @param {string} id Id of the context
+   * @throws {TypeError} If the id is not a string
+   * @memberof BaseSpinalRelation
+   */
+  removeContextId(id: string): void {
+    if (typeof id !== 'string') {
+      throw TypeError('id must be a string');
+    }
+
+    if (this.contextIds.has(id)) {
+      this.contextIds.delete(id);
+    }
+  }
+
+  /**
    * Removes children from the relation.
    * @param {Array<SpinalNode<spinal.Model>>} [nodesToDelete=[]] Childs to remove
    * @returns {Promise<void>} An empty promise
@@ -159,8 +174,8 @@ abstract class BaseSpinalRelation extends Model {
    * @throws {Error} If one of the nodes is not a child
    * @memberof BaseSpinalRelation
    */
-  async removeChildren(nodesToDelete: SpinalNodeAny[] = []): Promise<void> {
-    let nodes: SpinalNodeAny[] = nodesToDelete;
+  async removeChildren(nodesToDelete: SpinalNode<any>[] = []): Promise<void> {
+    let nodes: SpinalNode<any>[] = nodesToDelete;
     const promises: Promise<void>[] = [];
 
     if (!Array.isArray(nodes)) {
@@ -185,29 +200,29 @@ abstract class BaseSpinalRelation extends Model {
   /**
    * Removes a child from the relation.
    * @abstract
-   * @param {SpinalNodeAny} node Child to remove
+   * @param {SpinalNode<any>} node Child to remove
    * @return {*}  {Promise<void>} An empty promise
    * @memberof BaseSpinalRelation 
    */
-  abstract removeChild(node: SpinalNodeAny): Promise<void>;
+  abstract removeChild(node: SpinalNode<any>): Promise<void>;
 
   /**
    * Return all the children of the relation.
    * @abstract
-   * @return {*}  {Promise<SpinalNodeAny[]>} The children of the relation
+   * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
    * @memberof BaseSpinalRelation
    */
-  abstract getChildren(): Promise<SpinalNodeAny[]>;
+  abstract getChildren(): Promise<SpinalNode<any>[]>;
 
   /**
    * Return all the children of the relation associated to a certain context.
    * @abstract
    * @param {SpinalContext<any>} context 
-   * @return {*}  {Promise<SpinalNodeAny[]>} The children of the relation
+   * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
    * @throws {TypeError} If the context is not a SpinalContext
    * @memberof BaseSpinalRelation
    */
-  abstract getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNodeAny[]>;
+  abstract getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
 
   /**
    * Returns the type of the relation.

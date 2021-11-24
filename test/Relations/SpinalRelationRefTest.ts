@@ -1,5 +1,30 @@
+/*
+ * Copyright 2021 SpinalCom - www.spinalcom.com
+ * 
+ * This file is part of SpinalCore.
+ * 
+ * Please read all of the following terms and conditions
+ * of the Free Software license Agreement ("Agreement")
+ * carefully.
+ * 
+ * This Agreement is a legally binding contract between
+ * the Licensee (as defined below) and SpinalCom that
+ * sets forth the terms and conditions that govern your
+ * use of the Program. By installing and/or using the
+ * Program, you agree to abide by all the terms and
+ * conditions stated or referenced herein.
+ * 
+ * If you do not agree to abide by these terms and
+ * conditions, do not demonstrate your acceptance and do
+ * not install or use the Program.
+ * You should have received a copy of the license along
+ * with this file. If not, see
+ * <http://resources.spinalcom.com/licenses.pdf>.
+ */
+
 import { SpinalGraph, SpinalNode, SpinalContext, SPINAL_RELATION_TYPE, SpinalRelationRef } from '../../src';
 import { FileSystem, Model } from 'spinal-core-connectorjs_type';
+import "mocha"
 
 import * as assert from 'assert';
 
@@ -41,15 +66,15 @@ describe('SpinalRelationRef', () => {
     it('should throw an error if the parent or the name is missing', async () => {
       assert.throws(() => {
         new SpinalRelationRef();
-      },            TypeError);
+      }, TypeError);
 
       assert.throws(() => {
         new SpinalRelationRef(undefined, DEFAULT_RELATION_NAME);
-      },            TypeError);
+      }, TypeError);
 
       assert.throws(() => {
         new SpinalRelationRef(DEFAULT_NODE);
-      },            TypeError);
+      }, TypeError);
     });
 
     it('should throw an error if the parent is not a SpinalNode', async () => {
@@ -57,13 +82,13 @@ describe('SpinalRelationRef', () => {
 
       assert.throws(() => {
         new SpinalRelationRef(parent1, DEFAULT_RELATION_NAME);
-      },            TypeError);
+      }, TypeError);
 
       const parent2: any = new Model();
 
       assert.throws(() => {
         new SpinalRelationRef(parent2, DEFAULT_RELATION_NAME);
-      },            TypeError);
+      }, TypeError);
     });
   });
 
@@ -216,13 +241,13 @@ describe('SpinalRelationRef', () => {
   describe('How to add children', () => {
     describe('How to use addChild', () => {
       it('should add a child to the children of the relation',
-         async () => {
-           const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        async () => {
+          const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
-           await rel.addChild(DEFAULT_NODE);
-           const children = await rel.getChildren();
-           assert.deepStrictEqual(children, [DEFAULT_NODE]);
-         });
+          await rel.addChild(DEFAULT_NODE);
+          const children = await rel.getChildren();
+          assert.deepStrictEqual(children, [DEFAULT_NODE]);
+        });
 
       it('should throw an error if you try to add the same node twice', async () => {
         const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);

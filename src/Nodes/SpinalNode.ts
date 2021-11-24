@@ -175,9 +175,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
     for (const [, relationMap] of this.children) {
       for (const [, relation] of relationMap) {
         const relChildrenIds: string[] = relation.getChildrenIds();
-
-        for (let i: number = 0; i < relChildrenIds.length; i += 1) {
-          nodeChildrenIds.push(relChildrenIds[i]);
+        for (const relChildrenId of relChildrenIds) {
+          nodeChildrenIds.push(relChildrenId);
         }
       }
     }
@@ -533,14 +532,13 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If an element of relationNames is not a string
    */
   async getChildren(relationNames: string | RegExp | (string | RegExp)[] = []): Promise<SpinalNode<any>[]> {
-    let relName = this._getValidRelations(relationNames);
+    let relNames = this._getValidRelations(relationNames);
 
     const promises: Promise<SpinalNode<any>[]>[] = [];
-    const tmpRelName: string[] = <string[]>relName;
     for (const [, relationMap] of this.children) {
-      for (let j: number = 0; j < tmpRelName.length; j += 1) {
-        if (relationMap.has(tmpRelName[j])) {
-          const relation = relationMap.getElement(tmpRelName[j]);
+      for (const relName of relNames) {
+        if (relationMap.has(relName)) {
+          const relation = relationMap.getElement(relName);
           promises.push(relation.getChildren());
         }
       }
@@ -551,8 +549,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
     let children: SpinalNode<any>[];
     for (children of childrenLst) {
-      for (let i = 0; i < children.length; i += 1) {
-        res.push(children[i]);
+      for (const child of children) {
+        res.push(child);
       }
     }
 
@@ -583,8 +581,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
     const childrenLst: (SpinalNode<spinal.Model>[])[] = await Promise.all(promises);
     const res: SpinalNode<any>[] = [];
     for (const children of childrenLst) {
-      for (let i = 0; i < children.length; i += 1) {
-        res.push(children[i]);
+      for (const child of children) {
+        res.push(child);
       }
     }
     return res;
@@ -1261,8 +1259,11 @@ class SpinalNode<T extends spinal.Model> extends Model {
   }
 
   /**
-   * 
-   * @param relationNames 
+   * @private
+   * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]]
+   * @param {boolean} [getParent=false]
+   * @return {*}  {string[]}
+   * @memberof SpinalNode
    */
   private _getValidRelations(relationNames: string | RegExp | (string | RegExp)[] = [], getParent: boolean = false): string[] {
     let nodeRelations = !getParent ? this.getRelationNames() : this.parents.keys();
@@ -1271,20 +1272,28 @@ class SpinalNode<T extends spinal.Model> extends Model {
         return nodeRelations.filter((relationName: string): RegExpMatchArray => {
           return relationName.match(relationNames);
         })
+      } else if (typeof relationNames === "string") {
+        if (nodeRelations.includes(relationNames)) return [relationNames]
+        return []
       }
-      return [relationNames]
-    } else if (Array.isArray(relationNames) && relationNames.length === 0) {
+      throw TypeError('The RelationNames must be string | RegExp | (string | RegExp)[]');
+    } else if (relationNames.length === 0) {
       return nodeRelations;
-    } else if (Array.isArray(relationNames) && relationNames.length > 0) {
-      return nodeRelations.filter((relationName: string): boolean => {
-        for (let index = 0; index < relationNames.length; index++) {
-          const regex = relationNames[index];
-          if (relationName.match(regex)) {
-            return true;
+    } else if (relationNames.length > 0) {
+      const res = [];
+      for (const relationName of nodeRelations) {
+        for (const regOrStr of relationNames) {
+          if (typeof regOrStr === "string") {
+            if (regOrStr === relationName) res.push(relationName)
+          } else if (regOrStr instanceof RegExp) {
+            if (relationName.match(regOrStr))
+              res.push(relationName)
+          } else {
+            throw TypeError('The RelationNames must be string | RegExp | (string | RegExp)[]');
           }
         }
-        return false;
-      })
+      }
+      return res
     }
   }
 }

@@ -167,8 +167,8 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
         for (const [, relationMap] of this.children) {
             for (const [, relation] of relationMap) {
                 const relChildrenIds = relation.getChildrenIds();
-                for (let i = 0; i < relChildrenIds.length; i += 1) {
-                    nodeChildrenIds.push(relChildrenIds[i]);
+                for (const relChildrenId of relChildrenIds) {
+                    nodeChildrenIds.push(relChildrenId);
                 }
             }
         }
@@ -489,13 +489,12 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
      */
     getChildren(relationNames = []) {
         return __awaiter(this, void 0, void 0, function* () {
-            let relName = this._getValidRelations(relationNames);
+            let relNames = this._getValidRelations(relationNames);
             const promises = [];
-            const tmpRelName = relName;
             for (const [, relationMap] of this.children) {
-                for (let j = 0; j < tmpRelName.length; j += 1) {
-                    if (relationMap.has(tmpRelName[j])) {
-                        const relation = relationMap.getElement(tmpRelName[j]);
+                for (const relName of relNames) {
+                    if (relationMap.has(relName)) {
+                        const relation = relationMap.getElement(relName);
                         promises.push(relation.getChildren());
                     }
                 }
@@ -504,8 +503,8 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             const res = [];
             let children;
             for (children of childrenLst) {
-                for (let i = 0; i < children.length; i += 1) {
-                    res.push(children[i]);
+                for (const child of children) {
+                    res.push(child);
                 }
             }
             return res;
@@ -533,8 +532,8 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             const childrenLst = yield Promise.all(promises);
             const res = [];
             for (const children of childrenLst) {
-                for (let i = 0; i < children.length; i += 1) {
-                    res.push(children[i]);
+                for (const child of children) {
+                    res.push(child);
                 }
             }
             return res;
@@ -1145,8 +1144,11 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
         });
     }
     /**
-     *
-     * @param relationNames
+     * @private
+     * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]]
+     * @param {boolean} [getParent=false]
+     * @return {*}  {string[]}
+     * @memberof SpinalNode
      */
     _getValidRelations(relationNames = [], getParent = false) {
         let nodeRelations = !getParent ? this.getRelationNames() : this.parents.keys();
@@ -1156,21 +1158,34 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
                     return relationName.match(relationNames);
                 });
             }
-            return [relationNames];
+            else if (typeof relationNames === "string") {
+                if (nodeRelations.includes(relationNames))
+                    return [relationNames];
+                return [];
+            }
+            throw TypeError('The RelationNames must be string | RegExp | (string | RegExp)[]');
         }
-        else if (Array.isArray(relationNames) && relationNames.length === 0) {
+        else if (relationNames.length === 0) {
             return nodeRelations;
         }
-        else if (Array.isArray(relationNames) && relationNames.length > 0) {
-            return nodeRelations.filter((relationName) => {
-                for (let index = 0; index < relationNames.length; index++) {
-                    const regex = relationNames[index];
-                    if (relationName.match(regex)) {
-                        return true;
+        else if (relationNames.length > 0) {
+            const res = [];
+            for (const relationName of nodeRelations) {
+                for (const regOrStr of relationNames) {
+                    if (typeof regOrStr === "string") {
+                        if (regOrStr === relationName)
+                            res.push(relationName);
+                    }
+                    else if (regOrStr instanceof RegExp) {
+                        if (relationName.match(regOrStr))
+                            res.push(relationName);
+                    }
+                    else {
+                        throw TypeError('The RelationNames must be string | RegExp | (string | RegExp)[]');
                     }
                 }
-                return false;
-            });
+            }
+            return res;
         }
     }
 }

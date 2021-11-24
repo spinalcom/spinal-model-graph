@@ -25,7 +25,6 @@
 import {
   FileSystem, Lst, Model, spinalCore
 } from 'spinal-core-connectorjs_type';
-import type { SpinalNodeAny } from "../interfaces/SpinalNodeAny";
 import type { SpinalRelationPtrLstNodePointer } from '../interfaces/SpinalRelationPtrLstNodePointer';
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
@@ -39,7 +38,7 @@ import { SPINAL_RELATION_PTR_LST_TYPE } from './SpinalRelationFactory';
  * @extends {BaseSpinalRelation}
  * @property {spinal.Str} name
  * @property {spinal.Str} id
- * @property {SpinalNodePointer<SpinalNodeAny>} parent
+ * @property {SpinalNodePointer<SpinalNode<any>>} parent
  * @property {SpinalMap<spinal.Val>} contextIds
  * @property {SpinalRelationPtrLstNodePointer} children
  */
@@ -53,7 +52,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * @throws {TypeError} If the parent is not a node
    * @throws {TypeError} If the name is not a string
    */
-  constructor(parent: SpinalNodeAny, name: string) {
+  constructor(parent: SpinalNode<any>, name: string) {
     super(parent, name);
 
     if (FileSystem._sig_server === false) return;
@@ -92,12 +91,12 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
   /**
    * Return all the children of the relation.
-   * @returns {Promise<SpinalNodeAny[]>} The children of the relation
+   * @returns {Promise<SpinalNode<any>[]>} The children of the relation
    * @memberof SpinalRelationPtrLst
    */
-  async getChildren(): Promise<SpinalNodeAny[]> {
-    const childrenLst: spinal.Lst<SpinalNodeAny> = await this.children.load();
-    const children: SpinalNodeAny[] = [];
+  async getChildren(): Promise<SpinalNode<any>[]> {
+    const childrenLst: spinal.Lst<SpinalNode<any>> = await this.children.load();
+    const children: SpinalNode<any>[] = [];
 
     for (let i: number = 0; i < childrenLst.length; i += 1) {
       children.push(childrenLst[i]);
@@ -109,13 +108,13 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
   /**
    * Return all the children of the relation associated to a certain context.
    * @param {SpinalContext} context Context to use for the search
-   * @returns {Promise<Array<SpinalNodeAny>>} The children associated to the context
+   * @returns {Promise<Array<SpinalNode<any>>>} The children associated to the context
    * @throws {TypeError} If the context is not a SpinalContext
    * @memberof SpinalRelationPtrLst
    */
-  async getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNodeAny[]> {
-    const childrenLst: spinal.Lst<SpinalNodeAny> = await this.children.load();
-    const children: SpinalNodeAny[] = [];
+  async getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]> {
+    const childrenLst: spinal.Lst<SpinalNode<any>> = await this.children.load();
+    const children: SpinalNode<any>[] = [];
 
     if (!(context instanceof SpinalContext)) {
       throw TypeError('context must be a SpinalContext');
@@ -176,13 +175,13 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
   /**
    * Removes a child from the relation.
-   * @param {SpinalNodeAny} node Child to remove
+   * @param {SpinalNode<any>} node Child to remove
    * @returns {Promise<void>} An empty promise
    * @throws {Error} If the given node is not a child
    * @memberof SpinalRelationPtrLst
    */
-  async removeChild(node: SpinalNodeAny): Promise<void> {
-    const childrenLst: spinal.Lst<SpinalNodeAny> = await this.children.load();
+  async removeChild(node: SpinalNode<any>): Promise<void> {
+    const childrenLst: spinal.Lst<SpinalNode<any>> = await this.children.load();
 
     if (!childrenLst.contains(node)) {
       throw Error('The node is not a child');
@@ -196,18 +195,18 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
   /**
    * Removes children from the relation.
    * @override
-   * @param {SpinalNodeAny[]} [nodes=[]] Childs to remove
+   * @param {SpinalNode<any>[]} [nodes=[]] Childs to remove
    * @returns {Promise<void>} An empty promise
    * @throws {TypeError} If nodes is not an array or omitted
    * @throws {Error} If one of the nodes is not a child
    * @memberof SpinalRelationPtrLst
    */
-  async removeChildren(nodes: SpinalNodeAny[] = []): Promise<void> {
+  async removeChildren(nodes: SpinalNode<any>[] = []): Promise<void> {
     if (!Array.isArray(nodes)) {
       throw TypeError('node must be an array');
     }
 
-    const childrenLst: spinal.Lst<SpinalNodeAny> = await this.children.load();
+    const childrenLst: spinal.Lst<SpinalNode<any>> = await this.children.load();
     let error: boolean = false;
 
     if (nodes.length === 0) {

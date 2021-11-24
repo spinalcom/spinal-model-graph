@@ -45,7 +45,7 @@ const SpinalRelationFactory_1 = require("./SpinalRelationFactory");
  * @extends {BaseSpinalRelation}
  * @property {spinal.Str} name
  * @property {spinal.Str} id
- * @property {SpinalNodePointer<SpinalNodeAny>} parent
+ * @property {SpinalNodePointer<SpinalNode<any>>} parent
  * @property {SpinalMap<spinal.Val>} contextIds
  * @property {SpinalRelationPtrLstNodePointer} children
  */
@@ -89,7 +89,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
     }
     /**
      * Return all the children of the relation.
-     * @returns {Promise<SpinalNodeAny[]>} The children of the relation
+     * @returns {Promise<SpinalNode<any>[]>} The children of the relation
      * @memberof SpinalRelationPtrLst
      */
     getChildren() {
@@ -105,7 +105,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
     /**
      * Return all the children of the relation associated to a certain context.
      * @param {SpinalContext} context Context to use for the search
-     * @returns {Promise<Array<SpinalNodeAny>>} The children associated to the context
+     * @returns {Promise<Array<SpinalNode<any>>>} The children associated to the context
      * @throws {TypeError} If the context is not a SpinalContext
      * @memberof SpinalRelationPtrLst
      */
@@ -165,7 +165,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
     }
     /**
      * Removes a child from the relation.
-     * @param {SpinalNodeAny} node Child to remove
+     * @param {SpinalNode<any>} node Child to remove
      * @returns {Promise<void>} An empty promise
      * @throws {Error} If the given node is not a child
      * @memberof SpinalRelationPtrLst
@@ -184,7 +184,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
     /**
      * Removes children from the relation.
      * @override
-     * @param {SpinalNodeAny[]} [nodes=[]] Childs to remove
+     * @param {SpinalNode<any>[]} [nodes=[]] Childs to remove
      * @returns {Promise<void>} An empty promise
      * @throws {TypeError} If nodes is not an array or omitted
      * @throws {Error} If one of the nodes is not a child

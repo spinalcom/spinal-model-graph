@@ -87,7 +87,7 @@ class SpinalRelationRef extends BaseSpinalRelation_1.BaseSpinalRelation {
     }
     /**
      * Return all the children of the relation.
-     * @returns {Promise<Array<SpinalNodeAny>>} The children of the relation
+     * @returns {Promise<Array<SpinalNode<any>>>} The children of the relation
      * @memberof SpinalRelationRef
      */
     getChildren() {

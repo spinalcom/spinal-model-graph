@@ -26,7 +26,6 @@ export type { AnySpinalRelation } from "./interfaces/AnySpinalRelation";
 export type { ArrayPairStringAny } from "./interfaces/ArrayPairStringAny";
 export type { SpinalMapForEachFunc } from "./interfaces/SpinalMapForEachFunc";
 export type { SpinalMapItem } from "./interfaces/SpinalMapItem";
-export type { SpinalNodeAny } from "./interfaces/SpinalNodeAny";
 export type { SpinalNodeFindOnePredicateFunc } from "./interfaces/SpinalNodeFindOnePredicateFunc";
 export type { SpinalNodeFindPredicateFunc } from "./interfaces/SpinalNodeFindPredicateFunc";
 export type { SpinalNodeForEachFunc } from "./interfaces/SpinalNodeForEachFunc";

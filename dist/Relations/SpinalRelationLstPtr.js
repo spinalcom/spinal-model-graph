@@ -44,14 +44,14 @@ const SpinalRelationFactory_1 = require("./SpinalRelationFactory");
  * @extends BaseSpinalRelation
  * @property {spinal.Str} name
  * @property {spinal.Str} id
- * @property {SpinalNodePointer<SpinalNodeAny>} parent
+ * @property {SpinalNodePointer<SpinalNode<any>>} parent
  * @property {SpinalMap<spinal.Val>} contextIds
- * @property {spinal.Lst<SpinalNodePointer<SpinalNodeAny>>} children
+ * @property {spinal.Lst<SpinalNodePointer<SpinalNode<any>>>} children
  */
 class SpinalRelationLstPtr extends BaseSpinalRelation_1.BaseSpinalRelation {
     /**
      * Constructor for the SpinalRelationLstPtr class.
-     * @param {SpinalNodeAny} parent Parent of the relation
+     * @param {SpinalNode<any>} parent Parent of the relation
      * @param {string} name Name of the relation
      * @throws {TypeError} If the parent is not a node
      * @throws {TypeError} If the name is not a string
@@ -100,7 +100,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation_1.BaseSpinalRelation {
     }
     /**
      * Return all the children of the relation associated to a certain context.
-     * @returns {Promise<SpinalNodeAny[]>} The children of the relation
+     * @returns {Promise<SpinalNode<any>[]>} The children of the relation
      * @throws {TypeError} If the context is not a SpinalContext
      * @memberof SpinalRelationLstPtr
      */
@@ -155,7 +155,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation_1.BaseSpinalRelation {
     }
     /**
      * Removes a child from the relation.
-     * @param {SpinalNodeAny} node Child to remove
+     * @param {SpinalNode<any>} node Child to remove
      * @returns {Promise<void>} An empty promise
      * @throws {Error} If the given node is not a child
      * @memberof SpinalRelationLstPtr

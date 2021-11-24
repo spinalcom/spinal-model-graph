@@ -1,4 +1,3 @@
-import type { SpinalNodeAny } from "../interfaces/SpinalNodeAny";
 import type { SpinalRelationPtrLstNodePointer } from '../interfaces/SpinalRelationPtrLstNodePointer';
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
@@ -9,7 +8,7 @@ import { BaseSpinalRelation } from './BaseSpinalRelation';
  * @extends {BaseSpinalRelation}
  * @property {spinal.Str} name
  * @property {spinal.Str} id
- * @property {SpinalNodePointer<SpinalNodeAny>} parent
+ * @property {SpinalNodePointer<SpinalNode<any>>} parent
  * @property {SpinalMap<spinal.Val>} contextIds
  * @property {SpinalRelationPtrLstNodePointer} children
  */
@@ -22,7 +21,7 @@ declare class SpinalRelationPtrLst extends BaseSpinalRelation {
      * @throws {TypeError} If the parent is not a node
      * @throws {TypeError} If the name is not a string
      */
-    constructor(parent: SpinalNodeAny, name: string);
+    constructor(parent: SpinalNode<any>, name: string);
     /**
      * Retrieves all the ids of the children of the relation and return them inside an array.
      * @returns {String[]} Array containing all the children ids of the relation
@@ -37,18 +36,18 @@ declare class SpinalRelationPtrLst extends BaseSpinalRelation {
     getNbChildren(): number;
     /**
      * Return all the children of the relation.
-     * @returns {Promise<SpinalNodeAny[]>} The children of the relation
+     * @returns {Promise<SpinalNode<any>[]>} The children of the relation
      * @memberof SpinalRelationPtrLst
      */
-    getChildren(): Promise<SpinalNodeAny[]>;
+    getChildren(): Promise<SpinalNode<any>[]>;
     /**
      * Return all the children of the relation associated to a certain context.
      * @param {SpinalContext} context Context to use for the search
-     * @returns {Promise<Array<SpinalNodeAny>>} The children associated to the context
+     * @returns {Promise<Array<SpinalNode<any>>>} The children associated to the context
      * @throws {TypeError} If the context is not a SpinalContext
      * @memberof SpinalRelationPtrLst
      */
-    getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNodeAny[]>;
+    getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
     /**
      * Returns the type of the relation.
      * @returns {string} Type of the relation
@@ -67,22 +66,22 @@ declare class SpinalRelationPtrLst extends BaseSpinalRelation {
     addChild<T extends spinal.Model>(node: T | SpinalNode<T>): Promise<SpinalNode<T>>;
     /**
      * Removes a child from the relation.
-     * @param {SpinalNodeAny} node Child to remove
+     * @param {SpinalNode<any>} node Child to remove
      * @returns {Promise<void>} An empty promise
      * @throws {Error} If the given node is not a child
      * @memberof SpinalRelationPtrLst
      */
-    removeChild(node: SpinalNodeAny): Promise<void>;
+    removeChild(node: SpinalNode<any>): Promise<void>;
     /**
      * Removes children from the relation.
      * @override
-     * @param {SpinalNodeAny[]} [nodes=[]] Childs to remove
+     * @param {SpinalNode<any>[]} [nodes=[]] Childs to remove
      * @returns {Promise<void>} An empty promise
      * @throws {TypeError} If nodes is not an array or omitted
      * @throws {Error} If one of the nodes is not a child
      * @memberof SpinalRelationPtrLst
      */
-    removeChildren(nodes?: SpinalNodeAny[]): Promise<void>;
+    removeChildren(nodes?: SpinalNode<any>[]): Promise<void>;
 }
 export default SpinalRelationPtrLst;
 export { SpinalRelationPtrLst, };

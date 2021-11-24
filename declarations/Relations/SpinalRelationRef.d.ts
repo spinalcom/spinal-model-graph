@@ -1,4 +1,3 @@
-import type { SpinalNodeAny } from "../interfaces/SpinalNodeAny";
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
 import { BaseSpinalRelation } from './BaseSpinalRelation';
@@ -13,7 +12,7 @@ import { BaseSpinalRelation } from './BaseSpinalRelation';
  * @property {spinal.Lst<SpinalNode>} children
  */
 declare class SpinalRelationRef extends BaseSpinalRelation {
-    children: spinal.Lst<SpinalNodeAny>;
+    children: spinal.Lst<SpinalNode<any>>;
     /**
      * Constructor for the SpinalRelationRef class.
      * @param {SpinalNode} parent Parent of the relation
@@ -22,7 +21,7 @@ declare class SpinalRelationRef extends BaseSpinalRelation {
      * @throws {TypeError} If the name is not a string
      * @memberof SpinalRelationRef
      */
-    constructor(parent?: SpinalNodeAny, name?: string);
+    constructor(parent?: SpinalNode<any>, name?: string);
     /**
      * Retrieves all the ids of the children of the relation and return them inside an array.
      * @returns {String[]} Array containing all the children ids of the relation
@@ -37,10 +36,10 @@ declare class SpinalRelationRef extends BaseSpinalRelation {
     getNbChildren(): number;
     /**
      * Return all the children of the relation.
-     * @returns {Promise<Array<SpinalNodeAny>>} The children of the relation
+     * @returns {Promise<Array<SpinalNode<any>>>} The children of the relation
      * @memberof SpinalRelationRef
      */
-    getChildren(): Promise<SpinalNodeAny[]>;
+    getChildren(): Promise<SpinalNode<any>[]>;
     /**
      * Return all the children of the relation associated to a certain context.
      * @param {SpinalContext} context The context to use for the search
@@ -48,7 +47,7 @@ declare class SpinalRelationRef extends BaseSpinalRelation {
      * @throws {TypeError} If the context is not a SpinalContext
      * @memberof SpinalRelationRef
      */
-    getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNodeAny[]>;
+    getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
     /**
      * Returns the type of the relation.
      * @returns {string} Type of the relation
@@ -72,7 +71,7 @@ declare class SpinalRelationRef extends BaseSpinalRelation {
      * @throws {Error} If the given node is not a child
      * @memberof SpinalRelationRef
      */
-    removeChild(node: SpinalNodeAny): Promise<void>;
+    removeChild(node: SpinalNode<any>): Promise<void>;
 }
 export default SpinalRelationRef;
 export { SpinalRelationRef };
