@@ -35,14 +35,16 @@ import { guid } from '../Utilities';
 
 /**
  * Base for all relation in a SpinalGraph.
- * @extends Model
+ * @abstract
+ * @class BaseSpinalRelation
  * @abstract
  * @property {spinal.Str} name
  * @property {spinal.Str} id
  * @property {SpinalNodePointer<SpinalNode>} parent
  * @property {SpinalMap<spinal.Val>} contextIds
+ * @extends {Model}
  */
-class BaseSpinalRelation extends Model {
+abstract class BaseSpinalRelation extends Model {
   name: spinal.Str;
   id: spinal.Str;
   parent: SpinalNodePointer<SpinalNodeAny>;
@@ -180,6 +182,9 @@ class BaseSpinalRelation extends Model {
     }
   }
 
+  abstract removeChild(node: SpinalNodeAny): Promise<void>;
+  abstract getChildren(): Promise<SpinalNodeAny[]>;
+
   /**
    * Removes the relation from the graph.
    * @returns {Promise<void>} An empty promise
@@ -199,11 +204,15 @@ class BaseSpinalRelation extends Model {
    * @memberof BaseSpinalRelation
    */
   async _removeFromParent(): Promise<void> {
-    const parent = await this.getParent();
-    const relationMap = parent._getChildrenType(this.getType());
+    try {
+      const parent = await this.getParent();
+      const relationMap = parent._getChildrenType(this.getType());
 
-    relationMap.delete(this.getName().get());
-    this.parent.unset();
+      relationMap.delete(this.getName().get());
+      this.parent.unset();
+    } catch (e) {
+      return undefined
+    }
   }
 }
 

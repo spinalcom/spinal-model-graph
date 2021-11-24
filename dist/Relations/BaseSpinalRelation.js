@@ -42,12 +42,14 @@ const SpinalNodePointer_1 = require("../SpinalNodePointer");
 const Utilities_1 = require("../Utilities");
 /**
  * Base for all relation in a SpinalGraph.
- * @extends Model
+ * @abstract
+ * @class BaseSpinalRelation
  * @abstract
  * @property {spinal.Str} name
  * @property {spinal.Str} id
  * @property {SpinalNodePointer<SpinalNode>} parent
  * @property {SpinalMap<spinal.Val>} contextIds
+ * @extends {Model}
  */
 class BaseSpinalRelation extends spinal_core_connectorjs_type_1.Model {
     /**
@@ -189,10 +191,15 @@ class BaseSpinalRelation extends spinal_core_connectorjs_type_1.Model {
      */
     _removeFromParent() {
         return __awaiter(this, void 0, void 0, function* () {
-            const parent = yield this.getParent();
-            const relationMap = parent._getChildrenType(this.getType());
-            relationMap.delete(this.getName().get());
-            this.parent.unset();
+            try {
+                const parent = yield this.getParent();
+                const relationMap = parent._getChildrenType(this.getType());
+                relationMap.delete(this.getName().get());
+                this.parent.unset();
+            }
+            catch (e) {
+                return undefined;
+            }
         });
     }
 }

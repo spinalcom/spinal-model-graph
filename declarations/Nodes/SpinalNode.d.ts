@@ -1,5 +1,6 @@
 import { Model } from 'spinal-core-connectorjs_type';
 import type { AnySpinalRelation } from "../interfaces/AnySpinalRelation";
+import type { SpinalNodeFindOnePredicateFunc } from '../interfaces/SpinalNodeFindOnePredicateFunc';
 import type { SpinalNodeFindPredicateFunc } from '../interfaces/SpinalNodeFindPredicateFunc';
 import type { SpinalNodeForEachFunc } from '../interfaces/SpinalNodeForEachFunc';
 import type { SpinalNodeInfoModel } from '../interfaces/SpinalNodeInfoModel';
@@ -8,7 +9,8 @@ import { SpinalMap } from '../SpinalMap';
 import { SpinalNodePointer } from '../SpinalNodePointer';
 import { SpinalSet } from '../SpinalSet';
 import { SpinalContext } from './SpinalContext';
-export declare const DEFAULT_PREDICATE: SpinalNodeFindPredicateFunc;
+export declare const DEFAULT_FIND_PREDICATE: SpinalNodeFindPredicateFunc;
+export declare const DEFAULT_FINDONE_PREDICATE: SpinalNodeFindOnePredicateFunc;
 /**
  * Node of a graph.
  * @extends Model
@@ -70,10 +72,12 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
     */
     setDirectModificationDate(date?: number): void;
     /**
-     * Returns the element.
+     * Returns the element. if not present will create one
+     * @param {boolean} [noCreate=false] if true will not create a element and if element doesn't exist will return undefined
      * @returns {Promise<T>} A promise where the parameter of the resolve method is the element
+     * @memberof SpinalNode
      */
-    getElement(): Promise<T>;
+    getElement(noCreate?: boolean): Promise<T>;
     /**
      * Returns all the children ids in an array.
      * @returns {string[]} Ids of the children
@@ -105,12 +109,12 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
     /**
      * Verify if the node contains the relation name.
      * @param {string} relationName Name of the relation
-     * @param {string} relationType Type of the relation
+     * @param {string} [relationType] Type of the relation
      * @returns {boolean} Return true is the relation is contained in the node and false otherwise.
      * @throws {TypeError} If the relation name is not a string
      * @throws {Error} If the relation type doesn't exist
      */
-    hasRelation(relationName: string, relationType: string): boolean;
+    hasRelation(relationName: string, relationType?: string): boolean;
     /**
      * Verify if the node contains all the relation names.
      * @param {string[]} relationNames Array containing all the relation name
@@ -121,7 +125,7 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @throws {TypeError} If one of the relation names is not a string
      * @throws {Error} If the relation type doesn't exist
      */
-    hasRelations(relationNames: string[], relationType: string): boolean;
+    hasRelations(relationNames: string[], relationType?: string): boolean;
     /**
      * Returns all the relation names of the node.
      * @returns {string[]} The names of the relations of the node
@@ -226,19 +230,20 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      */
     getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
     /**
-    //  * Return all parents for the relation names no matter the type of relation
-    //  * @param {String[]} [relationNames=[]] Array containing the relation names of the desired parents
-    //  * @returns {Promise<Array<SpinalNode<any>>>} Promise containing the parents that were found
-    //  * @throws {TypeError} If the relationNames are neither an array, a string or omitted
-    //  * @throws {TypeError} If an element of relationNames is not a string
-    //  */
+     * Return all parents for the relation names no matter the type of relation
+     * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Array containing the relation names of the desired parents
+     * @returns {Promise<Array<SpinalNode<any>>>} Promise containing the parents that were found
+     * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+     * @throws {TypeError} If an element of relationNames is not a string
+     * @memberof SpinalNode
+     */
     getParents(relationNames?: string | RegExp | (string | RegExp)[]): Promise<SpinalNode<any>[]>;
     /**
    * Recursively finds and return the FIRST FOUND parent nodes for which the predicate is true
    * @param {string[]} relationNames Arry of relation
    * @param {(node)=> boolean} predicate function stop search if return true
    */
-    findOneParent(relationNames?: string | RegExp | (string | RegExp)[], predicate?: SpinalNodeFindPredicateFunc): Promise<any>;
+    findOneParent(relationNames?: string | RegExp | (string | RegExp)[], predicate?: SpinalNodeFindPredicateFunc): Promise<SpinalNode<any>>;
     /**
    * Recursively finds all the parent nodes for which the predicate is true
    * @export
@@ -390,10 +395,6 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @param relationNames
      */
     private _getValidRelations;
-    /**
-    *
-    */
-    private _addTypeToGraph;
 }
 export default SpinalNode;
 export { SpinalNode };

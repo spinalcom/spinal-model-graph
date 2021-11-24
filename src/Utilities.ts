@@ -50,7 +50,12 @@ async function loadParentRelation<T extends spinal.Model>(spinalNodePointer: Spi
   : Promise<SpinalNode<T>> {
   try {
     const relation = await spinalNodePointer.load();
-    return relation.getParent();
+    try {
+      return relation.getParent();
+    } catch (e) {
+      relation.removeFromGraph()
+      return undefined;
+    }
   } catch (e) {
     return undefined;
   }

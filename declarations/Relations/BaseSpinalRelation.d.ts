@@ -6,14 +6,16 @@ import { SpinalMap } from '../SpinalMap';
 import { SpinalNodePointer } from '../SpinalNodePointer';
 /**
  * Base for all relation in a SpinalGraph.
- * @extends Model
+ * @abstract
+ * @class BaseSpinalRelation
  * @abstract
  * @property {spinal.Str} name
  * @property {spinal.Str} id
  * @property {SpinalNodePointer<SpinalNode>} parent
  * @property {SpinalMap<spinal.Val>} contextIds
+ * @extends {Model}
  */
-declare class BaseSpinalRelation extends Model {
+declare abstract class BaseSpinalRelation extends Model {
     name: spinal.Str;
     id: spinal.Str;
     parent: SpinalNodePointer<SpinalNodeAny>;
@@ -75,6 +77,8 @@ declare class BaseSpinalRelation extends Model {
      * @memberof BaseSpinalRelation
      */
     removeChildren(nodesToDelete?: SpinalNodeAny[]): Promise<void>;
+    abstract removeChild(node: SpinalNodeAny): Promise<void>;
+    abstract getChildren(): Promise<SpinalNodeAny[]>;
     /**
      * Removes the relation from the graph.
      * @returns {Promise<void>} An empty promise

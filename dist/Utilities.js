@@ -55,7 +55,13 @@ function loadParentRelation(spinalNodePointer) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const relation = yield spinalNodePointer.load();
-            return relation.getParent();
+            try {
+                return relation.getParent();
+            }
+            catch (e) {
+                relation.removeFromGraph();
+                return undefined;
+            }
         }
         catch (e) {
             return undefined;

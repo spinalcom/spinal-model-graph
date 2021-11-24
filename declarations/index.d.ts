@@ -3,6 +3,7 @@ export type { ArrayPairStringAny } from "./interfaces/ArrayPairStringAny";
 export type { SpinalMapForEachFunc } from "./interfaces/SpinalMapForEachFunc";
 export type { SpinalMapItem } from "./interfaces/SpinalMapItem";
 export type { SpinalNodeAny } from "./interfaces/SpinalNodeAny";
+export type { SpinalNodeFindOnePredicateFunc } from "./interfaces/SpinalNodeFindOnePredicateFunc";
 export type { SpinalNodeFindPredicateFunc } from "./interfaces/SpinalNodeFindPredicateFunc";
 export type { SpinalNodeForEachFunc } from "./interfaces/SpinalNodeForEachFunc";
 export type { SpinalNodeInfoModel } from "./interfaces/SpinalNodeInfoModel";
@@ -13,7 +14,7 @@ export type { SpinalRelationPtrLstNodePointerInfoModel } from "./interfaces/Spin
 export type { SpinalSetForEachFunc } from "./interfaces/SpinalSetForEachFunc";
 export { SpinalContext } from './Nodes/SpinalContext';
 export { SpinalGraph } from './Nodes/SpinalGraph';
-export { DEFAULT_PREDICATE, SpinalNode } from './Nodes/SpinalNode';
+export { DEFAULT_FINDONE_PREDICATE, DEFAULT_FIND_PREDICATE, SpinalNode } from './Nodes/SpinalNode';
 export { SpinalRelationFactory, SPINAL_RELATION_LST_PTR_TYPE, SPINAL_RELATION_PTR_LST_TYPE, SPINAL_RELATION_TYPE } from './Relations/SpinalRelationFactory';
 export { SpinalRelationLstPtr } from './Relations/SpinalRelationLstPtr';
 export { SpinalRelationPtrLst } from './Relations/SpinalRelationPtrLst';
