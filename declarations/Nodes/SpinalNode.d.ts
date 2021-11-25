@@ -296,16 +296,22 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @throws {TypeError} If an element of relationNames is not a string
      * @throws {TypeError} If the predicate is not a function
      */
-    findByType(relationNames: string | string[], nodeType: string): Promise<any>;
+    findByType(relationNames: string | string[], nodeType: string): Promise<SpinalNode<any>[]>;
     /**
      * Recursively finds all the children nodes and classify them by type.
      * @param {string|string[]} relationNames Array containing the relation names to follow
-     * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
+     * @return {*}  {Promise<{ types: string[]; data: { [type: string]: SpinalNode<any>[] } }>}
      * @throws {TypeError} If the relationNames are neither an array, a string or omitted
      * @throws {TypeError} If an element of relationNames is not a string
      * @throws {TypeError} If the predicate is not a function
+     * @memberof SpinalNode
      */
-    browseAnClassifyByType(relationNames: string | string[]): Promise<any>;
+    browseAnClassifyByType(relationNames: string | string[]): Promise<{
+        types: string[];
+        data: {
+            [type: string]: SpinalNode<any>[];
+        };
+    }>;
     /**
      * Recursively finds all the children nodes in the context for which the predicate is true..
      * @param {SpinalContext} context Context to use for the search
@@ -323,7 +329,7 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @throws {TypeError} If context is not a SpinalContext
      * @throws {TypeError} If the predicate is not a function
      */
-    findInContextByType(context: SpinalContext<any>, nodeType: string): Promise<any>;
+    findInContextByType(context: SpinalContext<any>, nodeType: string): Promise<SpinalNode<any>[]>;
     /**
      * Recursively finds all the children nodes in the context and classify them by type.
      * @param {SpinalContext} context Context to use for the search
@@ -332,7 +338,12 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @throws {TypeError} If an element of relationNames is not a string
      * @throws {TypeError} If the predicate is not a function
      */
-    browseAndClassifyByTypeInContext(context: SpinalContext<any>): Promise<any>;
+    browseAndClassifyByTypeInContext(context: SpinalContext<any>): Promise<{
+        types: string[];
+        data: {
+            [type: string]: SpinalNode<any>[];
+        };
+    }>;
     /**
      * Recursively applies a function to all the children nodes.
      * @param {string|string[]} relationNames Array containing the relation names to follow
@@ -352,24 +363,28 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
     forEachInContext(context: SpinalContext<any>, callback: SpinalNodeForEachFunc): Promise<void>;
     /**
      * Recursively applies a function to all the children nodes and returns the results in an array.
+     * @template T
      * @param {string|string[]} relationNames Array containing the relation names to follow
      * @param {SpinalNodeMapFunc} callback Function to apply to the nodes
-     * @returns {Promise<any[]>} The results of the callback for each node
+     * @returns {Promise<T[]>} The results of the callback for each node
      * @throws {TypeError} If the relationNames are neither an array, a string or omitted
      * @throws {TypeError} If an element of relationNames is not a string
      * @throws {TypeError} If the callback is not a function
+     * @memberof SpinalNode
      */
-    map(relationNames: string | string[], callback: SpinalNodeMapFunc): Promise<any[]>;
+    map<T>(relationNames: string | string[], callback: SpinalNodeMapFunc<T>): Promise<T[]>;
     /**
      * Recursively applies a function to all the children nodes in the context
      * and returns the results in an array.
+     * @template T
      * @param {SpinalContext} context Context to use for the search
      * @param {function} callback Function to apply to the nodes
      * @returns {Promise<Array<*>>} The results of the callback for each node
      * @throws {TypeError} If context is not a SpinalContext
      * @throws {TypeError} If the callback is not a function
+     * @memberof SpinalNode
      */
-    mapInContext(context: SpinalContext<any>, callback: SpinalNodeMapFunc): Promise<any[]>;
+    mapInContext<T>(context: SpinalContext<any>, callback: SpinalNodeMapFunc<T>): Promise<T[]>;
     /**
      * @param {RelationSearch} relationNames
      * @memberof SpinalNode

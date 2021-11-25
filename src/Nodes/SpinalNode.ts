@@ -799,47 +799,15 @@ class SpinalNode<T extends spinal.Model> extends Model {
     if (typeof predicate !== 'function') {
       throw TypeError('predicate must be a function');
     }
+
+    const found: SpinalNode<any>[] = [];
     let stop = false;
     function stopFct(): void {
       stop = true;
     }
-    const seen: Set<SpinalNode<any>> = new Set([this]);
-    let promises: (() => Promise<SpinalNode<any>[]>)[] = [];
-    let nextGen: SpinalNode<any>[] = [this];
-    let currentGen: SpinalNode<any>[] = [];
-    const found: SpinalNode<any>[] = [];
-
-    while (nextGen.length) {
-      currentGen = nextGen;
-      promises = [];
-      nextGen = [];
-
-      for (const node of currentGen) {
-        if (predicate(node, stopFct)) {
-          found.push(node);
-        }
-        // @ts-ignore
-        if (stop === true) break;
-        promises.push(
-          (): Promise<SpinalNode<any>[]> => node.getChildren(relationNames)
-        );
-      }
-      // @ts-ignore
-      if (stop === true) break;
-
-      const childrenArrays: SpinalNode<any>[][] = await consumeBatch(
-        promises,
-        30
-      );
-
-      for (const children of childrenArrays) {
-        for (const child of children) {
-          if (!seen.has(child)) {
-            nextGen.push(child);
-            seen.add(child);
-          }
-        }
-      }
+    for await (const node of this.visitChildren(relationNames)) {
+      if (predicate(node, stopFct)) found.push(node);
+      if (stop) break;
     }
     return found;
   }
@@ -918,7 +886,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
     let promises: (() => Promise<SpinalNode<any>[]>)[] = [];
     let nextGen: SpinalNode<any>[] = [this];
     let currentGen: SpinalNode<any>[] = [];
-    const result = [];
+    const result: SpinalNode<any>[] = [];
     let stop = false;
     function stopFct(): void {
       stop = true;
@@ -969,7 +937,10 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the predicate is not a function
    */
-  findByType(relationNames: string | string[], nodeType: string): Promise<any> {
+  findByType(
+    relationNames: string | string[],
+    nodeType: string
+  ): Promise<SpinalNode<any>[]> {
     return this.find(relationNames, (node: SpinalNode<any>): boolean => {
       return node.getType().get() === nodeType;
     });
@@ -978,12 +949,15 @@ class SpinalNode<T extends spinal.Model> extends Model {
   /**
    * Recursively finds all the children nodes and classify them by type.
    * @param {string|string[]} relationNames Array containing the relation names to follow
-   * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
+   * @return {*}  {Promise<{ types: string[]; data: { [type: string]: SpinalNode<any>[] } }>}
    * @throws {TypeError} If the relationNames are neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the predicate is not a function
+   * @memberof SpinalNode
    */
-  async browseAnClassifyByType(relationNames: string | string[]): Promise<any> {
+  async browseAnClassifyByType(
+    relationNames: string | string[]
+  ): Promise<{ types: string[]; data: { [type: string]: SpinalNode<any>[] } }> {
     let dataStructure = {
       types: [],
       data: {},
@@ -1018,42 +992,15 @@ class SpinalNode<T extends spinal.Model> extends Model {
     if (typeof predicate !== 'function') {
       throw new Error('The predicate function must be a function');
     }
+    const found: SpinalNode<any>[] = [];
     let stop = false;
     function stopFct(): void {
       stop = true;
     }
-
-    const seen: Set<SpinalNode<any>> = new Set([this]);
-    let promises: Promise<SpinalNode<any>[]>[] = [];
-    let nextGen: SpinalNode<any>[] = [this];
-    let currentGen: SpinalNode<any>[] = [];
-    const found: SpinalNode<any>[] = [];
-
-    while (!stop && nextGen.length) {
-      currentGen = nextGen;
-      promises = [];
-      nextGen = [];
-
-      for (const node of currentGen) {
-        promises.push(node.getChildrenInContext(context));
-
-        if (predicate(node, stopFct)) {
-          found.push(node);
-        }
-      }
-
-      const childrenArrays: SpinalNode<any>[][] = await Promise.all(promises);
-
-      for (const children of childrenArrays) {
-        for (const child of children) {
-          if (!seen.has(child)) {
-            nextGen.push(child);
-            seen.add(child);
-          }
-        }
-      }
+    for await (const node of this.visitChildrenInContext(context)) {
+      if (predicate(node, stopFct)) found.push(node);
+      if (stop) break;
     }
-
     return found;
   }
 
@@ -1068,7 +1015,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
   findInContextByType(
     context: SpinalContext<any>,
     nodeType: string
-  ): Promise<any> {
+  ): Promise<SpinalNode<any>[]> {
     return this.findInContext(context, (node: SpinalNode<any>): boolean => {
       return node.getType().get() === nodeType;
     });
@@ -1084,7 +1031,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    */
   async browseAndClassifyByTypeInContext(
     context: SpinalContext<any>
-  ): Promise<any> {
+  ): Promise<{ types: string[]; data: { [type: string]: SpinalNode<any>[] } }> {
     let dataStructure = {
       types: [],
       data: {},
@@ -1152,23 +1099,25 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
   /**
    * Recursively applies a function to all the children nodes and returns the results in an array.
+   * @template T
    * @param {string|string[]} relationNames Array containing the relation names to follow
    * @param {SpinalNodeMapFunc} callback Function to apply to the nodes
-   * @returns {Promise<any[]>} The results of the callback for each node
+   * @returns {Promise<T[]>} The results of the callback for each node
    * @throws {TypeError} If the relationNames are neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the callback is not a function
+   * @memberof SpinalNode
    */
-  async map(
+  async map<T>(
     relationNames: string | string[],
-    callback: SpinalNodeMapFunc
-  ): Promise<any[]> {
+    callback: SpinalNodeMapFunc<T>
+  ): Promise<T[]> {
     if (typeof callback !== 'function') {
       throw TypeError('The callback function must be a function');
     }
 
     const nodes = await this.find(relationNames);
-    const results = [];
+    const results: T[] = [];
 
     for (const node of nodes) {
       results.push(callback(node));
@@ -1180,22 +1129,24 @@ class SpinalNode<T extends spinal.Model> extends Model {
   /**
    * Recursively applies a function to all the children nodes in the context
    * and returns the results in an array.
+   * @template T
    * @param {SpinalContext} context Context to use for the search
    * @param {function} callback Function to apply to the nodes
    * @returns {Promise<Array<*>>} The results of the callback for each node
    * @throws {TypeError} If context is not a SpinalContext
    * @throws {TypeError} If the callback is not a function
+   * @memberof SpinalNode
    */
-  async mapInContext(
+  async mapInContext<T>(
     context: SpinalContext<any>,
-    callback: SpinalNodeMapFunc
-  ): Promise<any[]> {
+    callback: SpinalNodeMapFunc<T>
+  ): Promise<T[]> {
     if (typeof callback !== 'function') {
       throw TypeError('The callback function must be a function');
     }
 
     const nodes: SpinalNode<any>[] = await this.findInContext(context);
-    const results: any[] = [];
+    const results: T[] = [];
 
     for (const node of nodes) {
       results.push(callback(node));
@@ -1279,7 +1230,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
     let nextGen: SpinalNode<any>[] = [this];
     let currentGen: SpinalNode<any>[] = [];
 
-    while (!stop && nextGen.length) {
+    while (nextGen.length) {
       currentGen = nextGen;
       promises = [];
       nextGen = [];
@@ -1317,7 +1268,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
     let nextGen: SpinalNode<any>[] = [this];
     let currentGen: SpinalNode<any>[] = [];
 
-    while (!stop && nextGen.length) {
+    while (nextGen.length) {
       currentGen = nextGen;
       promises = [];
       nextGen = [];

@@ -445,6 +445,54 @@ describe('How to use findInContext', () => {
 
       assert.deepStrictEqual(foundChildren, [child2, child5]);
     });
+
+    it('should return be able to do a find one like', async () => {
+      const context = new SpinalContext();
+      const child1 = new SpinalNode(`${DEFAULT_NODE_NAME}1`);
+      const child2 = new SpinalNode(`${DEFAULT_NODE_NAME}2`);
+      const child3 = new SpinalNode(`${DEFAULT_NODE_NAME}3`);
+
+      await Promise.all([
+        context.addChildInContext(child1, DEFAULT_RELATION_NAME),
+        context.addChildInContext(child2, DEFAULT_RELATION_NAME),
+        context.addChildInContext(child3, DEFAULT_RELATION_NAME),
+      ]);
+
+      const foundChild = await context.find(
+        DEFAULT_RELATION_NAME,
+        (node, stopFct) => {
+          if (node.getName().get() === `${DEFAULT_NODE_NAME}2`) {
+            stopFct();
+            return true;
+          }
+          return false;
+        }
+      );
+
+      assert.deepStrictEqual(foundChild, [child2]);
+    });
+    it('should return be able to stop a search', async () => {
+      const context = new SpinalContext();
+      const child1 = new SpinalNode(`${DEFAULT_NODE_NAME}1`);
+      const child2 = new SpinalNode(`${DEFAULT_NODE_NAME}2`);
+      const child3 = new SpinalNode(`${DEFAULT_NODE_NAME}3`);
+
+      await Promise.all([
+        context.addChildInContext(child1, DEFAULT_RELATION_NAME),
+        context.addChildInContext(child2, DEFAULT_RELATION_NAME),
+        context.addChildInContext(child3, DEFAULT_RELATION_NAME),
+      ]);
+
+      const foundChild = await context.find(
+        DEFAULT_RELATION_NAME,
+        (_node, stopFct) => {
+          stopFct();
+          return true;
+        }
+      );
+
+      assert.deepStrictEqual(foundChild, [context]);
+    });
   });
 
   describe('How to use context', () => {

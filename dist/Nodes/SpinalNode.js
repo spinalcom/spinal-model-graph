@@ -31,6 +31,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
@@ -698,6 +705,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
      * @throws {TypeError} If the predicate is not a function
      */
     find(relationNames, predicate = exports.DEFAULT_FIND_PREDICATE) {
+        var e_1, _a;
         return __awaiter(this, void 0, void 0, function* () {
             if (!Array.isArray(relationNames) &&
                 relationNames !== undefined &&
@@ -707,40 +715,26 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             if (typeof predicate !== 'function') {
                 throw TypeError('predicate must be a function');
             }
+            const found = [];
             let stop = false;
             function stopFct() {
                 stop = true;
             }
-            const seen = new Set([this]);
-            let promises = [];
-            let nextGen = [this];
-            let currentGen = [];
-            const found = [];
-            while (nextGen.length) {
-                currentGen = nextGen;
-                promises = [];
-                nextGen = [];
-                for (const node of currentGen) {
-                    if (predicate(node, stopFct)) {
+            try {
+                for (var _b = __asyncValues(this.visitChildren(relationNames)), _c; _c = yield _b.next(), !_c.done;) {
+                    const node = _c.value;
+                    if (predicate(node, stopFct))
                         found.push(node);
-                    }
-                    // @ts-ignore
-                    if (stop === true)
+                    if (stop)
                         break;
-                    promises.push(() => node.getChildren(relationNames));
                 }
-                // @ts-ignore
-                if (stop === true)
-                    break;
-                const childrenArrays = yield (0, Utilities_1.consumeBatch)(promises, 30);
-                for (const children of childrenArrays) {
-                    for (const child of children) {
-                        if (!seen.has(child)) {
-                            nextGen.push(child);
-                            seen.add(child);
-                        }
-                    }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
                 }
+                finally { if (e_1) throw e_1.error; }
             }
             return found;
         });
@@ -877,10 +871,11 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
     /**
      * Recursively finds all the children nodes and classify them by type.
      * @param {string|string[]} relationNames Array containing the relation names to follow
-     * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
+     * @return {*}  {Promise<{ types: string[]; data: { [type: string]: SpinalNode<any>[] } }>}
      * @throws {TypeError} If the relationNames are neither an array, a string or omitted
      * @throws {TypeError} If an element of relationNames is not a string
      * @throws {TypeError} If the predicate is not a function
+     * @memberof SpinalNode
      */
     browseAnClassifyByType(relationNames) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -911,38 +906,31 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
      * @throws {TypeError} If the predicate is not a function
      */
     findInContext(context, predicate = exports.DEFAULT_FIND_PREDICATE) {
+        var e_2, _a;
         return __awaiter(this, void 0, void 0, function* () {
             if (typeof predicate !== 'function') {
                 throw new Error('The predicate function must be a function');
             }
+            const found = [];
             let stop = false;
             function stopFct() {
                 stop = true;
             }
-            const seen = new Set([this]);
-            let promises = [];
-            let nextGen = [this];
-            let currentGen = [];
-            const found = [];
-            while (!stop && nextGen.length) {
-                currentGen = nextGen;
-                promises = [];
-                nextGen = [];
-                for (const node of currentGen) {
-                    promises.push(node.getChildrenInContext(context));
-                    if (predicate(node, stopFct)) {
+            try {
+                for (var _b = __asyncValues(this.visitChildrenInContext(context)), _c; _c = yield _b.next(), !_c.done;) {
+                    const node = _c.value;
+                    if (predicate(node, stopFct))
                         found.push(node);
-                    }
+                    if (stop)
+                        break;
                 }
-                const childrenArrays = yield Promise.all(promises);
-                for (const children of childrenArrays) {
-                    for (const child of children) {
-                        if (!seen.has(child)) {
-                            nextGen.push(child);
-                            seen.add(child);
-                        }
-                    }
+            }
+            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
                 }
+                finally { if (e_2) throw e_2.error; }
             }
             return found;
         });
@@ -1027,12 +1015,14 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
     }
     /**
      * Recursively applies a function to all the children nodes and returns the results in an array.
+     * @template T
      * @param {string|string[]} relationNames Array containing the relation names to follow
      * @param {SpinalNodeMapFunc} callback Function to apply to the nodes
-     * @returns {Promise<any[]>} The results of the callback for each node
+     * @returns {Promise<T[]>} The results of the callback for each node
      * @throws {TypeError} If the relationNames are neither an array, a string or omitted
      * @throws {TypeError} If an element of relationNames is not a string
      * @throws {TypeError} If the callback is not a function
+     * @memberof SpinalNode
      */
     map(relationNames, callback) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -1050,11 +1040,13 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
     /**
      * Recursively applies a function to all the children nodes in the context
      * and returns the results in an array.
+     * @template T
      * @param {SpinalContext} context Context to use for the search
      * @param {function} callback Function to apply to the nodes
      * @returns {Promise<Array<*>>} The results of the callback for each node
      * @throws {TypeError} If context is not a SpinalContext
      * @throws {TypeError} If the callback is not a function
+     * @memberof SpinalNode
      */
     mapInContext(context, callback) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -1141,7 +1133,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             let promises = [];
             let nextGen = [this];
             let currentGen = [];
-            while (!stop && nextGen.length) {
+            while (nextGen.length) {
                 currentGen = nextGen;
                 promises = [];
                 nextGen = [];
@@ -1171,7 +1163,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             let promises = [];
             let nextGen = [this];
             let currentGen = [];
-            while (!stop && nextGen.length) {
+            while (nextGen.length) {
                 currentGen = nextGen;
                 promises = [];
                 nextGen = [];
