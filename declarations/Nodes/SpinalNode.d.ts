@@ -272,8 +272,6 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      */
     find(relationNames: RelationSearch, predicate?: SpinalNodeFindPredicateFunc): Promise<SpinalNode<any>[]>;
     /**
-     *
-     *
      * @param {RelationSearch} relations
      * @param {(node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>} predicate
      * @return {*}  {Promise<SpinalNode<any>[]>}
@@ -387,24 +385,28 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
     mapInContext<T>(context: SpinalContext<any>, callback: SpinalNodeMapFunc<T>): Promise<T[]>;
     /**
      * @param {RelationSearch} relationNames
+     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
-    visitParents(relationNames: RelationSearch): AsyncGenerator<SpinalNode<any>, void, unknown>;
+    visitParents(relationNames: RelationSearch): AsyncGenerator<SpinalNode<any>, void, void>;
     /**
      * @param {SpinalContext<any>} context
+     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
-    visitParentsInContext(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, unknown>;
+    visitParentsInContext(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, void>;
     /**
      * @param {RelationSearch} relationNames
+     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
-    visitChildren(relationNames: RelationSearch): AsyncGenerator<SpinalNode<any>, void, unknown>;
+    visitChildren(relationNames: RelationSearch): AsyncGenerator<SpinalNode<any>, void, void>;
     /**
      * @param {SpinalContext<any>} context
+     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
-    visitChildrenInContext(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, unknown>;
+    visitChildrenInContext(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, void>;
     /**
      * Return the relation list corresponding to the relation type.
      * @param {string} relationType Type of the relation

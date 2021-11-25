@@ -757,8 +757,6 @@ class SpinalNode<T extends spinal.Model> extends Model {
   }
 
   /**
-   *
-   *
    * @param {RelationSearch} relations
    * @param {(node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>} predicate
    * @return {*}  {Promise<SpinalNode<any>[]>}
@@ -1101,9 +1099,12 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
   /**
    * @param {RelationSearch} relationNames
+   * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
    * @memberof SpinalNode
    */
-  async *visitParents(relationNames: RelationSearch) {
+  async *visitParents(
+    relationNames: RelationSearch
+  ): AsyncGenerator<SpinalNode<any>, void, void> {
     const seen: Set<SpinalNode<any>> = new Set([this]);
     let promises: Promise<SpinalNode<any>[]>[] = [];
     let nextGen: SpinalNode<any>[] = [this];
@@ -1134,9 +1135,12 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
   /**
    * @param {SpinalContext<any>} context
+   * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
    * @memberof SpinalNode
    */
-  async *visitParentsInContext(context: SpinalContext<any>) {
+  async *visitParentsInContext(
+    context: SpinalContext<any>
+  ): AsyncGenerator<SpinalNode<any>, void, void> {
     const seen: Set<SpinalNode<any>> = new Set([this]);
     let promises: Promise<SpinalNode<any>[]>[] = [];
     let nextGen: SpinalNode<any>[] = [this];
@@ -1164,11 +1168,15 @@ class SpinalNode<T extends spinal.Model> extends Model {
       }
     }
   }
+
   /**
    * @param {RelationSearch} relationNames
+   * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
    * @memberof SpinalNode
    */
-  async *visitChildren(relationNames: RelationSearch) {
+  async *visitChildren(
+    relationNames: RelationSearch
+  ): AsyncGenerator<SpinalNode<any>, void, void> {
     const seen: Set<SpinalNode<any>> = new Set([this]);
     let promises: (() => Promise<SpinalNode<any>[]>)[] = [];
     let nextGen: SpinalNode<any>[] = [this];
@@ -1204,9 +1212,12 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
   /**
    * @param {SpinalContext<any>} context
+   * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
    * @memberof SpinalNode
    */
-  async *visitChildrenInContext(context: SpinalContext<any>) {
+  async *visitChildrenInContext(
+    context: SpinalContext<any>
+  ): AsyncGenerator<SpinalNode<any>, void, void> {
     const seen: Set<SpinalNode<any>> = new Set([this]);
     let promises: (() => Promise<SpinalNode<any>[]>)[] = [];
     let nextGen: SpinalNode<any>[] = [this];

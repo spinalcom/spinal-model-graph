@@ -714,8 +714,6 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
         });
     }
     /**
-     *
-     *
      * @param {RelationSearch} relations
      * @param {(node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>} predicate
      * @return {*}  {Promise<SpinalNode<any>[]>}
@@ -1037,6 +1035,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
     }
     /**
      * @param {RelationSearch} relationNames
+     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
     visitParents(relationNames) {
@@ -1068,6 +1067,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
     }
     /**
      * @param {SpinalContext<any>} context
+     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
     visitParentsInContext(context) {
@@ -1099,6 +1099,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
     }
     /**
      * @param {RelationSearch} relationNames
+     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
     visitChildren(relationNames) {
@@ -1129,6 +1130,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
     }
     /**
      * @param {SpinalContext<any>} context
+     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
     visitChildrenInContext(context) {
