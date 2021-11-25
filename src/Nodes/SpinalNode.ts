@@ -695,37 +695,9 @@ class SpinalNode<T extends spinal.Model> extends Model {
       stop = true;
     }
     let found = [];
-    const seen: Set<SpinalNode<any>> = new Set([this]);
-    let promises: Promise<SpinalNode<any>[]>[] = [];
-    let nextGen: SpinalNode<any>[] = [this];
-    let currentGen: SpinalNode<any>[] = [];
-
-    while (nextGen.length) {
-      currentGen = nextGen;
-      promises = [];
-      nextGen = [];
-
-      for (const node of currentGen) {
-        if (predicate(node, stopFct)) {
-          found.push(node);
-        }
-        // @ts-ignore
-        if (stop === true) break;
-        promises.push(node.getParents(relationNames));
-      }
-      // @ts-ignore
-      if (stop === true) break;
-
-      // eslint-disable-next-line no-await-in-loop
-      const childrenArrays = await Promise.all(promises);
-      for (const children of childrenArrays) {
-        for (const child of children) {
-          if (!seen.has(child)) {
-            nextGen.push(child);
-            seen.add(child);
-          }
-        }
-      }
+    for await (const node of this.visitParents(relationNames)) {
+      if (predicate(node, stopFct)) found.push(node);
+      if (stop) break;
     }
     return found;
   }
@@ -734,42 +706,14 @@ class SpinalNode<T extends spinal.Model> extends Model {
     context: SpinalContext<any>,
     predicate: SpinalNodeFindPredicateFunc = DEFAULT_FIND_PREDICATE
   ): Promise<SpinalNode<any>[]> {
-    let stop: boolean = false;
+    let stop = false;
+    function stopFct(): void {
+      stop = true;
+    }
     let found = [];
-    const seen: Set<SpinalNode<any>> = new Set([this]);
-    let promises: Promise<SpinalNode<any>[]>[] = [];
-    let nextGen: SpinalNode<any>[] = [this];
-    let currentGen: SpinalNode<any>[] = [];
-
-    while (nextGen.length) {
-      currentGen = nextGen;
-      promises = [];
-      nextGen = [];
-
-      for (const node of currentGen) {
-        if (
-          predicate(node, (): void => {
-            stop = true;
-          })
-        )
-          found.push(node);
-        // @ts-ignore
-        if (stop === true) break;
-        promises.push(node.getParentsInContext(context));
-      }
-      // @ts-ignore
-      if (stop === true) break;
-      // eslint-disable-next-line no-await-in-loop
-      const childrenArrays = await Promise.all(promises);
-
-      for (const children of childrenArrays) {
-        for (const child of children) {
-          if (!seen.has(child)) {
-            nextGen.push(child);
-            seen.add(child);
-          }
-        }
-      }
+    for await (const node of this.visitParentsInContext(context)) {
+      if (predicate(node, stopFct)) found.push(node);
+      if (stop) break;
     }
     return found;
   }
@@ -1192,7 +1136,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @param {SpinalContext<any>} context
    * @memberof SpinalNode
    */
-  async *visitParentInContext(context: SpinalContext<any>) {
+  async *visitParentsInContext(context: SpinalContext<any>) {
     const seen: Set<SpinalNode<any>> = new Set([this]);
     let promises: Promise<SpinalNode<any>[]>[] = [];
     let nextGen: SpinalNode<any>[] = [this];

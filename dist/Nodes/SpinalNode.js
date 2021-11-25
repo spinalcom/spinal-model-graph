@@ -615,81 +615,55 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
      * @memberof SpinalNode
      */
     findParents(relationNames = [], predicate = exports.DEFAULT_FIND_PREDICATE) {
+        var e_1, _a;
         return __awaiter(this, void 0, void 0, function* () {
             let stop = false;
             function stopFct() {
                 stop = true;
             }
             let found = [];
-            const seen = new Set([this]);
-            let promises = [];
-            let nextGen = [this];
-            let currentGen = [];
-            while (nextGen.length) {
-                currentGen = nextGen;
-                promises = [];
-                nextGen = [];
-                for (const node of currentGen) {
-                    if (predicate(node, stopFct)) {
+            try {
+                for (var _b = __asyncValues(this.visitParents(relationNames)), _c; _c = yield _b.next(), !_c.done;) {
+                    const node = _c.value;
+                    if (predicate(node, stopFct))
                         found.push(node);
-                    }
-                    // @ts-ignore
-                    if (stop === true)
+                    if (stop)
                         break;
-                    promises.push(node.getParents(relationNames));
                 }
-                // @ts-ignore
-                if (stop === true)
-                    break;
-                // eslint-disable-next-line no-await-in-loop
-                const childrenArrays = yield Promise.all(promises);
-                for (const children of childrenArrays) {
-                    for (const child of children) {
-                        if (!seen.has(child)) {
-                            nextGen.push(child);
-                            seen.add(child);
-                        }
-                    }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
                 }
+                finally { if (e_1) throw e_1.error; }
             }
             return found;
         });
     }
     findParentsInContext(context, predicate = exports.DEFAULT_FIND_PREDICATE) {
+        var e_2, _a;
         return __awaiter(this, void 0, void 0, function* () {
             let stop = false;
+            function stopFct() {
+                stop = true;
+            }
             let found = [];
-            const seen = new Set([this]);
-            let promises = [];
-            let nextGen = [this];
-            let currentGen = [];
-            while (nextGen.length) {
-                currentGen = nextGen;
-                promises = [];
-                nextGen = [];
-                for (const node of currentGen) {
-                    if (predicate(node, () => {
-                        stop = true;
-                    }))
+            try {
+                for (var _b = __asyncValues(this.visitParentsInContext(context)), _c; _c = yield _b.next(), !_c.done;) {
+                    const node = _c.value;
+                    if (predicate(node, stopFct))
                         found.push(node);
-                    // @ts-ignore
-                    if (stop === true)
+                    if (stop)
                         break;
-                    promises.push(node.getParentsInContext(context));
                 }
-                // @ts-ignore
-                if (stop === true)
-                    break;
-                // eslint-disable-next-line no-await-in-loop
-                const childrenArrays = yield Promise.all(promises);
-                for (const children of childrenArrays) {
-                    for (const child of children) {
-                        if (!seen.has(child)) {
-                            nextGen.push(child);
-                            seen.add(child);
-                        }
-                    }
+            }
+            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
                 }
+                finally { if (e_2) throw e_2.error; }
             }
             return found;
         });
@@ -705,7 +679,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
      * @throws {TypeError} If the predicate is not a function
      */
     find(relationNames, predicate = exports.DEFAULT_FIND_PREDICATE) {
-        var e_1, _a;
+        var e_3, _a;
         return __awaiter(this, void 0, void 0, function* () {
             if (!Array.isArray(relationNames) &&
                 relationNames !== undefined &&
@@ -729,12 +703,12 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
                         break;
                 }
             }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            catch (e_3_1) { e_3 = { error: e_3_1 }; }
             finally {
                 try {
                     if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
                 }
-                finally { if (e_1) throw e_1.error; }
+                finally { if (e_3) throw e_3.error; }
             }
             return found;
         });
@@ -906,7 +880,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
      * @throws {TypeError} If the predicate is not a function
      */
     findInContext(context, predicate = exports.DEFAULT_FIND_PREDICATE) {
-        var e_2, _a;
+        var e_4, _a;
         return __awaiter(this, void 0, void 0, function* () {
             if (typeof predicate !== 'function') {
                 throw new Error('The predicate function must be a function');
@@ -925,12 +899,12 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
                         break;
                 }
             }
-            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            catch (e_4_1) { e_4 = { error: e_4_1 }; }
             finally {
                 try {
                     if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
                 }
-                finally { if (e_2) throw e_2.error; }
+                finally { if (e_4) throw e_4.error; }
             }
             return found;
         });
@@ -1096,8 +1070,8 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
      * @param {SpinalContext<any>} context
      * @memberof SpinalNode
      */
-    visitParentInContext(context) {
-        return __asyncGenerator(this, arguments, function* visitParentInContext_1() {
+    visitParentsInContext(context) {
+        return __asyncGenerator(this, arguments, function* visitParentsInContext_1() {
             const seen = new Set([this]);
             let promises = [];
             let nextGen = [this];

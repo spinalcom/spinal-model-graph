@@ -394,7 +394,7 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @param {SpinalContext<any>} context
      * @memberof SpinalNode
      */
-    visitParentInContext(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, unknown>;
+    visitParentsInContext(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, unknown>;
     /**
      * @param {RelationSearch} relationNames
      * @memberof SpinalNode
