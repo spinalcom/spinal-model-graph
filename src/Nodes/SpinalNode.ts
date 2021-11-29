@@ -1280,7 +1280,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
   _removeParent(relation: AnySpinalRelation): void {
     const parentLst: spinal.Lst<SpinalNodePointer<AnySpinalRelation>> =
       this.parents.getElement(relation.getName().get());
-
+    if (parentLst === undefined) return;
     for (let i: number = 0; i < parentLst.length; i += 1) {
       if (parentLst[i].getId().get() === relation.getId().get()) {
         parentLst.splice(i);
