@@ -1,3 +1,27 @@
+/*
+ * Copyright 2021 SpinalCom - www.spinalcom.com
+ *
+ * This file is part of SpinalCore.
+ *
+ * Please read all of the following terms and conditions
+ * of the Free Software license Agreement ("Agreement")
+ * carefully.
+ *
+ * This Agreement is a legally binding contract between
+ * the Licensee (as defined below) and SpinalCom that
+ * sets forth the terms and conditions that govern your
+ * use of the Program. By installing and/or using the
+ * Program, you agree to abide by all the terms and
+ * conditions stated or referenced herein.
+ *
+ * If you do not agree to abide by these terms and
+ * conditions, do not demonstrate your acceptance and do
+ * not install or use the Program.
+ * You should have received a copy of the license along
+ * with this file. If not, see
+ * <http://resources.spinalcom.com/licenses.pdf>.
+ */
+
 import {
   SpinalGraph,
   SpinalNode,
@@ -6,6 +30,7 @@ import {
   SpinalRelationLstPtr,
 } from '../../src';
 import { FileSystem, Model } from 'spinal-core-connectorjs_type';
+import 'mocha';
 
 import * as assert from 'assert';
 
@@ -14,7 +39,6 @@ const DEFAULT_NODE = new SpinalNode('test', 'test', new Model());
 
 describe('SpinalRelationLstPtr', () => {
   describe('How to use the constructor', () => {
-
     it('should create an empty object FileSystem._sig_server === false', () => {
       FileSystem._sig_server = false;
       const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
@@ -48,15 +72,15 @@ describe('SpinalRelationLstPtr', () => {
     it('should throw an error if the parent or the name is missing', async () => {
       assert.throws(() => {
         new SpinalRelationLstPtr();
-      },            TypeError);
+      }, TypeError);
 
       assert.throws(() => {
         new SpinalRelationLstPtr(undefined, DEFAULT_RELATION_NAME);
-      },            TypeError);
+      }, TypeError);
 
       assert.throws(() => {
         new SpinalRelationLstPtr(DEFAULT_NODE);
-      },            TypeError);
+      }, TypeError);
     });
 
     it('should throw an error if the parent is not a SpinalNode', async () => {
@@ -64,20 +88,23 @@ describe('SpinalRelationLstPtr', () => {
 
       assert.throws(() => {
         new SpinalRelationLstPtr(parent1, DEFAULT_RELATION_NAME);
-      },            TypeError);
+      }, TypeError);
 
       const parent2: any = new Model();
 
       assert.throws(() => {
         new SpinalRelationLstPtr(parent2, DEFAULT_RELATION_NAME);
-      },            TypeError);
+      }, TypeError);
     });
   });
 
   describe('How to get informations about the relation', () => {
     describe('How to use getChildrenIds', () => {
       it('should return the ids of all children', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
 
         await rel.addChild(DEFAULT_NODE);
         assert.deepStrictEqual(rel.getChildrenIds(), [
@@ -86,7 +113,10 @@ describe('SpinalRelationLstPtr', () => {
       });
 
       it('should return the ids of all children', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const node1 = new SpinalNode();
         const node2 = new SpinalNode();
         const node3 = new SpinalNode();
@@ -110,7 +140,10 @@ describe('SpinalRelationLstPtr', () => {
 
     describe('How to use getChildren', () => {
       it("should return the relation's child", async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
 
         await rel.addChild(DEFAULT_NODE);
         const children = await rel.getChildren();
@@ -118,7 +151,10 @@ describe('SpinalRelationLstPtr', () => {
       });
 
       it("should return the relation's children", async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const node1 = new SpinalNode();
         const node2 = new SpinalNode();
         const node3 = new SpinalNode();
@@ -134,7 +170,10 @@ describe('SpinalRelationLstPtr', () => {
       });
 
       it('should return an empty array', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const children = await rel.getChildren();
 
         assert.deepStrictEqual(children, []);
@@ -144,7 +183,10 @@ describe('SpinalRelationLstPtr', () => {
     describe('How to use getChildrenInContext', () => {
       it("should return the relation's child", async () => {
         const context = new SpinalContext();
-        const relation = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const child = new SpinalNode();
 
         child.addContextId(context.getId().get());
@@ -156,7 +198,10 @@ describe('SpinalRelationLstPtr', () => {
 
       it("should return the relation's children associated to the context", async () => {
         const context = new SpinalContext();
-        const relation = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const child1 = new SpinalNode();
         const child2 = new SpinalNode();
         const child3 = new SpinalNode();
@@ -169,13 +214,15 @@ describe('SpinalRelationLstPtr', () => {
           relation.addChild(child3),
         ]);
 
-        const children = await relation.getChildrenInContext(
-          context);
+        const children = await relation.getChildrenInContext(context);
         assert.deepStrictEqual(children, [child1, child3]);
       });
 
       it('should throw an error if the context is missing', async () => {
-        const relation: any = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation: any = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         let error = false;
 
         try {
@@ -189,7 +236,10 @@ describe('SpinalRelationLstPtr', () => {
 
       it('should throw an error if context is not a SpinalContext', async () => {
         const context1: any = new Model();
-        const relation = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const relation = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         let error = false;
 
         try {
@@ -215,7 +265,10 @@ describe('SpinalRelationLstPtr', () => {
 
     describe('How to use getType', () => {
       it("should return the relation's type", () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
 
         assert.strictEqual(rel.getType(), SPINAL_RELATION_LST_PTR_TYPE);
       });
@@ -224,17 +277,22 @@ describe('SpinalRelationLstPtr', () => {
 
   describe('How to add children', () => {
     describe('How to use addChild', () => {
-      it('should add a child to the children of the relation',
-         async () => {
-           const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+      it('should add a child to the children of the relation', async () => {
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
 
-           await rel.addChild(DEFAULT_NODE);
-           const children = await rel.getChildren();
-           assert.deepStrictEqual(children, [DEFAULT_NODE]);
-         });
+        await rel.addChild(DEFAULT_NODE);
+        const children = await rel.getChildren();
+        assert.deepStrictEqual(children, [DEFAULT_NODE]);
+      });
 
       it('should throw an error if you try to add the same node twice', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         let error;
 
         await rel.addChild(DEFAULT_NODE);
@@ -249,7 +307,10 @@ describe('SpinalRelationLstPtr', () => {
       });
 
       it('should throw an error when you pass it something that is not a model', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         let error;
         const array: any = [];
         try {
@@ -262,7 +323,10 @@ describe('SpinalRelationLstPtr', () => {
       });
 
       it('should return the node added to the relation', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const node = new SpinalNode();
         const model = new Model();
 
@@ -281,7 +345,10 @@ describe('SpinalRelationLstPtr', () => {
   describe('How to remove children', () => {
     describe('How to use removeChild', () => {
       it('should remove a child from the children of the relation', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
 
         await rel.addChild(DEFAULT_NODE);
         await rel.removeChild(DEFAULT_NODE);
@@ -291,7 +358,10 @@ describe('SpinalRelationLstPtr', () => {
       });
 
       it('should remove a child and update the children ids of the relation', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
 
         await rel.addChild(DEFAULT_NODE);
         await rel.removeChild(DEFAULT_NODE);
@@ -302,7 +372,10 @@ describe('SpinalRelationLstPtr', () => {
 
       it("should remove a child and remove the relation the node's parents", async () => {
         const parentNode = new SpinalNode();
-        const rel = parentNode._createRelation(DEFAULT_RELATION_NAME, SPINAL_RELATION_LST_PTR_TYPE);
+        const rel = parentNode._createRelation(
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_LST_PTR_TYPE
+        );
         const childNode = new SpinalNode();
 
         await rel.addChild(childNode);
@@ -314,7 +387,10 @@ describe('SpinalRelationLstPtr', () => {
 
       it('should throw an error if the node is not a child', async () => {
         const parentNode = new SpinalNode();
-        const rel = parentNode._createRelation(DEFAULT_RELATION_NAME, SPINAL_RELATION_LST_PTR_TYPE);
+        const rel = parentNode._createRelation(
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_LST_PTR_TYPE
+        );
         const childNode = new SpinalNode();
         let error = false;
 
@@ -330,7 +406,10 @@ describe('SpinalRelationLstPtr', () => {
 
     describe('How to use removeChildren', () => {
       it('should delete all of the children', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const node1 = new SpinalNode();
         const node2 = new SpinalNode();
         const node3 = new SpinalNode();
@@ -348,7 +427,10 @@ describe('SpinalRelationLstPtr', () => {
       });
 
       it('should delete the given children', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const node1 = new SpinalNode();
         const node2 = new SpinalNode();
         const node3 = new SpinalNode();
@@ -366,7 +448,10 @@ describe('SpinalRelationLstPtr', () => {
       });
 
       it('should delete some of the given children', async () => {
-        const rel = new SpinalRelationLstPtr(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
         const node1 = new SpinalNode('node1');
         const node2 = new SpinalNode('node2');
         const node3 = new SpinalNode('node3');

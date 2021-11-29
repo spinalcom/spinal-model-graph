@@ -1,19 +1,15 @@
 {
   "compilerOptions": {
-    "target": "es3",
+    "target": "es2015",
     "module": "commonjs",
     "outDir": "dist",
     "declaration": true,
     "declarationDir": "./declarations",
-    "downlevelIteration": true,
     "sourceMap": true,
-    "lib": ["es2015"],
-    "types": ["node", "./node_modules/spinal-core-connectorjs_type",
-      "mocha"]
+    "moduleResolution": "node"
   },
   "include": [
-    "src/**/*.ts",
-    "test/**/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules"

@@ -21,14 +21,17 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-import { FileSystem, spinalCore, Model, Ptr, Pbr } from 'spinal-core-connectorjs_type';
+import {
+  FileSystem,
+  Model,
+  Pbr,
+  Ptr,
+  spinalCore,
+} from 'spinal-core-connectorjs_type';
+import type { SpinalNodePointerInfoModel } from './interfaces/SpinalNodePointerInfoModel';
 import { SpinalNode } from './Nodes/SpinalNode';
 import { BaseSpinalRelation } from './Relations/BaseSpinalRelation';
 
-interface SpinalNodePointerInfoModel extends spinal.Model {
-  pointedId?: spinal.Str;
-  pointedType?: spinal.Str;
-}
 /**
  * Wrapper over SpinalNodePointer containing some information about the pointed element
  * @class SpinalNodePointer
@@ -67,7 +70,10 @@ class SpinalNodePointer<T extends spinal.Model> extends Model {
     if (!(element instanceof Model)) {
       throw TypeError('The pointed value must be a Model');
     }
-    if (element instanceof SpinalNode || element instanceof BaseSpinalRelation) {
+    if (
+      element instanceof SpinalNode ||
+      element instanceof BaseSpinalRelation
+    ) {
       this.info.mod_attr('pointedId', element.getId());
       this.info.mod_attr('pointedType', element.getType());
     }
@@ -80,14 +86,16 @@ class SpinalNodePointer<T extends spinal.Model> extends Model {
    * @memberof SpinalNodePointer
    */
   load(): Promise<T> {
-    return new Promise((resolve) => {
+    return new Promise((resolve: (value: T | PromiseLike<T>) => void): void => {
       if (this.ptr) {
         if (this.ptr.data.model) return resolve(this.ptr.data.model);
         if (this.ptr.data.value) {
           if (typeof FileSystem._objects[this.ptr.data.value] !== 'undefined') {
             return resolve(<T>FileSystem._objects[this.ptr.data.value]);
           }
-          if (typeof FileSystem._tmp_objects[this.ptr.data.value] !== 'undefined') {
+          if (
+            typeof FileSystem._tmp_objects[this.ptr.data.value] !== 'undefined'
+          ) {
             return resolve(<T>FileSystem._tmp_objects[this.ptr.data.value]);
           }
         }

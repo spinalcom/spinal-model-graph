@@ -21,14 +21,10 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-import { SpinalNode } from './SpinalNode';
 import { FileSystem, spinalCore } from 'spinal-core-connectorjs_type';
-import {
-  SPINAL_RELATION_PTR_LST_TYPE,
-} from '..';
-import {
-  guid,
-} from '../Utilities';
+import { SPINAL_RELATION_PTR_LST_TYPE } from '../Relations/SpinalRelationFactory';
+import { guid } from '../Utilities';
+import { SpinalNode } from './SpinalNode';
 
 /**
  * A SpinalContext is the statring node of a part of the graph.
@@ -44,11 +40,15 @@ class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
    * @param {SpinalNode | Model} [element] Element of the context
    * @throws {TypeError} If the element is not a Model
    */
-  constructor(name: string = 'undefined', type: string = 'SpinalContext', element?: T) {
+  constructor(
+    name: string = 'undefined',
+    type: string = 'SpinalContext',
+    element?: T
+  ) {
     super(name, type, element);
     if (FileSystem._sig_server === false) return;
 
-    this.info.id.set(guid(this.constructor.name));
+    this.info.id.set(guid());
   }
 
   /**
@@ -56,16 +56,17 @@ class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
    * @override
    * @param {SpinalNode | Model} child Node to add as child
    * @param {String} relationName Name of the relation
-   * @param {String} [relationType=SPINAL_RELATION_PTR_LST_TYPE]
+   * @param {String} [_relationType=SPINAL_RELATION_PTR_LST_TYPE]
    * This parameter is here only to properly override the parent method
    * @returns {Promise<SpinalNode>} The child node in a promise
    * @throws {TypeError} If the child is not a model
    * @throws {TypeError} If the relation name is not a string
    */
-  addChild<K extends spinal.Model>(child: K|SpinalNode<K>,
-                                   relationName: string,
-                                   relationType: string = SPINAL_RELATION_PTR_LST_TYPE,
-           ): Promise<SpinalNode<K>> {
+  addChild<K extends spinal.Model>(
+    child: K | SpinalNode<K>,
+    relationName: string,
+    _relationType: string = SPINAL_RELATION_PTR_LST_TYPE
+  ): Promise<SpinalNode<K>> {
     return super.addChild(child, relationName, SPINAL_RELATION_PTR_LST_TYPE);
   }
 
@@ -80,13 +81,18 @@ class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
    * @param {SpinalContext} context Context to update, usually unused
    * @returns {Promise<SpinalNode>} The child node in a promise
    */
-  addChildInContext<K extends spinal.Model>(child: K|SpinalNode<K>,
-                                            relationName: string,
-                                            relationType: string = SPINAL_RELATION_PTR_LST_TYPE,
-                                            context: SpinalContext<T> = this,
-                  ): Promise<SpinalNode<K>> {
-
-    return super.addChildInContext(child, relationName, SPINAL_RELATION_PTR_LST_TYPE, context);
+  addChildInContext<K extends spinal.Model>(
+    child: K | SpinalNode<K>,
+    relationName: string,
+    _relationType: string = SPINAL_RELATION_PTR_LST_TYPE,
+    context: SpinalContext<T> = this
+  ): Promise<SpinalNode<K>> {
+    return super.addChildInContext(
+      child,
+      relationName,
+      SPINAL_RELATION_PTR_LST_TYPE,
+      context
+    );
   }
 
   /**
@@ -96,7 +102,8 @@ class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
    * @returns {Promise<Array<SpinalNode>>} The children that were found
    */
   getChildrenInContext<K extends spinal.Model>(
-    context: SpinalContext<T> = this): Promise<SpinalNode<K>[]> {
+    context: SpinalContext<T> = this
+  ): Promise<SpinalNode<K>[]> {
     return super.getChildrenInContext(context);
   }
 }

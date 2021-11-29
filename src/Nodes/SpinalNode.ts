@@ -24,51 +24,28 @@
 
 import {
   FileSystem,
-  spinalCore,
-  Model,
   Lst,
-
+  Model,
+  spinalCore,
 } from 'spinal-core-connectorjs_type';
-
-import {
-  guid,
-  loadRelation
-} from '../Utilities';
-
-import {
-  SpinalContext,
-} from '../index';
-import { SpinalRelationRef, SpinalRelationLstPtr, SpinalRelationPtrLst } from '..';
-
-import { SpinalNodePointer } from '../SpinalNodePointer';
+import type { AnySpinalRelation } from '../interfaces/AnySpinalRelation';
+import { RelationSearch } from '../interfaces/RelationSearch';
+import type { SpinalNodeFindOnePredicateFunc } from '../interfaces/SpinalNodeFindOnePredicateFunc';
+import type { SpinalNodeFindPredicateFunc } from '../interfaces/SpinalNodeFindPredicateFunc';
+import type { SpinalNodeForEachFunc } from '../interfaces/SpinalNodeForEachFunc';
+import type { SpinalNodeInfoModel } from '../interfaces/SpinalNodeInfoModel';
+import type { SpinalNodeMapFunc } from '../interfaces/SpinalNodeMapFunc';
 import {
   RELATION_TYPE_LIST,
   SpinalRelationFactory,
 } from '../Relations/SpinalRelationFactory';
 import { SpinalMap } from '../SpinalMap';
+import { SpinalNodePointer } from '../SpinalNodePointer';
 import { SpinalSet } from '../SpinalSet';
+import { consumeBatch, guid, loadParentRelation } from '../Utilities';
+import { SpinalContext } from './SpinalContext';
 
-
-/**
- * A function that takes a node and returns a boolean.
- * @callback SpinalNodeFindPredicateFunc
- * @param {SpinalNode<any>} node
- * @returns {boolean}
- */
-type SpinalNodeFindPredicateFunc = (node: SpinalNode<any>) => boolean;
-type SpinalNodeForEachFunc = (node: SpinalNode<any>) => void;
-type SpinalNodeMapFunc = (node: SpinalNode<any>) => any;
-type AnySpinalRelation = SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst;
-
-const DEFAULT_PREDICATE: SpinalNodeFindPredicateFunc = () => true;
-
-interface SpinalNodeInfoModel extends spinal.Model {
-  id: spinal.Str;
-  name: spinal.Str;
-  type: spinal.Str;
-  directModificationDate: spinal.Val
-  indirectModificationDate: spinal.Val
-}
+export const DEFAULT_FIND_PREDICATE: SpinalNodeFindPredicateFunc = () => true;
 
 /**
  * Node of a graph.
@@ -90,7 +67,11 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @param {spinal.Model} [element] Element of the node
    * @throws {TypeError} If the element is not a Model
    */
-  constructor(name: string = 'undefined', type: string = 'SpinalNode', element?: T) {
+  constructor(
+    name: string = 'undefined',
+    type: string = 'SpinalNode',
+    element?: T
+  ) {
     super();
     if (FileSystem._sig_server === false) return;
 
@@ -98,16 +79,15 @@ class SpinalNode<T extends spinal.Model> extends Model {
       info: {
         name,
         type,
-        id: guid(this.constructor.name),
-        directModificationDate : Date.now(),
+        id: guid(),
+        directModificationDate: Date.now(),
         indirectModificationDate: Date.now(),
-        // new attr
       },
       parents: new SpinalMap(),
       children: new SpinalMap(),
-      element: element !== undefined ? new SpinalNodePointer(element) : undefined,
+      element:
+        element !== undefined ? new SpinalNodePointer(element) : undefined,
       contextIds: new SpinalSet(),
-    
     });
   }
 
@@ -136,55 +116,62 @@ class SpinalNode<T extends spinal.Model> extends Model {
   }
 
   /**
- * Returns the DirectModificationDate.
- * @returns {Date} Direct Modification Date of the node
- */
-   getDirectModificationDate(): spinal.Val {
+   * Returns the DirectModificationDate.
+   * @returns {Date} Direct Modification Date of the node
+   */
+  getDirectModificationDate(): spinal.Val {
     return this.info.directModificationDate;
   }
   /**
- * Returns the IndirectModificationDate.
- * @returns {Date} Indirect Modification Date of the node
- */
-   getIndirectModificationDate(): spinal.Val {
+   * Returns the IndirectModificationDate.
+   * @returns {Date} Indirect Modification Date of the node
+   */
+  getIndirectModificationDate(): spinal.Val {
     return this.info.indirectModificationDate;
   }
- /**
+  /**
    * Sets the value corresponding to the key.
    * @param {Date} date Key to the value
    * @throws {TypeError} If the date is not of type Date
    * @memberof SpinalNode
    */
-  setIndirectModificationDate(date: number = Date.now()): void{
-    if ( typeof date !== 'number') {
+  setIndirectModificationDate(date: number = Date.now()): void {
+    if (typeof date !== 'number') {
       throw TypeError('The date must be a number');
-    }if (this.info.directModificationDate) {
-      this.info.directModificationDate.set(date)
-    }else this.info.add_attr("directModificationDate",date);
+    }
+    if (this.info.directModificationDate) {
+      this.info.directModificationDate.set(date);
+    } else this.info.add_attr('directModificationDate', date);
   }
-   /**
+  /**
    * Sets the value corresponding to the key.
    * @param {Date} date Key to the value
    * @throws {TypeError} If the date is not of type Date
    * @memberof SpinalNode
    */
-    setDirectModificationDate(date: number = Date.now()): void{
-      if ( typeof date !== 'number') {
-        throw TypeError('The date must be a number');
-      }if (this.info.directModificationDate) {
-        this.info.directModificationDate.set(date)
-      }else this.info.add_attr("directModificationDate",date);
+  setDirectModificationDate(date: number = Date.now()): void {
+    if (typeof date !== 'number') {
+      throw TypeError('The date must be a number');
     }
-    
+    if (this.info.directModificationDate) {
+      this.info.directModificationDate.set(date);
+    } else this.info.add_attr('directModificationDate', date);
+  }
 
   /**
-   * Returns the element.
+   * Returns the element. if not present will create one
+   * @param {boolean} [noCreate=false] if true will not create a element and if element doesn't exist will return undefined
    * @returns {Promise<T>} A promise where the parameter of the resolve method is the element
+   * @memberof SpinalNode
    */
-  getElement(): Promise<T> {
+  getElement(noCreate = false): Promise<T> {
     if (this.element === undefined) {
+      if (noCreate === true) return undefined;
       const model = new Model();
-      this.add_attr('element', <SpinalNodePointer<T>>(new SpinalNodePointer(model)));
+      this.add_attr(
+        'element',
+        <SpinalNodePointer<T>>new SpinalNodePointer(model)
+      );
       return Promise.resolve(<any>model);
     }
     return this.element.load();
@@ -200,9 +187,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
     for (const [, relationMap] of this.children) {
       for (const [, relation] of relationMap) {
         const relChildrenIds: string[] = relation.getChildrenIds();
-
-        for (let i: number = 0; i < relChildrenIds.length; i += 1) {
-          nodeChildrenIds.push(relChildrenIds[i]);
+        for (const relChildrenId of relChildrenIds) {
+          nodeChildrenIds.push(relChildrenId);
         }
       }
     }
@@ -241,13 +227,28 @@ class SpinalNode<T extends spinal.Model> extends Model {
   }
 
   /**
+   * Remove an id to the context ids of the node.
+   * @param {string} id
+   * @memberof SpinalNode
+   */
+  removeContextId(id: string): void {
+    if (typeof id !== 'string') {
+      throw TypeError('id must be a string');
+    }
+
+    if (this.contextIds.has(id)) {
+      this.contextIds.delete(id);
+      this.setDirectModificationDate();
+    }
+  }
+
+  /**
    * Returns a list of the contexts the node is associated to.
    * @returns {string[]} An array of ids of the associated contexts
    */
   getContextIds(): string[] {
     return this.contextIds.values();
   }
-
 
   /**
    * Returns true if the node belongs to the context.
@@ -266,27 +267,31 @@ class SpinalNode<T extends spinal.Model> extends Model {
   /**
    * Verify if the node contains the relation name.
    * @param {string} relationName Name of the relation
-   * @param {string} relationType Type of the relation
+   * @param {string} [relationType] Type of the relation
    * @returns {boolean} Return true is the relation is contained in the node and false otherwise.
    * @throws {TypeError} If the relation name is not a string
    * @throws {Error} If the relation type doesn't exist
    */
-  hasRelation(relationName: string, relationType: string): boolean {
+  hasRelation(relationName: string, relationType?: string): boolean {
     if (typeof relationName !== 'string') {
       throw TypeError('the relation name must be a string');
     }
-
-    if (RELATION_TYPE_LIST.indexOf(relationType) === -1) {
-      throw Error('invalid relation type');
+    if (relationType) {
+      if (RELATION_TYPE_LIST.indexOf(relationType) === -1) {
+        throw Error('invalid relation type');
+      }
+      const typeMap = this._getChildrenType(relationType);
+      if (typeof typeMap === 'undefined') {
+        return false;
+      }
+      return typeMap.has(relationName);
     }
-
-    const typeMap = this._getChildrenType(relationType);
-
-    if (typeof typeMap === 'undefined') {
-      return false;
+    for (const [, relationMap] of this.children) {
+      for (const [relname] of relationMap) {
+        if (relname === relationName) return true;
+      }
     }
-
-    return typeMap.has(relationName);
+    return false;
   }
 
   /**
@@ -299,12 +304,12 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If one of the relation names is not a string
    * @throws {Error} If the relation type doesn't exist
    */
-  hasRelations(relationNames: string[], relationType: string): boolean {
+  hasRelations(relationNames: string[], relationType?: string): boolean {
     if (!Array.isArray(relationNames)) {
       throw TypeError('The relation names must be in an array');
     }
 
-    if (RELATION_TYPE_LIST.indexOf(relationType) === -1) {
+    if (relationType && RELATION_TYPE_LIST.indexOf(relationType) === -1) {
       throw Error('invalid relation type');
     }
 
@@ -313,7 +318,6 @@ class SpinalNode<T extends spinal.Model> extends Model {
         return false;
       }
     }
-
     return true;
   }
 
@@ -343,12 +347,14 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {Error} If the relation type is invalid
    */
   async addChild<K extends spinal.Model>(
-    child: K | SpinalNode<K>, relationName: string,
-    relationType: string): Promise<SpinalNode<K>> {
+    child: K | SpinalNode<K>,
+    relationName: string,
+    relationType: string
+  ): Promise<SpinalNode<K>> {
     let relation: AnySpinalRelation;
     if (!(child instanceof Model)) {
       throw TypeError(
-        'Cannot add a child witch is not an instance of SpinalNode or Model.',
+        'Cannot add a child witch is not an instance of SpinalNode or Model.'
       );
     }
     if (!this.hasRelation(relationName, relationType)) {
@@ -376,8 +382,11 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {Error} If the relation type is invalid
    */
   async addChildInContext<K extends spinal.Model>(
-    child: K | SpinalNode<K>, relationName: string,
-    relationType: string, context: SpinalContext<any>): Promise<SpinalNode<K>> {
+    child: K | SpinalNode<K>,
+    relationName: string,
+    relationType: string,
+    context: SpinalContext<any>
+  ): Promise<SpinalNode<K>> {
     let relation: AnySpinalRelation;
     let childCreate: K | SpinalNode<K> = child;
 
@@ -387,7 +396,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
     if (!(child instanceof Model)) {
       throw TypeError(
-        'Cannot add a child witch is not an instance of SpinalNode or Model.',
+        'Cannot add a child witch is not an instance of SpinalNode or Model.'
       );
     } else if (!(child instanceof SpinalNode)) {
       childCreate = new SpinalNode(undefined, undefined, child);
@@ -419,7 +428,11 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {Error} If relation doesn't exist
    * @throws {Error} If the child doesn't exist
    */
-  removeChild(node: SpinalNode<any>, relationName: string, relationType: string): Promise<void> {
+  removeChild(
+    node: SpinalNode<any>,
+    relationName: string,
+    relationType: string
+  ): Promise<void> {
     if (!this.hasRelation(relationName, relationType)) {
       throw Error("The relation doesn't exist");
     }
@@ -444,8 +457,11 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {Error} If the relation doesn't exist
    * @throws {Error} If one of the nodes is not a child
    */
-  removeChildren(nodes: SpinalNode<any>[], relationName: string,
-    relationType: string): Promise<void> {
+  removeChildren(
+    nodes: SpinalNode<any>[],
+    relationName: string,
+    relationType: string
+  ): Promise<void> {
     if (!Array.isArray(nodes)) {
       throw TypeError('nodes must be an array');
     }
@@ -457,8 +473,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
     const rel = this._getRelation(relationName, relationType);
     let res = rel.removeChildren(nodes);
     // change the res way
-    this.setDirectModificationDate(); 
-    return res
+    this.setDirectModificationDate();
+    return res;
   }
 
   /**
@@ -476,11 +492,11 @@ class SpinalNode<T extends spinal.Model> extends Model {
     }
 
     const rel = this._getRelation(relationName, relationType);
-    let res  = rel.removeFromGraph();
+    let res = rel.removeFromGraph();
     // change the res way
-    this.setDirectModificationDate(); 
-    return res
-    }
+    this.setDirectModificationDate();
+    return res;
+  }
 
   /**
    * Remove the node from the graph
@@ -490,10 +506,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @returns {Promise<void>} An empty promise
    */
   async removeFromGraph(): Promise<void> {
-    await Promise.all([
-      this._removeFromParents(),
-      this._removeFromChildren(),
-    ]);
+    await Promise.all([this._removeFromParents(), this._removeFromChildren()]);
   }
 
   /**
@@ -509,8 +522,11 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {Error} If relation type is invalid
    * @throws {Error} If relation doesn't exist
    */
-  async getChild(predicate: SpinalNodeFindPredicateFunc,
-    relationName: string, relationType: string): Promise<SpinalNode<any>> {
+  async getChild(
+    predicate: SpinalNodeFindPredicateFunc,
+    relationName: string,
+    relationType: string
+  ): Promise<SpinalNode<any>> {
     if (typeof predicate !== 'function') {
       throw TypeError('the predicate must be a function');
     }
@@ -537,26 +553,16 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If relationNames is neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
    */
-  async getChildren(relationNames: string | RegExp | (string | RegExp)[] = []): Promise<SpinalNode<any>[]> {
-    // let relName: string | string[] = relationNames;
-    // if (Array.isArray(relationNames)) {
-    //   if (relationNames.length === 0) {
-    //     relName = this.getRelationNames();
-    //   }
-    // } else if (typeof relationNames === 'string') {
-    //   relName = [relationNames];
-    // } else {
-    //   throw TypeError('relationNames must be an array, a string or omitted');
-    // }
-
-    let relName = this._getValidRelations(relationNames);
+  async getChildren(
+    relationNames: string | RegExp | (string | RegExp)[] = []
+  ): Promise<SpinalNode<any>[]> {
+    let relNames = this._getValidRelations(relationNames);
 
     const promises: Promise<SpinalNode<any>[]>[] = [];
-    const tmpRelName: string[] = <string[]>relName;
     for (const [, relationMap] of this.children) {
-      for (let j: number = 0; j < tmpRelName.length; j += 1) {
-        if (relationMap.has(tmpRelName[j])) {
-          const relation = relationMap.getElement(tmpRelName[j]);
+      for (const relName of relNames) {
+        if (relationMap.has(relName)) {
+          const relation = relationMap.getElement(relName);
           promises.push(relation.getChildren());
         }
       }
@@ -567,8 +573,8 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
     let children: SpinalNode<any>[];
     for (children of childrenLst) {
-      for (let i = 0; i < children.length; i += 1) {
-        res.push(children[i]);
+      for (const child of children) {
+        res.push(child);
       }
     }
 
@@ -581,11 +587,12 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @returns {Promise<SpinalNode[]>} The children that were found
    * @throws {TypeError} If the context is not a SpinalContext
    */
-  async getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]> {
+  async getChildrenInContext(
+    context: SpinalContext<any>
+  ): Promise<SpinalNode<any>[]> {
     if (!(context instanceof SpinalContext)) {
       throw TypeError('context must be a SpinalContext');
     }
-
     const promises: Promise<SpinalNode<any>[]>[] = [];
 
     for (const [, relationMap] of this.children) {
@@ -596,178 +603,120 @@ class SpinalNode<T extends spinal.Model> extends Model {
       }
     }
 
-    const childrenLst: (SpinalNode<spinal.Model>[])[] = await Promise.all(promises);
+    const childrenLst: SpinalNode<spinal.Model>[][] = await Promise.all(
+      promises
+    );
     const res: SpinalNode<any>[] = [];
-
     for (const children of childrenLst) {
-      for (let i = 0; i < children.length; i += 1) {
-        res.push(children[i]);
+      for (const child of children) {
+        res.push(child);
       }
     }
-
     return res;
   }
 
-  // /**
-  //  * Return all parents for the relation names no matter the type of relation
-  //  * @param {String[]} [relationNames=[]] Array containing the relation names of the desired parents
-  //  * @returns {Promise<Array<SpinalNode<any>>>} Promise containing the parents that were found
-  //  * @throws {TypeError} If the relationNames are neither an array, a string or omitted
-  //  * @throws {TypeError} If an element of relationNames is not a string
-  //  */
-  // getParents(relationNames: string | string[] = []): Promise<SpinalNode<any>[]> {
-  //   let relNames: string | string[] = relationNames;
-  //   if (Array.isArray(relationNames)) {
-  //     if (relationNames.length === 0) {
-  //       relNames = this.parents.keys();
-  //     }
-  //   } else if (typeof relationNames === 'string') {
-  //     relNames = [relationNames];
-  //   } else {
-  //     throw TypeError('relationNames must be an array, a string or omitted');
-  //   }
-  //   const promises: Promise<SpinalNode<any>>[] = [];
-  //   const tmpRelNames = <string[]>relNames;
-  //   for (const name of tmpRelNames) {
-  //     const list: spinal.Lst<SpinalNodePointer<AnySpinalRelation>> = this.parents.getElement(name);
-
-  //     if (typeof list !== "undefined" && list !== null) {
-  //       for (let i: number = 0; i < list.length; i += 1) {
-  //         promises.push(
-  //           list[i].load().then(
-  //             (relation: AnySpinalRelation) => {
-  //               return relation.getParent();
-  //             },
-  //           ),
-  //         );
-  //       }
-  //     }
-  //   }
-
-  //   return Promise.all(promises);
-  // }
-
   /**
-  //  * Return all parents for the relation names no matter the type of relation
-  //  * @param {String[]} [relationNames=[]] Array containing the relation names of the desired parents
-  //  * @returns {Promise<Array<SpinalNode<any>>>} Promise containing the parents that were found
-  //  * @throws {TypeError} If the relationNames are neither an array, a string or omitted
-  //  * @throws {TypeError} If an element of relationNames is not a string
-  //  */
-
-  public getParents(relationNames: string | RegExp | (string | RegExp)[] = []): Promise<SpinalNode<any>[]> {
-
+   * Return all parents for the relation names no matter the type of relation
+   * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Array containing the relation names of the desired parents
+   * @returns {Promise<Array<SpinalNode<any>>>} Promise containing the parents that were found
+   * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+   * @throws {TypeError} If an element of relationNames is not a string
+   * @memberof SpinalNode
+   */
+  public async getParents(
+    relationNames: string | RegExp | (string | RegExp)[] = []
+  ): Promise<SpinalNode<any>[]> {
     const relNames = this._getValidRelations(relationNames, true);
+    const prom: Promise<SpinalNode<spinal.Model>>[] = [];
 
-    const prom = [];
-
-    for (const nodeRelation of this.parents._attribute_names) {
+    for (const [parentRelationName, nodeRelation] of this.parents) {
       for (const searchRelation of relNames) {
-        if (nodeRelation === searchRelation) {
-          const lst = this.parents[nodeRelation];
-          for (var i = 0; i < lst.length; i++) {
-            prom.push(loadRelation(lst[i]));
+        if (parentRelationName === searchRelation) {
+          for (var i = 0; i < nodeRelation.length; i++) {
+            prom.push(loadParentRelation(nodeRelation[i]));
           }
         }
       }
     }
-    return Promise.all(prom);
+    const res = await Promise.all(prom);
+    return res.filter(
+      (e: SpinalNode<spinal.Model>): boolean => e !== undefined
+    );
   }
 
+  public async getParentsInContext(
+    context: SpinalContext<any>
+  ): Promise<SpinalNode<any>[]> {
+    const prom: Promise<SpinalNode<spinal.Model>>[] = [];
 
-  /**
- * Recursively finds and return the FIRST FOUND parent nodes for which the predicate is true
- * @param {string[]} relationNames Arry of relation
- * @param {(node)=> boolean} predicate function stop search if return true
- */
-  public async findOneParent(relationNames: string | RegExp | (string | RegExp)[] = [], predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE): Promise<any> {
-    let relNames = this._getValidRelations(relationNames, true);
-
-    if (predicate(this)) {
-      return this;
-    }
-
-    const seen = new Set([this]);
-    let promises = [];
-    let nextGen = [this];
-    let currentGen = [];
-
-    while (nextGen.length) {
-      currentGen = nextGen;
-      promises = [];
-      nextGen = [];
-
-      for (const node of currentGen) {
-        promises.push(node.getParents(relNames));
-
-        if (predicate(node)) {
-          return node;
-        }
-      }
-
-      // eslint-disable-next-line no-await-in-loop
-      const childrenArrays = await Promise.all(promises);
-
-      for (const children of childrenArrays) {
-        for (const child of children) {
-          if (!seen.has(child)) {
-            nextGen.push(child);
-            seen.add(child);
-          }
-        }
+    for (const [, nodeRelationLst] of this.parents) {
+      for (let idx = 0; idx < nodeRelationLst.length; idx++) {
+        prom.push(loadParentRelation(nodeRelationLst[idx], context));
       }
     }
+    const res = await Promise.all(prom);
+    return res.filter(
+      (e: SpinalNode<spinal.Model>): boolean => e !== undefined
+    );
   }
 
+  /**
+   * Recursively finds and return the FIRST FOUND parent nodes for which the predicate is true
+   * @param {string[]} relationNames Arry of relation
+   * @param {(node)=> boolean} predicate function stop search if return true
+   */
+  public async findOneParent(
+    relationNames: string | RegExp | (string | RegExp)[] = [],
+    predicate: SpinalNodeFindOnePredicateFunc = DEFAULT_FIND_PREDICATE
+  ): Promise<SpinalNode<any>> {
+    return this.findParents(
+      relationNames,
+      (node: SpinalNode<any>, stopFct: () => void): boolean => {
+        const res = predicate(node);
+        if (res) stopFct();
+        return res;
+      }
+    ).then((e: SpinalNode<any>[]): SpinalNode<any> => e[0]); // can do that because it stop to fist find
+  }
 
   /**
- * Recursively finds all the parent nodes for which the predicate is true
- * @export
- * @param {string[]} relationNames Arry of relation
- * @param {(node)=> boolean} predicate Function returning true if the node needs to be returned
- */
-  public async findParents(relationNames: string | RegExp | (string | RegExp)[] = [], predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE): Promise<any> {
-
-    const relNames = this._getValidRelations(relationNames, true);
-
+   * Recursively finds all the parent nodes for which the predicate is true
+   * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Arry of relation
+   * @param {SpinalNodeFindPredicateFunc} [predicate=DEFAULT_FIND_PREDICATE]
+   * @return {*}  {Promise<SpinalNode<any>[]>}
+   * @memberof SpinalNode
+   */
+  public async findParents(
+    relationNames: string | RegExp | (string | RegExp)[] = [],
+    predicate: SpinalNodeFindPredicateFunc = DEFAULT_FIND_PREDICATE
+  ): Promise<SpinalNode<any>[]> {
+    let stop = false;
+    function stopFct(): void {
+      stop = true;
+    }
     let found = [];
-    if (predicate(this)) {
-      found.push(this);
-    }
-
-    const seen = new Set([this]);
-    let promises = [];
-    let nextGen = [this];
-    let currentGen = [];
-
-    while (nextGen.length) {
-      currentGen = nextGen;
-      promises = [];
-      nextGen = [];
-
-      for (const node of currentGen) {
-        promises.push(node.getParents(node, relNames));
-
-        if (predicate(node)) {
-          found.push(node);
-        }
-      }
-
-      // eslint-disable-next-line no-await-in-loop
-      const childrenArrays = await Promise.all(promises);
-
-      for (const children of childrenArrays) {
-        for (const child of children) {
-          if (!seen.has(child)) {
-            nextGen.push(child);
-            seen.add(child);
-          }
-        }
-      }
+    for await (const node of this.visitParents(relationNames)) {
+      if (predicate(node, stopFct)) found.push(node);
+      if (stop) break;
     }
     return found;
   }
 
+  public async findParentsInContext(
+    context: SpinalContext<any>,
+    predicate: SpinalNodeFindPredicateFunc = DEFAULT_FIND_PREDICATE
+  ): Promise<SpinalNode<any>[]> {
+    let stop = false;
+    function stopFct(): void {
+      stop = true;
+    }
+    let found = [];
+    for await (const node of this.visitParentsInContext(context)) {
+      if (predicate(node, stopFct)) found.push(node);
+      if (stop) break;
+    }
+    return found;
+  }
 
   /**
    * Recursively finds all the children nodes for which the predicate is true.
@@ -779,13 +728,14 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the predicate is not a function
    */
-  async find(relationNames: string | string[],
-    predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE)
-    : Promise<SpinalNode<any>[]> {
+  async find(
+    relationNames: RelationSearch,
+    predicate: SpinalNodeFindPredicateFunc = DEFAULT_FIND_PREDICATE
+  ): Promise<SpinalNode<any>[]> {
     if (
       !Array.isArray(relationNames) &&
       relationNames !== undefined &&
-      typeof relationNames !== 'string'
+      !(typeof relationNames === 'string' || relationNames instanceof RegExp)
     ) {
       throw TypeError('relationNames must be an array, a string or omitted');
     }
@@ -794,27 +744,64 @@ class SpinalNode<T extends spinal.Model> extends Model {
       throw TypeError('predicate must be a function');
     }
 
+    const found: SpinalNode<any>[] = [];
+    let stop = false;
+    function stopFct(): void {
+      stop = true;
+    }
+    for await (const node of this.visitChildren(relationNames)) {
+      if (predicate(node, stopFct)) found.push(node);
+      if (stop) break;
+    }
+    return found;
+  }
+
+  /**
+   * @param {RelationSearch} relations
+   * @param {(node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>} predicate
+   * @return {*}  {Promise<SpinalNode<any>[]>}
+   * @memberof SpinalNode
+   */
+  async findAsyncPredicate(
+    relations: RelationSearch,
+    predicate: (node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>
+  ): Promise<SpinalNode<any>[]> {
     const seen: Set<SpinalNode<any>> = new Set([this]);
-    let promises: Promise<SpinalNode<any>[]>[] = [];
+    let promises: (() => Promise<SpinalNode<any>[]>)[] = [];
     let nextGen: SpinalNode<any>[] = [this];
     let currentGen: SpinalNode<any>[] = [];
-    const found: SpinalNode<any>[] = [];
-
+    const result = [];
+    let stop = false;
+    function stopFct(): void {
+      stop = true;
+    }
     while (nextGen.length) {
       currentGen = nextGen;
       promises = [];
       nextGen = [];
 
-      for (const node of currentGen) {
-        promises.push(node.getChildren(relationNames));
-
-        if (predicate(node)) {
-          found.push(node);
-        }
+      for (const curNode of currentGen) {
+        promises.push(async (): Promise<SpinalNode<any>[]> => {
+          const arr = await curNode.getChildren(relations);
+          const resProm = [];
+          for (const child of arr) {
+            // @ts-ignore
+            if (stop === true) break;
+            resProm.push(async (): Promise<void> => {
+              // @ts-ignore
+              if (stop === true) return;
+              const res = await predicate(child, stopFct);
+              if (res) result.push(child);
+            });
+          }
+          await consumeBatch(resProm, 30);
+          return arr;
+        });
       }
 
-      const childrenArrays: SpinalNode<any>[][] = await Promise.all(promises);
-
+      const childrenArrays = await consumeBatch(promises, 30);
+      // @ts-ignore
+      if (stop === true) break;
       for (const children of childrenArrays) {
         for (const child of children) {
           if (!seen.has(child)) {
@@ -824,10 +811,64 @@ class SpinalNode<T extends spinal.Model> extends Model {
         }
       }
     }
-
-    return found;
+    return result;
   }
 
+  /**
+   * @param {SpinalContext<any>} context
+   * @param {(node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>} predicate
+   * @return {*}  {Promise<SpinalNode<any>[]>}
+   * @memberof SpinalNode
+   */
+  async findInContextAsyncPredicate(
+    context: SpinalContext<any>,
+    predicate: (node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>
+  ): Promise<SpinalNode<any>[]> {
+    const seen: Set<SpinalNode<any>> = new Set([this]);
+    let promises: (() => Promise<SpinalNode<any>[]>)[] = [];
+    let nextGen: SpinalNode<any>[] = [this];
+    let currentGen: SpinalNode<any>[] = [];
+    const result: SpinalNode<any>[] = [];
+    let stop = false;
+    function stopFct(): void {
+      stop = true;
+    }
+
+    while (nextGen.length) {
+      currentGen = nextGen;
+      promises = [];
+      nextGen = [];
+
+      for (const curNode of currentGen) {
+        promises.push(async (): Promise<SpinalNode<any>[]> => {
+          const arr = await curNode.getChildrenInContext(context);
+          const resProm = [];
+          for (const child of arr) {
+            resProm.push(async (): Promise<void> => {
+              // @ts-ignore
+              if (stop === true) return;
+              const res = await predicate(child, stopFct);
+              if (res) result.push(child);
+            });
+          }
+          await consumeBatch(resProm);
+          return arr;
+        });
+      }
+      const childrenArrays = await consumeBatch(promises, 30);
+      // @ts-ignore
+      if (stop === true) break;
+      for (const children of childrenArrays) {
+        for (const child of children) {
+          if (!seen.has(child)) {
+            nextGen.push(child);
+            seen.add(child);
+          }
+        }
+      }
+    }
+    return result;
+  }
 
   /**
    * Recursively finds all the children nodes with type "nodeType".
@@ -838,48 +879,45 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the predicate is not a function
    */
-  findByType(relationNames: string | string[], nodeType: string): Promise<any> {
-    return this.find(relationNames, (node) => {
+  findByType(
+    relationNames: string | string[],
+    nodeType: string
+  ): Promise<SpinalNode<any>[]> {
+    return this.find(relationNames, (node: SpinalNode<any>): boolean => {
       return node.getType().get() === nodeType;
-    })
+    });
   }
 
-
   /**
-  * Recursively finds all the children nodes and classify them by type.
-  * @param {string|string[]} relationNames Array containing the relation names to follow
-  * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
-  * @throws {TypeError} If the relationNames are neither an array, a string or omitted
-  * @throws {TypeError} If an element of relationNames is not a string
-  * @throws {TypeError} If the predicate is not a function
-  */
-  async browseAnClassifyByType(relationNames: string | string[]): Promise<any> {
+   * Recursively finds all the children nodes and classify them by type.
+   * @param {string|string[]} relationNames Array containing the relation names to follow
+   * @return {*}  {Promise<{ types: string[]; data: { [type: string]: SpinalNode<any>[] } }>}
+   * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+   * @throws {TypeError} If an element of relationNames is not a string
+   * @throws {TypeError} If the predicate is not a function
+   * @memberof SpinalNode
+   */
+  async browseAnClassifyByType(
+    relationNames: string | string[]
+  ): Promise<{ types: string[]; data: { [type: string]: SpinalNode<any>[] } }> {
     let dataStructure = {
       types: [],
-      data: {}
+      data: {},
     };
-
-    await this.find(relationNames, (node) => {
+    await this.find(relationNames, (node: SpinalNode<any>): false => {
       let type = node.getType().get();
 
       if (dataStructure.types.indexOf(type) === -1) {
         dataStructure.types.push(type);
       }
-
-      if (typeof dataStructure.data[type] === "undefined") {
+      if (typeof dataStructure.data[type] === 'undefined') {
         dataStructure.data[type] = [];
       }
-
       dataStructure.data[type].push(node);
-
       return false;
-
-    })
-
+    });
     return dataStructure;
-
   }
-
 
   /**
    * Recursively finds all the children nodes in the context for which the predicate is true..
@@ -889,47 +927,24 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If context is not a SpinalContext
    * @throws {TypeError} If the predicate is not a function
    */
-  async findInContext(context: SpinalContext<any>,
-    predicate: SpinalNodeFindPredicateFunc = DEFAULT_PREDICATE,
+  async findInContext(
+    context: SpinalContext<any>,
+    predicate: SpinalNodeFindPredicateFunc = DEFAULT_FIND_PREDICATE
   ): Promise<SpinalNode<any>[]> {
     if (typeof predicate !== 'function') {
       throw new Error('The predicate function must be a function');
     }
-
-    const seen: Set<SpinalNode<any>> = new Set([this]);
-    let promises: Promise<SpinalNode<any>[]>[] = [];
-    let nextGen: SpinalNode<any>[] = [this];
-    let currentGen: SpinalNode<any>[] = [];
     const found: SpinalNode<any>[] = [];
-
-    while (nextGen.length) {
-      currentGen = nextGen;
-      promises = [];
-      nextGen = [];
-
-      for (const node of currentGen) {
-        promises.push(node.getChildrenInContext(context));
-
-        if (predicate(node)) {
-          found.push(node);
-        }
-      }
-
-      const childrenArrays: SpinalNode<any>[][] = await Promise.all(promises);
-
-      for (const children of childrenArrays) {
-        for (const child of children) {
-          if (!seen.has(child)) {
-            nextGen.push(child);
-            seen.add(child);
-          }
-        }
-      }
+    let stop = false;
+    function stopFct(): void {
+      stop = true;
     }
-
+    for await (const node of this.visitChildrenInContext(context)) {
+      if (predicate(node, stopFct)) found.push(node);
+      if (stop) break;
+    }
     return found;
   }
-
 
   /**
    * Recursively finds all the children nodes in the context for which the predicate is true..
@@ -939,47 +954,45 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If context is not a SpinalContext
    * @throws {TypeError} If the predicate is not a function
    */
-  findInContextByType(context: SpinalContext<any>, nodeType: string): Promise<any> {
-    return this.findInContext(context, (node) => {
-      return node.getType().get() === nodeType
-    })
+  findInContextByType(
+    context: SpinalContext<any>,
+    nodeType: string
+  ): Promise<SpinalNode<any>[]> {
+    return this.findInContext(context, (node: SpinalNode<any>): boolean => {
+      return node.getType().get() === nodeType;
+    });
   }
 
-
   /**
- * Recursively finds all the children nodes in the context and classify them by type.
- * @param {SpinalContext} context Context to use for the search
- * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
- * @throws {TypeError} If the relationNames are neither an array, a string or omitted
- * @throws {TypeError} If an element of relationNames is not a string
- * @throws {TypeError} If the predicate is not a function
- */
-  async browseAndClassifyByTypeInContext(context: SpinalContext<any>): Promise<any> {
+   * Recursively finds all the children nodes in the context and classify them by type.
+   * @param {SpinalContext} context Context to use for the search
+   * @returns {Object<{types : string[], data : Object<string : SpinalNode[]>}>}
+   * @throws {TypeError} If the relationNames are neither an array, a string or omitted
+   * @throws {TypeError} If an element of relationNames is not a string
+   * @throws {TypeError} If the predicate is not a function
+   */
+  async browseAndClassifyByTypeInContext(
+    context: SpinalContext<any>
+  ): Promise<{ types: string[]; data: { [type: string]: SpinalNode<any>[] } }> {
     let dataStructure = {
       types: [],
-      data: {}
+      data: {},
     };
 
-    await this.findInContext(context, (node) => {
+    await this.findInContext(context, (node: SpinalNode<any>): false => {
       let type = node.getType().get();
-
       if (dataStructure.types.indexOf(type) === -1) {
         dataStructure.types.push(type);
       }
-
-      if (typeof dataStructure.data[type] === "undefined") {
+      if (typeof dataStructure.data[type] === 'undefined') {
         dataStructure.data[type] = [];
       }
-
       dataStructure.data[type].push(node);
-
       return false;
-
-    })
+    });
 
     return dataStructure;
   }
-
 
   /**
    * Recursively applies a function to all the children nodes.
@@ -989,7 +1002,10 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the callback is not a function
    */
-  async forEach(relationNames: string | string[], callback: SpinalNodeForEachFunc): Promise<void> {
+  async forEach(
+    relationNames: string | string[],
+    callback: SpinalNodeForEachFunc
+  ): Promise<void> {
     if (typeof callback !== 'function') {
       throw TypeError('callback must be a function');
     }
@@ -1008,8 +1024,10 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If context is not a SpinalContext
    * @throws {TypeError} If the callback is not a function
    */
-  async forEachInContext(context: SpinalContext<any>,
-    callback: SpinalNodeForEachFunc): Promise<void> {
+  async forEachInContext(
+    context: SpinalContext<any>,
+    callback: SpinalNodeForEachFunc
+  ): Promise<void> {
     if (typeof callback !== 'function') {
       throw TypeError('callback must be a function');
     }
@@ -1023,20 +1041,25 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
   /**
    * Recursively applies a function to all the children nodes and returns the results in an array.
+   * @template T
    * @param {string|string[]} relationNames Array containing the relation names to follow
    * @param {SpinalNodeMapFunc} callback Function to apply to the nodes
-   * @returns {Promise<any[]>} The results of the callback for each node
+   * @returns {Promise<T[]>} The results of the callback for each node
    * @throws {TypeError} If the relationNames are neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the callback is not a function
+   * @memberof SpinalNode
    */
-  async map(relationNames: string | string[], callback: SpinalNodeMapFunc): Promise<any[]> {
+  async map<T>(
+    relationNames: string | string[],
+    callback: SpinalNodeMapFunc<T>
+  ): Promise<T[]> {
     if (typeof callback !== 'function') {
       throw TypeError('The callback function must be a function');
     }
 
     const nodes = await this.find(relationNames);
-    const results = [];
+    const results: T[] = [];
 
     for (const node of nodes) {
       results.push(callback(node));
@@ -1048,25 +1071,184 @@ class SpinalNode<T extends spinal.Model> extends Model {
   /**
    * Recursively applies a function to all the children nodes in the context
    * and returns the results in an array.
+   * @template T
    * @param {SpinalContext} context Context to use for the search
    * @param {function} callback Function to apply to the nodes
    * @returns {Promise<Array<*>>} The results of the callback for each node
    * @throws {TypeError} If context is not a SpinalContext
    * @throws {TypeError} If the callback is not a function
+   * @memberof SpinalNode
    */
-  async mapInContext(context: SpinalContext<any>, callback: SpinalNodeMapFunc): Promise<any[]> {
+  async mapInContext<T>(
+    context: SpinalContext<any>,
+    callback: SpinalNodeMapFunc<T>
+  ): Promise<T[]> {
     if (typeof callback !== 'function') {
       throw TypeError('The callback function must be a function');
     }
 
     const nodes: SpinalNode<any>[] = await this.findInContext(context);
-    const results: any[] = [];
+    const results: T[] = [];
 
     for (const node of nodes) {
       results.push(callback(node));
     }
 
     return results;
+  }
+
+  /**
+   * @param {RelationSearch} relationNames
+   * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
+   * @memberof SpinalNode
+   */
+  async *visitParents(
+    relationNames: RelationSearch
+  ): AsyncGenerator<SpinalNode<any>, void, void> {
+    const seen: Set<SpinalNode<any>> = new Set([this]);
+    let promises: Promise<SpinalNode<any>[]>[] = [];
+    let nextGen: SpinalNode<any>[] = [this];
+    let currentGen: SpinalNode<any>[] = [];
+
+    while (nextGen.length) {
+      currentGen = nextGen;
+      promises = [];
+      nextGen = [];
+
+      for (const node of currentGen) {
+        yield node;
+        promises.push(node.getParents(relationNames));
+      }
+
+      // eslint-disable-next-line no-await-in-loop
+      const childrenArrays = await Promise.all(promises);
+      for (const children of childrenArrays) {
+        for (const child of children) {
+          if (!seen.has(child)) {
+            nextGen.push(child);
+            seen.add(child);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * @param {SpinalContext<any>} context
+   * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
+   * @memberof SpinalNode
+   */
+  async *visitParentsInContext(
+    context: SpinalContext<any>
+  ): AsyncGenerator<SpinalNode<any>, void, void> {
+    const seen: Set<SpinalNode<any>> = new Set([this]);
+    let promises: Promise<SpinalNode<any>[]>[] = [];
+    let nextGen: SpinalNode<any>[] = [this];
+    let currentGen: SpinalNode<any>[] = [];
+
+    while (nextGen.length) {
+      currentGen = nextGen;
+      promises = [];
+      nextGen = [];
+
+      for (const node of currentGen) {
+        yield node;
+        promises.push(node.getParentsInContext(context));
+      }
+
+      // eslint-disable-next-line no-await-in-loop
+      const childrenArrays = await Promise.all(promises);
+      for (const children of childrenArrays) {
+        for (const child of children) {
+          if (!seen.has(child)) {
+            nextGen.push(child);
+            seen.add(child);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * @param {RelationSearch} relationNames
+   * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
+   * @memberof SpinalNode
+   */
+  async *visitChildren(
+    relationNames: RelationSearch
+  ): AsyncGenerator<SpinalNode<any>, void, void> {
+    const seen: Set<SpinalNode<any>> = new Set([this]);
+    let promises: (() => Promise<SpinalNode<any>[]>)[] = [];
+    let nextGen: SpinalNode<any>[] = [this];
+    let currentGen: SpinalNode<any>[] = [];
+
+    while (nextGen.length) {
+      currentGen = nextGen;
+      promises = [];
+      nextGen = [];
+
+      for (const node of currentGen) {
+        yield node;
+        promises.push(
+          (): Promise<SpinalNode<any>[]> => node.getChildren(relationNames)
+        );
+      }
+
+      const childrenArrays: SpinalNode<any>[][] = await consumeBatch(
+        promises,
+        30
+      );
+
+      for (const children of childrenArrays) {
+        for (const child of children) {
+          if (!seen.has(child)) {
+            nextGen.push(child);
+            seen.add(child);
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * @param {SpinalContext<any>} context
+   * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
+   * @memberof SpinalNode
+   */
+  async *visitChildrenInContext(
+    context: SpinalContext<any>
+  ): AsyncGenerator<SpinalNode<any>, void, void> {
+    const seen: Set<SpinalNode<any>> = new Set([this]);
+    let promises: (() => Promise<SpinalNode<any>[]>)[] = [];
+    let nextGen: SpinalNode<any>[] = [this];
+    let currentGen: SpinalNode<any>[] = [];
+
+    while (nextGen.length) {
+      currentGen = nextGen;
+      promises = [];
+      nextGen = [];
+
+      for (const node of currentGen) {
+        yield node;
+        promises.push(
+          (): Promise<SpinalNode<any>[]> => node.getChildrenInContext(context)
+        );
+      }
+
+      const childrenArrays: SpinalNode<any>[][] = await consumeBatch(
+        promises,
+        30
+      );
+
+      for (const children of childrenArrays) {
+        for (const child of children) {
+          if (!seen.has(child)) {
+            nextGen.push(child);
+            seen.add(child);
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -1096,14 +1278,14 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @protected
    */
   _removeParent(relation: AnySpinalRelation): void {
-    const parentLst: spinal.Lst<SpinalNodePointer<AnySpinalRelation>>
-      = this.parents.getElement(relation.getName().get());
+    const parentLst: spinal.Lst<SpinalNodePointer<AnySpinalRelation>> =
+      this.parents.getElement(relation.getName().get());
 
     for (let i: number = 0; i < parentLst.length; i += 1) {
       if (parentLst[i].getId().get() === relation.getId().get()) {
         parentLst.splice(i);
-         // change the res way
-        this.setDirectModificationDate(); 
+        // change the res way
+        this.setDirectModificationDate();
         break;
       }
     }
@@ -1118,7 +1300,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
     for (const [, parent] of this.parents) {
       for (let i = 0; i < parent.length; i += 1) {
-        parent[i].load().then((parentRel: AnySpinalRelation) => {
+        parent[i].load().then((parentRel: AnySpinalRelation): void => {
           promises.push(parentRel.removeChild(this));
         });
       }
@@ -1144,7 +1326,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
       list.push(new SpinalNodePointer(relation, true));
       this.parents.setElement(relationName, list);
       // change the res way
-      this.setDirectModificationDate(); 
+      this.setDirectModificationDate();
     }
   }
 
@@ -1154,22 +1336,25 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @param {string} relationType Type of the relation
    * @protected
    */
-  _createRelation(relationName: string, relationType: string): AnySpinalRelation {
+  _createRelation(
+    relationName: string,
+    relationType: string
+  ): AnySpinalRelation {
     const relation = SpinalRelationFactory.getNewRelation(
       this,
       relationName,
-      relationType,
+      relationType
     );
 
     if (!this.children.has(relationType)) {
       this.children.setElement(relationType, new SpinalMap());
-          // change the res way
-    this.setDirectModificationDate(); 
+      // change the res way
+      this.setDirectModificationDate();
     }
 
     this._getChildrenType(relationType).setElement(relationName, relation);
-        // change the res way
-        this.setDirectModificationDate(); 
+    // change the res way
+    this.setDirectModificationDate();
     return relation;
   }
 
@@ -1191,66 +1376,53 @@ class SpinalNode<T extends spinal.Model> extends Model {
   }
 
   /**
-   * 
-   * @param relationNames 
+   * @private
+   * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]]
+   * @param {boolean} [getParent=false]
+   * @return {*}  {string[]}
+   * @memberof SpinalNode
    */
-  private _getValidRelations(relationNames: string | RegExp | (string | RegExp)[] = [], getParent: boolean = false): string[] {
-    // let relName: string | string[] = relationNames;
-    // if (Array.isArray(relationNames)) {
-    //   if (relationNames.length === 0) {
-    //     relName = this.getRelationNames();
-    //   }
-    // } else if (typeof relationNames === 'string') {
-    //   relName = [relationNames];
-    // } else {
-    //   throw TypeError('relationNames must be an array, a string or omitted');
-    // }
-
-    let nodeRelations = !getParent ? this.getRelationNames() : this.parents.keys();
-
+  private _getValidRelations(
+    relationNames: RelationSearch = [],
+    getParent: boolean = false
+  ): string[] {
+    let nodeRelations = !getParent
+      ? this.getRelationNames()
+      : this.parents.keys();
     if (!Array.isArray(relationNames)) {
-
       if (relationNames instanceof RegExp) {
-
-        return nodeRelations.filter(relationName => {
-          return relationName.match(relationNames);
-        })
-
+        return nodeRelations.filter(
+          (relationName: string): RegExpMatchArray => {
+            return relationName.match(relationNames);
+          }
+        );
+      } else if (typeof relationNames === 'string') {
+        if (nodeRelations.includes(relationNames)) return [relationNames];
+        return [];
       }
-
-      return [relationNames]
-
-
-    } else if (Array.isArray(relationNames) && relationNames.length === 0) {
-
+      throw TypeError(
+        'The RelationNames must be string | RegExp | (string | RegExp)[]'
+      );
+    } else if (relationNames.length === 0) {
       return nodeRelations;
-
-    } else if (Array.isArray(relationNames) && relationNames.length > 0) {
-
-      return nodeRelations.filter(relationName => {
-        for (let index = 0; index < relationNames.length; index++) {
-          const regex = relationNames[index];
-          if (relationName.match(regex)) {
-            return true;
+    } else if (relationNames.length > 0) {
+      const res = [];
+      for (const relationName of nodeRelations) {
+        for (const regOrStr of relationNames) {
+          if (typeof regOrStr === 'string') {
+            if (regOrStr === relationName) res.push(relationName);
+          } else if (regOrStr instanceof RegExp) {
+            if (relationName.match(regOrStr)) res.push(relationName);
+          } else {
+            throw TypeError(
+              'The RelationNames must be string | RegExp | (string | RegExp)[]'
+            );
           }
         }
-
-        return false;
-      })
-
+      }
+      return res;
     }
-
-
   }
-
-
-  /**
-  * 
-  */
-  private _addTypeToGraph() {
-    let contextId
-  }
-
 }
 
 spinalCore.register_models([SpinalNode]);

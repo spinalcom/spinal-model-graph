@@ -25,32 +25,28 @@
 
 import {
   FileSystem,
-  spinalCore,
   Model,
+  spinalCore,
   Val,
 } from 'spinal-core-connectorjs_type';
-
-import {
-  guid,
-} from '../Utilities';
-
-import {
-  SpinalNode,
-  SpinalContext,
-} from '..';
-import { SpinalNodePointer } from '../SpinalNodePointer';
+import { SpinalContext } from '../Nodes/SpinalContext';
+import { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalMap } from '../SpinalMap';
+import { SpinalNodePointer } from '../SpinalNodePointer';
+import { guid } from '../Utilities';
 
 /**
  * Base for all relation in a SpinalGraph.
- * @extends Model
+ * @abstract
+ * @class BaseSpinalRelation
  * @abstract
  * @property {spinal.Str} name
  * @property {spinal.Str} id
  * @property {SpinalNodePointer<SpinalNode>} parent
  * @property {SpinalMap<spinal.Val>} contextIds
+ * @extends {Model}
  */
-class BaseSpinalRelation extends Model {
+abstract class BaseSpinalRelation extends Model {
   name: spinal.Str;
   id: spinal.Str;
   parent: SpinalNodePointer<SpinalNode<any>>;
@@ -79,7 +75,7 @@ class BaseSpinalRelation extends Model {
 
     this.add_attr({
       name,
-      id: guid(name),
+      id: guid(),
       parent: new SpinalNodePointer(parent, true),
       contextIds: new SpinalMap(),
     });
@@ -103,12 +99,17 @@ class BaseSpinalRelation extends Model {
     return this.name;
   }
 
+  // /**
+  //  * @returns {Promise<SpinalNode<spinal.Model>>} Returns a promise where the resolve is the parent
+  //  * @memberof BaseSpinalRelation
+  //  */
   /**
    * Returns the parent of the relation.
-   * @returns {Promise<SpinalNode<spinal.Model>>} Returns a promise where the resolve is the parent
+   * @template T
+   * @return {*}  {Promise<SpinalNode<T>>} Returns a promise where the resolve is the parent
    * @memberof BaseSpinalRelation
    */
-  getParent(): Promise<SpinalNode<spinal.Model>> {
+  getParent<T extends spinal.Model>(): Promise<SpinalNode<T>> {
     return this.parent.load();
   }
 
@@ -153,6 +154,22 @@ class BaseSpinalRelation extends Model {
   }
 
   /**
+   * Remove an id to the context ids of the relation.
+   * @param {string} id Id of the context
+   * @throws {TypeError} If the id is not a string
+   * @memberof BaseSpinalRelation
+   */
+  removeContextId(id: string): void {
+    if (typeof id !== 'string') {
+      throw TypeError('id must be a string');
+    }
+
+    if (this.contextIds.has(id)) {
+      this.contextIds.delete(id);
+    }
+  }
+
+  /**
    * Removes children from the relation.
    * @param {Array<SpinalNode<spinal.Model>>} [nodesToDelete=[]] Childs to remove
    * @returns {Promise<void>} An empty promise
@@ -184,15 +201,65 @@ class BaseSpinalRelation extends Model {
   }
 
   /**
+   * Removes a child from the relation.
+   * @abstract
+   * @param {SpinalNode<any>} node Child to remove
+   * @return {*}  {Promise<void>} An empty promise
+   * @memberof BaseSpinalRelation
+   */
+  abstract removeChild(node: SpinalNode<any>): Promise<void>;
+
+  /**
+   * Return all the children of the relation.
+   * @abstract
+   * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
+   * @memberof BaseSpinalRelation
+   */
+  abstract getChildren(): Promise<SpinalNode<any>[]>;
+
+  /**
+   * Return all the children of the relation associated to a certain context.
+   * @abstract
+   * @param {SpinalContext<any>} context
+   * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
+   * @throws {TypeError} If the context is not a SpinalContext
+   * @memberof BaseSpinalRelation
+   */
+  abstract getChildrenInContext(
+    context: SpinalContext<any>
+  ): Promise<SpinalNode<any>[]>;
+
+  /**
+   * Returns the type of the relation.
+   * @abstract
+   * @return {*}  {string} Type of the relation
+   * @memberof BaseSpinalRelation
+   */
+  abstract getType(): string;
+
+  /**
+   * returns the number of children of the relation.
+   * @abstract
+   * @return {*}  {number}
+   * @memberof BaseSpinalRelation
+   */
+  abstract getNbChildren(): number;
+
+  /**
+   * Retrieves all the ids of the children of the relation and return them inside an array.
+   * @abstract
+   * @return {*}  {string[]} Array containing all the children ids of the relation
+   * @memberof BaseSpinalRelation
+   */
+  abstract getChildrenIds(): string[];
+
+  /**
    * Removes the relation from the graph.
    * @returns {Promise<void>} An empty promise
    * @memberof BaseSpinalRelation
    */
   async removeFromGraph(): Promise<void> {
-    await Promise.all([
-      this._removeFromParent(),
-      this.removeChildren(),
-    ]);
+    await Promise.all([this._removeFromParent(), this.removeChildren()]);
   }
 
   /**
@@ -202,11 +269,15 @@ class BaseSpinalRelation extends Model {
    * @memberof BaseSpinalRelation
    */
   async _removeFromParent(): Promise<void> {
-    const parent = await this.getParent();
-    const relationMap = parent._getChildrenType(this.getType());
+    try {
+      const parent = await this.getParent();
+      const relationMap = parent._getChildrenType(this.getType());
 
-    relationMap.delete(this.getName().get());
-    this.parent.unset();
+      relationMap.delete(this.getName().get());
+      this.parent.unset();
+    } catch (e) {
+      return undefined;
+    }
   }
 }
 

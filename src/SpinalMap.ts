@@ -22,16 +22,11 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-// tslint:disable:function-name
+import { Model, spinalCore } from 'spinal-core-connectorjs_type';
+import type { ArrayPairStringAny } from './interfaces/ArrayPairStringAny';
+import type { SpinalMapForEachFunc } from './interfaces/SpinalMapForEachFunc';
+import type { SpinalMapItem } from './interfaces/SpinalMapItem';
 
-import { spinalCore, Model } from 'spinal-core-connectorjs_type';
-
-/**
- * @type SpinalMapForEachFunc
- * @template T
- */
-type SpinalMapForEachFunc<T extends spinal.Model> = (value: T, key: string) => void;
-type ArrayPairStringAny = [string, any];
 /**
  * @class SpinalMap
  * @extends {Model}
@@ -47,7 +42,7 @@ class SpinalMap<T extends spinal.Model> extends Model {
    * @throws {TypeError} If the keys of the values of the iterators are not strings
    * @memberof SpinalMap
    */
-  constructor(init?: [string, any][]) {
+  constructor(init?: ArrayPairStringAny[]) {
     super();
     if (init !== undefined) {
       for (const [key, value] of init) {
@@ -124,7 +119,7 @@ class SpinalMap<T extends spinal.Model> extends Model {
    * @returns {Array<Array<string,T>>} Array containing all the keys and values in the map
    * @memberof SpinalMap
    */
-  entries(): ([string, T])[] {
+  entries(): SpinalMapItem<T>[] {
     const arr = [];
 
     for (const key of this.keys()) {
@@ -166,7 +161,7 @@ class SpinalMap<T extends spinal.Model> extends Model {
    * @param {SpinalMapForEachFunc<T>} fun Funcion to apply
    * @memberof SpinalMap
    */
-  forEach(fun: SpinalMapForEachFunc<T>) {
+  forEach(fun: SpinalMapForEachFunc<T>): void {
     if (typeof fun !== 'function') {
       throw TypeError('The callback must be a function');
     }
@@ -181,7 +176,7 @@ class SpinalMap<T extends spinal.Model> extends Model {
    * @returns {IterableIterator<T>}
    * @memberof SpinalMap
    */
-  *[Symbol.iterator](): IterableIterator<[string, T]> {
+  *[Symbol.iterator](): IterableIterator<SpinalMapItem<T>> {
     const keys = this.keys();
 
     for (const key of keys) {

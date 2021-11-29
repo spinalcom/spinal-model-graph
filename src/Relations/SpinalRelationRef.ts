@@ -24,21 +24,14 @@
 
 import {
   FileSystem,
-  spinalCore,
-  Model,
   Lst,
+  Model,
+  spinalCore,
 } from 'spinal-core-connectorjs_type';
-
+import { SpinalContext } from '../Nodes/SpinalContext';
+import { SpinalNode } from '../Nodes/SpinalNode';
 import { BaseSpinalRelation } from './BaseSpinalRelation';
-import {
-  SPINAL_RELATION_TYPE,
-} from './SpinalRelationFactory';
-import {
-  SpinalNode,
-  SpinalContext,
-} from '../index';
-
-type SpinalNodeAny = SpinalNode<any>;
+import { SPINAL_RELATION_TYPE } from './SpinalRelationFactory';
 
 /**
  * Relation where the children are in a Lst.
@@ -51,7 +44,7 @@ type SpinalNodeAny = SpinalNode<any>;
  * @property {spinal.Lst<SpinalNode>} children
  */
 class SpinalRelationRef extends BaseSpinalRelation {
-  children: spinal.Lst<SpinalNodeAny>;
+  children: spinal.Lst<SpinalNode<any>>;
   /**
    * Constructor for the SpinalRelationRef class.
    * @param {SpinalNode} parent Parent of the relation
@@ -60,7 +53,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
    * @throws {TypeError} If the name is not a string
    * @memberof SpinalRelationRef
    */
-  constructor(parent?: SpinalNodeAny, name?: string) {
+  constructor(parent?: SpinalNode<any>, name?: string) {
     super(parent, name);
 
     if (FileSystem._sig_server === false) return;
@@ -84,7 +77,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
     return res;
   }
 
-    /**
+  /**
    * returns the number of children of the relation.
    * @returns {number}
    * @memberof SpinalRelationRef
@@ -95,11 +88,11 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
   /**
    * Return all the children of the relation.
-   * @returns {Promise<Array<SpinalNodeAny>>} The children of the relation
+   * @returns {Promise<Array<SpinalNode<any>>>} The children of the relation
    * @memberof SpinalRelationRef
    */
-  getChildren(): Promise<SpinalNodeAny[]> {
-    const children: SpinalNodeAny[] = [];
+  getChildren(): Promise<SpinalNode<any>[]> {
+    const children: SpinalNode<any>[] = [];
 
     for (let i: number = 0; i < this.children.length; i += 1) {
       children.push(this.children[i]);
@@ -114,15 +107,17 @@ class SpinalRelationRef extends BaseSpinalRelation {
    * @throws {TypeError} If the context is not a SpinalContext
    * @memberof SpinalRelationRef
    */
-  getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNodeAny[]> {
-    const children: SpinalNodeAny[] = [];
+  getChildrenInContext(
+    context: SpinalContext<any>
+  ): Promise<SpinalNode<any>[]> {
+    const children: SpinalNode<any>[] = [];
 
     if (!(context instanceof SpinalContext)) {
       return Promise.reject(TypeError('context must be a SpinalContext'));
     }
 
     for (let i: number = 0; i < this.children.length; i += 1) {
-      const child: SpinalNodeAny = this.children[i];
+      const child: SpinalNode<any> = this.children[i];
 
       if (child.belongsToContext(context)) {
         children.push(child);
@@ -150,11 +145,13 @@ class SpinalRelationRef extends BaseSpinalRelation {
    * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
    * @memberof SpinalRelationRef
    */
-  async addChild<T extends spinal.Model>(node: T|SpinalNode<T>): Promise<SpinalNode<T>> {
-    let nodeCreate: T|SpinalNode<T> = node;
+  async addChild<T extends spinal.Model>(
+    node: T | SpinalNode<T>
+  ): Promise<SpinalNode<T>> {
+    let nodeCreate: T | SpinalNode<T> = node;
     if (!(node instanceof Model)) {
       throw new TypeError(
-        'Cannot add a child witch is not an instance of SpinalNode or Model.',
+        'Cannot add a child witch is not an instance of SpinalNode or Model.'
       );
     } else if (!(node instanceof SpinalNode)) {
       nodeCreate = new SpinalNode(undefined, undefined, node);
@@ -177,7 +174,7 @@ class SpinalRelationRef extends BaseSpinalRelation {
    * @throws {Error} If the given node is not a child
    * @memberof SpinalRelationRef
    */
-  removeChild(node: SpinalNodeAny): Promise<void> {
+  removeChild(node: SpinalNode<any>): Promise<void> {
     if (!this.children.contains(node)) {
       return Promise.reject(Error('The node is not a child'));
     }
