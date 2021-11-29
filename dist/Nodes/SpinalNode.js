@@ -1185,6 +1185,8 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
      */
     _removeParent(relation) {
         const parentLst = this.parents.getElement(relation.getName().get());
+        if (parentLst === undefined)
+            return;
         for (let i = 0; i < parentLst.length; i += 1) {
             if (parentLst[i].getId().get() === relation.getId().get()) {
                 parentLst.splice(i);
