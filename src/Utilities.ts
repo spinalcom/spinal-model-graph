@@ -22,11 +22,13 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import type {} from 'spinal-core-connectorjs_type';
+import type { } from 'spinal-core-connectorjs_type';
 import type { AnySpinalRelation } from './interfaces/AnySpinalRelation';
 import type { SpinalContext } from './Nodes/SpinalContext';
 import type SpinalNode from './Nodes/SpinalNode';
 import type { SpinalNodePointer } from './SpinalNodePointer';
+import { spinalEventEmitter } from "spinal-env-viewer-plugin-event-emitter";
+
 
 /**
  * Generates a random number and returns in a string.
@@ -90,3 +92,8 @@ export async function consumeBatch<T>(
   }
   return result;
 }
+
+
+// export function sendEventFunc(eventName: string, parentNode: SpinalNode<any>, childNode: SpinalNode<any>, contextNode: SpinalContext<any>) {
+//   spinalEventEmitter.emit(eventName,);
+// }

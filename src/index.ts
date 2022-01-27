@@ -21,7 +21,7 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-
+export type { EventData } from "./interfaces/EventData";
 export type { AnySpinalRelation } from './interfaces/AnySpinalRelation';
 export type { ArrayPairStringAny } from './interfaces/ArrayPairStringAny';
 export type { RelationSearch } from './interfaces/RelationSearch';
@@ -51,3 +51,4 @@ export { SpinalRelationRef } from './Relations/SpinalRelationRef';
 export { SpinalMap } from './SpinalMap';
 export { SpinalNodePointer } from './SpinalNodePointer';
 export { SpinalSet } from './SpinalSet';
+export { ADD_CHILD_EVENT, ADD_CHILD_IN_CONTEXT_EVENT, REMOVE_CHILD_EVENT, REMOVE_CHILDREN_EVENT } from "./constants";

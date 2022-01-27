@@ -28,6 +28,7 @@ import {
   Model,
   spinalCore,
 } from 'spinal-core-connectorjs_type';
+import { ADD_CHILD_EVENT, ADD_CHILD_IN_CONTEXT_EVENT, REMOVE_CHILD_EVENT, REMOVE_CHILDREN_EVENT } from '../constants';
 import type { AnySpinalRelation } from '../interfaces/AnySpinalRelation';
 import { RelationSearch } from '../interfaces/RelationSearch';
 import type { SpinalNodeFindOnePredicateFunc } from '../interfaces/SpinalNodeFindOnePredicateFunc';
@@ -44,7 +45,8 @@ import { SpinalNodePointer } from '../SpinalNodePointer';
 import { SpinalSet } from '../SpinalSet';
 import { consumeBatch, guid, loadParentRelation } from '../Utilities';
 import { SpinalContext } from './SpinalContext';
-
+import { spinalEventEmitter } from "spinal-env-viewer-plugin-event-emitter";
+import { EventData } from '../interfaces/EventData';
 export const DEFAULT_FIND_PREDICATE: SpinalNodeFindPredicateFunc = () => true;
 
 /**
@@ -366,6 +368,11 @@ class SpinalNode<T extends spinal.Model> extends Model {
     //change the return way
     let res = relation.addChild(child);
     this.setDirectModificationDate();
+
+    // Send add child event via spinal-event-emitter
+    this.sendEventFunc(ADD_CHILD_EVENT, <SpinalNode<any>>child);
+
+
     return res;
   }
 
@@ -414,6 +421,12 @@ class SpinalNode<T extends spinal.Model> extends Model {
 
     await relation.addChild(tmpchildCreate);
     this.setDirectModificationDate();
+
+
+    // Send add child event via spinal-event-emitter
+    this.sendEventFunc(ADD_CHILD_IN_CONTEXT_EVENT, <SpinalNode<any>>childCreate, context)
+
+
     return tmpchildCreate;
   }
 
@@ -441,6 +454,12 @@ class SpinalNode<T extends spinal.Model> extends Model {
     let res = rel.removeChild(node);
     // change the res way
     this.setDirectModificationDate();
+
+
+    // Send add child event via spinal-event-emitter
+    this.sendEventFunc(REMOVE_CHILD_EVENT, node);
+
+
     return res;
   }
 
@@ -474,6 +493,11 @@ class SpinalNode<T extends spinal.Model> extends Model {
     let res = rel.removeChildren(nodes);
     // change the res way
     this.setDirectModificationDate();
+
+    // Send add child event via spinal-event-emitter
+    this.sendEventFunc(REMOVE_CHILDREN_EVENT, nodes)
+
+
     return res;
   }
 
@@ -1423,6 +1447,21 @@ class SpinalNode<T extends spinal.Model> extends Model {
       return res;
     }
   }
+
+
+  private sendEventFunc(eventName: string, childNode?: SpinalNode<any> | SpinalNode<any>[], contextNode?: SpinalContext<any>) {
+    if (this.info.activeEventSender && this.info.activeEventSender.get()) {
+      const data: EventData = {
+        nodeId: this.getId().get(),
+        ...(childNode && !Array.isArray(childNode) && { childId: childNode.getId().get() }),
+        ...(childNode && Array.isArray(childNode) && { childrenIds: childNode.map(node => node.getId().get()) }),
+        contextId: contextNode && contextNode.getId().get()
+      }
+      spinalEventEmitter.emit(eventName, data);
+    }
+  }
+
+
 }
 
 spinalCore.register_models([SpinalNode]);
