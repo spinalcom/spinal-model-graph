@@ -22,7 +22,7 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import { Model, spinalCore } from 'spinal-core-connectorjs_type';
+import { Model, spinalCore } from 'spinal-core-connectorjs';
 import type { SpinalSetForEachFunc } from './interfaces/SpinalSetForEachFunc';
 
 /**

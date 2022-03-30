@@ -1,3 +1,4 @@
+import { Lst, Model } from 'spinal-core-connectorjs';
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
 import { BaseSpinalRelation } from './BaseSpinalRelation';
@@ -5,14 +6,16 @@ import { BaseSpinalRelation } from './BaseSpinalRelation';
  * Relation where the children are in a Lst.
  * @class SpinalRelationRef
  * @extends {BaseSpinalRelation}
- * @property {spinal.Str} name
- * @property {spinal.Str} id
+ * @property {Str} name
+ * @property {Str} id
  * @property {SpinalNodePointer<SpinalNode>} parent
- * @property {SpinalMap<spinal.Val>} contextIds
- * @property {spinal.Lst<SpinalNode>} children
+ * @property {SpinalMap<Val>} contextIds
+ * @property {Lst<SpinalNode>} children
  */
 declare class SpinalRelationRef extends BaseSpinalRelation {
-    children: spinal.Lst<SpinalNode<any>>;
+    _constructorName: string;
+    static _constructorName: string;
+    children: Lst<SpinalNode<any>>;
     /**
      * Constructor for the SpinalRelationRef class.
      * @param {SpinalNode} parent Parent of the relation
@@ -56,14 +59,14 @@ declare class SpinalRelationRef extends BaseSpinalRelation {
     getType(): string;
     /**
      * Adds a child to the relation.
-     * @template T extends spinal.Model = Node Element Type
+     * @template T extends Model = Node Element Type
      * @param {(T|SpinalNode<T>)} node Node or model to add
      * @throws {TypeError} If the node is not a Model
      * @throws {Error} If the node is already a child of the relation
      * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
      * @memberof SpinalRelationRef
      */
-    addChild<T extends spinal.Model>(node: T | SpinalNode<T>): Promise<SpinalNode<T>>;
+    addChild<T extends Model>(node: T | SpinalNode<T>): Promise<SpinalNode<T>>;
     /**
      * Removes a child from the relation.
      * @param {SpinalNode} node Child to remove

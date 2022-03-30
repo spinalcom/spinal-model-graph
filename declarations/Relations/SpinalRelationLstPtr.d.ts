@@ -1,3 +1,4 @@
+import { Lst, Model } from 'spinal-core-connectorjs';
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalNodePointer } from '../SpinalNodePointer';
@@ -5,14 +6,16 @@ import { BaseSpinalRelation } from './BaseSpinalRelation';
 /**
  * Relation where the children are in Lst of Ptr.
  * @extends BaseSpinalRelation
- * @property {spinal.Str} name
- * @property {spinal.Str} id
+ * @property {Str} name
+ * @property {Str} id
  * @property {SpinalNodePointer<SpinalNode<any>>} parent
- * @property {SpinalMap<spinal.Val>} contextIds
- * @property {spinal.Lst<SpinalNodePointer<SpinalNode<any>>>} children
+ * @property {SpinalMap<Val>} contextIds
+ * @property {Lst<SpinalNodePointer<SpinalNode<any>>>} children
  */
 declare class SpinalRelationLstPtr extends BaseSpinalRelation {
-    children: spinal.Lst<SpinalNodePointer<SpinalNode<any>>>;
+    _constructorName: string;
+    static _constructorName: string;
+    children: Lst<SpinalNodePointer<SpinalNode<any>>>;
     /**
      * Constructor for the SpinalRelationLstPtr class.
      * @param {SpinalNode<any>} parent Parent of the relation
@@ -55,14 +58,14 @@ declare class SpinalRelationLstPtr extends BaseSpinalRelation {
     getType(): string;
     /**
      * Adds a child to the relation.
-     * @template T extends spinal.Model = Node Element Type
+     * @template T extends Model = Node Element Type
      * @param {(T|SpinalNode<T>)} node Node or model to add
      * @throws {TypeError} If the node is not a Model
      * @throws {Error} If the node is already a child of the relation
      * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
      * @memberof SpinalRelationLstPtr
      */
-    addChild<T extends spinal.Model>(node: T | SpinalNode<T>): Promise<SpinalNode<T>>;
+    addChild<T extends Model>(node: T | SpinalNode<T>): Promise<SpinalNode<T>>;
     /**
      * Removes a child from the relation.
      * @param {SpinalNode<any>} node Child to remove

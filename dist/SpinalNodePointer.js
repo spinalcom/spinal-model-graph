@@ -24,16 +24,16 @@ exports.SpinalNodePointer = void 0;
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-const spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
+const spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 const SpinalNode_1 = require("./Nodes/SpinalNode");
 const BaseSpinalRelation_1 = require("./Relations/BaseSpinalRelation");
 /**
  * Wrapper over SpinalNodePointer containing some information about the pointed element
  * @class SpinalNodePointer
  * @extends {Model}
- * @template T extends spinal.Model
+ * @template T extends Model
  */
-class SpinalNodePointer extends spinal_core_connectorjs_type_1.Model {
+class SpinalNodePointer extends spinal_core_connectorjs_1.Model {
     /**
      * Constructor for the SpinalNodePointer class.
      * @param {T} element Element to wich the SpinalNodePointer will point
@@ -42,10 +42,10 @@ class SpinalNodePointer extends spinal_core_connectorjs_type_1.Model {
      */
     constructor(element, blockRights = false) {
         super();
-        if (spinal_core_connectorjs_type_1.FileSystem._sig_server === false)
+        if (spinal_core_connectorjs_1.FileSystem._sig_server === false)
             return;
         this.add_attr({
-            ptr: blockRights ? new spinal_core_connectorjs_type_1.Pbr() : new spinal_core_connectorjs_type_1.Ptr(),
+            ptr: blockRights ? new spinal_core_connectorjs_1.Pbr() : new spinal_core_connectorjs_1.Ptr(),
             info: {},
         });
         this.setElement(element);
@@ -57,7 +57,7 @@ class SpinalNodePointer extends spinal_core_connectorjs_type_1.Model {
      * @memberof SpinalNodePointer
      */
     setElement(element) {
-        if (!(element instanceof spinal_core_connectorjs_type_1.Model)) {
+        if (!(element instanceof spinal_core_connectorjs_1.Model)) {
             throw TypeError('The pointed value must be a Model');
         }
         if (element instanceof SpinalNode_1.SpinalNode ||
@@ -78,11 +78,11 @@ class SpinalNodePointer extends spinal_core_connectorjs_type_1.Model {
                 if (this.ptr.data.model)
                     return resolve(this.ptr.data.model);
                 if (this.ptr.data.value) {
-                    if (typeof spinal_core_connectorjs_type_1.FileSystem._objects[this.ptr.data.value] !== 'undefined') {
-                        return resolve(spinal_core_connectorjs_type_1.FileSystem._objects[this.ptr.data.value]);
+                    if (typeof spinal_core_connectorjs_1.FileSystem._objects[this.ptr.data.value] !== 'undefined') {
+                        return resolve(spinal_core_connectorjs_1.FileSystem._objects[this.ptr.data.value]);
                     }
-                    if (typeof spinal_core_connectorjs_type_1.FileSystem._tmp_objects[this.ptr.data.value] !== 'undefined') {
-                        return resolve(spinal_core_connectorjs_type_1.FileSystem._tmp_objects[this.ptr.data.value]);
+                    if (typeof spinal_core_connectorjs_1.FileSystem._tmp_objects[this.ptr.data.value] !== 'undefined') {
+                        return resolve(spinal_core_connectorjs_1.FileSystem._tmp_objects[this.ptr.data.value]);
                     }
                 }
             }
@@ -100,7 +100,7 @@ class SpinalNodePointer extends spinal_core_connectorjs_type_1.Model {
     }
     /**
      * Returns the id of the pointed element.
-     * @returns {spinal.Str}  Id of the pointed element
+     * @returns {Str}  Id of the pointed element
      * @memberof SpinalNodePointer
      */
     getId() {
@@ -108,7 +108,7 @@ class SpinalNodePointer extends spinal_core_connectorjs_type_1.Model {
     }
     /**
      * This function returns the type of the pointed element.
-     * @returns {spinal.Str} Type of the pointed element
+     * @returns {Str} Type of the pointed element
      * @memberof SpinalNodePointer
      */
     getType() {
@@ -116,6 +116,6 @@ class SpinalNodePointer extends spinal_core_connectorjs_type_1.Model {
     }
 }
 exports.SpinalNodePointer = SpinalNodePointer;
-spinal_core_connectorjs_type_1.spinalCore.register_models([SpinalNodePointer]);
+spinal_core_connectorjs_1.spinalCore.register_models([SpinalNodePointer]);
 exports.default = SpinalNodePointer;
 //# sourceMappingURL=SpinalNodePointer.js.map

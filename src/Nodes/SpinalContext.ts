@@ -21,7 +21,7 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-import { FileSystem, spinalCore } from 'spinal-core-connectorjs_type';
+import { FileSystem, Model, spinalCore } from 'spinal-core-connectorjs';
 import { SPINAL_RELATION_PTR_LST_TYPE } from '../Relations/SpinalRelationFactory';
 import { guid } from '../Utilities';
 import { SpinalNode } from './SpinalNode';
@@ -32,7 +32,7 @@ import { SpinalNode } from './SpinalNode';
  * @extends {SpinalNode<T>}
  * @template T
  */
-class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
+class SpinalContext<T extends Model = any> extends SpinalNode<T> {
   /**
    * Constructor for the SpinalContext class.
    * @param {String} [name="undefined"] Name of the context
@@ -62,7 +62,7 @@ class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
    * @throws {TypeError} If the child is not a model
    * @throws {TypeError} If the relation name is not a string
    */
-  addChild<K extends spinal.Model>(
+  addChild<K extends Model>(
     child: K | SpinalNode<K>,
     relationName: string,
     _relationType: string = SPINAL_RELATION_PTR_LST_TYPE
@@ -81,7 +81,7 @@ class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
    * @param {SpinalContext} context Context to update, usually unused
    * @returns {Promise<SpinalNode>} The child node in a promise
    */
-  addChildInContext<K extends spinal.Model>(
+  addChildInContext<K extends Model>(
     child: K | SpinalNode<K>,
     relationName: string,
     _relationType: string = SPINAL_RELATION_PTR_LST_TYPE,
@@ -101,7 +101,7 @@ class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
    * @param {SpinalContext} [context=this] Context to use for the search, this by default
    * @returns {Promise<Array<SpinalNode>>} The children that were found
    */
-  getChildrenInContext<K extends spinal.Model>(
+  getChildrenInContext<K extends Model>(
     context: SpinalContext<T> = this
   ): Promise<SpinalNode<K>[]> {
     return super.getChildrenInContext(context);

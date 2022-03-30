@@ -1,4 +1,4 @@
-import { Model } from 'spinal-core-connectorjs_type';
+import { Model } from 'spinal-core-connectorjs';
 import type { SpinalSetForEachFunc } from './interfaces/SpinalSetForEachFunc';
 /**
  * @class SpinalSet

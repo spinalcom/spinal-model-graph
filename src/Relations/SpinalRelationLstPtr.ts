@@ -22,12 +22,7 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import {
-  FileSystem,
-  Lst,
-  Model,
-  spinalCore,
-} from 'spinal-core-connectorjs_type';
+import { FileSystem, Lst, Model, spinalCore } from 'spinal-core-connectorjs';
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalNodePointer } from '../SpinalNodePointer';
@@ -37,14 +32,16 @@ import { SPINAL_RELATION_LST_PTR_TYPE } from './SpinalRelationFactory';
 /**
  * Relation where the children are in Lst of Ptr.
  * @extends BaseSpinalRelation
- * @property {spinal.Str} name
- * @property {spinal.Str} id
+ * @property {Str} name
+ * @property {Str} id
  * @property {SpinalNodePointer<SpinalNode<any>>} parent
- * @property {SpinalMap<spinal.Val>} contextIds
- * @property {spinal.Lst<SpinalNodePointer<SpinalNode<any>>>} children
+ * @property {SpinalMap<Val>} contextIds
+ * @property {Lst<SpinalNodePointer<SpinalNode<any>>>} children
  */
 class SpinalRelationLstPtr extends BaseSpinalRelation {
-  children: spinal.Lst<SpinalNodePointer<SpinalNode<any>>>;
+  public _constructorName = 'SpinalRelationLstPtr';
+  public static _constructorName = 'SpinalRelationLstPtr';
+  children: Lst<SpinalNodePointer<SpinalNode<any>>>;
 
   /**
    * Constructor for the SpinalRelationLstPtr class.
@@ -139,14 +136,14 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
 
   /**
    * Adds a child to the relation.
-   * @template T extends spinal.Model = Node Element Type
+   * @template T extends Model = Node Element Type
    * @param {(T|SpinalNode<T>)} node Node or model to add
    * @throws {TypeError} If the node is not a Model
    * @throws {Error} If the node is already a child of the relation
    * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
    * @memberof SpinalRelationLstPtr
    */
-  async addChild<T extends spinal.Model>(
+  async addChild<T extends Model>(
     node: T | SpinalNode<T>
   ): Promise<SpinalNode<T>> {
     let nodeCreate: T | SpinalNode<T> = node;
@@ -194,6 +191,6 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
   }
 }
 
-spinalCore.register_models([SpinalRelationLstPtr]);
+spinalCore.register_models(SpinalRelationLstPtr, 'SpinalRelationLstPtr');
 export default SpinalRelationLstPtr;
 export { SpinalRelationLstPtr };

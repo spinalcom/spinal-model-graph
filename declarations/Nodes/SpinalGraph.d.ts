@@ -1,10 +1,11 @@
+import { Model } from 'spinal-core-connectorjs';
 import { SpinalContext } from './SpinalContext';
 import { SpinalNode } from './SpinalNode';
 /**
  * Starting node of a graph.
  * @extends SpinalNode
  */
-declare class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
+declare class SpinalGraph<T extends Model = any> extends SpinalNode<T> {
     /**
      * Constructor for the SpinalGraph class.
      * @param {String} [name="undefined"] Name of the graph, usually unused
@@ -19,7 +20,7 @@ declare class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
      * @returns {Promise<SpinalContext>} The added context
      * @throws {TypeError} If the context is not a context
      */
-    addContext<K extends spinal.Model>(context: SpinalContext<K>): Promise<SpinalContext<K>>;
+    addContext<K extends Model>(context: SpinalContext<K>): Promise<SpinalContext<K>>;
     /**
      * Searches for a context using its name.
      * @param {String} name Name of the context

@@ -29,7 +29,7 @@ import {
   SPINAL_RELATION_PTR_LST_TYPE,
   SPINAL_RELATION_TYPE,
 } from '../../src';
-import { FileSystem, Model } from 'spinal-core-connectorjs_type';
+import { FileSystem, Model } from 'spinal-core-connectorjs';
 import 'mocha';
 
 import * as assert from 'assert';
@@ -1125,7 +1125,7 @@ describe('SpinalNode', () => {
 
     describe('How to use removeChildren', () => {
       it('should delete all of the children', async () => {
-        const parent: any = new SpinalNode();
+        const parent = new SpinalNode();
         const node1 = new SpinalNode();
         const node2 = new SpinalNode();
         const node3 = new SpinalNode();

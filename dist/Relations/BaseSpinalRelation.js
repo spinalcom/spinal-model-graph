@@ -22,7 +22,6 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-// tslint:disable:function-name
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,7 +33,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseSpinalRelation = void 0;
-const spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
+const spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 const SpinalContext_1 = require("../Nodes/SpinalContext");
 const SpinalNode_1 = require("../Nodes/SpinalNode");
 const SpinalMap_1 = require("../SpinalMap");
@@ -45,23 +44,23 @@ const Utilities_1 = require("../Utilities");
  * @abstract
  * @class BaseSpinalRelation
  * @abstract
- * @property {spinal.Str} name
- * @property {spinal.Str} id
+ * @property {Str} name
+ * @property {Str} id
  * @property {SpinalNodePointer<SpinalNode>} parent
- * @property {SpinalMap<spinal.Val>} contextIds
+ * @property {SpinalMap<Val>} contextIds
  * @extends {Model}
  */
-class BaseSpinalRelation extends spinal_core_connectorjs_type_1.Model {
+class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
     /**
      * Constructor for the BaseSpinalRelation class.
-     * @param {SpinalNode<spinal.Model>} parent Parent of the relation
+     * @param {SpinalNode<Model>} parent Parent of the relation
      * @param {string} name Name of the relation
      * @throws {TypeError} If the parent is not a node
      * @throws {TypeError} If the name is not a string
      */
     constructor(parent, name) {
         super();
-        if (spinal_core_connectorjs_type_1.FileSystem._sig_server === false)
+        if (spinal_core_connectorjs_1.FileSystem._sig_server === false)
             return;
         // instanceof doesn't work here
         if (!SpinalNode_1.SpinalNode.prototype.isPrototypeOf(parent)) {
@@ -79,7 +78,7 @@ class BaseSpinalRelation extends spinal_core_connectorjs_type_1.Model {
     }
     /**
      * Shortcut to id.
-     * @returns {spinal.Str} Id of the relation
+     * @returns {Str} Id of the relation
      * @memberof BaseSpinalRelation
      */
     getId() {
@@ -87,14 +86,14 @@ class BaseSpinalRelation extends spinal_core_connectorjs_type_1.Model {
     }
     /**
      * Returns the name of the relation.
-     * @returns {spinal.Str} Name of the relation
+     * @returns {Str} Name of the relation
      * @memberof BaseSpinalRelation
      */
     getName() {
         return this.name;
     }
     // /**
-    //  * @returns {Promise<SpinalNode<spinal.Model>>} Returns a promise where the resolve is the parent
+    //  * @returns {Promise<SpinalNode<Model>>} Returns a promise where the resolve is the parent
     //  * @memberof BaseSpinalRelation
     //  */
     /**
@@ -117,7 +116,7 @@ class BaseSpinalRelation extends spinal_core_connectorjs_type_1.Model {
             throw TypeError('id must be a string');
         }
         if (!this.contextIds.has(id)) {
-            this.contextIds.setElement(id, new spinal_core_connectorjs_type_1.Val(0));
+            this.contextIds.setElement(id, new spinal_core_connectorjs_1.Val(0));
         }
     }
     /**
@@ -157,7 +156,7 @@ class BaseSpinalRelation extends spinal_core_connectorjs_type_1.Model {
     }
     /**
      * Removes children from the relation.
-     * @param {Array<SpinalNode<spinal.Model>>} [nodesToDelete=[]] Childs to remove
+     * @param {Array<SpinalNode<Model>>} [nodesToDelete=[]] Childs to remove
      * @returns {Promise<void>} An empty promise
      * @throws {TypeError} If nodes is not an array or omitted
      * @throws {Error} If one of the nodes is not a child
@@ -179,7 +178,7 @@ class BaseSpinalRelation extends spinal_core_connectorjs_type_1.Model {
             try {
                 yield Promise.all(promises);
             }
-            catch (_a) {
+            catch (error) {
                 throw Error('Could not remove all nodes');
             }
         });
@@ -215,6 +214,5 @@ class BaseSpinalRelation extends spinal_core_connectorjs_type_1.Model {
     }
 }
 exports.BaseSpinalRelation = BaseSpinalRelation;
-spinal_core_connectorjs_type_1.spinalCore.register_models([BaseSpinalRelation]);
 exports.default = BaseSpinalRelation;
 //# sourceMappingURL=BaseSpinalRelation.js.map

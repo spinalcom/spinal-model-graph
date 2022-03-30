@@ -21,7 +21,7 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-import { spinalCore } from 'spinal-core-connectorjs_type';
+import type { Model } from 'spinal-core-connectorjs';
 import {
   RELATION_TYPE_LIST,
   SPINAL_RELATION_LST_PTR_TYPE,
@@ -47,7 +47,7 @@ class SpinalRelationFactory {
    * @memberof SpinalRelationFactory
    */
   static getNewRelation(
-    parent: SpinalNode<spinal.Model>,
+    parent: SpinalNode<Model>,
     relationName: string,
     relationType: string
   ): SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst {
@@ -64,7 +64,6 @@ class SpinalRelationFactory {
   }
 }
 
-spinalCore.register_models([SpinalRelationFactory]);
 export {
   SPINAL_RELATION_TYPE,
   SPINAL_RELATION_LST_PTR_TYPE,

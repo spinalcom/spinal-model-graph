@@ -1,4 +1,4 @@
-import { Model } from 'spinal-core-connectorjs_type';
+import { Model } from 'spinal-core-connectorjs';
 import type { ArrayPairStringAny } from './interfaces/ArrayPairStringAny';
 import type { SpinalMapForEachFunc } from './interfaces/SpinalMapForEachFunc';
 import type { SpinalMapItem } from './interfaces/SpinalMapItem';
@@ -7,7 +7,7 @@ import type { SpinalMapItem } from './interfaces/SpinalMapItem';
  * @extends {Model}
  * @template T
  */
-declare class SpinalMap<T extends spinal.Model> extends Model {
+declare class SpinalMap<T extends Model = any> extends Model {
     /**
      * Constructor for the SpinalMap class.
      * @param {Array<ArrayPairStringAny>} [init] Array of arrays of key-value pairs

@@ -1,3 +1,4 @@
+import { Model } from 'spinal-core-connectorjs';
 import { SpinalNode } from './SpinalNode';
 /**
  * A SpinalContext is the statring node of a part of the graph.
@@ -5,7 +6,7 @@ import { SpinalNode } from './SpinalNode';
  * @extends {SpinalNode<T>}
  * @template T
  */
-declare class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
+declare class SpinalContext<T extends Model = any> extends SpinalNode<T> {
     /**
      * Constructor for the SpinalContext class.
      * @param {String} [name="undefined"] Name of the context
@@ -25,7 +26,7 @@ declare class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
      * @throws {TypeError} If the child is not a model
      * @throws {TypeError} If the relation name is not a string
      */
-    addChild<K extends spinal.Model>(child: K | SpinalNode<K>, relationName: string, _relationType?: string): Promise<SpinalNode<K>>;
+    addChild<K extends Model>(child: K | SpinalNode<K>, relationName: string, _relationType?: string): Promise<SpinalNode<K>>;
     /**
      * Adds a child with a SpinalRelationLstPtrType and notices
      * the context if a new relation was created.
@@ -37,14 +38,14 @@ declare class SpinalContext<T extends spinal.Model> extends SpinalNode<T> {
      * @param {SpinalContext} context Context to update, usually unused
      * @returns {Promise<SpinalNode>} The child node in a promise
      */
-    addChildInContext<K extends spinal.Model>(child: K | SpinalNode<K>, relationName: string, _relationType?: string, context?: SpinalContext<T>): Promise<SpinalNode<K>>;
+    addChildInContext<K extends Model>(child: K | SpinalNode<K>, relationName: string, _relationType?: string, context?: SpinalContext<T>): Promise<SpinalNode<K>>;
     /**
      * Return the children of the node that are registered in the context
      * @override
      * @param {SpinalContext} [context=this] Context to use for the search, this by default
      * @returns {Promise<Array<SpinalNode>>} The children that were found
      */
-    getChildrenInContext<K extends spinal.Model>(context?: SpinalContext<T>): Promise<SpinalNode<K>[]>;
+    getChildrenInContext<K extends Model>(context?: SpinalContext<T>): Promise<SpinalNode<K>[]>;
 }
 export default SpinalContext;
 export { SpinalContext };

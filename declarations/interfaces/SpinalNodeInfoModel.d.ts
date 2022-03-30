@@ -1,12 +1,13 @@
+import type { Model, Str, Val } from 'spinal-core-connectorjs';
 /**
  * @export
  * @interface SpinalNodeInfoModel
- * @extends {spinal.Model}
+ * @extends {Model}
  */
-export interface SpinalNodeInfoModel extends spinal.Model {
-    id: spinal.Str;
-    name: spinal.Str;
-    type: spinal.Str;
-    directModificationDate: spinal.Val;
-    indirectModificationDate: spinal.Val;
+export interface SpinalNodeInfoModel extends Model {
+    id: Str;
+    name: Str;
+    type: Str;
+    directModificationDate: Val;
+    indirectModificationDate: Val;
 }

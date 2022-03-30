@@ -22,7 +22,7 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import type {} from 'spinal-core-connectorjs_type';
+import type { Model } from 'spinal-core-connectorjs';
 import type { AnySpinalRelation } from './interfaces/AnySpinalRelation';
 import type { SpinalContext } from './Nodes/SpinalContext';
 import type SpinalNode from './Nodes/SpinalNode';
@@ -47,7 +47,7 @@ export function guid(): string {
   return `${s4()}-${s4()}-${s4()}-${Date.now().toString(16)}`;
 }
 
-export async function loadParentRelation<T extends spinal.Model>(
+export async function loadParentRelation<T extends Model>(
   spinalNodePointer: SpinalNodePointer<AnySpinalRelation>,
   context?: SpinalContext<any>
 ): Promise<SpinalNode<T>> {

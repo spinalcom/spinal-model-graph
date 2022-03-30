@@ -27,7 +27,9 @@ import {
   Lst,
   Model,
   spinalCore,
-} from 'spinal-core-connectorjs_type';
+  Str,
+  Val,
+} from 'spinal-core-connectorjs';
 import type { AnySpinalRelation } from '../interfaces/AnySpinalRelation';
 import { RelationSearch } from '../interfaces/RelationSearch';
 import type { SpinalNodeFindOnePredicateFunc } from '../interfaces/SpinalNodeFindOnePredicateFunc';
@@ -50,13 +52,13 @@ export const DEFAULT_FIND_PREDICATE: SpinalNodeFindPredicateFunc = () => true;
 /**
  * Node of a graph.
  * @extends Model
- * @template T extends spinal.Model = ElementType
+ * @template T extends Model = ElementType
  */
-class SpinalNode<T extends spinal.Model> extends Model {
+class SpinalNode<T extends Model = any> extends Model {
   info: SpinalNodeInfoModel;
-  parents: SpinalMap<spinal.Lst<SpinalNodePointer<AnySpinalRelation>>>;
+  parents: SpinalMap<Lst<SpinalNodePointer<AnySpinalRelation>>>;
   children: SpinalMap<SpinalMap<AnySpinalRelation>>;
-  element: SpinalNodePointer<T>;
+  element?: SpinalNodePointer<T>;
   contextIds: SpinalSet;
   /**
    * Constructor for the SpinalNode class.
@@ -64,7 +66,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @param {string} [type="undefined"] Type of the node
    * @param {date} [directModificationDate="undefined"] Type of the node
    * @param {date} [indirectModificationDate="undefined"] Type of the node
-   * @param {spinal.Model} [element] Element of the node
+   * @param {Model} [element] Element of the node
    * @throws {TypeError} If the element is not a Model
    */
   constructor(
@@ -85,33 +87,32 @@ class SpinalNode<T extends spinal.Model> extends Model {
       },
       parents: new SpinalMap(),
       children: new SpinalMap(),
-      element:
-        element !== undefined ? new SpinalNodePointer(element) : undefined,
       contextIds: new SpinalSet(),
     });
+    if (element) this.add_attr('element', new SpinalNodePointer(element));
   }
 
   /**
    * Returns the id.
-   * @returns {spinal.Str} Id of the node
+   * @returns {Str} Id of the node
    */
-  getId(): spinal.Str {
+  getId(): Str {
     return this.info.id;
   }
 
   /**
    * Returns the name.
-   * @returns {spinal.Str} Name of the node
+   * @returns {Str} Name of the node
    */
-  getName(): spinal.Str {
+  getName(): Str {
     return this.info.name;
   }
 
   /**
    * Returns the type.
-   * @returns {spinal.Str} Type of the node
+   * @returns {Str} Type of the node
    */
-  getType(): spinal.Str {
+  getType(): Str {
     return this.info.type;
   }
 
@@ -119,14 +120,14 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * Returns the DirectModificationDate.
    * @returns {Date} Direct Modification Date of the node
    */
-  getDirectModificationDate(): spinal.Val {
+  getDirectModificationDate(): Val {
     return this.info.directModificationDate;
   }
   /**
    * Returns the IndirectModificationDate.
    * @returns {Date} Indirect Modification Date of the node
    */
-  getIndirectModificationDate(): spinal.Val {
+  getIndirectModificationDate(): Val {
     return this.info.indirectModificationDate;
   }
   /**
@@ -346,7 +347,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If the relation name is not a string
    * @throws {Error} If the relation type is invalid
    */
-  async addChild<K extends spinal.Model>(
+  async addChild<K extends Model>(
     child: K | SpinalNode<K>,
     relationName: string,
     relationType: string
@@ -381,7 +382,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @throws {TypeError} If the context is not a SpinalContext
    * @throws {Error} If the relation type is invalid
    */
-  async addChildInContext<K extends spinal.Model>(
+  async addChildInContext<K extends Model>(
     child: K | SpinalNode<K>,
     relationName: string,
     relationType: string,
@@ -603,9 +604,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
       }
     }
 
-    const childrenLst: SpinalNode<spinal.Model>[][] = await Promise.all(
-      promises
-    );
+    const childrenLst: SpinalNode<Model>[][] = await Promise.all(promises);
     const res: SpinalNode<any>[] = [];
     for (const children of childrenLst) {
       for (const child of children) {
@@ -627,7 +626,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
     relationNames: string | RegExp | (string | RegExp)[] = []
   ): Promise<SpinalNode<any>[]> {
     const relNames = this._getValidRelations(relationNames, true);
-    const prom: Promise<SpinalNode<spinal.Model>>[] = [];
+    const prom: Promise<SpinalNode<Model>>[] = [];
 
     for (const [parentRelationName, nodeRelation] of this.parents) {
       for (const searchRelation of relNames) {
@@ -639,15 +638,13 @@ class SpinalNode<T extends spinal.Model> extends Model {
       }
     }
     const res = await Promise.all(prom);
-    return res.filter(
-      (e: SpinalNode<spinal.Model>): boolean => e !== undefined
-    );
+    return res.filter((e: SpinalNode<Model>): boolean => e !== undefined);
   }
 
   public async getParentsInContext(
     context: SpinalContext<any>
   ): Promise<SpinalNode<any>[]> {
-    const prom: Promise<SpinalNode<spinal.Model>>[] = [];
+    const prom: Promise<SpinalNode<Model>>[] = [];
 
     for (const [, nodeRelationLst] of this.parents) {
       for (let idx = 0; idx < nodeRelationLst.length; idx++) {
@@ -655,9 +652,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
       }
     }
     const res = await Promise.all(prom);
-    return res.filter(
-      (e: SpinalNode<spinal.Model>): boolean => e !== undefined
-    );
+    return res.filter((e: SpinalNode<Model>): boolean => e !== undefined);
   }
 
   /**
@@ -1278,7 +1273,7 @@ class SpinalNode<T extends spinal.Model> extends Model {
    * @protected
    */
   _removeParent(relation: AnySpinalRelation): void {
-    const parentLst: spinal.Lst<SpinalNodePointer<AnySpinalRelation>> =
+    const parentLst: Lst<SpinalNodePointer<AnySpinalRelation>> =
       this.parents.getElement(relation.getName().get());
     if (parentLst === undefined) return;
     for (let i: number = 0; i < parentLst.length; i += 1) {

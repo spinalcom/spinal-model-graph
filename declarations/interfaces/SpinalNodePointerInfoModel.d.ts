@@ -1,9 +1,10 @@
+import type { Str, Model } from 'spinal-core-connectorjs';
 /**
  * @export
  * @interface SpinalNodePointerInfoModel
- * @extends {spinal.Model}
+ * @extends {Model}
  */
-export interface SpinalNodePointerInfoModel extends spinal.Model {
-    pointedId?: spinal.Str;
-    pointedType?: spinal.Str;
+export interface SpinalNodePointerInfoModel extends Model {
+    pointedId?: Str;
+    pointedType?: Str;
 }

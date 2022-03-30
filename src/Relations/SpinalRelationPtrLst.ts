@@ -27,7 +27,8 @@ import {
   Lst,
   Model,
   spinalCore,
-} from 'spinal-core-connectorjs_type';
+  Str,
+} from 'spinal-core-connectorjs';
 import type { SpinalRelationPtrLstNodePointer } from '../interfaces/SpinalRelationPtrLstNodePointer';
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
@@ -39,23 +40,25 @@ import { SPINAL_RELATION_PTR_LST_TYPE } from './SpinalRelationFactory';
  * Relation where the children are in Ptr to a Lst.
  * @class SpinalRelationPtrLst
  * @extends {BaseSpinalRelation}
- * @property {spinal.Str} name
- * @property {spinal.Str} id
+ * @property {Str} name
+ * @property {Str} id
  * @property {SpinalNodePointer<SpinalNode<any>>} parent
- * @property {SpinalMap<spinal.Val>} contextIds
+ * @property {SpinalMap<Val>} contextIds
  * @property {SpinalRelationPtrLstNodePointer} children
  */
 class SpinalRelationPtrLst extends BaseSpinalRelation {
+  public _constructorName = 'SpinalRelationPtrLst';
+  public static _constructorName = 'SpinalRelationPtrLst';
   children: SpinalRelationPtrLstNodePointer;
 
   /**
    * Constructor for the SpinalRelationPtrLst class.
-   * @param {SpinalNode} parent Parent of the relation
-   * @param {string} name Name of the relation
+   * @param {SpinalNode} [parent] Parent of the relation
+   * @param {string} [name] Name of the relation
    * @throws {TypeError} If the parent is not a node
    * @throws {TypeError} If the name is not a string
    */
-  constructor(parent: SpinalNode<any>, name: string) {
+  constructor(parent?: SpinalNode<any>, name?: string) {
     super(parent, name);
 
     if (FileSystem._sig_server === false) return;
@@ -73,7 +76,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * @memberof SpinalRelationPtrLst
    */
   getChildrenIds(): string[] {
-    const idLst: spinal.Lst<spinal.Str> = this.children.info.ids;
+    const idLst: Lst<Str> = this.children.info.ids;
     const ids: string[] = [];
 
     for (let i: number = 0; i < idLst.length; i += 1) {
@@ -98,7 +101,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * @memberof SpinalRelationPtrLst
    */
   async getChildren(): Promise<SpinalNode<any>[]> {
-    const childrenLst: spinal.Lst<SpinalNode<any>> = await this.children.load();
+    const childrenLst: Lst<SpinalNode<any>> = await this.children.load();
     const children: SpinalNode<any>[] = [];
 
     for (let i: number = 0; i < childrenLst.length; i += 1) {
@@ -118,7 +121,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
   async getChildrenInContext(
     context: SpinalContext<any>
   ): Promise<SpinalNode<any>[]> {
-    const childrenLst: spinal.Lst<SpinalNode<any>> = await this.children.load();
+    const childrenLst: Lst<SpinalNode<any>> = await this.children.load();
     const children: SpinalNode<any>[] = [];
 
     if (!(context instanceof SpinalContext)) {
@@ -147,17 +150,17 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
   /**
    * Adds a child to the relation.
-   * @template T extends spinal.Model = Node Element Type
+   * @template T extends Model = Node Element Type
    * @param {(T|SpinalNode<T>)} node Node or model to add
    * @throws {TypeError} If the node is not a Model
    * @throws {Error} If the node is already a child of the relation
    * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
    * @memberof SpinalRelationPtrLst
    */
-  async addChild<T extends spinal.Model>(
+  async addChild<T extends Model>(
     node: T | SpinalNode<T>
   ): Promise<SpinalNode<T>> {
-    let nodeCreate: SpinalNode<T> | spinal.Model = node;
+    let nodeCreate: SpinalNode<T> | Model = node;
     if (!(node instanceof Model)) {
       throw new Error(
         'Cannot add a child witch is not an instance of SpinalNode or Model.'
@@ -188,7 +191,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * @memberof SpinalRelationPtrLst
    */
   async removeChild(node: SpinalNode<any>): Promise<void> {
-    const childrenLst: spinal.Lst<SpinalNode<any>> = await this.children.load();
+    const childrenLst: Lst<SpinalNode<any>> = await this.children.load();
 
     if (!childrenLst.contains(node)) {
       throw Error('The node is not a child');
@@ -213,7 +216,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
       throw TypeError('node must be an array');
     }
 
-    const childrenLst: spinal.Lst<SpinalNode<any>> = await this.children.load();
+    const childrenLst: Lst<SpinalNode<any>> = await this.children.load();
     let error: boolean = false;
 
     if (nodes.length === 0) {
@@ -240,7 +243,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
   }
 }
 
-spinalCore.register_models([SpinalRelationPtrLst]);
+spinalCore.register_models(SpinalRelationPtrLst, 'SpinalRelationPtrLst');
 export default SpinalRelationPtrLst;
 
 export { SpinalRelationPtrLst };

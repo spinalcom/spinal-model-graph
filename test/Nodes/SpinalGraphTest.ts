@@ -23,7 +23,7 @@
  */
 
 import { SpinalGraph, SpinalNode, SpinalContext } from '../../src';
-import { FileSystem, Model } from 'spinal-core-connectorjs_type';
+import { FileSystem, Model } from 'spinal-core-connectorjs';
 import 'mocha';
 
 import * as assert from 'assert';

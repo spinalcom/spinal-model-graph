@@ -24,12 +24,12 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpinalSet = void 0;
-const spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
+const spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 /**
  * @class SpinalSet
  * @extends {Model}
  */
-class SpinalSet extends spinal_core_connectorjs_type_1.Model {
+class SpinalSet extends spinal_core_connectorjs_1.Model {
     /**
      * Constructor for the SpinalSet class.
      * @param {(string[]|IterableIterator<string>)} [init] Array of values
@@ -137,6 +137,6 @@ class SpinalSet extends spinal_core_connectorjs_type_1.Model {
     }
 }
 exports.SpinalSet = SpinalSet;
-spinal_core_connectorjs_type_1.spinalCore.register_models([SpinalSet]);
+spinal_core_connectorjs_1.spinalCore.register_models([SpinalSet]);
 exports.default = SpinalSet;
 //# sourceMappingURL=SpinalSet.js.map

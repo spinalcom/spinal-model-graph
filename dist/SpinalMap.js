@@ -24,13 +24,13 @@
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpinalMap = void 0;
-const spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
+const spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 /**
  * @class SpinalMap
  * @extends {Model}
  * @template T
  */
-class SpinalMap extends spinal_core_connectorjs_type_1.Model {
+class SpinalMap extends spinal_core_connectorjs_1.Model {
     /**
      * Constructor for the SpinalMap class.
      * @param {Array<ArrayPairStringAny>} [init] Array of arrays of key-value pairs
@@ -165,6 +165,6 @@ class SpinalMap extends spinal_core_connectorjs_type_1.Model {
     }
 }
 exports.SpinalMap = SpinalMap;
-spinal_core_connectorjs_type_1.spinalCore.register_models([SpinalMap]);
+spinal_core_connectorjs_1.spinalCore.register_models([SpinalMap]);
 exports.default = SpinalMap;
 //# sourceMappingURL=SpinalMap.js.map

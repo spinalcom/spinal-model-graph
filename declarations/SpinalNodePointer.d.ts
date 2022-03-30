@@ -1,13 +1,13 @@
-import { Model } from 'spinal-core-connectorjs_type';
+import { Model, Ptr, Str } from 'spinal-core-connectorjs';
 import type { SpinalNodePointerInfoModel } from './interfaces/SpinalNodePointerInfoModel';
 /**
  * Wrapper over SpinalNodePointer containing some information about the pointed element
  * @class SpinalNodePointer
  * @extends {Model}
- * @template T extends spinal.Model
+ * @template T extends Model
  */
-declare class SpinalNodePointer<T extends spinal.Model> extends Model {
-    ptr: spinal.Ptr<T>;
+declare class SpinalNodePointer<T extends Model = any> extends Model {
+    ptr: Ptr<T>;
     info: SpinalNodePointerInfoModel;
     /**
      * Constructor for the SpinalNodePointer class.
@@ -36,16 +36,16 @@ declare class SpinalNodePointer<T extends spinal.Model> extends Model {
     unset(): void;
     /**
      * Returns the id of the pointed element.
-     * @returns {spinal.Str}  Id of the pointed element
+     * @returns {Str}  Id of the pointed element
      * @memberof SpinalNodePointer
      */
-    getId(): spinal.Str;
+    getId(): Str;
     /**
      * This function returns the type of the pointed element.
-     * @returns {spinal.Str} Type of the pointed element
+     * @returns {Str} Type of the pointed element
      * @memberof SpinalNodePointer
      */
-    getType(): spinal.Str;
+    getType(): Str;
 }
 export default SpinalNodePointer;
 export { SpinalNodePointer };

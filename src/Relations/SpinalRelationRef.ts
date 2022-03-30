@@ -22,12 +22,7 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import {
-  FileSystem,
-  Lst,
-  Model,
-  spinalCore,
-} from 'spinal-core-connectorjs_type';
+import { FileSystem, Lst, Model, spinalCore } from 'spinal-core-connectorjs';
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
 import { BaseSpinalRelation } from './BaseSpinalRelation';
@@ -37,14 +32,16 @@ import { SPINAL_RELATION_TYPE } from './SpinalRelationFactory';
  * Relation where the children are in a Lst.
  * @class SpinalRelationRef
  * @extends {BaseSpinalRelation}
- * @property {spinal.Str} name
- * @property {spinal.Str} id
+ * @property {Str} name
+ * @property {Str} id
  * @property {SpinalNodePointer<SpinalNode>} parent
- * @property {SpinalMap<spinal.Val>} contextIds
- * @property {spinal.Lst<SpinalNode>} children
+ * @property {SpinalMap<Val>} contextIds
+ * @property {Lst<SpinalNode>} children
  */
 class SpinalRelationRef extends BaseSpinalRelation {
-  children: spinal.Lst<SpinalNode<any>>;
+  public _constructorName = 'SpinalRelationRef';
+  public static _constructorName = 'SpinalRelationRef';
+  children: Lst<SpinalNode<any>>;
   /**
    * Constructor for the SpinalRelationRef class.
    * @param {SpinalNode} parent Parent of the relation
@@ -138,14 +135,14 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
   /**
    * Adds a child to the relation.
-   * @template T extends spinal.Model = Node Element Type
+   * @template T extends Model = Node Element Type
    * @param {(T|SpinalNode<T>)} node Node or model to add
    * @throws {TypeError} If the node is not a Model
    * @throws {Error} If the node is already a child of the relation
    * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
    * @memberof SpinalRelationRef
    */
-  async addChild<T extends spinal.Model>(
+  async addChild<T extends Model>(
     node: T | SpinalNode<T>
   ): Promise<SpinalNode<T>> {
     let nodeCreate: T | SpinalNode<T> = node;
@@ -185,6 +182,6 @@ class SpinalRelationRef extends BaseSpinalRelation {
   }
 }
 
-spinalCore.register_models([SpinalRelationRef]);
+spinalCore.register_models(SpinalRelationRef, 'SpinalRelationRef');
 export default SpinalRelationRef;
 export { SpinalRelationRef };

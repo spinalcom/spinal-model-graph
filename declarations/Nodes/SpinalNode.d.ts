@@ -1,4 +1,4 @@
-import { Model } from 'spinal-core-connectorjs_type';
+import { Lst, Model, Str, Val } from 'spinal-core-connectorjs';
 import type { AnySpinalRelation } from '../interfaces/AnySpinalRelation';
 import { RelationSearch } from '../interfaces/RelationSearch';
 import type { SpinalNodeFindOnePredicateFunc } from '../interfaces/SpinalNodeFindOnePredicateFunc';
@@ -14,13 +14,13 @@ export declare const DEFAULT_FIND_PREDICATE: SpinalNodeFindPredicateFunc;
 /**
  * Node of a graph.
  * @extends Model
- * @template T extends spinal.Model = ElementType
+ * @template T extends Model = ElementType
  */
-declare class SpinalNode<T extends spinal.Model> extends Model {
+declare class SpinalNode<T extends Model = any> extends Model {
     info: SpinalNodeInfoModel;
-    parents: SpinalMap<spinal.Lst<SpinalNodePointer<AnySpinalRelation>>>;
+    parents: SpinalMap<Lst<SpinalNodePointer<AnySpinalRelation>>>;
     children: SpinalMap<SpinalMap<AnySpinalRelation>>;
-    element: SpinalNodePointer<T>;
+    element?: SpinalNodePointer<T>;
     contextIds: SpinalSet;
     /**
      * Constructor for the SpinalNode class.
@@ -28,35 +28,35 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @param {string} [type="undefined"] Type of the node
      * @param {date} [directModificationDate="undefined"] Type of the node
      * @param {date} [indirectModificationDate="undefined"] Type of the node
-     * @param {spinal.Model} [element] Element of the node
+     * @param {Model} [element] Element of the node
      * @throws {TypeError} If the element is not a Model
      */
     constructor(name?: string, type?: string, element?: T);
     /**
      * Returns the id.
-     * @returns {spinal.Str} Id of the node
+     * @returns {Str} Id of the node
      */
-    getId(): spinal.Str;
+    getId(): Str;
     /**
      * Returns the name.
-     * @returns {spinal.Str} Name of the node
+     * @returns {Str} Name of the node
      */
-    getName(): spinal.Str;
+    getName(): Str;
     /**
      * Returns the type.
-     * @returns {spinal.Str} Type of the node
+     * @returns {Str} Type of the node
      */
-    getType(): spinal.Str;
+    getType(): Str;
     /**
      * Returns the DirectModificationDate.
      * @returns {Date} Direct Modification Date of the node
      */
-    getDirectModificationDate(): spinal.Val;
+    getDirectModificationDate(): Val;
     /**
      * Returns the IndirectModificationDate.
      * @returns {Date} Indirect Modification Date of the node
      */
-    getIndirectModificationDate(): spinal.Val;
+    getIndirectModificationDate(): Val;
     /**
      * Sets the value corresponding to the key.
      * @param {Date} date Key to the value
@@ -147,7 +147,7 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @throws {TypeError} If the relation name is not a string
      * @throws {Error} If the relation type is invalid
      */
-    addChild<K extends spinal.Model>(child: K | SpinalNode<K>, relationName: string, relationType: string): Promise<SpinalNode<K>>;
+    addChild<K extends Model>(child: K | SpinalNode<K>, relationName: string, relationType: string): Promise<SpinalNode<K>>;
     /**
      * Adds a child and notices the context if a new relation was created.
      * @param {SpinalNode | Model} child Node to add as child
@@ -160,7 +160,7 @@ declare class SpinalNode<T extends spinal.Model> extends Model {
      * @throws {TypeError} If the context is not a SpinalContext
      * @throws {Error} If the relation type is invalid
      */
-    addChildInContext<K extends spinal.Model>(child: K | SpinalNode<K>, relationName: string, relationType: string, context: SpinalContext<any>): Promise<SpinalNode<K>>;
+    addChildInContext<K extends Model>(child: K | SpinalNode<K>, relationName: string, relationType: string, context: SpinalContext<any>): Promise<SpinalNode<K>>;
     /**
      * Removes the node from the relation children.
      * @param {SpinalNode} node Node to remove

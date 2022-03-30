@@ -22,11 +22,13 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
+import type { Model } from 'spinal-core-connectorjs';
+
 /**
  * @type SpinalMapForEachFunc
  * @template T
  */
-export type SpinalMapForEachFunc<T extends spinal.Model> = (
+export type SpinalMapForEachFunc<T extends Model> = (
   value: T,
   key: string
 ) => void;

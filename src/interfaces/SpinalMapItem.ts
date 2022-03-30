@@ -22,4 +22,6 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-export type SpinalMapItem<T extends spinal.Model> = [string, T];
+import type { Model } from 'spinal-core-connectorjs';
+
+export type SpinalMapItem<T extends Model> = [key: string, item: T];

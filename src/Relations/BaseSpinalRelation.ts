@@ -21,14 +21,8 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-// tslint:disable:function-name
 
-import {
-  FileSystem,
-  Model,
-  spinalCore,
-  Val,
-} from 'spinal-core-connectorjs_type';
+import { FileSystem, Model, Val, Str } from 'spinal-core-connectorjs';
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalMap } from '../SpinalMap';
@@ -40,21 +34,21 @@ import { guid } from '../Utilities';
  * @abstract
  * @class BaseSpinalRelation
  * @abstract
- * @property {spinal.Str} name
- * @property {spinal.Str} id
+ * @property {Str} name
+ * @property {Str} id
  * @property {SpinalNodePointer<SpinalNode>} parent
- * @property {SpinalMap<spinal.Val>} contextIds
+ * @property {SpinalMap<Val>} contextIds
  * @extends {Model}
  */
 abstract class BaseSpinalRelation extends Model {
-  name: spinal.Str;
-  id: spinal.Str;
+  name: Str;
+  id: Str;
   parent: SpinalNodePointer<SpinalNode<any>>;
-  contextIds: SpinalMap<spinal.Val>;
+  contextIds: SpinalMap<Val>;
 
   /**
    * Constructor for the BaseSpinalRelation class.
-   * @param {SpinalNode<spinal.Model>} parent Parent of the relation
+   * @param {SpinalNode<Model>} parent Parent of the relation
    * @param {string} name Name of the relation
    * @throws {TypeError} If the parent is not a node
    * @throws {TypeError} If the name is not a string
@@ -83,24 +77,24 @@ abstract class BaseSpinalRelation extends Model {
 
   /**
    * Shortcut to id.
-   * @returns {spinal.Str} Id of the relation
+   * @returns {Str} Id of the relation
    * @memberof BaseSpinalRelation
    */
-  getId(): spinal.Str {
+  getId(): Str {
     return this.id;
   }
 
   /**
    * Returns the name of the relation.
-   * @returns {spinal.Str} Name of the relation
+   * @returns {Str} Name of the relation
    * @memberof BaseSpinalRelation
    */
-  getName(): spinal.Str {
+  getName(): Str {
     return this.name;
   }
 
   // /**
-  //  * @returns {Promise<SpinalNode<spinal.Model>>} Returns a promise where the resolve is the parent
+  //  * @returns {Promise<SpinalNode<Model>>} Returns a promise where the resolve is the parent
   //  * @memberof BaseSpinalRelation
   //  */
   /**
@@ -109,7 +103,7 @@ abstract class BaseSpinalRelation extends Model {
    * @return {*}  {Promise<SpinalNode<T>>} Returns a promise where the resolve is the parent
    * @memberof BaseSpinalRelation
    */
-  getParent<T extends spinal.Model>(): Promise<SpinalNode<T>> {
+  getParent<T extends Model>(): Promise<SpinalNode<T>> {
     return this.parent.load();
   }
 
@@ -171,7 +165,7 @@ abstract class BaseSpinalRelation extends Model {
 
   /**
    * Removes children from the relation.
-   * @param {Array<SpinalNode<spinal.Model>>} [nodesToDelete=[]] Childs to remove
+   * @param {Array<SpinalNode<Model>>} [nodesToDelete=[]] Childs to remove
    * @returns {Promise<void>} An empty promise
    * @throws {TypeError} If nodes is not an array or omitted
    * @throws {Error} If one of the nodes is not a child
@@ -195,7 +189,7 @@ abstract class BaseSpinalRelation extends Model {
 
     try {
       await Promise.all(promises);
-    } catch {
+    } catch (error) {
       throw Error('Could not remove all nodes');
     }
   }
@@ -281,6 +275,5 @@ abstract class BaseSpinalRelation extends Model {
   }
 }
 
-spinalCore.register_models([BaseSpinalRelation]);
 export default BaseSpinalRelation;
 export { BaseSpinalRelation };

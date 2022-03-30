@@ -1,3 +1,4 @@
+import { Model } from 'spinal-core-connectorjs';
 import type { SpinalRelationPtrLstNodePointer } from '../interfaces/SpinalRelationPtrLstNodePointer';
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
@@ -6,22 +7,24 @@ import { BaseSpinalRelation } from './BaseSpinalRelation';
  * Relation where the children are in Ptr to a Lst.
  * @class SpinalRelationPtrLst
  * @extends {BaseSpinalRelation}
- * @property {spinal.Str} name
- * @property {spinal.Str} id
+ * @property {Str} name
+ * @property {Str} id
  * @property {SpinalNodePointer<SpinalNode<any>>} parent
- * @property {SpinalMap<spinal.Val>} contextIds
+ * @property {SpinalMap<Val>} contextIds
  * @property {SpinalRelationPtrLstNodePointer} children
  */
 declare class SpinalRelationPtrLst extends BaseSpinalRelation {
+    _constructorName: string;
+    static _constructorName: string;
     children: SpinalRelationPtrLstNodePointer;
     /**
      * Constructor for the SpinalRelationPtrLst class.
-     * @param {SpinalNode} parent Parent of the relation
-     * @param {string} name Name of the relation
+     * @param {SpinalNode} [parent] Parent of the relation
+     * @param {string} [name] Name of the relation
      * @throws {TypeError} If the parent is not a node
      * @throws {TypeError} If the name is not a string
      */
-    constructor(parent: SpinalNode<any>, name: string);
+    constructor(parent?: SpinalNode<any>, name?: string);
     /**
      * Retrieves all the ids of the children of the relation and return them inside an array.
      * @returns {String[]} Array containing all the children ids of the relation
@@ -56,14 +59,14 @@ declare class SpinalRelationPtrLst extends BaseSpinalRelation {
     getType(): string;
     /**
      * Adds a child to the relation.
-     * @template T extends spinal.Model = Node Element Type
+     * @template T extends Model = Node Element Type
      * @param {(T|SpinalNode<T>)} node Node or model to add
      * @throws {TypeError} If the node is not a Model
      * @throws {Error} If the node is already a child of the relation
      * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
      * @memberof SpinalRelationPtrLst
      */
-    addChild<T extends spinal.Model>(node: T | SpinalNode<T>): Promise<SpinalNode<T>>;
+    addChild<T extends Model>(node: T | SpinalNode<T>): Promise<SpinalNode<T>>;
     /**
      * Removes a child from the relation.
      * @param {SpinalNode<any>} node Child to remove

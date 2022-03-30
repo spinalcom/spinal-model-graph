@@ -52,7 +52,7 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpinalNode = exports.DEFAULT_FIND_PREDICATE = void 0;
-const spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
+const spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 const SpinalRelationFactory_1 = require("../Relations/SpinalRelationFactory");
 const SpinalMap_1 = require("../SpinalMap");
 const SpinalNodePointer_1 = require("../SpinalNodePointer");
@@ -64,21 +64,21 @@ exports.DEFAULT_FIND_PREDICATE = DEFAULT_FIND_PREDICATE;
 /**
  * Node of a graph.
  * @extends Model
- * @template T extends spinal.Model = ElementType
+ * @template T extends Model = ElementType
  */
-class SpinalNode extends spinal_core_connectorjs_type_1.Model {
+class SpinalNode extends spinal_core_connectorjs_1.Model {
     /**
      * Constructor for the SpinalNode class.
      * @param {string} [name="undefined"] Name of the node
      * @param {string} [type="undefined"] Type of the node
      * @param {date} [directModificationDate="undefined"] Type of the node
      * @param {date} [indirectModificationDate="undefined"] Type of the node
-     * @param {spinal.Model} [element] Element of the node
+     * @param {Model} [element] Element of the node
      * @throws {TypeError} If the element is not a Model
      */
     constructor(name = 'undefined', type = 'SpinalNode', element) {
         super();
-        if (spinal_core_connectorjs_type_1.FileSystem._sig_server === false)
+        if (spinal_core_connectorjs_1.FileSystem._sig_server === false)
             return;
         this.add_attr({
             info: {
@@ -90,27 +90,28 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             },
             parents: new SpinalMap_1.SpinalMap(),
             children: new SpinalMap_1.SpinalMap(),
-            element: element !== undefined ? new SpinalNodePointer_1.SpinalNodePointer(element) : undefined,
             contextIds: new SpinalSet_1.SpinalSet(),
         });
+        if (element)
+            this.add_attr('element', new SpinalNodePointer_1.SpinalNodePointer(element));
     }
     /**
      * Returns the id.
-     * @returns {spinal.Str} Id of the node
+     * @returns {Str} Id of the node
      */
     getId() {
         return this.info.id;
     }
     /**
      * Returns the name.
-     * @returns {spinal.Str} Name of the node
+     * @returns {Str} Name of the node
      */
     getName() {
         return this.info.name;
     }
     /**
      * Returns the type.
-     * @returns {spinal.Str} Type of the node
+     * @returns {Str} Type of the node
      */
     getType() {
         return this.info.type;
@@ -171,7 +172,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
         if (this.element === undefined) {
             if (noCreate === true)
                 return undefined;
-            const model = new spinal_core_connectorjs_type_1.Model();
+            const model = new spinal_core_connectorjs_1.Model();
             this.add_attr('element', new SpinalNodePointer_1.SpinalNodePointer(model));
             return Promise.resolve(model);
         }
@@ -332,7 +333,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
     addChild(child, relationName, relationType) {
         return __awaiter(this, void 0, void 0, function* () {
             let relation;
-            if (!(child instanceof spinal_core_connectorjs_type_1.Model)) {
+            if (!(child instanceof spinal_core_connectorjs_1.Model)) {
                 throw TypeError('Cannot add a child witch is not an instance of SpinalNode or Model.');
             }
             if (!this.hasRelation(relationName, relationType)) {
@@ -367,7 +368,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
             if (!(context instanceof SpinalContext_1.SpinalContext)) {
                 throw TypeError('context must be a SpinaContext');
             }
-            if (!(child instanceof spinal_core_connectorjs_type_1.Model)) {
+            if (!(child instanceof spinal_core_connectorjs_1.Model)) {
                 throw TypeError('Cannot add a child witch is not an instance of SpinalNode or Model.');
             }
             else if (!(child instanceof SpinalNode)) {
@@ -1226,7 +1227,7 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
                 .push(new SpinalNodePointer_1.SpinalNodePointer(relation, true));
         }
         else {
-            const list = new spinal_core_connectorjs_type_1.Lst();
+            const list = new spinal_core_connectorjs_1.Lst();
             list.push(new SpinalNodePointer_1.SpinalNodePointer(relation, true));
             this.parents.setElement(relationName, list);
             // change the res way
@@ -1316,6 +1317,6 @@ class SpinalNode extends spinal_core_connectorjs_type_1.Model {
     }
 }
 exports.SpinalNode = SpinalNode;
-spinal_core_connectorjs_type_1.spinalCore.register_models([SpinalNode]);
+spinal_core_connectorjs_1.spinalCore.register_models([SpinalNode]);
 exports.default = SpinalNode;
 //# sourceMappingURL=SpinalNode.js.map

@@ -33,7 +33,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpinalRelationLstPtr = void 0;
-const spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
+const spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 const SpinalContext_1 = require("../Nodes/SpinalContext");
 const SpinalNode_1 = require("../Nodes/SpinalNode");
 const SpinalNodePointer_1 = require("../SpinalNodePointer");
@@ -42,11 +42,11 @@ const SpinalRelationFactory_1 = require("./SpinalRelationFactory");
 /**
  * Relation where the children are in Lst of Ptr.
  * @extends BaseSpinalRelation
- * @property {spinal.Str} name
- * @property {spinal.Str} id
+ * @property {Str} name
+ * @property {Str} id
  * @property {SpinalNodePointer<SpinalNode<any>>} parent
- * @property {SpinalMap<spinal.Val>} contextIds
- * @property {spinal.Lst<SpinalNodePointer<SpinalNode<any>>>} children
+ * @property {SpinalMap<Val>} contextIds
+ * @property {Lst<SpinalNodePointer<SpinalNode<any>>>} children
  */
 class SpinalRelationLstPtr extends BaseSpinalRelation_1.BaseSpinalRelation {
     /**
@@ -59,10 +59,11 @@ class SpinalRelationLstPtr extends BaseSpinalRelation_1.BaseSpinalRelation {
      */
     constructor(parent, name) {
         super(parent, name);
-        if (spinal_core_connectorjs_type_1.FileSystem._sig_server === false)
+        this._constructorName = 'SpinalRelationLstPtr';
+        if (spinal_core_connectorjs_1.FileSystem._sig_server === false)
             return;
         this.add_attr({
-            children: new spinal_core_connectorjs_type_1.Lst(),
+            children: new spinal_core_connectorjs_1.Lst(),
         });
     }
     /**
@@ -128,7 +129,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation_1.BaseSpinalRelation {
     }
     /**
      * Adds a child to the relation.
-     * @template T extends spinal.Model = Node Element Type
+     * @template T extends Model = Node Element Type
      * @param {(T|SpinalNode<T>)} node Node or model to add
      * @throws {TypeError} If the node is not a Model
      * @throws {Error} If the node is already a child of the relation
@@ -138,7 +139,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation_1.BaseSpinalRelation {
     addChild(node) {
         return __awaiter(this, void 0, void 0, function* () {
             let nodeCreate = node;
-            if (!(node instanceof spinal_core_connectorjs_type_1.Model)) {
+            if (!(node instanceof spinal_core_connectorjs_1.Model)) {
                 throw new Error('Cannot add a child witch is not an instance of SpinalNode or Model.');
             }
             else if (!(node instanceof SpinalNode_1.SpinalNode)) {
@@ -177,6 +178,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation_1.BaseSpinalRelation {
     }
 }
 exports.SpinalRelationLstPtr = SpinalRelationLstPtr;
-spinal_core_connectorjs_type_1.spinalCore.register_models([SpinalRelationLstPtr]);
+SpinalRelationLstPtr._constructorName = 'SpinalRelationLstPtr';
+spinal_core_connectorjs_1.spinalCore.register_models(SpinalRelationLstPtr, 'SpinalRelationLstPtr');
 exports.default = SpinalRelationLstPtr;
 //# sourceMappingURL=SpinalRelationLstPtr.js.map

@@ -33,7 +33,7 @@ exports.SpinalGraph = void 0;
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-const spinal_core_connectorjs_type_1 = require("spinal-core-connectorjs_type");
+const spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 const constants_1 = require("../constants");
 const SpinalRelationFactory_1 = require("../Relations/SpinalRelationFactory");
 const Utilities_1 = require("../Utilities");
@@ -53,7 +53,7 @@ class SpinalGraph extends SpinalNode_1.SpinalNode {
      */
     constructor(name = 'undefined', type = 'SpinalGraph', element) {
         super(name, type, element);
-        if (spinal_core_connectorjs_type_1.FileSystem._sig_server === false)
+        if (spinal_core_connectorjs_1.FileSystem._sig_server === false)
             return;
         this.info.id.set((0, Utilities_1.guid)());
     }
@@ -96,6 +96,6 @@ class SpinalGraph extends SpinalNode_1.SpinalNode {
     }
 }
 exports.SpinalGraph = SpinalGraph;
-spinal_core_connectorjs_type_1.spinalCore.register_models([SpinalGraph]);
+spinal_core_connectorjs_1.spinalCore.register_models([SpinalGraph]);
 exports.default = SpinalGraph;
 //# sourceMappingURL=SpinalGraph.js.map

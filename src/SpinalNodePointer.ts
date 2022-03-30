@@ -27,7 +27,8 @@ import {
   Pbr,
   Ptr,
   spinalCore,
-} from 'spinal-core-connectorjs_type';
+  Str,
+} from 'spinal-core-connectorjs';
 import type { SpinalNodePointerInfoModel } from './interfaces/SpinalNodePointerInfoModel';
 import { SpinalNode } from './Nodes/SpinalNode';
 import { BaseSpinalRelation } from './Relations/BaseSpinalRelation';
@@ -36,10 +37,10 @@ import { BaseSpinalRelation } from './Relations/BaseSpinalRelation';
  * Wrapper over SpinalNodePointer containing some information about the pointed element
  * @class SpinalNodePointer
  * @extends {Model}
- * @template T extends spinal.Model
+ * @template T extends Model
  */
-class SpinalNodePointer<T extends spinal.Model> extends Model {
-  public ptr: spinal.Ptr<T>;
+class SpinalNodePointer<T extends Model = any> extends Model {
+  public ptr: Ptr<T>;
   public info: SpinalNodePointerInfoModel;
 
   /**
@@ -116,19 +117,19 @@ class SpinalNodePointer<T extends spinal.Model> extends Model {
 
   /**
    * Returns the id of the pointed element.
-   * @returns {spinal.Str}  Id of the pointed element
+   * @returns {Str}  Id of the pointed element
    * @memberof SpinalNodePointer
    */
-  getId(): spinal.Str {
+  getId(): Str {
     return this.info.pointedId;
   }
 
   /**
    * This function returns the type of the pointed element.
-   * @returns {spinal.Str} Type of the pointed element
+   * @returns {Str} Type of the pointed element
    * @memberof SpinalNodePointer
    */
-  getType(): spinal.Str {
+  getType(): Str {
     return this.info.pointedType;
   }
 }

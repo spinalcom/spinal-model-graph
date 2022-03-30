@@ -21,7 +21,7 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-import { FileSystem, spinalCore } from 'spinal-core-connectorjs_type';
+import { FileSystem, Model, spinalCore } from 'spinal-core-connectorjs';
 import { HAS_CONTEXT_RELATION_NAME } from '../constants';
 import { SPINAL_RELATION_TYPE } from '../Relations/SpinalRelationFactory';
 import { guid } from '../Utilities';
@@ -32,7 +32,7 @@ import { SpinalNode } from './SpinalNode';
  * Starting node of a graph.
  * @extends SpinalNode
  */
-class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
+class SpinalGraph<T extends Model = any> extends SpinalNode<T> {
   /**
    * Constructor for the SpinalGraph class.
    * @param {String} [name="undefined"] Name of the graph, usually unused
@@ -57,7 +57,7 @@ class SpinalGraph<T extends spinal.Model> extends SpinalNode<T> {
    * @returns {Promise<SpinalContext>} The added context
    * @throws {TypeError} If the context is not a context
    */
-  async addContext<K extends spinal.Model>(
+  async addContext<K extends Model>(
     context: SpinalContext<K>
   ): Promise<SpinalContext<K>> {
     if (!(context instanceof SpinalContext)) {
