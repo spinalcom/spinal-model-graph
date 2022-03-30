@@ -1,4 +1,4 @@
-import { Model, Val, Str } from 'spinal-core-connectorjs';
+import { Model, Str, Val } from 'spinal-core-connectorjs';
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalMap } from '../SpinalMap';

@@ -31,7 +31,8 @@
   },
   "homepage": "https://github.com/spinalcom/spinal-model-graph#readme",
   "dependencies": {
-    "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git"
+    "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git",
+    "spinal-env-viewer-plugin-event-emitter": "git+https://github.com/spinalcom/spinal-env-viewer-plugin-event-emitter.git"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.7",

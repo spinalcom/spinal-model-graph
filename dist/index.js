@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SpinalSet = exports.SpinalNodePointer = exports.SpinalMap = exports.SpinalRelationRef = exports.SpinalRelationPtrLst = exports.SpinalRelationLstPtr = exports.SPINAL_RELATION_TYPE = exports.SPINAL_RELATION_PTR_LST_TYPE = exports.SPINAL_RELATION_LST_PTR_TYPE = exports.SpinalRelationFactory = exports.SpinalNode = exports.DEFAULT_FIND_PREDICATE = exports.SpinalGraph = exports.SpinalContext = exports.REMOVE_CHILD_EVENT = exports.REMOVE_CHILDREN_EVENT = exports.ADD_CHILD_IN_CONTEXT_EVENT = exports.ADD_CHILD_EVENT = void 0;
 /*
  * Copyright 2018 SpinalCom - www.spinalcom.com
  *
@@ -22,8 +24,11 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SpinalSet = exports.SpinalNodePointer = exports.SpinalMap = exports.SpinalRelationRef = exports.SpinalRelationPtrLst = exports.SpinalRelationLstPtr = exports.SPINAL_RELATION_TYPE = exports.SPINAL_RELATION_PTR_LST_TYPE = exports.SPINAL_RELATION_LST_PTR_TYPE = exports.SpinalRelationFactory = exports.SpinalNode = exports.DEFAULT_FIND_PREDICATE = exports.SpinalGraph = exports.SpinalContext = void 0;
+var constants_1 = require("./constants");
+Object.defineProperty(exports, "ADD_CHILD_EVENT", { enumerable: true, get: function () { return constants_1.ADD_CHILD_EVENT; } });
+Object.defineProperty(exports, "ADD_CHILD_IN_CONTEXT_EVENT", { enumerable: true, get: function () { return constants_1.ADD_CHILD_IN_CONTEXT_EVENT; } });
+Object.defineProperty(exports, "REMOVE_CHILDREN_EVENT", { enumerable: true, get: function () { return constants_1.REMOVE_CHILDREN_EVENT; } });
+Object.defineProperty(exports, "REMOVE_CHILD_EVENT", { enumerable: true, get: function () { return constants_1.REMOVE_CHILD_EVENT; } });
 var SpinalContext_1 = require("./Nodes/SpinalContext");
 Object.defineProperty(exports, "SpinalContext", { enumerable: true, get: function () { return SpinalContext_1.SpinalContext; } });
 var SpinalGraph_1 = require("./Nodes/SpinalGraph");

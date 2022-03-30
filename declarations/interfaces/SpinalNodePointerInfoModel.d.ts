@@ -1,4 +1,4 @@
-import type { Str, Model } from 'spinal-core-connectorjs';
+import type { Model, Str } from 'spinal-core-connectorjs';
 /**
  * @export
  * @interface SpinalNodePointerInfoModel

@@ -460,6 +460,7 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @memberof SpinalNode
      */
     private _getValidRelations;
+    private sendEventFunc;
 }
 export default SpinalNode;
 export { SpinalNode };

@@ -22,7 +22,7 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import type { Str, Model } from 'spinal-core-connectorjs';
+import type { Model, Str } from 'spinal-core-connectorjs';
 
 /**
  * @export

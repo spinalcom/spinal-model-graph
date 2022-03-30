@@ -92,4 +92,7 @@ function consumeBatch(promises, batchSize = 10) {
     });
 }
 exports.consumeBatch = consumeBatch;
+// export function sendEventFunc(eventName: string, parentNode: SpinalNode<any>, childNode: SpinalNode<any>, contextNode: SpinalContext<any>) {
+//   spinalEventEmitter.emit(eventName,);
+// }
 //# sourceMappingURL=Utilities.js.map

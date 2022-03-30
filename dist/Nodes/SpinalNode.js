@@ -53,6 +53,8 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpinalNode = exports.DEFAULT_FIND_PREDICATE = void 0;
 const spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
+const spinal_env_viewer_plugin_event_emitter_1 = require("spinal-env-viewer-plugin-event-emitter");
+const constants_1 = require("../constants");
 const SpinalRelationFactory_1 = require("../Relations/SpinalRelationFactory");
 const SpinalMap_1 = require("../SpinalMap");
 const SpinalNodePointer_1 = require("../SpinalNodePointer");
@@ -346,6 +348,8 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
             //change the return way
             let res = relation.addChild(child);
             this.setDirectModificationDate();
+            // Send add child event via spinal-event-emitter
+            this.sendEventFunc(constants_1.ADD_CHILD_EVENT, child);
             return res;
         });
     }
@@ -385,6 +389,8 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
             relation.addContextId(context.getId().get());
             yield relation.addChild(tmpchildCreate);
             this.setDirectModificationDate();
+            // Send add child event via spinal-event-emitter
+            this.sendEventFunc(constants_1.ADD_CHILD_IN_CONTEXT_EVENT, childCreate, context);
             return tmpchildCreate;
         });
     }
@@ -407,6 +413,8 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
         let res = rel.removeChild(node);
         // change the res way
         this.setDirectModificationDate();
+        // Send add child event via spinal-event-emitter
+        this.sendEventFunc(constants_1.REMOVE_CHILD_EVENT, node);
         return res;
     }
     /**
@@ -433,6 +441,8 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
         let res = rel.removeChildren(nodes);
         // change the res way
         this.setDirectModificationDate();
+        // Send add child event via spinal-event-emitter
+        this.sendEventFunc(constants_1.REMOVE_CHILDREN_EVENT, nodes);
         return res;
     }
     /**
@@ -1313,6 +1323,16 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
                 }
             }
             return res;
+        }
+    }
+    sendEventFunc(eventName, childNode, contextNode) {
+        if (this.info.activeEventSender && this.info.activeEventSender.get()) {
+            const data = Object.assign(Object.assign(Object.assign({ nodeId: this.getId().get() }, (childNode &&
+                !Array.isArray(childNode) && { childId: childNode.getId().get() })), (childNode &&
+                Array.isArray(childNode) && {
+                childrenIds: childNode.map((node) => node.getId().get()),
+            })), { contextId: contextNode && contextNode.getId().get() });
+            spinal_env_viewer_plugin_event_emitter_1.spinalEventEmitter.emit(eventName, data);
         }
     }
 }

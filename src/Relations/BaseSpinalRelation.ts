@@ -22,7 +22,7 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import { FileSystem, Model, Val, Str } from 'spinal-core-connectorjs';
+import { FileSystem, Model, Str, Val } from 'spinal-core-connectorjs';
 import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalMap } from '../SpinalMap';
