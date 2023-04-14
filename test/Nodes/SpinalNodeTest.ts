@@ -1423,6 +1423,35 @@ describe('SpinalNode', () => {
         const children = await node.getChildren([]);
         assert.deepStrictEqual(children, [node]);
       });
+
+      describe('remove relation + check child parent', () => {
+        async function testRelationParentChild(relationType: string) {
+          const parent: any = new SpinalNode();
+          const child = new SpinalNode();
+
+          await parent.addChild(child, DEFAULT_RELATION_NAME, relationType);
+          await parent.removeRelation(DEFAULT_RELATION_NAME, relationType);
+
+          assert(!parent.hasRelation(DEFAULT_RELATION_NAME, relationType));
+          for (const [parentRelName, parentRels] of child.parents) {
+            assert(
+              !(
+                parentRelName === DEFAULT_RELATION_NAME &&
+                parentRels.length !== 0
+              )
+            );
+          }
+        }
+        it('test remove relation on Ref', async () => {
+          return testRelationParentChild(SPINAL_RELATION_TYPE);
+        });
+        it('test remove relation on PtrLst', async () => {
+          return testRelationParentChild(SPINAL_RELATION_PTR_LST_TYPE);
+        });
+        it('test remove relation on LstPtr', async () => {
+          return testRelationParentChild(SPINAL_RELATION_LST_PTR_TYPE);
+        });
+      });
     });
 
     describe('How to use removeFromGraph', () => {

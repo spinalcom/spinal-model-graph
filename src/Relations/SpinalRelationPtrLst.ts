@@ -220,6 +220,9 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     let error: boolean = false;
 
     if (nodes.length === 0) {
+      for (let idx = 0; idx < childrenLst.length; idx++) {
+        childrenLst[idx]._removeParent(this);
+      }
       childrenLst.clear();
       this.children.info.ids.clear();
       return;
@@ -227,14 +230,9 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
     for (const node of nodes) {
       const index: number = childrenLst.indexOf(node);
-
-      if (index !== -1) {
-        childrenLst.remove(node);
-        this.children.info.ids.remove(node.getId());
-        node._removeParent(this);
-      } else {
-        error = true;
-      }
+      childrenLst.remove(node);
+      this.children.info.ids.remove(node.getId());
+      node._removeParent(this);
     }
 
     if (error) {
