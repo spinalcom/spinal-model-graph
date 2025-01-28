@@ -320,6 +320,15 @@ declare class SpinalNode<T extends Model = any> extends Model {
      */
     findInContext(context: SpinalContext<any>, predicate?: SpinalNodeFindPredicateFunc): Promise<SpinalNode<any>[]>;
     /**
+     * Recursively finds the first child node in the context for which the predicate is true.
+     * @param {SpinalContext} context Context to use for the search
+     * @param {findPredicate} predicate Function returning true if the node needs to be returned
+     * @returns {Promise<SpinalNode | undefined>} The node that was found or undefined if no node was found
+     * @throws {TypeError} If context is not a SpinalContext
+     * @throws {TypeError} If the predicate is not a function
+     */
+    findOneInContext(context: SpinalContext<any>, predicate?: SpinalNodeFindPredicateFunc): Promise<SpinalNode<any> | undefined>;
+    /**
      * Recursively finds all the children nodes in the context for which the predicate is true..
      * @param {SpinalContext} context Context to use for the search
      * @param {string} nodeType Type of node to find in children

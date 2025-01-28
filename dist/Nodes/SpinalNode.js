@@ -919,6 +919,43 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
         });
     }
     /**
+     * Recursively finds the first child node in the context for which the predicate is true.
+     * @param {SpinalContext} context Context to use for the search
+     * @param {findPredicate} predicate Function returning true if the node needs to be returned
+     * @returns {Promise<SpinalNode | undefined>} The node that was found or undefined if no node was found
+     * @throws {TypeError} If context is not a SpinalContext
+     * @throws {TypeError} If the predicate is not a function
+     */
+    findOneInContext(context, predicate = exports.DEFAULT_FIND_PREDICATE) {
+        var e_5, _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            if (typeof predicate !== 'function') {
+                throw new Error('The predicate function must be a function');
+            }
+            let stop = false;
+            function stopFct() {
+                stop = true;
+            }
+            try {
+                for (var _b = __asyncValues(this.visitChildrenInContext(context)), _c; _c = yield _b.next(), !_c.done;) {
+                    const node = _c.value;
+                    if (predicate(node, stopFct))
+                        return node;
+                    if (stop)
+                        break;
+                }
+            }
+            catch (e_5_1) { e_5 = { error: e_5_1 }; }
+            finally {
+                try {
+                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                }
+                finally { if (e_5) throw e_5.error; }
+            }
+            return undefined;
+        });
+    }
+    /**
      * Recursively finds all the children nodes in the context for which the predicate is true..
      * @param {SpinalContext} context Context to use for the search
      * @param {string} nodeType Type of node to find in children

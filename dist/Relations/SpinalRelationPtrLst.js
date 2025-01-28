@@ -212,21 +212,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
                 this.children.info.ids.remove(node.getId());
                 node._removeParent(this);
             }
-            // if (nodes.length === 0) {
-            // childrenLst.clear();
-            // this.children.info.ids.clear();
-            // return;
-            // }
-            // for (const node of nodes) {
-            //   const index: number = childrenLst.indexOf(node);
-            //   if (index !== -1) {
-            //     childrenLst.remove(node);
-            //     this.children.info.ids.remove(node.getId());
-            //     node._removeParent(this);
-            //   } else {
-            //     error = true;
-            //   }
-            // }
             if (error) {
                 throw Error('Could not remove all nodes');
             }

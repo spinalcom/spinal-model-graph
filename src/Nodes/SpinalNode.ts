@@ -969,6 +969,32 @@ class SpinalNode<T extends Model = any> extends Model {
   }
 
   /**
+   * Recursively finds the first child node in the context for which the predicate is true.
+   * @param {SpinalContext} context Context to use for the search
+   * @param {findPredicate} predicate Function returning true if the node needs to be returned
+   * @returns {Promise<SpinalNode | undefined>} The node that was found or undefined if no node was found
+   * @throws {TypeError} If context is not a SpinalContext
+   * @throws {TypeError} If the predicate is not a function
+   */
+  async findOneInContext(
+    context: SpinalContext<any>,
+    predicate: SpinalNodeFindPredicateFunc = DEFAULT_FIND_PREDICATE
+  ): Promise<SpinalNode<any> | undefined> {
+    if (typeof predicate !== 'function') {
+      throw new Error('The predicate function must be a function');
+    }
+    let stop = false;
+    function stopFct(): void {
+      stop = true;
+    }
+    for await (const node of this.visitChildrenInContext(context)) {
+      if (predicate(node, stopFct)) return node;
+      if (stop) break;
+    }
+    return undefined;
+  }
+
+  /**
    * Recursively finds all the children nodes in the context for which the predicate is true..
    * @param {SpinalContext} context Context to use for the search
    * @param {string} nodeType Type of node to find in children
