@@ -1,6 +1,6 @@
 {
   "name": "spinal-model-graph",
-  "version": "2.5.6",
+  "version": "2.5.7",
   "description": "The spinal graph is a data structure",
   "main": "dist/index.js",
   "types": "declarations/index.d.ts",
