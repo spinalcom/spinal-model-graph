@@ -52,7 +52,7 @@ import {
 import { SpinalMap } from '../SpinalMap';
 import { SpinalNodePointer } from '../SpinalNodePointer';
 import { SpinalSet } from '../SpinalSet';
-import { consumeBatch, guid, loadParentRelation } from '../Utilities';
+import { consumeBatch, guid, loadParentRelation, toRegex } from '../Utilities';
 import { SpinalContext } from './SpinalContext';
 export const DEFAULT_FIND_PREDICATE: SpinalNodeFindPredicateFunc = () => true;
 
@@ -616,16 +616,18 @@ class SpinalNode<T extends Model = any> extends Model {
    * @throws {TypeError} If the context is not a SpinalContext
    */
   async getChildrenInContext(
-    context: SpinalContext<any>
+    context: SpinalContext<any>,
+    relationNames: string | RegExp | (string | RegExp)[] = []
   ): Promise<SpinalNode<any>[]> {
     if (!(context instanceof SpinalContext)) {
       throw TypeError('context must be a SpinalContext');
     }
     const promises: Promise<SpinalNode<any>[]>[] = [];
+    const regex = toRegex(relationNames);
 
     for (const [, relationMap] of this.children) {
-      for (const [, relation] of relationMap) {
-        if (relation.belongsToContext(context)) {
+      for (const [ name, relation] of relationMap) {
+        if (relation.belongsToContext(context) && regex.test(name)) {
           promises.push(relation.getChildrenInContext(context));
         }
       }

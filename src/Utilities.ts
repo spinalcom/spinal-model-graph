@@ -91,6 +91,26 @@ export async function consumeBatch<T>(
   return result;
 }
 
+/**
+ * Converts a string, regex or an array of strings/regex to a single regex ( big Regex joining array elements with OR ).
+ *
+ * @param {(string | RegExp | (string | RegExp)[])} relationNames
+ * @return {*}  {RegExp}
+ */
+export function toRegex(relationNames: string | RegExp | (string | RegExp)[]): RegExp {
+  const arr = Array.isArray(relationNames) ? relationNames : [relationNames];
+  const sources = arr.map(item => {
+    if (item instanceof RegExp) {
+      return item.source;
+    }
+    // Escape regex special characters in strings
+    return item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  });
+
+  // Combine into one big regex
+  return new RegExp(`^(?:${sources.join('|')})$`);
+}
+
 // export function sendEventFunc(eventName: string, parentNode: SpinalNode<any>, childNode: SpinalNode<any>, contextNode: SpinalContext<any>) {
 //   spinalEventEmitter.emit(eventName,);
 // }
