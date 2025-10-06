@@ -234,7 +234,7 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @returns {Promise<SpinalNode[]>} The children that were found
      * @throws {TypeError} If the context is not a SpinalContext
      */
-    getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
+    getChildrenInContext(context: SpinalContext<any>, relationNames?: string | RegExp | (string | RegExp)[]): Promise<SpinalNode<any>[]>;
     /**
      * Return all parents for the relation names no matter the type of relation
      * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Array containing the relation names of the desired parents

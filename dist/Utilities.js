@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.consumeBatch = exports.loadParentRelation = exports.guid = void 0;
+exports.toRegex = exports.consumeBatch = exports.loadParentRelation = exports.guid = void 0;
 /**
  * Generates a random number and returns in a string.
  * @returns {String} Random number in a string
@@ -92,6 +92,25 @@ function consumeBatch(promises, batchSize = 10) {
     });
 }
 exports.consumeBatch = consumeBatch;
+/**
+ * Converts a string, regex or an array of strings/regex to a single regex ( big Regex joining array elements with OR ).
+ *
+ * @param {(string | RegExp | (string | RegExp)[])} relationNames
+ * @return {*}  {RegExp}
+ */
+function toRegex(relationNames) {
+    const arr = Array.isArray(relationNames) ? relationNames : [relationNames];
+    const sources = arr.map(item => {
+        if (item instanceof RegExp) {
+            return item.source;
+        }
+        // Escape regex special characters in strings
+        return item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    });
+    // Combine into one big regex
+    return new RegExp(`^(?:${sources.join('|')})$`);
+}
+exports.toRegex = toRegex;
 // export function sendEventFunc(eventName: string, parentNode: SpinalNode<any>, childNode: SpinalNode<any>, contextNode: SpinalContext<any>) {
 //   spinalEventEmitter.emit(eventName,);
 // }

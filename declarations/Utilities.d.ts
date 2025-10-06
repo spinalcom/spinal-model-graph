@@ -12,4 +12,11 @@ export declare function guid(): string;
 export declare function loadParentRelation<T extends Model>(spinalNodePointer: SpinalNodePointer<AnySpinalRelation>, context?: SpinalContext<any>): Promise<SpinalNode<T>>;
 declare type Consumedfunction<T> = () => Promise<T>;
 export declare function consumeBatch<T>(promises: Consumedfunction<T>[], batchSize?: number): Promise<T[]>;
+/**
+ * Converts a string, regex or an array of strings/regex to a single regex ( big Regex joining array elements with OR ).
+ *
+ * @param {(string | RegExp | (string | RegExp)[])} relationNames
+ * @return {*}  {RegExp}
+ */
+export declare function toRegex(relationNames: string | RegExp | (string | RegExp)[]): RegExp;
 export {};
