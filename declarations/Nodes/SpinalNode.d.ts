@@ -231,6 +231,7 @@ declare class SpinalNode<T extends Model = any> extends Model {
     /**
      * Return the children of the node that are registered in the context
      * @param {SpinalContext} context Context to use for the search
+     * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[new RegExp('.*')]] Relation names to filter the children. If empty or undefined all the relations will be used
      * @returns {Promise<SpinalNode[]>} The children that were found
      * @throws {TypeError} If the context is not a SpinalContext
      */

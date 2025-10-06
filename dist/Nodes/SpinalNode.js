@@ -540,6 +540,7 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
     /**
      * Return the children of the node that are registered in the context
      * @param {SpinalContext} context Context to use for the search
+     * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[new RegExp('.*')]] Relation names to filter the children. If empty or undefined all the relations will be used
      * @returns {Promise<SpinalNode[]>} The children that were found
      * @throws {TypeError} If the context is not a SpinalContext
      */
@@ -548,8 +549,11 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
             if (!(context instanceof SpinalContext_1.SpinalContext)) {
                 throw TypeError('context must be a SpinalContext');
             }
-            const promises = [];
+            if (Array.isArray(relationNames) && relationNames.length === 0) {
+                relationNames = [new RegExp('.*')];
+            }
             const regex = (0, Utilities_1.toRegex)(relationNames);
+            const promises = [];
             for (const [, relationMap] of this.children) {
                 for (const [name, relation] of relationMap) {
                     if (relation.belongsToContext(context) && regex.test(name)) {
