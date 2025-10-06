@@ -675,11 +675,20 @@ class SpinalNode<T extends Model = any> extends Model {
   }
 
   public async getParentsInContext(
-    context: SpinalContext<any>
+    context: SpinalContext<any>,
+    relationNames: string | RegExp | (string | RegExp)[] = [new RegExp('.*')]
   ): Promise<SpinalNode<any>[]> {
+    if (!(context instanceof SpinalContext)) {
+      throw TypeError('context must be a SpinalContext');
+    }
+    if (Array.isArray(relationNames) && relationNames.length === 0) {
+      relationNames = [new RegExp('.*')];
+    }
+    const regex = toRegex(relationNames);
     const prom: Promise<SpinalNode<Model>>[] = [];
 
-    for (const [, nodeRelationLst] of this.parents) {
+    for (const [name, nodeRelationLst] of this.parents) {
+      if (!regex.test(name)) continue;
       for (let idx = 0; idx < nodeRelationLst.length; idx++) {
         prom.push(loadParentRelation(nodeRelationLst[idx], context));
       }
@@ -1193,7 +1202,8 @@ class SpinalNode<T extends Model = any> extends Model {
    * @memberof SpinalNode
    */
   async *visitParentsInContext(
-    context: SpinalContext<any>
+    context: SpinalContext<any>,
+    relationNames: string | RegExp | (string | RegExp)[] = [new RegExp('.*')]
   ): AsyncGenerator<SpinalNode<any>, void, void> {
     const seen: Set<SpinalNode<any>> = new Set([this]);
     let promises: Promise<SpinalNode<any>[]>[] = [];
@@ -1207,7 +1217,7 @@ class SpinalNode<T extends Model = any> extends Model {
 
       for (const node of currentGen) {
         yield node;
-        promises.push(node.getParentsInContext(context));
+        promises.push(node.getParentsInContext(context, relationNames));
       }
 
       // eslint-disable-next-line no-await-in-loop
@@ -1270,7 +1280,8 @@ class SpinalNode<T extends Model = any> extends Model {
    * @memberof SpinalNode
    */
   async *visitChildrenInContext(
-    context: SpinalContext<any>
+    context: SpinalContext<any>,
+    relationNames: string | RegExp | (string | RegExp)[] = [new RegExp('.*')]
   ): AsyncGenerator<SpinalNode<any>, void, void> {
     const seen: Set<SpinalNode<any>> = new Set([this]);
     let promises: (() => Promise<SpinalNode<any>[]>)[] = [];
@@ -1285,7 +1296,7 @@ class SpinalNode<T extends Model = any> extends Model {
       for (const node of currentGen) {
         yield node;
         promises.push(
-          (): Promise<SpinalNode<any>[]> => node.getChildrenInContext(context)
+          (): Promise<SpinalNode<any>[]> => node.getChildrenInContext(context, relationNames)
         );
       }
 

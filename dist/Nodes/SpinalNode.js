@@ -596,10 +596,19 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
             return res.filter((e) => e !== undefined);
         });
     }
-    getParentsInContext(context) {
+    getParentsInContext(context, relationNames = [new RegExp('.*')]) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!(context instanceof SpinalContext_1.SpinalContext)) {
+                throw TypeError('context must be a SpinalContext');
+            }
+            if (Array.isArray(relationNames) && relationNames.length === 0) {
+                relationNames = [new RegExp('.*')];
+            }
+            const regex = (0, Utilities_1.toRegex)(relationNames);
             const prom = [];
-            for (const [, nodeRelationLst] of this.parents) {
+            for (const [name, nodeRelationLst] of this.parents) {
+                if (!regex.test(name))
+                    continue;
                 for (let idx = 0; idx < nodeRelationLst.length; idx++) {
                     prom.push((0, Utilities_1.loadParentRelation)(nodeRelationLst[idx], context));
                 }
@@ -1123,7 +1132,7 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
-    visitParentsInContext(context) {
+    visitParentsInContext(context, relationNames = [new RegExp('.*')]) {
         return __asyncGenerator(this, arguments, function* visitParentsInContext_1() {
             const seen = new Set([this]);
             let promises = [];
@@ -1135,7 +1144,7 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
                 nextGen = [];
                 for (const node of currentGen) {
                     yield yield __await(node);
-                    promises.push(node.getParentsInContext(context));
+                    promises.push(node.getParentsInContext(context, relationNames));
                 }
                 // eslint-disable-next-line no-await-in-loop
                 const childrenArrays = yield __await(Promise.all(promises));
@@ -1186,7 +1195,7 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
-    visitChildrenInContext(context) {
+    visitChildrenInContext(context, relationNames = [new RegExp('.*')]) {
         return __asyncGenerator(this, arguments, function* visitChildrenInContext_1() {
             const seen = new Set([this]);
             let promises = [];
@@ -1198,7 +1207,7 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
                 nextGen = [];
                 for (const node of currentGen) {
                     yield yield __await(node);
-                    promises.push(() => node.getChildrenInContext(context));
+                    promises.push(() => node.getChildrenInContext(context, relationNames));
                 }
                 const childrenArrays = yield __await((0, Utilities_1.consumeBatch)(promises, 30));
                 for (const children of childrenArrays) {

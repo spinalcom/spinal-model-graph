@@ -245,7 +245,7 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @memberof SpinalNode
      */
     getParents(relationNames?: string | RegExp | (string | RegExp)[]): Promise<SpinalNode<any>[]>;
-    getParentsInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
+    getParentsInContext(context: SpinalContext<any>, relationNames?: string | RegExp | (string | RegExp)[]): Promise<SpinalNode<any>[]>;
     /**
      * Recursively finds and return the FIRST FOUND parent nodes for which the predicate is true
      * @param {string[]} relationNames Arry of relation
@@ -404,7 +404,7 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
-    visitParentsInContext(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, void>;
+    visitParentsInContext(context: SpinalContext<any>, relationNames?: string | RegExp | (string | RegExp)[]): AsyncGenerator<SpinalNode<any>, void, void>;
     /**
      * @param {RelationSearch} relationNames
      * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
@@ -416,7 +416,7 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
-    visitChildrenInContext(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, void>;
+    visitChildrenInContext(context: SpinalContext<any>, relationNames?: string | RegExp | (string | RegExp)[]): AsyncGenerator<SpinalNode<any>, void, void>;
     /**
      * Return the relation list corresponding to the relation type.
      * @param {string} relationType Type of the relation
