@@ -617,7 +617,7 @@ class SpinalNode<T extends Model = any> extends Model {
    */
   async getChildrenInContext(
     context: SpinalContext<any>,
-    relationNames: string | RegExp | (string | RegExp)[] = []
+    relationNames: string | RegExp | (string | RegExp)[] = [new RegExp('.*')]
   ): Promise<SpinalNode<any>[]> {
     if (!(context instanceof SpinalContext)) {
       throw TypeError('context must be a SpinalContext');

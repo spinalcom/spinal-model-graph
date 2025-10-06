@@ -543,7 +543,7 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @returns {Promise<SpinalNode[]>} The children that were found
      * @throws {TypeError} If the context is not a SpinalContext
      */
-    getChildrenInContext(context, relationNames = []) {
+    getChildrenInContext(context, relationNames = [new RegExp('.*')]) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!(context instanceof SpinalContext_1.SpinalContext)) {
                 throw TypeError('context must be a SpinalContext');
