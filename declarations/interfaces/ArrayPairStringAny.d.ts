@@ -1,1 +1,1 @@
-export declare type ArrayPairStringAny = [string, any];
+export type ArrayPairStringAny = [string, any];

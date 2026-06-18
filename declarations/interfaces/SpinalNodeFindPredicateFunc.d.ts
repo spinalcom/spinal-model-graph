@@ -6,4 +6,4 @@ import type { SpinalNode } from '../Nodes/SpinalNode';
  * @param {() => void} [stopCallback] callback to stop the find
  * @returns {boolean}
  */
-export declare type SpinalNodeFindPredicateFunc = (node: SpinalNode<any>, stopCallback?: () => void) => boolean;
+export type SpinalNodeFindPredicateFunc = (node: SpinalNode<any>, stopCallback?: () => void) => boolean;

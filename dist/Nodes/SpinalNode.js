@@ -1,11 +1,11 @@
 "use strict";
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -42,8 +42,9 @@ var __await = (this && this.__await) || function (v) { return this instanceof __
 var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var g = generator.apply(thisArg, _arguments || []), i, q = [];
-    return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i;
-    function verb(n) { if (g[n]) i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; }
+    return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
     function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
     function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
     function fulfill(value) { resume("next", value); }
@@ -165,20 +166,22 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
             this.info.add_attr('directModificationDate', date);
     }
     /**
-     * Returns the element. if not present will create one
+     * Returns the element. if noCreate is true and the element is not present, it will not create one
      * @param {boolean} [noCreate=false] if true will not create a element and if element doesn't exist will return undefined
-     * @returns {Promise<T>} A promise where the parameter of the resolve method is the element
+     * @returns {Promise<T> | undefined} A promise where the parameter of the resolve method is the element
      * @memberof SpinalNode
      */
-    getElement(noCreate = false) {
-        if (this.element === undefined) {
-            if (noCreate === true)
-                return undefined;
-            const model = new spinal_core_connectorjs_1.Model();
-            this.add_attr('element', new SpinalNodePointer_1.SpinalNodePointer(model));
-            return Promise.resolve(model);
-        }
-        return this.element.load();
+    getElement() {
+        return __awaiter(this, arguments, void 0, function* (noCreate = false) {
+            if (this.element === undefined) {
+                if (noCreate === true)
+                    return undefined;
+                const model = new spinal_core_connectorjs_1.Model();
+                this.add_attr('element', new SpinalNodePointer_1.SpinalNodePointer(model));
+                return model;
+            }
+            return yield this.element.load();
+        });
     }
     /**
      * Returns all the children ids in an array.
@@ -243,6 +246,21 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      */
     getContextIds() {
         return this.contextIds.values();
+    }
+    /**
+     * Returns true if the node has the context id.
+     * @param {string} id
+     * @return {*}  {boolean}
+     * @memberof SpinalNode
+     */
+    hasContextId(id) {
+        if (typeof id !== 'string') {
+            throw TypeError('id must be a string');
+        }
+        if (this.contextIds.has(id)) {
+            return true;
+        }
+        return false;
     }
     /**
      * Returns true if the node belongs to the context.
@@ -315,12 +333,13 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @returns {string[]} The names of the relations of the node
      */
     getRelationNames() {
-        const names = [];
+        const names = new Set();
         for (const [, relationMap] of this.children) {
-            names.push(...relationMap.keys());
+            for (const relname of relationMap.keys()) {
+                names.add(relname);
+            }
         }
-        // Removes all duplicates
-        return Array.from(new Set(names));
+        return Array.from(names);
     }
     /**
      * Add the node as child of the relation.
@@ -431,19 +450,21 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @throws {Error} If one of the nodes is not a child
      */
     removeChildren(nodes, relationName, relationType) {
-        if (!Array.isArray(nodes)) {
-            throw TypeError('nodes must be an array');
-        }
-        if (!this.hasRelation(relationName, relationType)) {
-            throw Error("The relation doesn't exist");
-        }
-        const rel = this._getRelation(relationName, relationType);
-        let res = rel.removeChildren(nodes);
-        // change the res way
-        this.setDirectModificationDate();
-        // Send add child event via spinal-event-emitter
-        this.sendEventFunc(constants_1.REMOVE_CHILDREN_EVENT, nodes);
-        return res;
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!Array.isArray(nodes)) {
+                throw TypeError('nodes must be an array');
+            }
+            if (!this.hasRelation(relationName, relationType)) {
+                throw Error("The relation doesn't exist");
+            }
+            const rel = this._getRelation(relationName, relationType);
+            const res = yield rel.removeChildren(nodes);
+            // change the res way
+            this.setDirectModificationDate();
+            // Send add child event via spinal-event-emitter
+            this.sendEventFunc(constants_1.REMOVE_CHILDREN_EVENT, nodes);
+            return res;
+        });
     }
     /**
      * Removes a child relation of the node.
@@ -455,14 +476,16 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @throws {Error} If the relation doesn't exist
      */
     removeRelation(relationName, relationType) {
-        if (!this.hasRelation(relationName, relationType)) {
-            throw Error("The relation doesn't exist");
-        }
-        const rel = this._getRelation(relationName, relationType);
-        let res = rel.removeFromGraph();
-        // change the res way
-        this.setDirectModificationDate();
-        return res;
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!this.hasRelation(relationName, relationType)) {
+                throw Error("The relation doesn't exist");
+            }
+            const rel = this._getRelation(relationName, relationType);
+            let res = yield rel.removeFromGraph();
+            // change the res way
+            this.setDirectModificationDate();
+            return res;
+        });
     }
     /**
      * Remove the node from the graph
@@ -482,8 +505,8 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * Functions that takes a node and returns a boolean
      * @param {string} relationName Name of the relation
      * @param {string} relationType Type of the relation
-     * @returns {Promise<SpinalNode<any>>}
-     * The first child for which the predicate is true or undefined
+     * @returns {Promise<SpinalNode<any> | undefined>}
+     * The first child for which the predicate is true, undefined if no child verify the predicate
      * @throws {TypeError} If predicate is not a function
      * @throws {TypeError} If relation name is not a string
      * @throws {Error} If relation type is invalid
@@ -491,6 +514,7 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      */
     getChild(predicate, relationName, relationType) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a, e_1, _b, _c;
             if (typeof predicate !== 'function') {
                 throw TypeError('the predicate must be a function');
             }
@@ -498,12 +522,24 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
                 throw Error("The relation doesn't exist");
             }
             const relation = this._getRelation(relationName, relationType);
-            const children = yield relation.getChildren();
-            for (const child of children) {
-                if (predicate(child)) {
-                    return child;
+            try {
+                for (var _d = true, _e = __asyncValues(relation.getChildrenGen()), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
+                    _c = _f.value;
+                    _d = false;
+                    const child = _c;
+                    if (predicate(child)) {
+                        return child;
+                    }
                 }
             }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
+            return undefined;
         });
     }
     /**
@@ -514,44 +550,83 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @throws {TypeError} If relationNames is neither an array, a string or omitted
      * @throws {TypeError} If an element of relationNames is not a string
      */
-    getChildren(relationNames = []) {
-        return __awaiter(this, void 0, void 0, function* () {
+    getChildren() {
+        return __awaiter(this, arguments, void 0, function* (relationNames = []) {
+            var _a, e_2, _b, _c;
+            const res = [];
+            try {
+                for (var _d = true, _e = __asyncValues(this.getChildrenGen(relationNames)), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
+                    _c = _f.value;
+                    _d = false;
+                    const child = _c;
+                    res.push(child);
+                }
+            }
+            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            finally {
+                try {
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
+                }
+                finally { if (e_2) throw e_2.error; }
+            }
+            return res;
+        });
+    }
+    getChildrenGen() {
+        return __asyncGenerator(this, arguments, function* getChildrenGen_1(relationNames = []) {
+            var _a, e_3, _b, _c;
             let relNames = this._getValidRelations(relationNames);
-            const promises = [];
+            const matchingRelations = [];
             for (const [, relationMap] of this.children) {
                 for (const relName of relNames) {
                     if (relationMap.has(relName)) {
                         const relation = relationMap.getElement(relName);
-                        promises.push(relation.getChildren());
+                        matchingRelations.push(relation);
                     }
                 }
             }
-            const childrenLst = yield Promise.all(promises);
-            const res = [];
-            let children;
-            for (children of childrenLst) {
-                for (const child of children) {
-                    res.push(child);
+            // launch all the generators at the same time and yield the results as they come
+            const generators = matchingRelations.map((relation) => relation.getChildrenGen());
+            const promises = generators.map((gen) => gen.next());
+            for (const promise of promises) {
+                const result = yield __await(promise);
+                if (result.done === false) {
+                    const child = result.value;
+                    yield yield __await(child);
                 }
             }
-            return res;
+            for (const generator of generators) {
+                try {
+                    for (var _d = true, generator_1 = (e_3 = void 0, __asyncValues(generator)), generator_1_1; generator_1_1 = yield __await(generator_1.next()), _a = generator_1_1.done, !_a; _d = true) {
+                        _c = generator_1_1.value;
+                        _d = false;
+                        const child = _c;
+                        yield yield __await(child);
+                    }
+                }
+                catch (e_3_1) { e_3 = { error: e_3_1 }; }
+                finally {
+                    try {
+                        if (!_d && !_a && (_b = generator_1.return)) yield __await(_b.call(generator_1));
+                    }
+                    finally { if (e_3) throw e_3.error; }
+                }
+            }
         });
     }
     /**
      * Return the children of the node that are registered in the context
      * @param {SpinalContext} context Context to use for the search
-     * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[new RegExp('.*')]] Relation names to filter the children. If empty or undefined all the relations will be used
+     * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Relation names to filter the children. If empty or undefined all the relations will be used
      * @returns {Promise<SpinalNode[]>} The children that were found
      * @throws {TypeError} If the context is not a SpinalContext
      */
-    getChildrenInContext(context, relationNames = [new RegExp('.*')]) {
-        return __awaiter(this, void 0, void 0, function* () {
+    getChildrenInContext(context_1) {
+        return __awaiter(this, arguments, void 0, function* (context, relationNames = []) {
             if (!(context instanceof SpinalContext_1.SpinalContext)) {
                 throw TypeError('context must be a SpinalContext');
             }
-            if (Array.isArray(relationNames) && relationNames.length === 0) {
-                relationNames = [new RegExp('.*')];
-            }
+            relationNames = this._getValidRelations(relationNames, false);
             const regex = (0, Utilities_1.toRegex)(relationNames);
             const promises = [];
             for (const [, relationMap] of this.children) {
@@ -579,8 +654,8 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @throws {TypeError} If an element of relationNames is not a string
      * @memberof SpinalNode
      */
-    getParents(relationNames = []) {
-        return __awaiter(this, void 0, void 0, function* () {
+    getParents() {
+        return __awaiter(this, arguments, void 0, function* (relationNames = []) {
             const relNames = this._getValidRelations(relationNames, true);
             const prom = [];
             for (const [parentRelationName, nodeRelation] of this.parents) {
@@ -596,14 +671,12 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
             return res.filter((e) => e !== undefined);
         });
     }
-    getParentsInContext(context, relationNames = [new RegExp('.*')]) {
-        return __awaiter(this, void 0, void 0, function* () {
+    getParentsInContext(context_1) {
+        return __awaiter(this, arguments, void 0, function* (context, relationNames = []) {
             if (!(context instanceof SpinalContext_1.SpinalContext)) {
                 throw TypeError('context must be a SpinalContext');
             }
-            if (Array.isArray(relationNames) && relationNames.length === 0) {
-                relationNames = [new RegExp('.*')];
-            }
+            relationNames = this._getValidRelations(relationNames, true);
             const regex = (0, Utilities_1.toRegex)(relationNames);
             const prom = [];
             for (const [name, nodeRelationLst] of this.parents) {
@@ -622,8 +695,8 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @param {string[]} relationNames Arry of relation
      * @param {(node)=> boolean} predicate function stop search if return true
      */
-    findOneParent(relationNames = [], predicate = exports.DEFAULT_FIND_PREDICATE) {
-        return __awaiter(this, void 0, void 0, function* () {
+    findOneParent() {
+        return __awaiter(this, arguments, void 0, function* (relationNames = [], predicate = exports.DEFAULT_FIND_PREDICATE) {
             return this.findParents(relationNames, (node, stopFct) => {
                 const res = predicate(node);
                 if (res)
@@ -639,56 +712,66 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @return {*}  {Promise<SpinalNode<any>[]>}
      * @memberof SpinalNode
      */
-    findParents(relationNames = [], predicate = exports.DEFAULT_FIND_PREDICATE) {
-        var e_1, _a;
-        return __awaiter(this, void 0, void 0, function* () {
+    findParents() {
+        return __awaiter(this, arguments, void 0, function* (relationNames = [], predicate = exports.DEFAULT_FIND_PREDICATE) {
+            var _a, e_4, _b, _c;
             let stop = false;
+            if (typeof predicate !== 'function') {
+                throw TypeError('predicate must be a function');
+            }
             function stopFct() {
                 stop = true;
             }
             let found = [];
             try {
-                for (var _b = __asyncValues(this.visitParents(relationNames)), _c; _c = yield _b.next(), !_c.done;) {
-                    const node = _c.value;
+                for (var _d = true, _e = __asyncValues(this.visitParents(relationNames)), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
+                    _c = _f.value;
+                    _d = false;
+                    const node = _c;
                     if (predicate(node, stopFct))
                         found.push(node);
                     if (stop)
                         break;
                 }
             }
-            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            catch (e_4_1) { e_4 = { error: e_4_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
-                finally { if (e_1) throw e_1.error; }
+                finally { if (e_4) throw e_4.error; }
             }
             return found;
         });
     }
-    findParentsInContext(context, predicate = exports.DEFAULT_FIND_PREDICATE) {
-        var e_2, _a;
-        return __awaiter(this, void 0, void 0, function* () {
+    findParentsInContext(context_1) {
+        return __awaiter(this, arguments, void 0, function* (context, predicate = exports.DEFAULT_FIND_PREDICATE) {
+            var _a, e_5, _b, _c;
+            if (typeof predicate !== 'function') {
+                throw TypeError('predicate must be a function');
+            }
             let stop = false;
             function stopFct() {
                 stop = true;
             }
             let found = [];
             try {
-                for (var _b = __asyncValues(this.visitParentsInContext(context)), _c; _c = yield _b.next(), !_c.done;) {
-                    const node = _c.value;
+                for (var _d = true, _e = __asyncValues(this.visitParentsInContext(context)), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
+                    _c = _f.value;
+                    _d = false;
+                    const node = _c;
                     if (predicate(node, stopFct))
                         found.push(node);
                     if (stop)
                         break;
                 }
             }
-            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            catch (e_5_1) { e_5 = { error: e_5_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
-                finally { if (e_2) throw e_2.error; }
+                finally { if (e_5) throw e_5.error; }
             }
             return found;
         });
@@ -703,9 +786,9 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @throws {TypeError} If an element of relationNames is not a string
      * @throws {TypeError} If the predicate is not a function
      */
-    find(relationNames, predicate = exports.DEFAULT_FIND_PREDICATE) {
-        var e_3, _a;
-        return __awaiter(this, void 0, void 0, function* () {
+    find(relationNames_1) {
+        return __awaiter(this, arguments, void 0, function* (relationNames, predicate = exports.DEFAULT_FIND_PREDICATE) {
+            var _a, e_6, _b, _c;
             if (!Array.isArray(relationNames) &&
                 relationNames !== undefined &&
                 !(typeof relationNames === 'string' || relationNames instanceof RegExp)) {
@@ -720,20 +803,22 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
                 stop = true;
             }
             try {
-                for (var _b = __asyncValues(this.visitChildren(relationNames)), _c; _c = yield _b.next(), !_c.done;) {
-                    const node = _c.value;
+                for (var _d = true, _e = __asyncValues(this.visitChildren(relationNames)), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
+                    _c = _f.value;
+                    _d = false;
+                    const node = _c;
                     if (predicate(node, stopFct))
                         found.push(node);
                     if (stop)
                         break;
                 }
             }
-            catch (e_3_1) { e_3 = { error: e_3_1 }; }
+            catch (e_6_1) { e_6 = { error: e_6_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
-                finally { if (e_3) throw e_3.error; }
+                finally { if (e_6) throw e_6.error; }
             }
             return found;
         });
@@ -874,23 +959,35 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @throws {TypeError} If the predicate is not a function
      * @memberof SpinalNode
      */
-    browseAnClassifyByType(relationNames) {
+    browseAndClassifyByType(relationNames) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a, e_7, _b, _c;
             let dataStructure = {
                 types: [],
                 data: {},
             };
-            yield this.find(relationNames, (node) => {
-                let type = node.getType().get();
-                if (dataStructure.types.indexOf(type) === -1) {
-                    dataStructure.types.push(type);
+            try {
+                for (var _d = true, _e = __asyncValues(this.visitChildren(relationNames)), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
+                    _c = _f.value;
+                    _d = false;
+                    const node = _c;
+                    let type = node.getType().get();
+                    if (dataStructure.types.indexOf(type) === -1) {
+                        dataStructure.types.push(type);
+                    }
+                    if (typeof dataStructure.data[type] === 'undefined') {
+                        dataStructure.data[type] = [];
+                    }
+                    dataStructure.data[type].push(node);
                 }
-                if (typeof dataStructure.data[type] === 'undefined') {
-                    dataStructure.data[type] = [];
+            }
+            catch (e_7_1) { e_7 = { error: e_7_1 }; }
+            finally {
+                try {
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
-                dataStructure.data[type].push(node);
-                return false;
-            });
+                finally { if (e_7) throw e_7.error; }
+            }
             return dataStructure;
         });
     }
@@ -902,11 +999,11 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @throws {TypeError} If context is not a SpinalContext
      * @throws {TypeError} If the predicate is not a function
      */
-    findInContext(context, predicate = exports.DEFAULT_FIND_PREDICATE) {
-        var e_4, _a;
-        return __awaiter(this, void 0, void 0, function* () {
+    findInContext(context_1) {
+        return __awaiter(this, arguments, void 0, function* (context, predicate = exports.DEFAULT_FIND_PREDICATE) {
+            var _a, e_8, _b, _c;
             if (typeof predicate !== 'function') {
-                throw new Error('The predicate function must be a function');
+                throw new TypeError('The predicate function must be a function');
             }
             const found = [];
             let stop = false;
@@ -914,20 +1011,22 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
                 stop = true;
             }
             try {
-                for (var _b = __asyncValues(this.visitChildrenInContext(context)), _c; _c = yield _b.next(), !_c.done;) {
-                    const node = _c.value;
+                for (var _d = true, _e = __asyncValues(this.visitChildrenInContext(context)), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
+                    _c = _f.value;
+                    _d = false;
+                    const node = _c;
                     if (predicate(node, stopFct))
                         found.push(node);
                     if (stop)
                         break;
                 }
             }
-            catch (e_4_1) { e_4 = { error: e_4_1 }; }
+            catch (e_8_1) { e_8 = { error: e_8_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
-                finally { if (e_4) throw e_4.error; }
+                finally { if (e_8) throw e_8.error; }
             }
             return found;
         });
@@ -940,31 +1039,28 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @throws {TypeError} If context is not a SpinalContext
      * @throws {TypeError} If the predicate is not a function
      */
-    findOneInContext(context, predicate = exports.DEFAULT_FIND_PREDICATE) {
-        var e_5, _a;
-        return __awaiter(this, void 0, void 0, function* () {
+    findOneInContext(context_1) {
+        return __awaiter(this, arguments, void 0, function* (context, predicate = exports.DEFAULT_FIND_PREDICATE) {
+            var _a, e_9, _b, _c;
             if (typeof predicate !== 'function') {
-                throw new Error('The predicate function must be a function');
+                throw new TypeError('The predicate function must be a function');
             }
             let stop = false;
-            function stopFct() {
-                stop = true;
-            }
             try {
-                for (var _b = __asyncValues(this.visitChildrenInContext(context)), _c; _c = yield _b.next(), !_c.done;) {
-                    const node = _c.value;
-                    if (predicate(node, stopFct))
+                for (var _d = true, _e = __asyncValues(this.visitChildrenInContext(context)), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
+                    _c = _f.value;
+                    _d = false;
+                    const node = _c;
+                    if (predicate(node))
                         return node;
-                    if (stop)
-                        break;
                 }
             }
-            catch (e_5_1) { e_5 = { error: e_5_1 }; }
+            catch (e_9_1) { e_9 = { error: e_9_1 }; }
             finally {
                 try {
-                    if (_c && !_c.done && (_a = _b.return)) yield _a.call(_b);
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
-                finally { if (e_5) throw e_5.error; }
+                finally { if (e_9) throw e_9.error; }
             }
             return undefined;
         });
@@ -992,21 +1088,33 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      */
     browseAndClassifyByTypeInContext(context) {
         return __awaiter(this, void 0, void 0, function* () {
-            let dataStructure = {
+            var _a, e_10, _b, _c;
+            const dataStructure = {
                 types: [],
                 data: {},
             };
-            yield this.findInContext(context, (node) => {
-                let type = node.getType().get();
-                if (dataStructure.types.indexOf(type) === -1) {
-                    dataStructure.types.push(type);
+            try {
+                for (var _d = true, _e = __asyncValues(this.visitChildrenInContext(context)), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
+                    _c = _f.value;
+                    _d = false;
+                    const node = _c;
+                    const type = node.getType().get();
+                    if (dataStructure.types.indexOf(type) === -1) {
+                        dataStructure.types.push(type);
+                    }
+                    if (typeof dataStructure.data[type] === 'undefined') {
+                        dataStructure.data[type] = [];
+                    }
+                    dataStructure.data[type].push(node);
                 }
-                if (typeof dataStructure.data[type] === 'undefined') {
-                    dataStructure.data[type] = [];
+            }
+            catch (e_10_1) { e_10 = { error: e_10_1 }; }
+            finally {
+                try {
+                    if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
                 }
-                dataStructure.data[type].push(node);
-                return false;
-            });
+                finally { if (e_10) throw e_10.error; }
+            }
             return dataStructure;
         });
     }
@@ -1132,8 +1240,8 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
-    visitParentsInContext(context, relationNames = [new RegExp('.*')]) {
-        return __asyncGenerator(this, arguments, function* visitParentsInContext_1() {
+    visitParentsInContext(context_1) {
+        return __asyncGenerator(this, arguments, function* visitParentsInContext_1(context, relationNames = [new RegExp('.*')]) {
             const seen = new Set([this]);
             let promises = [];
             let nextGen = [this];
@@ -1195,8 +1303,8 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
      * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
      * @memberof SpinalNode
      */
-    visitChildrenInContext(context, relationNames = [new RegExp('.*')]) {
-        return __asyncGenerator(this, arguments, function* visitChildrenInContext_1() {
+    visitChildrenInContext(context_1) {
+        return __asyncGenerator(this, arguments, function* visitChildrenInContext_1(context, relationNames = [new RegExp('.*')]) {
             const seen = new Set([this]);
             let promises = [];
             let nextGen = [this];
@@ -1356,25 +1464,23 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
         else if (relationNames.length === 0) {
             return nodeRelations;
         }
-        else if (relationNames.length > 0) {
-            const res = [];
-            for (const relationName of nodeRelations) {
-                for (const regOrStr of relationNames) {
-                    if (typeof regOrStr === 'string') {
-                        if (regOrStr === relationName)
-                            res.push(relationName);
-                    }
-                    else if (regOrStr instanceof RegExp) {
-                        if (relationName.match(regOrStr))
-                            res.push(relationName);
-                    }
-                    else {
-                        throw TypeError('The RelationNames must be string | RegExp | (string | RegExp)[]');
-                    }
+        const res = [];
+        for (const relationName of nodeRelations) {
+            for (const regOrStr of relationNames) {
+                if (typeof regOrStr === 'string') {
+                    if (regOrStr === relationName)
+                        res.push(relationName);
+                }
+                else if (regOrStr instanceof RegExp) {
+                    if (relationName.match(regOrStr))
+                        res.push(relationName);
+                }
+                else {
+                    throw TypeError('The RelationNames must be string | RegExp | (string | RegExp)[]');
                 }
             }
-            return res;
         }
+        return res;
     }
     sendEventFunc(eventName, childNode, contextNode) {
         if (this.info.activeEventSender && this.info.activeEventSender.get()) {

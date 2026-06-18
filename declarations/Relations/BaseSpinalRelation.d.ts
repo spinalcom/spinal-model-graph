@@ -93,20 +93,35 @@ declare abstract class BaseSpinalRelation extends Model {
     abstract removeChild(node: SpinalNode<any>): Promise<void>;
     /**
      * Return all the children of the relation.
-     * @abstract
      * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
      * @memberof BaseSpinalRelation
+     * @deprecated
      */
-    abstract getChildren(): Promise<SpinalNode<any>[]>;
+    getChildren(): Promise<SpinalNode<any>[]>;
+    /**
+     * Return an async generator that yields each children of the relation.
+     * @abstract
+     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
+     * @memberof BaseSpinalRelation
+     */
+    abstract getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown>;
     /**
      * Return all the children of the relation associated to a certain context.
-     * @abstract
      * @param {SpinalContext<any>} context
      * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
      * @throws {TypeError} If the context is not a SpinalContext
      * @memberof BaseSpinalRelation
+     * @deprecated
      */
-    abstract getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
+    getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
+    /**
+     * Return an async generator that yields each children of the relation associated to a certain context.
+     * @abstract
+     * @param {SpinalContext<any>} context
+     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
+     * @memberof BaseSpinalRelation
+     */
+    abstract getChildrenInContextGen(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, unknown>;
     /**
      * Returns the type of the relation.
      * @abstract

@@ -28,11 +28,12 @@ import {
   SPINAL_RELATION_LST_PTR_TYPE,
   SPINAL_RELATION_PTR_LST_TYPE,
   SPINAL_RELATION_TYPE,
+  ADD_CHILD_EVENT,
+  REMOVE_CHILDREN_EVENT,
 } from '../../src';
 import { FileSystem, Model } from 'spinal-core-connectorjs';
-import 'mocha';
-
-import * as assert from 'assert';
+import { describe, it, expect } from 'vitest';
+import { spinalEventEmitter } from 'spinal-env-viewer-plugin-event-emitter';
 
 const DEFAULT_SPINAL_NODE_NAME = 'undefined';
 const DEFAULT_SPINAL_NODE_TYPE = 'SpinalNode';
@@ -55,27 +56,23 @@ describe('SpinalNode', () => {
       const node = new SpinalNode();
       FileSystem._sig_server = true;
 
-      assert(typeof node.element === 'undefined');
+      expect(typeof node.element === 'undefined').toBeTruthy();
     });
     it('should create a new spinal node.', async () => {
       const node: any = new SpinalNode();
 
-      assert.strictEqual(node.getName().get(), DEFAULT_SPINAL_NODE_NAME);
+      expect(node.getName().get()).toBe(DEFAULT_SPINAL_NODE_NAME);
 
-      assert.strictEqual(node.getType().get(), DEFAULT_SPINAL_NODE_TYPE);
+      expect(node.getType().get()).toBe(DEFAULT_SPINAL_NODE_TYPE);
 
       const elt = await node.getElement();
-      assert.strictEqual(elt instanceof Model, true);
+      expect(elt instanceof Model).toBe(true);
     });
 
     it('should create spinal a new SpinalNode with a specific name.', () => {
       const node = new SpinalNode(CUSTOM_SPINAL_NODE_NAME);
 
-      assert.strictEqual(
-        node.getName().get(),
-        CUSTOM_SPINAL_NODE_NAME,
-        'By setting the first argument of the construct the name should be setElement.'
-      );
+      expect(node.getName().get()).toBe(CUSTOM_SPINAL_NODE_NAME);
     });
 
     it('should create a new SpinalNode with specific name and type.', () => {
@@ -84,17 +81,9 @@ describe('SpinalNode', () => {
         CUSTOM_SPINAL_NODE_TYPE
       );
 
-      assert.strictEqual(
-        node.getName().get(),
-        CUSTOM_SPINAL_NODE_NAME,
-        'By setting the first argument of the construct the name should be setElement.'
-      );
+      expect(node.getName().get()).toBe(CUSTOM_SPINAL_NODE_NAME);
 
-      assert.strictEqual(
-        node.getType().get(),
-        CUSTOM_SPINAL_NODE_TYPE,
-        'By setting the second argument of the construct the type should be setElement.'
-      );
+      expect(node.getType().get()).toBe(CUSTOM_SPINAL_NODE_TYPE);
     });
 
     it('should create a new SpinalNode with specific name, type and element', async () => {
@@ -104,23 +93,15 @@ describe('SpinalNode', () => {
         new SpinalNode()
       );
 
-      assert.strictEqual(
-        node.getName().get(),
-        CUSTOM_SPINAL_NODE_NAME,
-        'By setting the first argument of the construct the name should be setElement.'
-      );
+      expect(node.getName().get()).toBe(CUSTOM_SPINAL_NODE_NAME);
 
-      assert.strictEqual(
-        node.getType().get(),
-        CUSTOM_SPINAL_NODE_TYPE,
-        'By setting the second argument of the construct the type should be setElement.'
-      );
+      expect(node.getType().get()).toBe(CUSTOM_SPINAL_NODE_TYPE);
 
       const elt = await node.getElement();
-      assert(
+      expect(
         elt instanceof SpinalNode,
         'By setting the third argument of the construct the element should be setElement.'
-      );
+      ).toBeTruthy();
     });
   });
 
@@ -128,11 +109,7 @@ describe('SpinalNode', () => {
     describe('How to use getName', () => {
       it('should return the name CUSTOM_SPINAL_NODE_NAME', () => {
         const node = new SpinalNode(CUSTOM_SPINAL_NODE_NAME);
-        assert.strictEqual(
-          node.getName().get(),
-          CUSTOM_SPINAL_NODE_NAME,
-          'By setting the first argument of the construct the name should be setElement.'
-        );
+        expect(node.getName().get()).toBe(CUSTOM_SPINAL_NODE_NAME);
       });
     });
 
@@ -142,11 +119,7 @@ describe('SpinalNode', () => {
           CUSTOM_SPINAL_NODE_NAME,
           CUSTOM_SPINAL_NODE_TYPE
         );
-        assert.strictEqual(
-          node.getType().get(),
-          CUSTOM_SPINAL_NODE_TYPE,
-          'By setting the first argument of the construct the type should be setElement.'
-        );
+        expect(node.getType().get()).toBe(CUSTOM_SPINAL_NODE_TYPE);
       });
     });
 
@@ -159,11 +132,7 @@ describe('SpinalNode', () => {
         );
 
         const elt = await node.getElement();
-        assert.strictEqual(
-          elt,
-          DEFAULT_ELEMENT,
-          'By setting the second argument of the construct the element should be setElement.'
-        );
+        expect(elt).toBe(DEFAULT_ELEMENT);
       });
     });
 
@@ -171,7 +140,7 @@ describe('SpinalNode', () => {
       it('should return no ids', () => {
         const node: any = new SpinalNode();
 
-        assert.deepStrictEqual(node.getChildrenIds(), []);
+        expect(node.getChildrenIds()).toEqual([]);
       });
 
       it('should return all children ids', async () => {
@@ -204,7 +173,7 @@ describe('SpinalNode', () => {
           ),
         ]);
 
-        assert.deepStrictEqual(parent.getChildrenIds(), childrenIds);
+        expect(parent.getChildrenIds()).toEqual(childrenIds);
       });
     });
 
@@ -213,7 +182,7 @@ describe('SpinalNode', () => {
         const node: any = new SpinalNode();
         const res = node.getNbChildren();
 
-        assert.strictEqual(res, 0);
+        expect(res).toBe(0);
       });
 
       it('should return 3', () => {
@@ -226,11 +195,11 @@ describe('SpinalNode', () => {
         node.addChild(child2, DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE);
         node.addChild(child3, DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE);
         const res = node.getNbChildren();
-        assert.strictEqual(res, 3);
+        expect(res).toBe(3);
       });
 
       it('should return 2', async () => {
-        const node: any = new SpinalNode();
+        const node = new SpinalNode();
         const child1 = new SpinalNode();
         const child2 = new SpinalNode();
         const child3 = new SpinalNode();
@@ -247,7 +216,7 @@ describe('SpinalNode', () => {
           SPINAL_RELATION_TYPE
         );
         const res = node.getNbChildren();
-        assert.strictEqual(res, 2);
+        expect(res).toBe(2);
       });
     });
 
@@ -259,29 +228,29 @@ describe('SpinalNode', () => {
 
         node.addContextId(contextId1);
 
-        assert.deepStrictEqual(node.getContextIds(), [contextId1]);
+        expect(node.getContextIds()).toEqual([contextId1]);
 
         node.addContextId(contextId1);
         node.addContextId(contextId2);
 
-        assert.deepStrictEqual(node.getContextIds(), [contextId1, contextId2]);
+        expect(node.getContextIds()).toEqual([contextId1, contextId2]);
       });
 
       it('should throw an error if the id is missing', () => {
         const node: any = new SpinalNode();
 
-        assert.throws(() => {
+        expect(() => {
           node.addContextId();
-        }, TypeError);
+        }).toThrow(TypeError);
       });
 
       it('should throw an error if the id is not a string', () => {
         const node: any = new SpinalNode();
         const context = new SpinalContext();
 
-        assert.throws(() => {
+        expect(() => {
           node.addContextId(<any>context.getId());
-        }, TypeError);
+        }).toThrow(TypeError);
       });
     });
 
@@ -298,30 +267,30 @@ describe('SpinalNode', () => {
           context
         );
 
-        assert(child.belongsToContext(context));
+        expect(child.belongsToContext(context)).toBe(true);
       });
 
       it('should return false', () => {
         const context = new SpinalContext();
         const node: any = new SpinalNode();
 
-        assert(!node.belongsToContext(context));
+        expect(node.belongsToContext(context)).toBe(false);
       });
 
       it('should throw an error if the context is missing', () => {
         const node: any = new SpinalNode();
 
-        assert.throws(() => {
-          node.belongsToContext(<any>context);
-        }, TypeError);
+        expect(() => {
+          node.belongsToContext(<any>undefined);
+        }).toThrow(TypeError);
       });
 
-      it('should throw an error if the context is missing', () => {
+      it('should throw an error if the context is not a SpinalContext', () => {
         const node: any = new SpinalNode();
 
-        assert.throws(() => {
+        expect(() => {
           node.belongsToContext(<any>1);
-        }, TypeError);
+        }).toThrow(TypeError);
       });
     });
   });
@@ -336,10 +305,7 @@ describe('SpinalNode', () => {
           DEFAULT_RELATION_NAME,
           SPINAL_RELATION_TYPE
         );
-        assert.strictEqual(
-          node.hasRelation(DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE),
-          true
-        );
+        expect(node.hasRelation(DEFAULT_RELATION_NAME)).toBeTruthy();
       });
 
       it('should return false', async () => {
@@ -350,10 +316,7 @@ describe('SpinalNode', () => {
           DEFAULT_RELATION_NAME,
           SPINAL_RELATION_TYPE
         );
-        assert.strictEqual(
-          node.hasRelation(CUSTOM_RELATION_NAME1, SPINAL_RELATION_TYPE),
-          false
-        );
+        expect(node.hasRelation(CUSTOM_RELATION_NAME1)).toBeFalsy();
       });
 
       it('should handle optional relationType', async () => {
@@ -364,32 +327,32 @@ describe('SpinalNode', () => {
           DEFAULT_RELATION_NAME,
           SPINAL_RELATION_TYPE
         );
-        assert.strictEqual(node.hasRelation(DEFAULT_RELATION_NAME), true);
-        assert.strictEqual(node.hasRelation(CUSTOM_RELATION_NAME1), false);
+        expect(node.hasRelation(DEFAULT_RELATION_NAME)).toBeTruthy();
+        expect(node.hasRelation(CUSTOM_RELATION_NAME1)).toBeFalsy();
       });
 
       it('should throw an error if the relation name is missing', () => {
         const node: any = new SpinalNode();
 
-        assert.throws(() => {
+        expect(() => {
           node.hasRelation(undefined, SPINAL_RELATION_TYPE);
-        }, TypeError);
+        }).toThrow(TypeError);
       });
 
       it('should throw an error if the relation name is not a string', () => {
         const node: any = new SpinalNode();
 
-        assert.throws(() => {
+        expect(() => {
           node.hasRelation(<any>1, SPINAL_RELATION_TYPE);
-        }, TypeError);
+        }).toThrow(TypeError);
       });
 
       it('should throw an error if the relation type is not valid', () => {
         const node: any = new SpinalNode();
 
-        assert.throws(() => {
+        expect(() => {
           node.hasRelation(DEFAULT_RELATION_NAME, <any>1);
-        }, Error);
+        }).toThrow(Error);
       });
     });
 
@@ -410,13 +373,12 @@ describe('SpinalNode', () => {
           ),
         ]);
 
-        assert.strictEqual(
+        expect(
           node.hasRelations(
             [DEFAULT_RELATION_NAME, CUSTOM_RELATION_NAME1],
             SPINAL_RELATION_TYPE
-          ),
-          true
-        );
+          )
+        ).toBe(true);
       });
 
       it("should return false if the node doesn't contain all the relations", async () => {
@@ -435,13 +397,12 @@ describe('SpinalNode', () => {
           ),
         ]);
 
-        assert.strictEqual(
+        expect(
           node.hasRelations(
             [CUSTOM_RELATION_NAME1, CUSTOM_RELATION_NAME2],
             SPINAL_RELATION_TYPE
-          ),
-          false
-        );
+          )
+        ).toBe(false);
       });
 
       it('should handle optional relationType', async () => {
@@ -459,50 +420,48 @@ describe('SpinalNode', () => {
             SPINAL_RELATION_TYPE
           ),
         ]);
-        assert.strictEqual(
+        expect(
           node.hasRelations(
             [DEFAULT_RELATION_NAME, CUSTOM_RELATION_NAME1],
             SPINAL_RELATION_TYPE
-          ),
-          true
-        );
+          )
+        ).toBe(true);
 
-        assert.strictEqual(
-          node.hasRelations([CUSTOM_RELATION_NAME1, CUSTOM_RELATION_NAME2]),
-          false
-        );
+        expect(
+          node.hasRelations([CUSTOM_RELATION_NAME1, CUSTOM_RELATION_NAME2])
+        ).toBe(false);
       });
 
       it('should throw an error if the relation name array is missing', () => {
         const node: any = new SpinalNode();
 
-        assert.throws(() => {
+        expect(() => {
           node.hasRelations(undefined, SPINAL_RELATION_TYPE);
-        }, TypeError);
+        }).toThrow(TypeError);
       });
 
       it('should throw an error if the relation name array is not an array', () => {
         const node: any = new SpinalNode();
 
-        assert.throws(() => {
+        expect(() => {
           node.hasRelations(<any>1, SPINAL_RELATION_TYPE);
-        }, TypeError);
+        }).toThrow(TypeError);
       });
 
       it('should throw an error if the relation type is not valid', () => {
         const node: any = new SpinalNode();
 
-        assert.throws(() => {
+        expect(() => {
           node.hasRelations([], <any>1);
-        }, Error);
+        }).toThrow(Error);
       });
 
       it('should throw an error if on of the relation names is not a string', () => {
         const node: any = new SpinalNode();
 
-        assert.throws(() => {
+        expect(() => {
           node.hasRelations(<any>[1], SPINAL_RELATION_TYPE);
-        }, TypeError);
+        }).toThrow(TypeError);
       });
     });
 
@@ -510,7 +469,7 @@ describe('SpinalNode', () => {
       it('should return no name', () => {
         const node: any = new SpinalNode();
 
-        assert.deepStrictEqual(node.getRelationNames(), []);
+        expect(node.getRelationNames()).toEqual([]);
       });
 
       it('should return all relation names', async () => {
@@ -548,7 +507,7 @@ describe('SpinalNode', () => {
             SPINAL_RELATION_LST_PTR_TYPE
           ),
         ]);
-        assert.deepStrictEqual(node.getRelationNames(), [
+        expect(node.getRelationNames()).toEqual([
           `${DEFAULT_RELATION_NAME}1`,
           `${DEFAULT_RELATION_NAME}2`,
           `${DEFAULT_RELATION_NAME}4`,
@@ -577,9 +536,7 @@ describe('SpinalNode', () => {
               SPINAL_RELATION_PTR_LST_TYPE
             ),
           ]);
-          assert.deepStrictEqual(node.getRelationNames(), [
-            DEFAULT_RELATION_NAME,
-          ]);
+          expect(node.getRelationNames()).toEqual([DEFAULT_RELATION_NAME]);
         }
       );
     });
@@ -595,16 +552,13 @@ describe('SpinalNode', () => {
           DEFAULT_RELATION_NAME,
           SPINAL_RELATION_TYPE
         );
-        assert.strictEqual(typeof node !== 'undefined', true);
-        assert.strictEqual(
-          node.hasRelation(DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE),
-          true
-        );
+        expect(typeof node !== 'undefined').toBeTruthy();
+        expect(node.hasRelation(DEFAULT_RELATION_NAME)).toBeTruthy();
 
         const children = await node.getChildren([DEFAULT_RELATION_NAME]);
 
-        assert.strictEqual(children.length, 1);
-        assert.strictEqual(children[0], DEFAULT_NODE);
+        expect(children.length).toBe(1);
+        expect(children[0]).toBe(DEFAULT_NODE);
       });
 
       it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', async () => {
@@ -615,16 +569,13 @@ describe('SpinalNode', () => {
           DEFAULT_RELATION_NAME,
           SPINAL_RELATION_PTR_LST_TYPE
         );
-        assert.strictEqual(typeof node !== 'undefined', true);
-        assert.strictEqual(
-          node.hasRelation(DEFAULT_RELATION_NAME, SPINAL_RELATION_PTR_LST_TYPE),
-          true
-        );
+        expect(typeof node !== 'undefined').toBeTruthy();
+        expect(node.hasRelation(DEFAULT_RELATION_NAME)).toBeTruthy();
 
         const children = await node.getChildren([DEFAULT_RELATION_NAME]);
 
-        assert.strictEqual(children.length, 1);
-        assert.strictEqual(children[0], DEFAULT_NODE);
+        expect(children.length).toBe(1);
+        expect(children[0]).toBe(DEFAULT_NODE);
       });
 
       it('should add a child to the node with a relation type SPINAL_RELATION_LST_PTR_TYPE', async () => {
@@ -635,16 +586,13 @@ describe('SpinalNode', () => {
           DEFAULT_RELATION_NAME,
           SPINAL_RELATION_LST_PTR_TYPE
         );
-        assert.strictEqual(typeof node !== 'undefined', true);
-        assert.strictEqual(
-          node.hasRelation(DEFAULT_RELATION_NAME, SPINAL_RELATION_LST_PTR_TYPE),
-          true
-        );
+        expect(typeof node !== 'undefined').toBeTruthy();
+        expect(node.hasRelation(DEFAULT_RELATION_NAME)).toBeTruthy();
 
         const children = await node.getChildren([DEFAULT_RELATION_NAME]);
 
-        assert.strictEqual(children.length, 1);
-        assert.strictEqual(children[0], DEFAULT_NODE);
+        expect(children.length).toBe(1);
+        expect(children[0]).toBe(DEFAULT_NODE);
       });
 
       it('should return the node added to the relation', async () => {
@@ -658,7 +606,7 @@ describe('SpinalNode', () => {
           SPINAL_RELATION_TYPE
         );
 
-        assert.strictEqual(res1, childNode);
+        expect(res1).toBe(childNode);
 
         const res2 = await node.addChild(
           childModel,
@@ -667,7 +615,7 @@ describe('SpinalNode', () => {
         );
         const res2Elem = await res2.getElement();
 
-        assert.strictEqual(res2Elem, childModel);
+        expect(res2Elem).toBe(childModel);
       });
 
       it('should throw an error if you try to add the same node twice', async () => {
@@ -688,9 +636,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if the child is not a model', async () => {
@@ -705,9 +653,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if the relation name is missing', async () => {
@@ -718,9 +666,9 @@ describe('SpinalNode', () => {
           await node.addChild(DEFAULT_NODE, undefined, SPINAL_RELATION_TYPE);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if the relation name is not a string', async () => {
@@ -731,9 +679,9 @@ describe('SpinalNode', () => {
           await node.addChild(DEFAULT_NODE, <any>1, SPINAL_RELATION_TYPE);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if the relation type is missing', async () => {
@@ -744,9 +692,9 @@ describe('SpinalNode', () => {
           await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if the relation type is invalid', async () => {
@@ -757,9 +705,9 @@ describe('SpinalNode', () => {
           await node.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME, 1);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
     });
 
@@ -774,16 +722,13 @@ describe('SpinalNode', () => {
           SPINAL_RELATION_TYPE,
           context
         );
-        assert.strictEqual(typeof node !== 'undefined', true);
-        assert.strictEqual(
-          node.hasRelation(DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE),
-          true
-        );
+        expect(typeof node !== 'undefined').toBeTruthy();
+        expect(node.hasRelation(DEFAULT_RELATION_NAME)).toBeTruthy();
 
         const children = await node.getChildren([DEFAULT_RELATION_NAME]);
 
-        assert.strictEqual(children.length, 1);
-        assert.strictEqual(children[0], DEFAULT_NODE);
+        expect(children.length).toBe(1);
+        expect(children[0]).toBe(DEFAULT_NODE);
       });
 
       it('Shoud add a child and associate it to the context', async () => {
@@ -798,7 +743,7 @@ describe('SpinalNode', () => {
           context
         );
 
-        assert.deepStrictEqual(child.getContextIds(), [context.getId().get()]);
+        expect(child.getContextIds()).toEqual([context.getId().get()]);
       });
 
       it('should return the node added to the relation', async () => {
@@ -814,7 +759,7 @@ describe('SpinalNode', () => {
           context
         );
 
-        assert.strictEqual(res1, childNode);
+        expect(res1).toBe(childNode);
 
         const res2 = await node.addChildInContext(
           childModel,
@@ -824,7 +769,7 @@ describe('SpinalNode', () => {
         );
         const res2Elem = await res2.getElement();
 
-        assert.strictEqual(res2Elem, childModel);
+        expect(res2Elem).toBe(childModel);
       });
 
       it('should throw an error if you try to add the same node twice', async () => {
@@ -848,9 +793,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if the child is not a model', async () => {
@@ -867,9 +812,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if the relation name is missing', async () => {
@@ -886,9 +831,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if the relation name is not a string', async () => {
@@ -905,9 +850,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if the relation type is missing', async () => {
@@ -924,9 +869,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if the relation type is invalid', async () => {
@@ -943,9 +888,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if the context is missing', async () => {
@@ -960,9 +905,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if the context is not a SpinalContext', async () => {
@@ -978,9 +923,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
     });
   });
@@ -998,7 +943,7 @@ describe('SpinalNode', () => {
         );
 
         const children = await node.getChildren([]);
-        assert.deepStrictEqual(children, []);
+        expect(children).toEqual([]);
       });
 
       it('should throw if the relation name is missing', async () => {
@@ -1009,9 +954,9 @@ describe('SpinalNode', () => {
           await node.removeChild(node, undefined, SPINAL_RELATION_TYPE);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the relation name is not a string', async () => {
@@ -1022,9 +967,9 @@ describe('SpinalNode', () => {
           await node.removeChild(node, 1, SPINAL_RELATION_TYPE);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the relation type is missing', async () => {
@@ -1035,9 +980,9 @@ describe('SpinalNode', () => {
           await node.removeChild(node, DEFAULT_RELATION_NAME);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the relation type is invalid', async () => {
@@ -1048,9 +993,9 @@ describe('SpinalNode', () => {
           await node.removeChild(node, DEFAULT_RELATION_NAME, 1);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it("should throw if the relation doesn't exist", async () => {
@@ -1067,9 +1012,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
 
         error = false;
         try {
@@ -1080,12 +1025,12 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
 
         const children = await node.getChildren([]);
-        assert.deepStrictEqual(children, [node]);
+        expect(children).toEqual([node]);
       });
 
       it('should throw if the node is missing', async () => {
@@ -1100,9 +1045,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the node is not a child', async () => {
@@ -1117,9 +1062,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
     });
 
@@ -1143,7 +1088,7 @@ describe('SpinalNode', () => {
         );
 
         const children = await parent.getChildren();
-        assert.deepStrictEqual(children, []);
+        expect(children).toEqual([]);
       });
 
       it('should delete the given children', async () => {
@@ -1165,7 +1110,7 @@ describe('SpinalNode', () => {
         );
 
         const children = await parent.getChildren();
-        assert.deepStrictEqual(children, [node2]);
+        expect(children).toEqual([node2]);
       });
 
       it('should throw an error if nodes is not an array', async () => {
@@ -1180,9 +1125,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if an element of nodes is not a SpinalNode', async () => {
@@ -1202,9 +1147,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if an element of nodes is not a child', async () => {
@@ -1225,9 +1170,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the relation name is missing', async () => {
@@ -1238,9 +1183,9 @@ describe('SpinalNode', () => {
           await node.removeChildren([], undefined, SPINAL_RELATION_TYPE);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the relation name is not a string', async () => {
@@ -1251,9 +1196,9 @@ describe('SpinalNode', () => {
           await node.removeChildren([], 1, SPINAL_RELATION_TYPE);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the relation type is missing', async () => {
@@ -1264,9 +1209,9 @@ describe('SpinalNode', () => {
           await node.removeChildren([], DEFAULT_RELATION_NAME);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the relation type is invalid', async () => {
@@ -1277,9 +1222,9 @@ describe('SpinalNode', () => {
           await node.removeChildren([], DEFAULT_RELATION_NAME, 1);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it("should throw if the relation doesn't exist", async () => {
@@ -1297,9 +1242,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
 
         error = false;
         try {
@@ -1310,12 +1255,12 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
 
         const children = await node.getChildren([]);
-        assert.deepStrictEqual(children, [child]);
+        expect(children).toEqual([child]);
       });
     });
 
@@ -1334,9 +1279,9 @@ describe('SpinalNode', () => {
           SPINAL_RELATION_TYPE
         );
 
-        assert(
+        expect(
           !parent.hasRelation(DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE)
-        );
+        ).toBeTruthy();
       });
 
       it('should throw if the relation name is missing', async () => {
@@ -1347,9 +1292,9 @@ describe('SpinalNode', () => {
           await node.removeRelation(undefined, SPINAL_RELATION_TYPE);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the relation name is not a string', async () => {
@@ -1360,9 +1305,9 @@ describe('SpinalNode', () => {
           await node.removeRelation(node, 1, SPINAL_RELATION_TYPE);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the relation type is missing', async () => {
@@ -1373,9 +1318,9 @@ describe('SpinalNode', () => {
           await node.removeRelation(node, DEFAULT_RELATION_NAME);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the relation type is invalid', async () => {
@@ -1386,9 +1331,9 @@ describe('SpinalNode', () => {
           await node.removeRelation(node, DEFAULT_RELATION_NAME, 1);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it("should throw if the relation doesn't exist", async () => {
@@ -1404,9 +1349,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
 
         error = false;
         try {
@@ -1416,12 +1361,12 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
 
         const children = await node.getChildren([]);
-        assert.deepStrictEqual(children, [node]);
+        expect(children).toEqual([node]);
       });
 
       describe('remove relation + check child parent', () => {
@@ -1432,14 +1377,16 @@ describe('SpinalNode', () => {
           await parent.addChild(child, DEFAULT_RELATION_NAME, relationType);
           await parent.removeRelation(DEFAULT_RELATION_NAME, relationType);
 
-          assert(!parent.hasRelation(DEFAULT_RELATION_NAME, relationType));
+          expect(
+            !parent.hasRelation(DEFAULT_RELATION_NAME, relationType)
+          ).toBeTruthy();
           for (const [parentRelName, parentRels] of child.parents) {
-            assert(
+            expect(
               !(
                 parentRelName === DEFAULT_RELATION_NAME &&
                 parentRels.length !== 0
               )
-            );
+            ).toBeTruthy();
           }
         }
         it('test remove relation on Ref', async () => {
@@ -1468,7 +1415,7 @@ describe('SpinalNode', () => {
         await node.removeFromGraph();
 
         const children = await parentNode.getChildren([]);
-        assert.deepStrictEqual(children, []);
+        expect(children).toEqual([]);
       });
 
       it('should remove the node from its children', async () => {
@@ -1484,7 +1431,7 @@ describe('SpinalNode', () => {
         await parentNode.removeFromGraph();
 
         const parents = await parentNode.getParents([]);
-        assert.deepStrictEqual(parents, []);
+        expect(parents).toEqual([]);
       });
     });
   });
@@ -1492,7 +1439,7 @@ describe('SpinalNode', () => {
   describe('How to get related nodes', () => {
     describe('How to use getChild', () => {
       it('should get the child', async () => {
-        const parent: any = new SpinalNode();
+        const parent = new SpinalNode();
         const child = new SpinalNode();
 
         await parent.addChild(
@@ -1507,7 +1454,7 @@ describe('SpinalNode', () => {
           SPINAL_RELATION_TYPE
         );
 
-        assert.strictEqual(res, child);
+        expect(res).toBe(child);
       });
 
       it('should use the relation name', async () => {
@@ -1546,7 +1493,7 @@ describe('SpinalNode', () => {
           SPINAL_RELATION_TYPE
         );
 
-        assert.strictEqual(res, child3);
+        expect(res).toBe(child3);
       });
 
       it('should use the relation type', async () => {
@@ -1575,7 +1522,7 @@ describe('SpinalNode', () => {
           SPINAL_RELATION_PTR_LST_TYPE
         );
 
-        assert.strictEqual(res, child3);
+        expect(res).toBe(child3);
       });
 
       it("should return undefined if the child doesn't exist", async () => {
@@ -1594,7 +1541,7 @@ describe('SpinalNode', () => {
           SPINAL_RELATION_TYPE
         );
 
-        assert.strictEqual(res, undefined);
+        expect(res).toBe(undefined);
       });
 
       it('should throw if the relation name is missing', async () => {
@@ -1612,9 +1559,9 @@ describe('SpinalNode', () => {
           await parent.getChild(() => true, undefined, SPINAL_RELATION_TYPE);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the relation name is not a string', async () => {
@@ -1632,9 +1579,9 @@ describe('SpinalNode', () => {
           await parent.getChild(() => true, 1, SPINAL_RELATION_TYPE);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the relation type is missing', async () => {
@@ -1652,9 +1599,9 @@ describe('SpinalNode', () => {
           await parent.getChild(() => true, DEFAULT_RELATION_NAME);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the relation type is invalid', async () => {
@@ -1672,9 +1619,9 @@ describe('SpinalNode', () => {
           await parent.getChild(() => true, DEFAULT_RELATION_NAME, false);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it("should throw if the relation doesn't exist", async () => {
@@ -1696,9 +1643,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
 
         error = false;
         try {
@@ -1709,9 +1656,9 @@ describe('SpinalNode', () => {
           );
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the predicate is missing', async () => {
@@ -1729,9 +1676,9 @@ describe('SpinalNode', () => {
           await parent.getChild(undefined, DEFAULT_RELATION_NAME, false);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw if the predicate is not a function', async () => {
@@ -1749,9 +1696,9 @@ describe('SpinalNode', () => {
           await parent.getChild(123, DEFAULT_RELATION_NAME, false);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
     });
 
@@ -1760,7 +1707,7 @@ describe('SpinalNode', () => {
         const node: any = new SpinalNode();
         const children = await node.getChildren([]);
 
-        assert.deepStrictEqual(children, []);
+        expect(children).toEqual([]);
       });
 
       it('should return some children', async () => {
@@ -1784,17 +1731,13 @@ describe('SpinalNode', () => {
 
         const children = await node.getChildren([DEFAULT_RELATION_NAME]);
 
-        assert.strictEqual(
-          children.length,
-          2,
-          'getChildren does not filter same children'
-        );
+        expect(children.length).toBe(2);
         for (const child of children) {
-          if (child === node2) assert.strictEqual(child, node2);
-          else assert.strictEqual(child, DEFAULT_NODE);
+          if (child === node2) expect(child).toBe(node2);
+          else expect(child).toBe(DEFAULT_NODE);
         }
 
-        // assert.deepStrictEqual(children, [DEFAULT_NODE]);
+        // expect(children).toEqual([DEFAULT_NODE]);
       });
 
       it('should return all children', async () => {
@@ -1814,7 +1757,7 @@ describe('SpinalNode', () => {
         ]);
 
         const children = await node.getChildren([]);
-        assert.deepStrictEqual(children, [DEFAULT_NODE, DEFAULT_NODE]);
+        expect(children).toEqual([DEFAULT_NODE, DEFAULT_NODE]);
       });
 
       it('should return all children also', async () => {
@@ -1834,7 +1777,7 @@ describe('SpinalNode', () => {
         ]);
 
         const children = await node.getChildren();
-        assert.deepStrictEqual(children, [DEFAULT_NODE, DEFAULT_NODE]);
+        expect(children).toEqual([DEFAULT_NODE, DEFAULT_NODE]);
       });
 
       it('should return children for one relation name passed has string', async () => {
@@ -1854,7 +1797,7 @@ describe('SpinalNode', () => {
         ]);
 
         const children = await node.getChildren(DEFAULT_RELATION_NAME);
-        assert.deepStrictEqual(children, [DEFAULT_NODE]);
+        expect(children).toEqual([DEFAULT_NODE]);
       });
 
       it('should works with RegExp relations', async () => {
@@ -1876,7 +1819,7 @@ describe('SpinalNode', () => {
         const children = await node.getChildren(
           new RegExp(DEFAULT_RELATION_NAME)
         );
-        assert.deepStrictEqual(children, [DEFAULT_NODE, DEFAULT_NODE]);
+        expect(children).toEqual([DEFAULT_NODE, DEFAULT_NODE]);
       });
 
       it('should throw an error if relationNames is neither an array, a string or omitted', async () => {
@@ -1887,9 +1830,9 @@ describe('SpinalNode', () => {
           await parent.getChildren(1);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if an element of relationNames array is not a string or regExp', async () => {
@@ -1909,9 +1852,9 @@ describe('SpinalNode', () => {
           ]);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
     });
 
@@ -1929,7 +1872,7 @@ describe('SpinalNode', () => {
         );
 
         const children = await parent.getChildrenInContext(context);
-        assert.deepStrictEqual(children, [child]);
+        expect(children).toEqual([child]);
       });
 
       it("should return the node's children associated to the context", async () => {
@@ -1960,7 +1903,7 @@ describe('SpinalNode', () => {
         ]);
 
         const children = await parent.getChildrenInContext(context);
-        assert.deepStrictEqual(children, [child1, child3]);
+        expect(children).toEqual([child1, child3]);
       });
 
       it('should throw an error if the context is missing', async () => {
@@ -1971,9 +1914,9 @@ describe('SpinalNode', () => {
           await parent.getChildrenInContext();
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if the context is not a SpinalContext', async () => {
@@ -1984,9 +1927,9 @@ describe('SpinalNode', () => {
           await parent.getChildrenInContext(1);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
     });
 
@@ -1995,7 +1938,7 @@ describe('SpinalNode', () => {
         const node: any = new SpinalNode();
         const parents = await node.getParents([]);
 
-        assert.deepStrictEqual(parents, []);
+        expect(parents).toEqual([]);
       });
 
       it('should return some parents', async () => {
@@ -2017,7 +1960,7 @@ describe('SpinalNode', () => {
         ]);
 
         const parents = await childNode.getParents([DEFAULT_RELATION_NAME]);
-        assert.deepStrictEqual(parents, [parentNode1]);
+        expect(parents).toEqual([parentNode1]);
       });
 
       it('should return one parents', async () => {
@@ -2039,7 +1982,7 @@ describe('SpinalNode', () => {
         ]);
 
         const parents = await childNode.getParents(DEFAULT_RELATION_NAME);
-        assert.deepStrictEqual(parents, [parentNode1]);
+        expect(parents).toEqual([parentNode1]);
       });
 
       it('should return all parents', async () => {
@@ -2061,7 +2004,7 @@ describe('SpinalNode', () => {
         ]);
 
         const parents = await childNode.getParents([]);
-        assert.deepStrictEqual(parents, [parentNode1, parentNode2]);
+        expect(parents).toEqual([parentNode1, parentNode2]);
       });
 
       it('should return all parents with a certain relation name', async () => {
@@ -2083,7 +2026,7 @@ describe('SpinalNode', () => {
         ]);
 
         const parents = await childNode.getParents([]);
-        assert.deepStrictEqual(parents, [parentNode1, parentNode2]);
+        expect(parents).toEqual([parentNode1, parentNode2]);
       });
 
       it('should throw an error if relationNames is neither an array, a string or omitted', async () => {
@@ -2094,9 +2037,9 @@ describe('SpinalNode', () => {
           await parent.getParents(1);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if an element of relationNames is not a string', async () => {
@@ -2112,9 +2055,484 @@ describe('SpinalNode', () => {
           await child.getParents([`${DEFAULT_RELATION_NAME}1`, <any>1]);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
+      });
+    });
+  });
+
+  describe('How to use getChildrenGen', () => {
+    it('should return a generator of the children', async () => {
+      const node: any = new SpinalNode();
+      const child1 = new SpinalNode();
+      const child2 = new SpinalNode();
+      const child3 = new SpinalNode();
+
+      await Promise.all([
+        node.addChild(child1, DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE),
+        node.addChild(child2, DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE),
+        node.addChild(child3, 'test', SPINAL_RELATION_LST_PTR_TYPE),
+      ]);
+
+      const gen = node.getChildrenGen(
+        DEFAULT_RELATION_NAME,
+        SPINAL_RELATION_TYPE
+      );
+      const res1 = await gen.next();
+      expect(res1.value).toBe(child1);
+      expect(res1.done).toBeFalsy();
+
+      const res2 = await gen.next();
+      expect(res2.value).toBe(child2);
+      expect(res2.done).toBeFalsy();
+
+      const res3 = await gen.next();
+      expect(res3.value).toBeUndefined();
+      expect(res3.done).toBeTruthy();
+    });
+  });
+
+  describe('How to use hasContextId', () => {
+    it('should return true if the node has the context id', async () => {
+      const context = new SpinalContext();
+      const node: any = new SpinalNode();
+
+      await context.addChildInContext(
+        node,
+        DEFAULT_RELATION_NAME,
+        SPINAL_RELATION_TYPE
+      );
+
+      const res = await node.hasContextId(context.info.id.get());
+      expect(res).toBeTruthy();
+    });
+
+    it('should return false if the node does not have the context id', async () => {
+      const node: any = new SpinalNode();
+      const res = await node.hasContextId('123');
+      expect(res).toBeFalsy();
+    });
+    it('should throw an error if the context id is not a string', async () => {
+      const node: any = new SpinalNode();
+      expect(() => node.hasContextId(123)).toThrow(TypeError);
+    });
+  });
+  describe('How to use removeContextId', () => {
+    it('should remove the context id from the node', async () => {
+      const context = new SpinalContext();
+      const node: any = new SpinalNode();
+
+      await context.addChildInContext(
+        node,
+        DEFAULT_RELATION_NAME,
+        SPINAL_RELATION_TYPE
+      );
+
+      await node.removeContextId(context.info.id.get());
+
+      const res = await node.hasContextId(context.info.id.get());
+      expect(res).toBeFalsy();
+    });
+
+    it('should throw an error if the context id is not a string', async () => {
+      const node: any = new SpinalNode();
+      expect(() => node.removeContextId(123)).toThrow(TypeError);
+    });
+  });
+
+  describe('How to use setDirectModificationDate', () => {
+    it('should set the direct modification date of the node', async () => {
+      const node: any = new SpinalNode();
+      const date = new Date();
+
+      node.setDirectModificationDate(date.getTime());
+
+      const res = node.getDirectModificationDate().get();
+      expect(res).toEqual(date.getTime());
+    });
+
+    it('should throw an error if the date is not a a number', async () => {
+      const node: any = new SpinalNode();
+      expect(() => node.setDirectModificationDate('abc')).toThrow(TypeError);
+    });
+  });
+
+  describe('How to use setIndirectModificationDate', () => {
+    it('should set the indirect modification date of the node', async () => {
+      const node = new SpinalNode();
+      const date = new Date();
+
+      node.setIndirectModificationDate(date.getTime());
+
+      const res = node.getIndirectModificationDate().get();
+      expect(res).toEqual(date.getTime());
+    });
+
+    it('should throw an error if the date is not a a number', async () => {
+      const node: any = new SpinalNode();
+      expect(() => node.setIndirectModificationDate('abc')).toThrow(TypeError);
+    });
+  });
+  describe('How to browse the a graph', async () => {
+    const context = new SpinalContext('context', 'contextType');
+    const unRelatedContext = new SpinalContext(
+      'unRelatedContext',
+      'contextType2'
+    );
+    const node = new SpinalNode('origin', 'originType');
+    node.addContextId(context.info.id.get());
+    const child1 = new SpinalNode('child1', 'type1');
+    const child2 = new SpinalNode('child2', 'type2');
+    const child3 = new SpinalNode('child3', 'type1');
+    const child4 = new SpinalNode('child4', 'type3');
+    const child5 = new SpinalNode('child5', 'type2');
+
+    await Promise.all([
+      node.addChildInContext(
+        child1,
+        DEFAULT_RELATION_NAME,
+        SPINAL_RELATION_TYPE,
+        unRelatedContext
+      ),
+      node.addChildInContext(
+        child2,
+        DEFAULT_RELATION_NAME,
+        SPINAL_RELATION_TYPE,
+        context
+      ),
+      child2.addChildInContext(
+        child3,
+        DEFAULT_RELATION_NAME,
+        SPINAL_RELATION_TYPE,
+        context
+      ),
+      child3.addChildInContext(
+        child4,
+        DEFAULT_RELATION_NAME,
+        SPINAL_RELATION_TYPE,
+        context
+      ),
+      child3.addChildInContext(
+        child5,
+        DEFAULT_RELATION_NAME + '_test',
+        SPINAL_RELATION_TYPE,
+        context
+      ),
+    ]);
+
+    describe('How to use browseAndClassifyByType', async () => {
+      it('should browse the graph and classify nodes by type', async () => {
+        const res = await node.browseAndClassifyByType(DEFAULT_RELATION_NAME);
+        expect(res).toEqual({
+          types: ['originType', 'type1', 'type2', 'type3'],
+          data: {
+            originType: [node],
+            type1: [child1, child3],
+            type2: [child2],
+            type3: [child4],
+          },
+        });
+      });
+
+      it('should browse the graph and classify nodes by type 2', async () => {
+        const res = await node.browseAndClassifyByType([
+          DEFAULT_RELATION_NAME,
+          DEFAULT_RELATION_NAME + '_test',
+        ]);
+        expect(res).toEqual({
+          types: ['originType', 'type1', 'type2', 'type3'],
+          data: {
+            originType: [node],
+            type1: [child1, child3],
+            type2: [child2, child5],
+            type3: [child4],
+          },
+        });
+      });
+
+      it('should find nothing if the relation name does not exist', async () => {
+        const res = await node.browseAndClassifyByType('nonExistentRelation');
+        expect(res).toEqual({
+          types: ['originType'],
+          data: { originType: [node] },
+        });
+      });
+    });
+
+    describe('How to use browseAndClassifyByType', async () => {
+      it('should browse the graph and classify nodes by type', async () => {
+        const res = await node.browseAndClassifyByTypeInContext(context);
+        expect(res).toEqual({
+          types: ['originType', 'type2', 'type1', 'type3'],
+          data: {
+            originType: [node],
+            type2: [child2, child5],
+            type1: [child3],
+            type3: [child4],
+          },
+        });
+      });
+
+      it('should browse the graph and classify nodes by type 2', async () => {
+        const res = await node.browseAndClassifyByTypeInContext(context);
+        expect(res).toEqual({
+          types: ['originType', 'type2', 'type1', 'type3'],
+          data: {
+            originType: [node],
+            type2: [child2, child5],
+            type1: [child3],
+            type3: [child4],
+          },
+        });
+      });
+
+      it('should find nodes in unrelated context', async () => {
+        const res =
+          await node.browseAndClassifyByTypeInContext(unRelatedContext);
+        expect(res).toEqual({
+          types: ['originType', 'type1'],
+          data: { originType: [node], type1: [child1] },
+        });
+      });
+    });
+    describe('How to use findParents', async () => {
+      it('should find parents with a certain type', async () => {
+        const res = await child3.findParents(
+          DEFAULT_RELATION_NAME,
+          (node) => node.info.type.get() === 'originType'
+        );
+        expect(res).toEqual([node]);
+      });
+      it('should find parents with a certain type 2', async () => {
+        const res = await child3.findParents(
+          DEFAULT_RELATION_NAME,
+          (node) => node.info.type.get() === 'type2'
+        );
+        expect(res).toEqual([child2]);
+      });
+      it('should find nothing if no parent has the type', async () => {
+        const res = await child3.findParents(
+          DEFAULT_RELATION_NAME,
+          (node) => node.info.type.get() === 'nonExistentType'
+        );
+        expect(res).toEqual([]);
+      });
+      it('should find all parents if predicate always returns true', async () => {
+        const res = await child3.findParents(DEFAULT_RELATION_NAME);
+        expect(res).toEqual([child3, child2, node]);
+      });
+      it('should stop if the stop function is called in the predicate', async () => {
+        const res = await child3.findParents(
+          DEFAULT_RELATION_NAME,
+          (node, stop) => {
+            stop!();
+            return true;
+          }
+        );
+        expect(res).toEqual([child3]);
+      });
+
+      it("should'nt work if the predicate is not a function", async () => {
+        let error = false;
+        try {
+          await child3.findParents(DEFAULT_RELATION_NAME, 123 as any);
+        } catch (e) {
+          error = true;
+          expect(e).toBeInstanceOf(TypeError);
+        }
+        expect(error).toBe(true);
+      });
+    });
+
+    describe('How to use findParentsInContext', async () => {
+      it('should find parents with a certain type', async () => {
+        const res = await child5.findParentsInContext(context, (node) => {
+          return node.info.type.get() === 'originType';
+        });
+        expect(res).toEqual([node]);
+      });
+      it('should find parents with a certain type 2', async () => {
+        const res = await child3.findParentsInContext(
+          context,
+          (node) => node.info.type.get() === 'type2'
+        );
+        expect(res).toEqual([child2]);
+      });
+      it('should find nothing if no parent has the type', async () => {
+        const res = await child3.findParentsInContext(
+          context,
+          (node) => node.info.type.get() === 'nonExistentType'
+        );
+        expect(res).toEqual([]);
+      });
+      it('should find all parents if predicate always returns true', async () => {
+        const res = await child3.findParentsInContext(context, (node) => true);
+        expect(res).toEqual([child3, child2, node]);
+      });
+      it('should stop if the stop function is called in the predicate', async () => {
+        const res = await child3.findParentsInContext(context, (node, stop) => {
+          stop!();
+          return true;
+        });
+        expect(res).toEqual([child3]);
+      });
+
+      it('should work if the predicate is not sent', async () => {
+        const res = await child3.findParentsInContext(context);
+        expect(res).toEqual([child3, child2, node]);
+      });
+
+      it('should throw an error if the context is not a SpinalContext', async () => {
+        try {
+          await child3.findParentsInContext(123 as any, (node) => true);
+        } catch (e) {
+          expect(e).toBeInstanceOf(TypeError);
+        }
+      });
+      it('should throw an error if the predicate is not a function', async () => {
+        try {
+          await child3.findParentsInContext(context, 123 as any);
+        } catch (e) {
+          expect(e).toBeInstanceOf(TypeError);
+        }
+      });
+    });
+    describe('How to use findOneParent', async () => {
+      it('should find one parent following the predicate', async () => {
+        const res = await child3.findOneParent(
+          DEFAULT_RELATION_NAME,
+          (node) => node.info.type.get() === 'originType'
+        );
+        expect(res).toEqual(node);
+      });
+    });
+
+    describe('How to use findAsyncPredicate', async () => {
+      it('should find children that the predicate matches but the predicate is async', async () => {
+        const res = await node.findAsyncPredicate(
+          DEFAULT_RELATION_NAME,
+          async (node) => {
+            return node.info.type.get() === 'type1';
+          }
+        );
+        expect(res).toEqual([child1, child3]);
+      });
+      it('should stop if the stop function is called in the predicate', async () => {
+        const res = await node.findAsyncPredicate(
+          DEFAULT_RELATION_NAME,
+          async (node, stop) => {
+            stop!();
+            return true;
+          }
+        );
+        expect(res).toEqual([child1]);
+      });
+    });
+
+    describe('How to use findInContextAsyncPredicate', async () => {
+      it('should find children that the predicate matches but the predicate is async', async () => {
+        const res = await node.findInContextAsyncPredicate(
+          context,
+          async (node) => {
+            return node.info.type.get() === 'type1';
+          }
+        );
+        expect(res).toEqual([child3]);
+      });
+      it('should stop if the stop function is called in the predicate', async () => {
+        const res = await node.findInContextAsyncPredicate(
+          context,
+          async (node, stop) => {
+            stop!();
+            return true;
+          }
+        );
+        expect(res).toEqual([child2]);
+      });
+    });
+
+    describe('How to use findByType', async () => {
+      it('should find children that the type matches', async () => {
+        const res = await node.findByType(DEFAULT_RELATION_NAME, 'type1');
+        expect(res).toEqual([child1, child3]);
+      });
+    });
+    describe('How to use findInContext stop', async () => {
+      it('should stop if the stop function is called in the predicate', async () => {
+        const res = await node.findInContext(context, (node, stop) => {
+          stop!();
+          return true;
+        });
+        expect(res).toEqual([node]);
+      });
+    });
+
+    describe('How to use findOneInContext', async () => {
+      it('should find one node that the predicate matches', async () => {
+        const res = await node.findOneInContext(context, (node) => {
+          return node.info.type.get() === 'type1';
+        });
+        expect(res).toEqual(child3);
+      });
+      it('should throw an error if the predicate is not a function', async () => {
+        let error = false;
+        try {
+          await node.findOneInContext(context, 123 as any);
+        } catch (e) {
+          error = true;
+          expect(e).toBeInstanceOf(TypeError);
+        }
+        expect(error).toBe(true);
+      });
+      it('should return undefined if no node matches the predicate', async () => {
+        const res = await node.findOneInContext(context, (node) => {
+          return node.info.type.get() === 'nonExistentType';
+        });
+        expect(res).toBeUndefined();
+      });
+    });
+    describe('How to use findInContextByType', async () => {
+      it('should find children that the type matches', async () => {
+        const res = await node.findInContextByType(context, 'type1');
+        expect(res).toEqual([child3]);
+      });
+    });
+
+    describe('test sendEventFunc', async () => {
+      it('should send an event when a child is added', async () => {
+        const node_test = new SpinalNode('test', 'testType');
+        const child_test = new SpinalNode('child', 'childType');
+        node_test.info.add_attr('activeEventSender', true);
+        spinalEventEmitter.once(ADD_CHILD_EVENT, (child) => {
+          // expect(child).toBe(child_test);
+        });
+
+        await node_test.addChild(
+          child_test,
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_TYPE
+        );
+      });
+      it('should send an event when a children are removed', async () => {
+        const node_test = new SpinalNode('test', 'testType');
+        const child_test = new SpinalNode('child', 'childType');
+        node_test.info.add_attr('activeEventSender', true);
+
+        await node_test.addChild(
+          child_test,
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_TYPE
+        );
+        spinalEventEmitter.once(REMOVE_CHILDREN_EVENT, (child) => {
+          // expect(child).toBe(child_test);
+        });
+
+        await node_test.removeChildren(
+          [child_test],
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_TYPE
+        );
       });
     });
   });

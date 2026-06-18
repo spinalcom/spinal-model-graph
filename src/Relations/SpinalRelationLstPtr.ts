@@ -1,10 +1,10 @@
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -41,7 +41,7 @@ import { SPINAL_RELATION_LST_PTR_TYPE } from './SpinalRelationFactory';
 class SpinalRelationLstPtr extends BaseSpinalRelation {
   public _constructorName = 'SpinalRelationLstPtr';
   public static _constructorName = 'SpinalRelationLstPtr';
-  children: Lst<SpinalNodePointer<SpinalNode<any>>>;
+  children!: Lst<SpinalNodePointer<SpinalNode<any>>>;
 
   /**
    * Constructor for the SpinalRelationLstPtr class.
@@ -86,43 +86,43 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
 
   /**
    * Return all the children of the relation.
-   * @returns {Promise<SpinalNode[]>} The children of the relation
+   * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation
    * @memberof SpinalRelationLstPtr
    */
-  getChildren(): Promise<SpinalNode<any>[]> {
-    const promises: Promise<SpinalNode<any>>[] = [];
-
+  async *getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown> {
+    const proms = [];
+    // We load all the children in parallel and then yield them one by one
+    // when they are all loaded to avoid multiple await in the loop
+    // which can cause performance issues
     for (let i: number = 0; i < this.children.length; i += 1) {
-      const ptr: SpinalNodePointer<SpinalNode<any>> = this.children[i];
-      promises.push(ptr.load());
+      proms.push(this.children[i].load());
     }
-
-    return Promise.all(promises);
+    const children = await Promise.all(proms);
+    for (let child of children) {
+      yield child;
+    }
   }
 
   /**
    * Return all the children of the relation associated to a certain context.
-   * @returns {Promise<SpinalNode<any>[]>} The children of the relation
+   * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation
    * @throws {TypeError} If the context is not a SpinalContext
    * @memberof SpinalRelationLstPtr
    */
-  async getChildrenInContext(
+  async *getChildrenInContextGen(
     context: SpinalContext<any>
-  ): Promise<SpinalNode<any>[]> {
-    const promises: Promise<SpinalNode<any>>[] = [];
-
+  ): AsyncGenerator<SpinalNode<any>, void, unknown> {
     if (!(context instanceof SpinalContext)) {
       return Promise.reject(TypeError('context must be a SpinalContext'));
     }
 
     for (let i: number = 0; i < this.children.length; i += 1) {
       const ptr: SpinalNodePointer<SpinalNode<any>> = this.children[i];
-
-      promises.push(ptr.load());
+      const child: SpinalNode<any> = await ptr.load();
+      if (child.belongsToContext(context)) {
+        yield child;
+      }
     }
-
-    const children: SpinalNode<any>[] = await Promise.all(promises);
-    return children.filter((child) => child.belongsToContext(context));
   }
 
   /**

@@ -31,9 +31,7 @@ import {
   SpinalRelationRef,
 } from '../../src';
 import { Model, Str } from 'spinal-core-connectorjs';
-import 'mocha';
-
-import * as assert from 'assert';
+import { describe, it, expect } from 'vitest';
 
 const DEFAULT_RELATION_NAME = 'relationName';
 const DEFAULT_NODE = new SpinalNode();
@@ -44,61 +42,58 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
       const parent = new SpinalNode<any>();
       const rel = new SpinalRelationRef(parent, DEFAULT_RELATION_NAME);
 
-      assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
-      assert.strictEqual(await rel.getParent(), parent);
-      assert(rel.getId() instanceof Str);
+      expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
+      expect(await rel.getParent()).toBe(parent);
+      expect(rel.getId() instanceof Str).toBeTruthy();
     });
 
     it('should create a new relation with a name and a context parent', async () => {
       const parent = new SpinalContext();
       const rel = new SpinalRelationRef(parent, DEFAULT_RELATION_NAME);
 
-      assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
-      assert.strictEqual(await rel.getParent(), parent);
-      assert(rel.getId() instanceof Str);
+      expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
+      expect(await rel.getParent()).toBe(parent);
+      expect(rel.getId() instanceof Str).toBeTruthy();
     });
 
     it('should create a new relation with a name and a graph parent', async () => {
       const parent = new SpinalGraph();
       const rel = new SpinalRelationRef(parent, DEFAULT_RELATION_NAME);
 
-      assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
-      assert.strictEqual(await rel.getParent(), parent);
-      assert(rel.getId() instanceof Str);
+      expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
+      expect(await rel.getParent()).toBe(parent);
+      expect(rel.getId() instanceof Str).toBeTruthy();
     });
 
     it('should throw an error if the parent or the name is missing', async () => {
-      assert.throws(() => {
+      expect(() => {
         new SpinalRelationRef();
-      }, TypeError);
+      }).toThrow(TypeError);
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalRelationRef(undefined, DEFAULT_RELATION_NAME);
-      }, TypeError);
+      }).toThrow(TypeError);
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalRelationRef(DEFAULT_NODE);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
 
     it('should throw an error if the name is not a string', async () => {
-      assert.throws(() => {
+      expect(() => {
         new SpinalRelationRef(DEFAULT_NODE, <any>1);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
 
     it('should throw an error if the parent is not a SpinalNode', async () => {
-      const parent1 = [];
-
-      assert.throws(() => {
-        new SpinalRelationRef(<any>parent1, DEFAULT_RELATION_NAME);
-      }, TypeError);
+      expect(() => {
+        new SpinalRelationRef(<any>[], DEFAULT_RELATION_NAME);
+      }).toThrow(TypeError);
 
       const parent2 = new Model();
-
-      assert.throws(() => {
+      expect(() => {
         new SpinalRelationRef(<any>parent2, DEFAULT_RELATION_NAME);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
   });
 
@@ -106,7 +101,7 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
     describe('How to use getName', () => {
       it('should return the name DEFAULT_RELATION_NAME', () => {
         const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
-        assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
+        expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
       });
     });
 
@@ -114,107 +109,164 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
       it('should return the parent of the relation', async () => {
         const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
-        assert.strictEqual(await rel.getParent(), DEFAULT_NODE);
+        expect(await rel.getParent()).toBe(DEFAULT_NODE);
       });
     });
+  });
 
-    describe('How to use addContextIds and getContextIds', () => {
-      it('should get the ids of the associated contexts', () => {
-        const relation = new SpinalRelationRef(
-          DEFAULT_NODE,
-          DEFAULT_RELATION_NAME
-        );
-        const contextId1 = new SpinalContext().getId().get();
-        const contextId2 = new SpinalContext().getId().get();
+  describe('How to use addContextIds and getContextIds', () => {
+    it('should get the ids of the associated contexts', () => {
+      const relation = new SpinalRelationRef(
+        DEFAULT_NODE,
+        DEFAULT_RELATION_NAME
+      );
+      const contextId1 = new SpinalContext().getId().get();
+      const contextId2 = new SpinalContext().getId().get();
 
-        relation.addContextId(contextId1);
+      relation.addContextId(contextId1);
 
-        assert.deepStrictEqual(relation.getContextIds(), [contextId1]);
+      expect(relation.getContextIds()).toEqual([contextId1]);
 
-        relation.addContextId(contextId1);
-        relation.addContextId(contextId2);
+      relation.addContextId(contextId1);
+      relation.addContextId(contextId2);
 
-        assert.deepStrictEqual(relation.getContextIds(), [
-          contextId1,
-          contextId2,
-        ]);
-      });
-
-      it('should throw an error if the contextId is missing', () => {
-        const relation: any = new SpinalRelationRef(
-          DEFAULT_NODE,
-          DEFAULT_RELATION_NAME
-        );
-
-        assert.throws(() => {
-          relation.addContextId();
-        }, TypeError);
-      });
-
-      it('should throw an error if the contextId is not a string', () => {
-        const relation = new SpinalRelationRef(
-          DEFAULT_NODE,
-          DEFAULT_RELATION_NAME
-        );
-        const badContextId1 = new SpinalContext().getId();
-
-        assert.throws(() => {
-          relation.addContextId(<any>badContextId1);
-        }, TypeError);
-      });
+      expect(relation.getContextIds()).toEqual([contextId1, contextId2]);
     });
 
-    describe('How to use belongsToContext', () => {
-      it('should return true', async () => {
-        const context = new SpinalContext();
-        const relation = new SpinalRelationRef(
-          DEFAULT_NODE,
-          DEFAULT_RELATION_NAME
-        );
+    it('should throw an error if the contextId is missing', () => {
+      const relation: any = new SpinalRelationRef(
+        DEFAULT_NODE,
+        DEFAULT_RELATION_NAME
+      );
 
-        relation.addContextId(context.getId().get());
+      expect(() => {
+        relation.addContextId();
+      }).toThrow(TypeError);
+    });
 
-        assert(relation.belongsToContext(context));
-      });
+    it('should throw an error if the contextId is not a string', () => {
+      const relation = new SpinalRelationRef(
+        DEFAULT_NODE,
+        DEFAULT_RELATION_NAME
+      );
+      const badContextId1 = new SpinalContext().getId();
 
-      it('should return false', () => {
-        const context = new SpinalContext();
-        const relation = new SpinalRelationRef(
-          DEFAULT_NODE,
-          DEFAULT_RELATION_NAME
-        );
+      expect(() => {
+        relation.addContextId(<any>badContextId1);
+      }).toThrow(TypeError);
+    });
+  });
 
-        assert(!relation.belongsToContext(context));
-      });
+  describe('How to use belongsToContext', () => {
+    it('should return true', async () => {
+      const context = new SpinalContext();
+      const relation = new SpinalRelationRef(
+        DEFAULT_NODE,
+        DEFAULT_RELATION_NAME
+      );
 
-      it('should throw an error if no context is passed', () => {
-        const relation = new SpinalRelationRef(
-          DEFAULT_NODE,
-          DEFAULT_RELATION_NAME
-        );
+      relation.addContextId(context.getId().get());
 
-        assert.throws(() => {
-          relation.belongsToContext(<any>context);
-        }, TypeError);
-      });
+      expect(relation.belongsToContext(context)).toBeTruthy();
+    });
 
-      it('should throw an error if the context as the wrong type', () => {
-        const context1 = {};
-        const relation = new SpinalRelationRef(
-          DEFAULT_NODE,
-          DEFAULT_RELATION_NAME
-        );
+    it('should return false', () => {
+      const context = new SpinalContext();
+      const relation = new SpinalRelationRef(
+        DEFAULT_NODE,
+        DEFAULT_RELATION_NAME
+      );
 
-        assert.throws(() => {
-          relation.belongsToContext(<any>context1);
-        }, TypeError);
+      expect(relation.belongsToContext(context)).toBeFalsy();
+    });
 
-        const context2 = new SpinalNode();
+    it('should throw an error if no context is passed', () => {
+      const relation = new SpinalRelationRef(
+        DEFAULT_NODE,
+        DEFAULT_RELATION_NAME
+      );
 
-        assert.throws(() => {
-          relation.belongsToContext(context2);
-        }, TypeError);
-      });
+      expect(() => {
+        relation.belongsToContext(<any>undefined);
+      }).toThrow(TypeError);
+    });
+
+    it('should throw an error if the context as the wrong type', () => {
+      const context1 = {};
+      const relation = new SpinalRelationRef(
+        DEFAULT_NODE,
+        DEFAULT_RELATION_NAME
+      );
+
+      expect(() => {
+        relation.belongsToContext(<any>context1);
+      }).toThrow(TypeError);
+
+      const context2 = new SpinalNode();
+
+      expect(() => {
+        relation.belongsToContext(context2);
+      }).toThrow(TypeError);
+    });
+  });
+
+  describe('How to use removeContextId', () => {
+    it('should remove the contextId', () => {
+      const relation = new SpinalRelationRef(
+        DEFAULT_NODE,
+        DEFAULT_RELATION_NAME
+      );
+      const contextId1 = new SpinalContext().getId().get();
+      const contextId2 = new SpinalContext().getId().get();
+
+      relation.addContextId(contextId1);
+      relation.addContextId(contextId2);
+
+      expect(relation.getContextIds()).toEqual([contextId1, contextId2]);
+
+      relation.removeContextId(contextId1);
+
+      expect(relation.getContextIds()).toEqual([contextId2]);
+    });
+
+    it('should throw an error if the contextId is missing', () => {
+      const relation: any = new SpinalRelationRef(
+        DEFAULT_NODE,
+        DEFAULT_RELATION_NAME
+      );
+
+      expect(() => {
+        relation.removeContextId();
+      }).toThrow(TypeError);
+    });
+
+    it('should throw an error if the contextId is not a string', () => {
+      const relation = new SpinalRelationRef(
+        DEFAULT_NODE,
+        DEFAULT_RELATION_NAME
+      );
+      const badContextId1 = new SpinalContext().getId();
+
+      expect(() => {
+        relation.removeContextId(<any>badContextId1);
+      }).toThrow(TypeError);
+    });
+
+    it('should not do anything if the contextId is not in the relation', () => {
+      const relation = new SpinalRelationRef(
+        DEFAULT_NODE,
+        DEFAULT_RELATION_NAME
+      );
+      const contextId1 = new SpinalContext().getId().get();
+      const contextId2 = new SpinalContext().getId().get();
+
+      relation.addContextId(contextId1);
+
+      expect(relation.getContextIds()).toEqual([contextId1]);
+
+      relation.removeContextId(contextId2);
+
+      expect(relation.getContextIds()).toEqual([contextId1]);
     });
   });
 
@@ -238,7 +290,7 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
         await rel.removeChildren();
 
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, []);
+        expect(children).toEqual([]);
       });
 
       it('should delete the given children', async () => {
@@ -259,7 +311,7 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
         await rel.removeChildren([node3, node1]);
 
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, [node2]);
+        expect(children).toEqual([node2]);
       });
 
       it('should delete some of the given children', async () => {
@@ -283,12 +335,12 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
           await rel.removeChildren([node3, node1, node4]);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
 
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, [node2]);
+        expect(children).toEqual([node2]);
       });
 
       it('should throw an error if nodes is not an array', async () => {
@@ -302,9 +354,9 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
           await relation.removeChildren(<any>{});
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
     });
 
@@ -327,7 +379,7 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
         await rel.removeChildren();
 
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, []);
+        expect(children).toEqual([]);
       });
 
       it('should the relation from the parent pointer', async () => {
@@ -338,12 +390,12 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
         );
 
         await rel.removeFromGraph();
-        assert(
-          !parent.hasRelation(
+        expect(
+          parent.hasRelation(
             DEFAULT_RELATION_NAME,
             SPINAL_RELATION_LST_PTR_TYPE
           )
-        );
+        ).toBeFalsy();
       });
     });
   });

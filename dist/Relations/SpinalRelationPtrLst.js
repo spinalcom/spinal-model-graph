@@ -1,11 +1,11 @@
 "use strict";
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -30,6 +30,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
+};
+var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
+var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpinalRelationPtrLst = void 0;
@@ -90,40 +103,36 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
     }
     /**
      * Return all the children of the relation.
-     * @returns {Promise<SpinalNode<any>[]>} The children of the relation
+     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
      * @memberof SpinalRelationPtrLst
      */
-    getChildren() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const childrenLst = yield this.children.load();
-            const children = [];
+    getChildrenGen() {
+        return __asyncGenerator(this, arguments, function* getChildrenGen_1() {
+            const childrenLst = yield __await(this.children.load());
             for (let i = 0; i < childrenLst.length; i += 1) {
-                children.push(childrenLst[i]);
+                yield yield __await(childrenLst[i]);
             }
-            return children;
         });
     }
     /**
      * Return all the children of the relation associated to a certain context.
      * @param {SpinalContext} context Context to use for the search
-     * @returns {Promise<Array<SpinalNode<any>>>} The children associated to the context
+     * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children associated to the context
      * @throws {TypeError} If the context is not a SpinalContext
      * @memberof SpinalRelationPtrLst
      */
-    getChildrenInContext(context) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const childrenLst = yield this.children.load();
-            const children = [];
+    getChildrenInContextGen(context) {
+        return __asyncGenerator(this, arguments, function* getChildrenInContextGen_1() {
+            const childrenLst = yield __await(this.children.load());
             if (!(context instanceof SpinalContext_1.SpinalContext)) {
                 throw TypeError('context must be a SpinalContext');
             }
             for (let i = 0; i < childrenLst.length; i += 1) {
                 const child = childrenLst[i];
                 if (child.belongsToContext(context)) {
-                    children.push(child);
+                    yield yield __await(child);
                 }
             }
-            return children;
         });
     }
     /**
@@ -185,19 +194,18 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
     /**
      * Removes children from the relation.
      * @override
-     * @param {SpinalNode<any>[]} [nodes=[]] Childs to remove
+     * @param {SpinalNode<any>[]} [nodes=[]] Childs to remove, if empty or missing all the children will be removed
      * @returns {Promise<void>} An empty promise
      * @throws {TypeError} If nodes is not an array or omitted
      * @throws {Error} If one of the nodes is not a child
      * @memberof SpinalRelationPtrLst
      */
-    removeChildren(nodes = []) {
-        return __awaiter(this, void 0, void 0, function* () {
+    removeChildren() {
+        return __awaiter(this, arguments, void 0, function* (nodes = []) {
             if (!Array.isArray(nodes)) {
                 throw TypeError('node must be an array');
             }
             const childrenLst = yield this.children.load();
-            let error = false;
             if (nodes.length === 0) {
                 for (let idx = 0; idx < childrenLst.length; idx++) {
                     childrenLst[idx]._removeParent(this);
@@ -207,13 +215,10 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
                 return;
             }
             for (const node of nodes) {
-                const index = childrenLst.indexOf(node);
+                // const index: number = childrenLst.indexOf(node);
                 childrenLst.remove(node);
                 this.children.info.ids.remove(node.getId());
                 node._removeParent(this);
-            }
-            if (error) {
-                throw Error('Could not remove all nodes');
             }
         });
     }

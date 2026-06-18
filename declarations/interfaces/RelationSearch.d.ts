@@ -1,1 +1,1 @@
-export declare type RelationSearch = string | RegExp | (string | RegExp)[];
+export type RelationSearch = string | RegExp | (string | RegExp)[];

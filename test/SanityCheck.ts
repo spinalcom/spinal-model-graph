@@ -22,11 +22,10 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-const assert = require('assert');
-import 'mocha';
+import { describe, it, expect } from 'vitest';
 
 describe('Sanity check', () => {
   it('should return true', () => {
-    assert.equal(0, 0);
+    expect(0).toBe(0);
   });
 });

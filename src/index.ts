@@ -1,10 +1,10 @@
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -21,6 +21,7 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
+
 export {
   ADD_CHILD_EVENT,
   ADD_CHILD_IN_CONTEXT_EVENT,
@@ -49,10 +50,12 @@ export {
   SpinalRelationFactory,
   SPINAL_RELATION_LST_PTR_TYPE,
   SPINAL_RELATION_PTR_LST_TYPE,
+  SPINAL_RELATION_LST_PTR_LST_TYPE,
   SPINAL_RELATION_TYPE,
 } from './Relations/SpinalRelationFactory';
 export { SpinalRelationLstPtr } from './Relations/SpinalRelationLstPtr';
 export { SpinalRelationPtrLst } from './Relations/SpinalRelationPtrLst';
+export { SpinalRelationLstPtrLst } from './Relations/SpinalRelationLstPtrLst';
 export { SpinalRelationRef } from './Relations/SpinalRelationRef';
 export { SpinalMap } from './SpinalMap';
 export { SpinalNodePointer } from './SpinalNodePointer';

@@ -1,10 +1,10 @@
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -59,8 +59,11 @@ class SpinalMap<T extends Model = any> extends Model {
    * @memberof SpinalMap
    */
   setElement(key: string, value: any): void {
-    if (typeof key !== 'string' && typeof key !== 'number') {
-      throw TypeError('The key must be a string or a number');
+    if (typeof key !== 'string') {
+      throw TypeError('The key must be a string');
+    }
+    if (value === undefined) {
+      throw TypeError('The value must be defined');
     }
 
     this.rem_attr(key);
@@ -88,8 +91,8 @@ class SpinalMap<T extends Model = any> extends Model {
    * @memberof SpinalMap
    */
   has(key: string): boolean {
-    if (typeof key !== 'string' && typeof key !== 'number') {
-      throw TypeError('The key must be a string or a number');
+    if (typeof key !== 'string') {
+      throw TypeError('The key must be a string');
     }
 
     return this._attribute_names.includes(key);
@@ -120,7 +123,7 @@ class SpinalMap<T extends Model = any> extends Model {
    * @memberof SpinalMap
    */
   entries(): SpinalMapItem<T>[] {
-    const arr = [];
+    const arr: SpinalMapItem<T>[] = [];
 
     for (const key of this.keys()) {
       arr.push([key, this.getElement(key)]);

@@ -1,13 +1,11 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SpinalContext = void 0;
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -24,6 +22,8 @@ exports.SpinalContext = void 0;
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SpinalContext = void 0;
 const spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
 const SpinalRelationFactory_1 = require("../Relations/SpinalRelationFactory");
 const Utilities_1 = require("../Utilities");

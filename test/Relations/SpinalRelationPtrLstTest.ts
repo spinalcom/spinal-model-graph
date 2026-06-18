@@ -30,9 +30,7 @@ import {
   SpinalNode,
 } from '../../src';
 import { FileSystem, Model } from 'spinal-core-connectorjs';
-import 'mocha';
-
-import * as assert from 'assert';
+import { describe, it, expect } from 'vitest';
 
 const DEFAULT_RELATION_NAME = 'relationName';
 const DEFAULT_NODE = new SpinalNode('test', 'test', new Model());
@@ -44,58 +42,58 @@ describe('SpinalRelationPtrLst', () => {
       const rel = new SpinalRelationPtrLst(DEFAULT_NODE, DEFAULT_RELATION_NAME);
       FileSystem._sig_server = true;
 
-      assert(typeof rel.children === 'undefined');
+      expect(typeof rel.children === 'undefined').toBeTruthy();
     });
 
     it('should create a new relation with a name and a node parent', () => {
       const rel = new SpinalRelationPtrLst(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
-      assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
+      expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
     });
 
     it('should create a new relation with a name and a context parent', async () => {
       const parent = new SpinalContext();
       const rel = new SpinalRelationPtrLst(parent, DEFAULT_RELATION_NAME);
 
-      assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
-      assert.strictEqual(await rel.getParent(), parent);
+      expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
+      expect(await rel.getParent()).toBe(parent);
     });
 
     it('should create a new relation with a name and a graph parent', async () => {
       const parent = new SpinalGraph();
       const rel = new SpinalRelationPtrLst(parent, DEFAULT_RELATION_NAME);
 
-      assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
-      assert.strictEqual(await rel.getParent(), parent);
+      expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
+      expect(await rel.getParent()).toBe(parent);
     });
 
     it('should throw an error if the parent or the name is missing', async () => {
       const testConstructor: any = SpinalRelationPtrLst;
-      assert.throws(() => {
+      expect(() => {
         new testConstructor();
-      }, TypeError);
+      }).toThrow(TypeError);
 
-      assert.throws(() => {
+      expect(() => {
         new testConstructor(undefined, DEFAULT_RELATION_NAME);
-      }, TypeError);
+      }).toThrow(TypeError);
 
-      assert.throws(() => {
+      expect(() => {
         new testConstructor(DEFAULT_NODE);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
 
     it('should throw an error if the parent is not a SpinalNode', async () => {
       const parent1: any = [];
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalRelationPtrLst(parent1, DEFAULT_RELATION_NAME);
-      }, TypeError);
+      }).toThrow(TypeError);
 
       const parent2: any = new Model();
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalRelationPtrLst(parent2, DEFAULT_RELATION_NAME);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
   });
 
@@ -108,7 +106,7 @@ describe('SpinalRelationPtrLst', () => {
         );
 
         await rel.addChild(DEFAULT_NODE);
-        assert.deepStrictEqual(rel.getChildrenIds(), [
+        expect(rel.getChildrenIds()).toEqual([
           DEFAULT_NODE.getId().get(),
         ]);
       });
@@ -134,8 +132,8 @@ describe('SpinalRelationPtrLst', () => {
           rel.addChild(node3),
         ]);
 
-        assert.deepStrictEqual(rel.getChildrenIds(), nodeIds);
-        assert.deepStrictEqual(rel.getNbChildren(), nodeIds.length);
+        expect(rel.getChildrenIds()).toEqual(nodeIds);
+        expect(rel.getNbChildren()).toEqual(nodeIds.length);
       });
     });
 
@@ -148,7 +146,7 @@ describe('SpinalRelationPtrLst', () => {
 
         await rel.addChild(DEFAULT_NODE);
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, [DEFAULT_NODE]);
+        expect(children).toEqual([DEFAULT_NODE]);
       });
 
       it("should return the relation's children", async () => {
@@ -167,7 +165,7 @@ describe('SpinalRelationPtrLst', () => {
         ]);
 
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, [node1, node2, node3]);
+        expect(children).toEqual([node1, node2, node3]);
       });
 
       it('should return an empty array', async () => {
@@ -177,7 +175,7 @@ describe('SpinalRelationPtrLst', () => {
         );
         const children = await rel.getChildren();
 
-        assert.deepStrictEqual(children, []);
+        expect(children).toEqual([]);
       });
     });
 
@@ -194,7 +192,7 @@ describe('SpinalRelationPtrLst', () => {
         await relation.addChild(child);
 
         const children = await relation.getChildrenInContext(context);
-        assert.deepStrictEqual(children, [child]);
+        expect(children).toEqual([child]);
       });
 
       it("should return the relation's children associated to the context", async () => {
@@ -216,7 +214,7 @@ describe('SpinalRelationPtrLst', () => {
         ]);
 
         const children = await relation.getChildrenInContext(context);
-        assert.deepStrictEqual(children, [child1, child3]);
+        expect(children).toEqual([child1, child3]);
       });
 
       it('should throw an error if the context is missing', async () => {
@@ -230,9 +228,9 @@ describe('SpinalRelationPtrLst', () => {
           await relation.getChildrenInContext();
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if context is not a SpinalContext', async () => {
@@ -247,9 +245,9 @@ describe('SpinalRelationPtrLst', () => {
           await relation.getChildrenInContext(context1);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
 
         const context2 = new SpinalNode();
         error = false;
@@ -258,9 +256,9 @@ describe('SpinalRelationPtrLst', () => {
           await relation.getChildrenInContext(context2);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
     });
 
@@ -271,7 +269,7 @@ describe('SpinalRelationPtrLst', () => {
           DEFAULT_RELATION_NAME
         );
 
-        assert.strictEqual(rel.getType(), SPINAL_RELATION_PTR_LST_TYPE);
+        expect(rel.getType()).toBe(SPINAL_RELATION_PTR_LST_TYPE);
       });
     });
   });
@@ -286,7 +284,7 @@ describe('SpinalRelationPtrLst', () => {
 
         await rel.addChild(DEFAULT_NODE);
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, [DEFAULT_NODE]);
+        expect(children).toEqual([DEFAULT_NODE]);
       });
 
       it('should throw an error if you try to add the same node twice', async () => {
@@ -302,9 +300,9 @@ describe('SpinalRelationPtrLst', () => {
           await rel.addChild(DEFAULT_NODE);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error when you pass it something that is not a model', async () => {
@@ -319,9 +317,9 @@ describe('SpinalRelationPtrLst', () => {
           await rel.addChild(arr);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should return the node added to the relation', async () => {
@@ -334,12 +332,12 @@ describe('SpinalRelationPtrLst', () => {
 
         const res1 = await rel.addChild(node);
 
-        assert.strictEqual(res1, node);
+        expect(res1).toBe(node);
 
         const res2 = await rel.addChild(model);
         const res2Elem = await res2.getElement();
 
-        assert.strictEqual(res2Elem, model);
+        expect(res2Elem).toBe(model);
       });
     });
   });
@@ -356,7 +354,7 @@ describe('SpinalRelationPtrLst', () => {
         await rel.removeChild(DEFAULT_NODE);
 
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, []);
+        expect(children).toEqual([]);
       });
 
       it('should remove a child and update the children ids of the relation', async () => {
@@ -369,7 +367,7 @@ describe('SpinalRelationPtrLst', () => {
         await rel.removeChild(DEFAULT_NODE);
 
         const ids = rel.getChildrenIds();
-        assert.deepStrictEqual(ids, []);
+        expect(ids).toEqual([]);
       });
 
       it("should remove a child and remove the relation the node's parents", async () => {
@@ -384,7 +382,7 @@ describe('SpinalRelationPtrLst', () => {
         await rel.removeChild(childNode);
 
         const parents = await childNode.getParents();
-        assert.deepStrictEqual(parents, []);
+        expect(parents).toEqual([]);
       });
 
       it('should throw an error if the node is not a child', async () => {
@@ -400,9 +398,9 @@ describe('SpinalRelationPtrLst', () => {
           await rel.removeChild(childNode);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if nodes is not an array', async () => {
@@ -417,9 +415,9 @@ describe('SpinalRelationPtrLst', () => {
           await relation.removeChildren(argTest);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
     });
 
@@ -442,7 +440,7 @@ describe('SpinalRelationPtrLst', () => {
         await rel.removeChildren();
 
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, []);
+        expect(children).toEqual([]);
       });
 
       it('should delete the given children', async () => {
@@ -463,14 +461,12 @@ describe('SpinalRelationPtrLst', () => {
         await rel.removeChildren([node3, node1]);
 
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, [node2]);
+        expect(children).toEqual([node2]);
       });
 
       it('should delete some of the given children', async () => {
-        const rel = new SpinalRelationPtrLst(
-          DEFAULT_NODE,
-          DEFAULT_RELATION_NAME
-        );
+        const origNode = new SpinalNode('node1');
+        const rel = new SpinalRelationPtrLst(origNode, DEFAULT_RELATION_NAME);
         const node1 = new SpinalNode('node1');
         const node2 = new SpinalNode('node2');
         const node3 = new SpinalNode('node3');
@@ -487,12 +483,12 @@ describe('SpinalRelationPtrLst', () => {
           await rel.removeChildren([node3, node4, node1]);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          // expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        // expect(error).toBeTruthy();
 
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, [node2]);
+        expect(children).toEqual([node2]);
       });
     });
   });

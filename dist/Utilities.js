@@ -1,11 +1,11 @@
 "use strict";
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -32,7 +32,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.toRegex = exports.consumeBatch = exports.loadParentRelation = exports.guid = void 0;
+exports.guid = guid;
+exports.loadParentRelation = loadParentRelation;
+exports.consumeBatch = consumeBatch;
+exports.toRegex = toRegex;
+exports.debounce = debounce;
 /**
  * Generates a random number and returns in a string.
  * @returns {String} Random number in a string
@@ -50,7 +54,6 @@ function s4() {
 function guid() {
     return `${s4()}-${s4()}-${s4()}-${Date.now().toString(16)}`;
 }
-exports.guid = guid;
 function loadParentRelation(spinalNodePointer, context) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -74,9 +77,8 @@ function loadParentRelation(spinalNodePointer, context) {
         }
     });
 }
-exports.loadParentRelation = loadParentRelation;
-function consumeBatch(promises, batchSize = 10) {
-    return __awaiter(this, void 0, void 0, function* () {
+function consumeBatch(promises_1) {
+    return __awaiter(this, arguments, void 0, function* (promises, batchSize = 10) {
         let index = 0;
         const result = [];
         while (index < promises.length) {
@@ -91,7 +93,6 @@ function consumeBatch(promises, batchSize = 10) {
         return result;
     });
 }
-exports.consumeBatch = consumeBatch;
 /**
  * Converts a string, regex or an array of strings/regex to a single regex ( big Regex joining array elements with OR ).
  *
@@ -100,7 +101,7 @@ exports.consumeBatch = consumeBatch;
  */
 function toRegex(relationNames) {
     const arr = Array.isArray(relationNames) ? relationNames : [relationNames];
-    const sources = arr.map(item => {
+    const sources = arr.map((item) => {
         if (item instanceof RegExp) {
             return item.source;
         }
@@ -110,7 +111,23 @@ function toRegex(relationNames) {
     // Combine into one big regex
     return new RegExp(`^(?:${sources.join('|')})$`);
 }
-exports.toRegex = toRegex;
+function debounce(func, wait) {
+    let timeout = null;
+    let resolveQueue = [];
+    return (...args) => {
+        return new Promise((resolve) => {
+            resolveQueue.push(resolve);
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+            timeout = setTimeout(() => __awaiter(this, void 0, void 0, function* () {
+                const result = yield func(...args);
+                resolveQueue.forEach((res) => res(result));
+                resolveQueue = [];
+            }), wait);
+        });
+    };
+}
 // export function sendEventFunc(eventName: string, parentNode: SpinalNode<any>, childNode: SpinalNode<any>, contextNode: SpinalContext<any>) {
 //   spinalEventEmitter.emit(eventName,);
 // }

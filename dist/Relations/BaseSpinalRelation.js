@@ -1,11 +1,11 @@
 "use strict";
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -30,6 +30,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
+};
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseSpinalRelation = void 0;
@@ -162,25 +169,88 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
      * @throws {Error} If one of the nodes is not a child
      * @memberof BaseSpinalRelation
      */
-    removeChildren(nodesToDelete = []) {
-        return __awaiter(this, void 0, void 0, function* () {
+    removeChildren() {
+        return __awaiter(this, arguments, void 0, function* (nodesToDelete = []) {
             let nodes = nodesToDelete;
             const promises = [];
             if (!Array.isArray(nodes)) {
                 throw TypeError('node must be an array');
             }
             if (nodes.length === 0) {
-                nodes = yield this.getChildren();
+                for (const node of yield this.getChildren()) {
+                    promises.push(this.removeChild(node));
+                }
             }
-            for (const node of nodes) {
-                promises.push(this.removeChild(node));
+            else {
+                for (const node of nodes) {
+                    promises.push(this.removeChild(node));
+                }
             }
-            try {
-                yield Promise.all(promises);
-            }
-            catch (error) {
+            const res = yield Promise.allSettled(promises);
+            const rejected = res.filter((r) => r.status === 'rejected');
+            if (rejected.length > 0) {
                 throw Error('Could not remove all nodes');
             }
+        });
+    }
+    /**
+     * Return all the children of the relation.
+     * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
+     * @memberof BaseSpinalRelation
+     * @deprecated
+     */
+    getChildren() {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a, e_1, _b, _c;
+            const results = [];
+            const gen = this.getChildrenGen();
+            try {
+                for (var _d = true, gen_1 = __asyncValues(gen), gen_1_1; gen_1_1 = yield gen_1.next(), _a = gen_1_1.done, !_a; _d = true) {
+                    _c = gen_1_1.value;
+                    _d = false;
+                    let node = _c;
+                    results.push(node);
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (!_d && !_a && (_b = gen_1.return)) yield _b.call(gen_1);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
+            return results;
+        });
+    }
+    /**
+     * Return all the children of the relation associated to a certain context.
+     * @param {SpinalContext<any>} context
+     * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
+     * @throws {TypeError} If the context is not a SpinalContext
+     * @memberof BaseSpinalRelation
+     * @deprecated
+     */
+    getChildrenInContext(context) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a, e_2, _b, _c;
+            const results = [];
+            const gen = this.getChildrenInContextGen(context);
+            try {
+                for (var _d = true, gen_2 = __asyncValues(gen), gen_2_1; gen_2_1 = yield gen_2.next(), _a = gen_2_1.done, !_a; _d = true) {
+                    _c = gen_2_1.value;
+                    _d = false;
+                    let node = _c;
+                    results.push(node);
+                }
+            }
+            catch (e_2_1) { e_2 = { error: e_2_1 }; }
+            finally {
+                try {
+                    if (!_d && !_a && (_b = gen_2.return)) yield _b.call(gen_2);
+                }
+                finally { if (e_2) throw e_2.error; }
+            }
+            return results;
         });
     }
     /**
@@ -201,15 +271,10 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
      */
     _removeFromParent() {
         return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const parent = yield this.getParent();
-                const relationMap = parent._getChildrenType(this.getType());
-                relationMap.delete(this.getName().get());
-                this.parent.unset();
-            }
-            catch (e) {
-                return undefined;
-            }
+            const parent = yield this.getParent();
+            const relationMap = parent._getChildrenType(this.getType());
+            relationMap.delete(this.getName().get());
+            this.parent.unset();
         });
     }
 }

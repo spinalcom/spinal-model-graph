@@ -23,15 +23,14 @@
  */
 
 import { SpinalMap } from '../src';
-import 'mocha';
-import * as assert from 'assert';
+import { describe, it, expect } from 'vitest';
 
 describe('SpinalMap', () => {
   describe('How to use the constructor', () => {
     it('should create an empty map', () => {
       const map = new SpinalMap();
 
-      assert(!map.hasKey());
+      expect(map.hasKey()).toBeFalsy();
     });
 
     it('should create a map using an array', () => {
@@ -42,50 +41,49 @@ describe('SpinalMap', () => {
 
       const map = new SpinalMap(init);
 
-      assert(map.has('key'));
-      assert.strictEqual(map.getElement('key').get(), 'value');
-      assert(map.has('hello'));
-      assert.strictEqual(map.getElement('hello').get(), 'world');
+      expect(map.has('key')).toBeTruthy();
+      expect(map.getElement('key').get()).toBe('value');
+      expect(map.has('hello')).toBeTruthy();
+      expect(map.getElement('hello').get()).toBe('world');
     });
 
     it('should throw an error if init is not iterable', () => {
       const init: any = {};
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalMap(init);
-      }, TypeError);
+      }).toThrow(TypeError);
 
       init[Symbol.iterator] = null;
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalMap(init);
-      }, TypeError);
+      }).toThrow(TypeError);
 
       init[Symbol.iterator] = () => {};
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalMap(init);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
 
     it('should throw an error if init has bad values', () => {
-      let init: any = [1];
-
-      assert.throws(() => {
+      const init: any = [1];
+      expect(() => {
         new SpinalMap(init);
-      }, TypeError);
-
-      init = [[]];
-
-      assert.throws(() => {
+      }).toThrow(TypeError);
+    });
+    it('should throw an error if init has bad values 2', () => {
+      const init: any = [[]];
+      expect(() => {
         new SpinalMap(init);
-      }, TypeError);
-
-      init = [[1]];
-
-      assert.throws(() => {
+      }).toThrow(TypeError);
+    });
+    it('should throw an error if init has bad values 3', () => {
+      const init: any = [[1]];
+      expect(() => {
         new SpinalMap(init);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
   });
 
@@ -95,7 +93,7 @@ describe('SpinalMap', () => {
 
       map.setElement('hello', 'world');
 
-      assert.strictEqual(map.getElement('hello').get(), 'world');
+      expect(map.getElement('hello').get()).toBe('world');
     });
 
     it('should set an existing element', () => {
@@ -104,23 +102,30 @@ describe('SpinalMap', () => {
       map.setElement('hello', 'world');
       map.setElement('hello', 'everyone');
 
-      assert.strictEqual(map.getElement('hello').get(), 'everyone');
+      expect(map.getElement('hello').get()).toBe('everyone');
     });
 
     it('should throw an error if the key is missing', () => {
       const map: any = new SpinalMap();
 
-      assert.throws(() => {
+      expect(() => {
         map.setElement();
-      }, TypeError);
+      }).toThrow(TypeError);
     });
 
     it('should throw an error if the key is not a string', () => {
       const map: any = new SpinalMap();
 
-      assert.throws(() => {
+      expect(() => {
         map.setElement(1);
-      }, TypeError);
+      }).toThrow(TypeError);
+    });
+    it('should throw an error if the value is missing', () => {
+      const map: any = new SpinalMap();
+
+      expect(() => {
+        map.setElement('hello');
+      }).toThrow(TypeError);
     });
   });
 
@@ -130,7 +135,7 @@ describe('SpinalMap', () => {
 
       map.setElement('hello', 'world');
 
-      assert(map.has('hello'));
+      expect(map.has('hello')).toBeTruthy();
     });
 
     it("should return false if the key doesn't exist", () => {
@@ -138,15 +143,15 @@ describe('SpinalMap', () => {
 
       map.setElement('howdy', 'world');
 
-      assert(!map.has('hello'));
+      expect(map.has('hello')).toBeFalsy();
     });
 
     it('should throw an error if the key is not a string', () => {
       const map: any = new SpinalMap();
 
-      assert.throws(() => {
+      expect(() => {
         map.has(1);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
   });
 
@@ -156,13 +161,13 @@ describe('SpinalMap', () => {
 
       map.setElement('hello', 'world');
 
-      assert(map.hasKey());
+      expect(map.hasKey()).toBeTruthy();
     });
 
     it('should return false if the map has no key', () => {
       const map = new SpinalMap();
 
-      assert(!map.hasKey());
+      expect(map.hasKey()).toBeFalsy();
     });
   });
 
@@ -170,7 +175,7 @@ describe('SpinalMap', () => {
     it('should return no keys', () => {
       const map = new SpinalMap();
 
-      assert.deepStrictEqual(map.keys(), []);
+      expect(map.keys()).toEqual([]);
     });
 
     it("should return the map's keys", () => {
@@ -179,7 +184,7 @@ describe('SpinalMap', () => {
       map.setElement('hello', 'world');
       map.setElement('bye', 'inexistance');
 
-      assert.deepStrictEqual(map.keys(), ['hello', 'bye']);
+      expect(map.keys()).toEqual(['hello', 'bye']);
     });
   });
 
@@ -187,7 +192,7 @@ describe('SpinalMap', () => {
     it('should return an empty array', () => {
       const map = new SpinalMap();
 
-      assert.deepStrictEqual(map.entries(), []);
+      expect(map.entries()).toEqual([]);
     });
 
     it("should return the map's entries", () => {
@@ -196,7 +201,7 @@ describe('SpinalMap', () => {
       map.setElement('hello', 'world');
       map.setElement('bye', 'inexistance');
 
-      assert.deepStrictEqual(map.entries(), [
+      expect(map.entries()).toEqual([
         ['hello', map.getElement('hello')],
         ['bye', map.getElement('bye')],
       ]);
@@ -212,24 +217,24 @@ describe('SpinalMap', () => {
 
       map.delete('bye');
 
-      assert(map.has('hello'));
-      assert(!map.has('bye'));
+      expect(map.has('hello')).toBeTruthy();
+      expect(map.has('bye')).toBeFalsy();
     });
 
     it('should throw an error if the key is missing', () => {
       const map: any = new SpinalMap();
 
-      assert.throws(() => {
+      expect(() => {
         map.delete();
-      }, TypeError);
+      }).toThrow(TypeError);
     });
 
     it('should throw an error if the key is not a string', () => {
       const map: any = new SpinalMap();
 
-      assert.throws(() => {
+      expect(() => {
         map.delete(1);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
 
     it("should throw an error if the key doesn't exist", () => {
@@ -237,11 +242,11 @@ describe('SpinalMap', () => {
 
       map.setElement('hello', 'world');
 
-      assert.throws(() => {
+      expect(() => {
         map.delete('bye');
-      }, Error);
+      }).toThrow(Error);
 
-      assert(map.has('hello'));
+      expect(map.has('hello')).toBeTruthy();
     });
   });
 
@@ -254,15 +259,15 @@ describe('SpinalMap', () => {
 
       map.clear();
 
-      assert(!map.hasKey());
+      expect(map.hasKey()).toBeFalsy();
     });
   });
 
   describe('How to use forEach', () => {
     it('should apply a function to all the values and keys in the map', () => {
       const map = new SpinalMap();
-      const keys = [];
-      const values = [];
+      const keys: string[] = [];
+      const values: string[] = [];
 
       map.setElement('hello', 'world');
       map.setElement('bye', 'inexistance');
@@ -272,16 +277,16 @@ describe('SpinalMap', () => {
         values.push(value.get());
       });
 
-      assert.deepStrictEqual(keys, ['hello', 'bye']);
-      assert.deepStrictEqual(values, ['world', 'inexistance']);
+      expect(keys).toEqual(['hello', 'bye']);
+      expect(values).toEqual(['world', 'inexistance']);
     });
 
     it('should throw an error if the callback is missing', () => {
       const map: any = new SpinalMap();
 
-      assert.throws(() => {
+      expect(() => {
         map.forEach();
-      }, TypeError);
+      }).toThrow(TypeError);
     });
   });
 
@@ -299,8 +304,8 @@ describe('SpinalMap', () => {
         values.push(value.get());
       }
 
-      assert.deepStrictEqual(keys, ['hello', 'bye']);
-      assert.deepStrictEqual(values, ['world', 'inexistance']);
+      expect(keys).toEqual(['hello', 'bye']);
+      expect(values).toEqual(['world', 'inexistance']);
     });
   });
 });

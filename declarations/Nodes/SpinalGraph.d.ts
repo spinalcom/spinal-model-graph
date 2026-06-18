@@ -27,7 +27,7 @@ declare class SpinalGraph<T extends Model = any> extends SpinalNode<T> {
      * @returns {SpinalContext | undefined} The wanted context or undefined
      * @throws {TypeError} If name is not a string
      */
-    getContext(name: any): Promise<SpinalNode<any>>;
+    getContext(name: string): Promise<SpinalNode<any>>;
     /**
      * Empty override of the SpinalNode method.
      * @override

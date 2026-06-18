@@ -1,10 +1,10 @@
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -50,7 +50,7 @@ export function guid(): string {
 export async function loadParentRelation<T extends Model>(
   spinalNodePointer: SpinalNodePointer<AnySpinalRelation>,
   context?: SpinalContext<any>
-): Promise<SpinalNode<T>> {
+): Promise<SpinalNode<T> | undefined> {
   try {
     const relation = await spinalNodePointer.load();
     if (relation && context && relation.belongsToContext(context) === false) {
@@ -97,9 +97,11 @@ export async function consumeBatch<T>(
  * @param {(string | RegExp | (string | RegExp)[])} relationNames
  * @return {*}  {RegExp}
  */
-export function toRegex(relationNames: string | RegExp | (string | RegExp)[]): RegExp {
+export function toRegex(
+  relationNames: string | RegExp | (string | RegExp)[]
+): RegExp {
   const arr = Array.isArray(relationNames) ? relationNames : [relationNames];
-  const sources = arr.map(item => {
+  const sources = arr.map((item) => {
     if (item instanceof RegExp) {
       return item.source;
     }
@@ -109,6 +111,32 @@ export function toRegex(relationNames: string | RegExp | (string | RegExp)[]): R
 
   // Combine into one big regex
   return new RegExp(`^(?:${sources.join('|')})$`);
+}
+
+export function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => Promise<ReturnType<T>> {
+  let timeout: NodeJS.Timeout | null = null;
+  let resolveQueue: ((
+    value: ReturnType<T> | PromiseLike<ReturnType<T>>
+  ) => void)[] = [];
+
+  return (...args: Parameters<T>): Promise<ReturnType<T>> => {
+    return new Promise((resolve) => {
+      resolveQueue.push(resolve);
+
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+
+      timeout = setTimeout(async () => {
+        const result = await func(...args);
+        resolveQueue.forEach((res) => res(result));
+        resolveQueue = [];
+      }, wait);
+    });
+  };
 }
 
 // export function sendEventFunc(eventName: string, parentNode: SpinalNode<any>, childNode: SpinalNode<any>, contextNode: SpinalContext<any>) {

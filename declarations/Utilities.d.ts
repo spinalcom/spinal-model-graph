@@ -9,8 +9,8 @@ import type { SpinalNodePointer } from './SpinalNodePointer';
  * @returns {string} Generated id
  */
 export declare function guid(): string;
-export declare function loadParentRelation<T extends Model>(spinalNodePointer: SpinalNodePointer<AnySpinalRelation>, context?: SpinalContext<any>): Promise<SpinalNode<T>>;
-declare type Consumedfunction<T> = () => Promise<T>;
+export declare function loadParentRelation<T extends Model>(spinalNodePointer: SpinalNodePointer<AnySpinalRelation>, context?: SpinalContext<any>): Promise<SpinalNode<T> | undefined>;
+type Consumedfunction<T> = () => Promise<T>;
 export declare function consumeBatch<T>(promises: Consumedfunction<T>[], batchSize?: number): Promise<T[]>;
 /**
  * Converts a string, regex or an array of strings/regex to a single regex ( big Regex joining array elements with OR ).
@@ -19,4 +19,5 @@ export declare function consumeBatch<T>(promises: Consumedfunction<T>[], batchSi
  * @return {*}  {RegExp}
  */
 export declare function toRegex(relationNames: string | RegExp | (string | RegExp)[]): RegExp;
+export declare function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => Promise<ReturnType<T>>;
 export {};

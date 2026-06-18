@@ -1,10 +1,10 @@
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -21,11 +21,13 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
+
 import type { Model } from 'spinal-core-connectorjs';
 import {
   RELATION_TYPE_LIST,
   SPINAL_RELATION_LST_PTR_TYPE,
   SPINAL_RELATION_PTR_LST_TYPE,
+  SPINAL_RELATION_LST_PTR_LST_TYPE,
   SPINAL_RELATION_TYPE,
 } from '../constants';
 import type { SpinalNode } from '../Nodes/SpinalNode';
@@ -56,6 +58,8 @@ class SpinalRelationFactory {
         return new SpinalRelationRef(parent, relationName);
       case SPINAL_RELATION_LST_PTR_TYPE:
         return new SpinalRelationLstPtr(parent, relationName);
+      case SPINAL_RELATION_LST_PTR_LST_TYPE:
+        return new SpinalRelationLstPtr(parent, relationName);
       case SPINAL_RELATION_PTR_LST_TYPE:
         return new SpinalRelationPtrLst(parent, relationName);
       default:
@@ -68,6 +72,7 @@ export {
   SPINAL_RELATION_TYPE,
   SPINAL_RELATION_LST_PTR_TYPE,
   SPINAL_RELATION_PTR_LST_TYPE,
+  SPINAL_RELATION_LST_PTR_LST_TYPE,
   RELATION_TYPE_LIST,
   SpinalRelationFactory,
 };

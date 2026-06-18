@@ -23,15 +23,14 @@
  */
 
 import { SpinalSet } from '../src';
-import 'mocha';
-import * as assert from 'assert';
+import { describe, it, expect } from 'vitest';
 
 describe('SpinalSet', () => {
   describe('How to use the constructor', () => {
     it('should create an empty set', () => {
       const set = new SpinalSet();
 
-      assert.strictEqual(set.size(), 0);
+      expect(set.size()).toBe(0);
     });
 
     it('should create a set using an array', () => {
@@ -39,36 +38,36 @@ describe('SpinalSet', () => {
 
       const set = new SpinalSet(init);
 
-      assert(set.has('value'));
-      assert(set.has('val'));
+      expect(set.has('value')).toBeTruthy();
+      expect(set.has('val')).toBeTruthy();
     });
 
     it('should throw an error if init is not iterable', () => {
       const init: any = {};
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalSet(init);
-      }, TypeError);
+      }).toThrow(TypeError);
 
       init[Symbol.iterator] = null;
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalSet(init);
-      }, TypeError);
+      }).toThrow(TypeError);
 
       init[Symbol.iterator] = () => {};
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalSet(init);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
 
     it('should throw an error if init has bad values', () => {
       const init: any = [1];
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalSet(init);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
   });
 
@@ -84,17 +83,17 @@ describe('SpinalSet', () => {
     it('should throw an error if the value is missing', () => {
       const set = new SpinalSet();
 
-      assert.throws(() => {
+      expect(() => {
         set.setElement();
-      }, TypeError);
+      }).toThrow(TypeError);
     });
 
     it('should throw an error if the value is not a string', () => {
       const set = new SpinalSet();
 
-      assert.throws(() => {
+      expect(() => {
         set.setElement(1);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
   });
 
@@ -112,15 +111,15 @@ describe('SpinalSet', () => {
 
       set.add('val');
 
-      assert(!set.has('value'));
+      expect(set.has('value')).toBeFalsy();
     });
 
     it('should throw an error if the value is not a string', () => {
       const set: any = new SpinalSet();
 
-      assert.throws(() => {
+      expect(() => {
         set.has(1);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
   });
 
@@ -128,7 +127,7 @@ describe('SpinalSet', () => {
     it('should return no values', () => {
       const set = new SpinalSet();
 
-      assert.deepStrictEqual(set.values(), []);
+      expect(set.values()).toEqual([]);
     });
 
     it("should return the set's values", () => {
@@ -137,7 +136,7 @@ describe('SpinalSet', () => {
       set.add('value');
       set.add('val');
 
-      assert.deepStrictEqual(set.values(), ['value', 'val']);
+      expect(set.values()).toEqual(['value', 'val']);
     });
   });
 
@@ -150,24 +149,24 @@ describe('SpinalSet', () => {
 
       set.delete('val');
 
-      assert(set.has('value'));
-      assert(!set.has('val'));
+      expect(set.has('value')).toBeTruthy();
+      expect(set.has('val')).toBeFalsy();
     });
 
     it('should throw an error if the value is missing', () => {
       const set: any = new SpinalSet();
 
-      assert.throws(() => {
+      expect(() => {
         set.delete();
-      }, TypeError);
+      }).toThrow(TypeError);
     });
 
     it('should throw an error if the value is not a string', () => {
       const set: any = new SpinalSet();
 
-      assert.throws(() => {
+      expect(() => {
         set.delete(4645);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
 
     it("should throw an error if the value doesn't exist", () => {
@@ -175,11 +174,11 @@ describe('SpinalSet', () => {
 
       set.add('value');
 
-      assert.throws(() => {
+      expect(() => {
         set.delete('val');
-      }, Error);
+      }).toThrow(Error);
 
-      assert(set.has('value'));
+      expect(set.has('value')).toBeTruthy();
     });
   });
 
@@ -192,7 +191,7 @@ describe('SpinalSet', () => {
 
       set.clear();
 
-      assert.strictEqual(set.size(), 0);
+      expect(set.size()).toBe(0);
     });
   });
 
@@ -200,7 +199,7 @@ describe('SpinalSet', () => {
     it('should return 0 if the set is empty', () => {
       const set = new SpinalSet();
 
-      assert.strictEqual(set.size(), 0);
+      expect(set.size()).toBe(0);
     });
 
     it('should return the size of the set', () => {
@@ -209,7 +208,7 @@ describe('SpinalSet', () => {
       set.add('value');
       set.add('val');
 
-      assert.strictEqual(set.size(), 2);
+      expect(set.size()).toBe(2);
     });
   });
 
@@ -225,19 +224,19 @@ describe('SpinalSet', () => {
 
       set.forEach((value, index) => {
         arr.push(value);
-        assert.strictEqual(index, i);
+        expect(index).toBe(i);
         i += 1;
       });
 
-      assert.deepStrictEqual(arr, ['value', 'val']);
+      expect(arr).toEqual(['value', 'val']);
     });
 
     it('should throw an error if the callback is missing', () => {
       const set: any = new SpinalSet();
 
-      assert.throws(() => {
+      expect(() => {
         set.forEach();
-      }, TypeError);
+      }).toThrow(TypeError);
     });
   });
 
@@ -252,7 +251,7 @@ describe('SpinalSet', () => {
       for (const value of set) {
         arr.push(value);
       }
-      assert.deepStrictEqual(arr, ['value', 'val']);
+      expect(arr).toEqual(['value', 'val']);
     });
   });
 });

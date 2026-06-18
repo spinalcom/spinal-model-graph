@@ -1,11 +1,11 @@
 "use strict";
 /*
- * Copyright 2021 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -23,16 +23,19 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.REMOVE_CHILDREN_EVENT = exports.REMOVE_CHILD_EVENT = exports.ADD_CHILD_IN_CONTEXT_EVENT = exports.ADD_CHILD_EVENT = exports.HAS_CONTEXT_RELATION_NAME = exports.RELATION_TYPE_LIST = exports.SPINAL_RELATION_PTR_LST_TYPE = exports.SPINAL_RELATION_LST_PTR_TYPE = exports.SPINAL_RELATION_TYPE = void 0;
+exports.REMOVE_CHILDREN_EVENT = exports.REMOVE_CHILD_EVENT = exports.ADD_CHILD_IN_CONTEXT_EVENT = exports.ADD_CHILD_EVENT = exports.LST_PTR_LST_SIZE = exports.HAS_CONTEXT_RELATION_NAME = exports.RELATION_TYPE_LIST = exports.SPINAL_RELATION_LST_PTR_LST_TYPE = exports.SPINAL_RELATION_PTR_LST_TYPE = exports.SPINAL_RELATION_LST_PTR_TYPE = exports.SPINAL_RELATION_TYPE = void 0;
 exports.SPINAL_RELATION_TYPE = 'Ref';
 exports.SPINAL_RELATION_LST_PTR_TYPE = 'LstPtr';
 exports.SPINAL_RELATION_PTR_LST_TYPE = 'PtrLst';
+exports.SPINAL_RELATION_LST_PTR_LST_TYPE = 'LstPtrLst';
 exports.RELATION_TYPE_LIST = [
     exports.SPINAL_RELATION_TYPE,
     exports.SPINAL_RELATION_LST_PTR_TYPE,
     exports.SPINAL_RELATION_PTR_LST_TYPE,
+    exports.SPINAL_RELATION_LST_PTR_LST_TYPE,
 ];
 exports.HAS_CONTEXT_RELATION_NAME = 'hasContext';
+exports.LST_PTR_LST_SIZE = 50;
 // EVENT RELATION
 exports.ADD_CHILD_EVENT = 'addChild';
 exports.ADD_CHILD_IN_CONTEXT_EVENT = 'addChildInContext';

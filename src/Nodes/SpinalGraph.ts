@@ -1,10 +1,10 @@
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -21,6 +21,7 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
+
 import { FileSystem, Model, spinalCore } from 'spinal-core-connectorjs';
 import { HAS_CONTEXT_RELATION_NAME } from '../constants';
 import { SPINAL_RELATION_TYPE } from '../Relations/SpinalRelationFactory';
@@ -77,7 +78,7 @@ class SpinalGraph<T extends Model = any> extends SpinalNode<T> {
    * @returns {SpinalContext | undefined} The wanted context or undefined
    * @throws {TypeError} If name is not a string
    */
-  async getContext(name) {
+  async getContext(name: string) {
     if (typeof name !== 'string') {
       throw TypeError('name must be string');
     }

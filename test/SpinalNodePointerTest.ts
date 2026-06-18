@@ -23,9 +23,8 @@
  */
 
 import { SpinalNode, SpinalNodePointer } from '../src';
-import { FileSystem, Model } from 'spinal-core-connectorjs_type';
-import 'mocha';
-import * as assert from 'assert';
+import { FileSystem, Model } from 'spinal-core-connectorjs';
+import { describe, it, expect } from 'vitest';
 const DEFAULT_NODE = new SpinalNode('test', 'test', new Model());
 const DEFAULT_MODEL = new Model();
 
@@ -36,28 +35,28 @@ describe('SpinalNodePointer', () => {
       const rel = new SpinalNodePointer(DEFAULT_NODE);
       FileSystem._sig_server = true;
 
-      assert(typeof rel.children === 'undefined');
+      expect(typeof rel.children).toBe('undefined');
     });
 
     it('should create a SpinalNodePointer with correct default values if a Model is given', () => {
       const ptr = new SpinalNodePointer(new Model());
 
-      assert.strictEqual(typeof ptr.getId(), 'undefined');
-      assert.strictEqual(typeof ptr.getType(), 'undefined');
+      expect(typeof ptr.getId()).toBe('undefined');
+      expect(typeof ptr.getType()).toBe('undefined');
     });
 
     it('should create a SpinalNodePointer with correct default values if a node is given', () => {
       const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-      assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
-      assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
+      expect(ptr.getId()).toBe(DEFAULT_NODE.getId());
+      expect(ptr.getType()).toBe(DEFAULT_NODE.getType());
     });
 
     it('should throw an error if no element is given', () => {
-      assert.throws(() => {
+      expect(() => {
         const testConstructor: any = SpinalNodePointer;
         new testConstructor();
-      }, TypeError);
+      }).toThrow(TypeError);
     });
   });
 
@@ -66,21 +65,21 @@ describe('SpinalNodePointer', () => {
       it('should set an element and update pointedId and pointedType', async () => {
         const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-        assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
-        assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
+        expect(ptr.getId()).toBe(DEFAULT_NODE.getId());
+        expect(ptr.getType()).toBe(DEFAULT_NODE.getType());
 
         const elem = await ptr.load();
-        assert.strictEqual(elem, DEFAULT_NODE);
+        expect(elem).toBe(DEFAULT_NODE);
       });
 
       it('should set an element but not update pointedId and pointedType', async () => {
         const ptr = new SpinalNodePointer(DEFAULT_MODEL);
 
-        assert.strictEqual(typeof ptr.getId(), 'undefined');
-        assert.strictEqual(typeof ptr.getType(), 'undefined');
+        expect(typeof ptr.getId()).toBe('undefined');
+        expect(typeof ptr.getType()).toBe('undefined');
 
         const elem = await ptr.load();
-        assert.strictEqual(elem, DEFAULT_MODEL);
+        expect(elem).toBe(DEFAULT_MODEL);
       });
     });
 
@@ -89,7 +88,7 @@ describe('SpinalNodePointer', () => {
         const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
         const elem = await ptr.load();
-        assert.strictEqual(elem, DEFAULT_NODE);
+        expect(elem).toBe(DEFAULT_NODE);
       });
     });
 
@@ -97,12 +96,12 @@ describe('SpinalNodePointer', () => {
       it('should unset the pointer', () => {
         const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-        assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
-        assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
+        expect(ptr.getId()).toBe(DEFAULT_NODE.getId());
+        expect(ptr.getType()).toBe(DEFAULT_NODE.getType());
         ptr.unset();
-        assert.strictEqual(typeof ptr.getId(), 'undefined');
-        assert.strictEqual(typeof ptr.getType(), 'undefined');
-        assert.deepStrictEqual(ptr.ptr.data, {
+        expect(typeof ptr.getId()).toBe('undefined');
+        expect(typeof ptr.getType()).toBe('undefined');
+        expect(ptr.ptr.data).toEqual({
           value: 0,
         });
       });
@@ -114,7 +113,7 @@ describe('SpinalNodePointer', () => {
       it('should return the id of the pointed node', () => {
         const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-        assert.strictEqual(ptr.getId(), DEFAULT_NODE.getId());
+        expect(ptr.getId()).toBe(DEFAULT_NODE.getId());
       });
     });
 
@@ -122,7 +121,7 @@ describe('SpinalNodePointer', () => {
       it('should return the type of the pointed node', () => {
         const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-        assert.strictEqual(ptr.getType(), DEFAULT_NODE.getType());
+        expect(ptr.getType()).toBe(DEFAULT_NODE.getType());
       });
     });
   });

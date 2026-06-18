@@ -1,10 +1,10 @@
 /*
- * Copyright 2021 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -25,14 +25,17 @@
 export const SPINAL_RELATION_TYPE = 'Ref';
 export const SPINAL_RELATION_LST_PTR_TYPE = 'LstPtr';
 export const SPINAL_RELATION_PTR_LST_TYPE = 'PtrLst';
+export const SPINAL_RELATION_LST_PTR_LST_TYPE = 'LstPtrLst';
+
 export const RELATION_TYPE_LIST = [
   SPINAL_RELATION_TYPE,
   SPINAL_RELATION_LST_PTR_TYPE,
   SPINAL_RELATION_PTR_LST_TYPE,
+  SPINAL_RELATION_LST_PTR_LST_TYPE,
 ];
 export const HAS_CONTEXT_RELATION_NAME = 'hasContext';
 
-
+export const LST_PTR_LST_SIZE = 50;
 
 // EVENT RELATION
 export const ADD_CHILD_EVENT = 'addChild';

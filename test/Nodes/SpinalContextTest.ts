@@ -28,9 +28,7 @@ import {
   SPINAL_RELATION_PTR_LST_TYPE,
 } from '../../src';
 import { FileSystem, Model } from 'spinal-core-connectorjs';
-import 'mocha';
-
-import * as assert from 'assert';
+import { describe, it, expect } from 'vitest';
 
 const DEFAULT_SPINAL_CONTEXT_NAME = 'undefined';
 const DEFAULT_SPINAL_CONTEXT_TYPE = 'SpinalContext';
@@ -44,16 +42,16 @@ describe('SpinalContext', () => {
       const node = new SpinalContext();
       FileSystem._sig_server = true;
 
-      assert(typeof node.element === 'undefined');
+      expect(typeof node.element === 'undefined').toBeTruthy();
     });
 
     it('should create a context with default values', async () => {
       const context = new SpinalContext();
 
-      assert.strictEqual(context.getName().get(), DEFAULT_SPINAL_CONTEXT_NAME);
-      assert.strictEqual(context.getType().get(), DEFAULT_SPINAL_CONTEXT_TYPE);
+      expect(context.getName().get()).toBe(DEFAULT_SPINAL_CONTEXT_NAME);
+      expect(context.getType().get()).toBe(DEFAULT_SPINAL_CONTEXT_TYPE);
       const element = await context.getElement();
-      assert(element instanceof Model);
+      expect(element instanceof Model).toBeTruthy();
     });
   });
 
@@ -91,7 +89,7 @@ describe('SpinalContext', () => {
 
         await context.addChildInContext(node, DEFAULT_RELATION_NAME);
 
-        assert.deepStrictEqual(node.getContextIds(), [context.getId().get()]);
+        expect(node.getContextIds()).toEqual([context.getId().get()]);
       });
     });
   });
@@ -111,7 +109,7 @@ describe('SpinalContext', () => {
 
       const children = await context.getChildrenInContext();
 
-      assert.deepStrictEqual(children, [node1, node2]);
+      expect(children).toEqual([node1, node2]);
     });
   });
 });

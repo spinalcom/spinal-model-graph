@@ -1,10 +1,10 @@
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -21,6 +21,7 @@
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
+
 import {
   FileSystem,
   Model,
@@ -40,8 +41,8 @@ import { BaseSpinalRelation } from './Relations/BaseSpinalRelation';
  * @template T extends Model
  */
 class SpinalNodePointer<T extends Model = any> extends Model {
-  public ptr: Ptr<T>;
-  public info: SpinalNodePointerInfoModel;
+  public ptr!: Ptr<T>;
+  public info!: SpinalNodePointerInfoModel;
 
   /**
    * Constructor for the SpinalNodePointer class.
@@ -121,7 +122,7 @@ class SpinalNodePointer<T extends Model = any> extends Model {
    * @memberof SpinalNodePointer
    */
   getId(): Str {
-    return this.info.pointedId;
+    return this.info.pointedId!;
   }
 
   /**
@@ -130,7 +131,7 @@ class SpinalNodePointer<T extends Model = any> extends Model {
    * @memberof SpinalNodePointer
    */
   getType(): Str {
-    return this.info.pointedType;
+    return this.info.pointedType!;
   }
 }
 

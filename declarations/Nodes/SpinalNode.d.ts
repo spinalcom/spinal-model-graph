@@ -72,12 +72,12 @@ declare class SpinalNode<T extends Model = any> extends Model {
      */
     setDirectModificationDate(date?: number): void;
     /**
-     * Returns the element. if not present will create one
+     * Returns the element. if noCreate is true and the element is not present, it will not create one
      * @param {boolean} [noCreate=false] if true will not create a element and if element doesn't exist will return undefined
-     * @returns {Promise<T>} A promise where the parameter of the resolve method is the element
+     * @returns {Promise<T> | undefined} A promise where the parameter of the resolve method is the element
      * @memberof SpinalNode
      */
-    getElement(noCreate?: boolean): Promise<T>;
+    getElement(noCreate?: boolean): Promise<T | undefined>;
     /**
      * Returns all the children ids in an array.
      * @returns {string[]} Ids of the children
@@ -105,6 +105,13 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @returns {string[]} An array of ids of the associated contexts
      */
     getContextIds(): string[];
+    /**
+     * Returns true if the node has the context id.
+     * @param {string} id
+     * @return {*}  {boolean}
+     * @memberof SpinalNode
+     */
+    hasContextId(id: string): boolean;
     /**
      * Returns true if the node belongs to the context.
      * @param {SpinalContext} context The context that might own the node
@@ -211,14 +218,14 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * Functions that takes a node and returns a boolean
      * @param {string} relationName Name of the relation
      * @param {string} relationType Type of the relation
-     * @returns {Promise<SpinalNode<any>>}
-     * The first child for which the predicate is true or undefined
+     * @returns {Promise<SpinalNode<any> | undefined>}
+     * The first child for which the predicate is true, undefined if no child verify the predicate
      * @throws {TypeError} If predicate is not a function
      * @throws {TypeError} If relation name is not a string
      * @throws {Error} If relation type is invalid
      * @throws {Error} If relation doesn't exist
      */
-    getChild(predicate: SpinalNodeFindPredicateFunc, relationName: string, relationType: string): Promise<SpinalNode<any>>;
+    getChild(predicate: SpinalNodeFindPredicateFunc, relationName: string, relationType: string): Promise<SpinalNode<any> | undefined>;
     /**
      * Returns the children of the node for the relation names.
      * @param {string[]} [relationNames=[]]
@@ -228,10 +235,11 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @throws {TypeError} If an element of relationNames is not a string
      */
     getChildren(relationNames?: string | RegExp | (string | RegExp)[]): Promise<SpinalNode<any>[]>;
+    getChildrenGen(relationNames?: string | RegExp | (string | RegExp)[]): AsyncGenerator<SpinalNode<T>, void, void>;
     /**
      * Return the children of the node that are registered in the context
      * @param {SpinalContext} context Context to use for the search
-     * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[new RegExp('.*')]] Relation names to filter the children. If empty or undefined all the relations will be used
+     * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Relation names to filter the children. If empty or undefined all the relations will be used
      * @returns {Promise<SpinalNode[]>} The children that were found
      * @throws {TypeError} If the context is not a SpinalContext
      */
@@ -305,7 +313,7 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @throws {TypeError} If the predicate is not a function
      * @memberof SpinalNode
      */
-    browseAnClassifyByType(relationNames: string | string[]): Promise<{
+    browseAndClassifyByType(relationNames: string | string[]): Promise<{
         types: string[];
         data: {
             [type: string]: SpinalNode<any>[];

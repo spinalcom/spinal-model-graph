@@ -32,9 +32,7 @@ import {
   SPINAL_RELATION_PTR_LST_TYPE,
   SpinalRelationFactory,
 } from '../../src';
-
-import * as assert from 'assert';
-import 'mocha';
+import { describe, it, expect } from 'vitest';
 
 const DEFAULT_NODE = new SpinalNode();
 const DEFAULT_RELATION_NAME = 'duh';
@@ -48,7 +46,7 @@ describe('SpinalRelationFactory', () => {
         SPINAL_RELATION_TYPE
       );
 
-      assert(rel instanceof SpinalRelationRef);
+      expect(rel instanceof SpinalRelationRef).toBeTruthy();
     });
 
     it('should return a SpinalRelationLstPtr', () => {
@@ -58,7 +56,7 @@ describe('SpinalRelationFactory', () => {
         SPINAL_RELATION_LST_PTR_TYPE
       );
 
-      assert(rel instanceof SpinalRelationLstPtr);
+      expect(rel instanceof SpinalRelationLstPtr).toBeTruthy();
     });
 
     it('should return a SpinalRelationPtrLst', () => {
@@ -68,17 +66,17 @@ describe('SpinalRelationFactory', () => {
         SPINAL_RELATION_PTR_LST_TYPE
       );
 
-      assert(rel instanceof SpinalRelationPtrLst);
+      expect(rel instanceof SpinalRelationPtrLst).toBeTruthy();
     });
 
     it('should throw an error if the type is invalid', () => {
-      assert.throws(() => {
+      expect(() => {
         SpinalRelationFactory.getNewRelation(
           DEFAULT_NODE,
           DEFAULT_RELATION_NAME,
           <any>-1
         );
-      }, Error);
+      }).toThrow(Error);
     });
   });
 });

@@ -24,9 +24,8 @@
 
 import { SpinalGraph, SpinalNode, SpinalContext } from '../../src';
 import { FileSystem, Model } from 'spinal-core-connectorjs';
-import 'mocha';
+import { describe, it, expect } from 'vitest';
 
-import * as assert from 'assert';
 const DEFAULT_SPINAL_GRAPH_NAME = 'undefined';
 const DEFAULT_SPINAL_GRAPH_TYPE = 'SpinalGraph';
 const DEFAULT_SPINAL_CONTEXT_NAME1 = 'SpinalContext1';
@@ -40,16 +39,16 @@ describe('SpinalGraph', () => {
       const node = new SpinalGraph();
       FileSystem._sig_server = true;
 
-      assert(typeof node.element === 'undefined');
+      expect(typeof node.element === 'undefined').toBeTruthy();
     });
     it('should create a graph with default values', async () => {
       const context = new SpinalGraph();
 
-      assert.strictEqual(context.getName().get(), DEFAULT_SPINAL_GRAPH_NAME);
-      assert.strictEqual(context.getType().get(), DEFAULT_SPINAL_GRAPH_TYPE);
+      expect(context.getName().get()).toBe(DEFAULT_SPINAL_GRAPH_NAME);
+      expect(context.getType().get()).toBe(DEFAULT_SPINAL_GRAPH_TYPE);
 
       const element = await context.getElement();
-      assert(element instanceof Model);
+      expect(element instanceof Model).toBeTruthy();
     });
   });
 
@@ -61,7 +60,7 @@ describe('SpinalGraph', () => {
       await graph.addContext(context);
 
       const children = await graph.getChildren([HAS_CONTEXT_RELATION_NAME]);
-      assert.deepStrictEqual(children, [context]);
+      expect(children).toEqual([context]);
     });
 
     it('should throw an error if the context is missing', async () => {
@@ -72,9 +71,9 @@ describe('SpinalGraph', () => {
         await graph.addContext();
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should throw an error if the context is not a SpinalContext', async () => {
@@ -86,9 +85,9 @@ describe('SpinalGraph', () => {
         await graph.addContext(context);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
   });
 
@@ -104,14 +103,14 @@ describe('SpinalGraph', () => {
       ]);
 
       const context = await graph.getContext(DEFAULT_SPINAL_CONTEXT_NAME2);
-      assert.strictEqual(context, context2);
+      expect(context).toBe(context2);
     });
 
     it("should return undefined if the context isn't found", async () => {
       const graph = new SpinalGraph();
       const context = await graph.getContext(DEFAULT_SPINAL_CONTEXT_NAME1);
 
-      assert.strictEqual(context, undefined);
+      expect(context).toBe(undefined);
     });
 
     it('should throw an error if the name is missing', async () => {
@@ -122,9 +121,9 @@ describe('SpinalGraph', () => {
         await graph.getContext();
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should throw an error if the name is not a string', async () => {
@@ -135,9 +134,9 @@ describe('SpinalGraph', () => {
         await graph.getContext(1);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
   });
 
@@ -156,10 +155,10 @@ describe('SpinalGraph', () => {
       await graph.removeFromGraph();
 
       const children = await graph.getChildren();
-      assert.deepStrictEqual(children, [context]);
+      expect(children).toEqual([context]);
 
       const parents = await context.getParents();
-      assert.deepStrictEqual(parents, [graph]);
+      expect(parents).toEqual([graph]);
     });
   });
 });

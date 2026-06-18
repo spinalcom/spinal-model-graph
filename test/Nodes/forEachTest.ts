@@ -27,9 +27,8 @@ import {
   SpinalContext,
   SPINAL_RELATION_LST_PTR_TYPE,
 } from '../../src';
-import 'mocha';
+import { describe, it, expect } from 'vitest';
 
-import * as assert from 'assert';
 const CUSTOM_TYPE = 'custom';
 const DEFAULT_NODE = new SpinalNode();
 const DEFAULT_CONTEXT = new SpinalContext();
@@ -50,9 +49,9 @@ describe('How to use forEach', () => {
         await DEFAULT_NODE.forEach(<any>1, DEFAULT_FUN);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should throw an error if the callback function is missing', async () => {
@@ -62,9 +61,9 @@ describe('How to use forEach', () => {
         await DEFAULT_NODE.forEach([], undefined);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should throw an error if the callback function is not a function', async () => {
@@ -74,9 +73,9 @@ describe('How to use forEach', () => {
         await DEFAULT_NODE.forEach([], <any>256);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should not fall in infinite loops', async () => {
@@ -88,8 +87,8 @@ describe('How to use forEach', () => {
 
       await node1.forEach(undefined, DEFAULT_FUN);
 
-      assert.strictEqual(node1.getType().get(), CUSTOM_TYPE);
-      assert.strictEqual(node2.getType().get(), CUSTOM_TYPE);
+      expect(node1.getType().get()).toBe(CUSTOM_TYPE);
+      expect(node2.getType().get()).toBe(CUSTOM_TYPE);
     });
   });
 
@@ -108,10 +107,10 @@ describe('How to use forEach', () => {
 
       await parent.forEach(undefined, DEFAULT_FUN);
 
-      assert.strictEqual(parent.getType().get(), CUSTOM_TYPE);
-      assert.strictEqual(child1.getType().get(), CUSTOM_TYPE);
-      assert.strictEqual(child2.getType().get(), CUSTOM_TYPE);
-      assert.strictEqual(child3.getType().get(), CUSTOM_TYPE);
+      expect(parent.getType().get()).toBe(CUSTOM_TYPE);
+      expect(child1.getType().get()).toBe(CUSTOM_TYPE);
+      expect(child2.getType().get()).toBe(CUSTOM_TYPE);
+      expect(child3.getType().get()).toBe(CUSTOM_TYPE);
     });
   });
 });
@@ -125,9 +124,9 @@ describe('How to use forEachInContext', () => {
         await DEFAULT_NODE.forEachInContext(undefined, DEFAULT_FUN);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should throw an error if the context is not a SpinalContext', async () => {
@@ -138,9 +137,9 @@ describe('How to use forEachInContext', () => {
         await DEFAULT_NODE.forEachInContext(context, DEFAULT_FUN);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should throw an error if the callback is missing', async () => {
@@ -151,9 +150,9 @@ describe('How to use forEachInContext', () => {
         await testNode.forEachInContext(DEFAULT_CONTEXT);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should throw an error if the callback is not a function', async () => {
@@ -163,9 +162,9 @@ describe('How to use forEachInContext', () => {
         await DEFAULT_NODE.forEachInContext(DEFAULT_CONTEXT, <any>128);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should not fall in infinite loops', async () => {
@@ -190,8 +189,8 @@ describe('How to use forEachInContext', () => {
 
       await node1.forEachInContext(context, DEFAULT_FUN);
 
-      assert.strictEqual(node1.getType().get(), CUSTOM_TYPE);
-      assert.strictEqual(node2.getType().get(), CUSTOM_TYPE);
+      expect(node1.getType().get()).toBe(CUSTOM_TYPE);
+      expect(node2.getType().get()).toBe(CUSTOM_TYPE);
     });
   });
 
@@ -210,9 +209,9 @@ describe('How to use forEachInContext', () => {
 
       await context.forEachInContext(context, DEFAULT_FUN);
 
-      assert.strictEqual(child1.getType().get(), CUSTOM_TYPE);
-      assert.strictEqual(child2.getType().get(), CUSTOM_TYPE);
-      assert.strictEqual(child3.getType().get(), CUSTOM_TYPE);
+      expect(child1.getType().get()).toBe(CUSTOM_TYPE);
+      expect(child2.getType().get()).toBe(CUSTOM_TYPE);
+      expect(child3.getType().get()).toBe(CUSTOM_TYPE);
     });
   });
 
@@ -273,14 +272,14 @@ describe('How to use forEachInContext', () => {
         foundChildren.push(node)
       );
 
-      assert.deepStrictEqual(foundChildren, [parent, child2, child3, child4]);
+      expect(foundChildren).toEqual([parent, child2, child3, child4]);
 
       foundChildren = [];
       await parent.forEachInContext(context1, (node) =>
         foundChildren.push(node)
       );
 
-      assert.deepStrictEqual(foundChildren, [parent, child1]);
+      expect(foundChildren).toEqual([parent, child1]);
     });
   });
 });

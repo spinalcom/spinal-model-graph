@@ -30,9 +30,7 @@ import {
   SpinalRelationRef,
 } from '../../src';
 import { FileSystem, Model } from 'spinal-core-connectorjs';
-import 'mocha';
-
-import * as assert from 'assert';
+import { describe, it, expect } from 'vitest';
 
 const DEFAULT_RELATION_NAME = 'relationName';
 const DEFAULT_NODE = new SpinalNode('test', 'test', new Model());
@@ -44,57 +42,57 @@ describe('SpinalRelationRef', () => {
       const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
       FileSystem._sig_server = true;
 
-      assert(typeof rel.children === 'undefined');
+      expect(typeof rel.children === 'undefined').toBeTruthy();
     });
 
     it('should create a new relation with a name and a node parent', () => {
       const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
-      assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
+      expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
     });
 
     it('should create a new relation with a name and a context parent', async () => {
       const parent = new SpinalContext();
       const rel = new SpinalRelationRef(parent, DEFAULT_RELATION_NAME);
 
-      assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
-      assert.strictEqual(await rel.getParent(), parent);
+      expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
+      expect(await rel.getParent()).toBe(parent);
     });
 
     it('should create a new relation with a name and a graph parent', async () => {
       const parent = new SpinalGraph();
       const rel = new SpinalRelationRef(parent, DEFAULT_RELATION_NAME);
 
-      assert.strictEqual(rel.getName().get(), DEFAULT_RELATION_NAME);
-      assert.strictEqual(await rel.getParent(), parent);
+      expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
+      expect(await rel.getParent()).toBe(parent);
     });
 
     it('should throw an error if the parent or the name is missing', async () => {
-      assert.throws(() => {
+      expect(() => {
         new SpinalRelationRef();
-      }, TypeError);
+      }).toThrow(TypeError);
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalRelationRef(undefined, DEFAULT_RELATION_NAME);
-      }, TypeError);
+      }).toThrow(TypeError);
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalRelationRef(DEFAULT_NODE);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
 
     it('should throw an error if the parent is not a SpinalNode', async () => {
       const parent1: any = [];
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalRelationRef(parent1, DEFAULT_RELATION_NAME);
-      }, TypeError);
+      }).toThrow(TypeError);
 
       const parent2: any = new Model();
 
-      assert.throws(() => {
+      expect(() => {
         new SpinalRelationRef(parent2, DEFAULT_RELATION_NAME);
-      }, TypeError);
+      }).toThrow(TypeError);
     });
   });
 
@@ -104,9 +102,7 @@ describe('SpinalRelationRef', () => {
         const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
         await rel.addChild(DEFAULT_NODE);
-        assert.deepStrictEqual(rel.getChildrenIds(), [
-          DEFAULT_NODE.getId().get(),
-        ]);
+        expect(rel.getChildrenIds()).toEqual([DEFAULT_NODE.getId().get()]);
       });
 
       it('should return the ids of all children', async () => {
@@ -127,7 +123,7 @@ describe('SpinalRelationRef', () => {
           rel.addChild(node3),
         ]);
 
-        assert.deepStrictEqual(rel.getChildrenIds(), nodeIds);
+        expect(rel.getChildrenIds()).toEqual(nodeIds);
       });
     });
 
@@ -137,7 +133,7 @@ describe('SpinalRelationRef', () => {
 
         await rel.addChild(DEFAULT_NODE);
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, [DEFAULT_NODE]);
+        expect(children).toEqual([DEFAULT_NODE]);
       });
 
       it("should return the relation's children", async () => {
@@ -153,14 +149,14 @@ describe('SpinalRelationRef', () => {
         ]);
 
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, [node1, node2, node3]);
+        expect(children).toEqual([node1, node2, node3]);
       });
 
       it('should return an empty array', async () => {
         const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
         const children = await rel.getChildren();
 
-        assert.deepStrictEqual(children, []);
+        expect(children).toEqual([]);
       });
     });
 
@@ -177,7 +173,7 @@ describe('SpinalRelationRef', () => {
         await relation.addChild(child);
 
         const children = await relation.getChildrenInContext(context);
-        assert.deepStrictEqual(children, [child]);
+        expect(children).toEqual([child]);
       });
 
       it("should return the relation's children associated to the context", async () => {
@@ -199,7 +195,7 @@ describe('SpinalRelationRef', () => {
         ]);
 
         const children = await relation.getChildrenInContext(context);
-        assert.deepStrictEqual(children, [child1, child3]);
+        expect(children).toEqual([child1, child3]);
       });
 
       it('should throw an error if the context is missing', async () => {
@@ -213,9 +209,9 @@ describe('SpinalRelationRef', () => {
           await relation.getChildrenInContext();
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
 
       it('should throw an error if context is not a SpinalContext', async () => {
@@ -230,9 +226,9 @@ describe('SpinalRelationRef', () => {
           await relation.getChildrenInContext(context1);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
 
         const context2 = new SpinalNode();
         error = false;
@@ -241,9 +237,9 @@ describe('SpinalRelationRef', () => {
           await relation.getChildrenInContext(context2);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
       });
     });
 
@@ -251,120 +247,138 @@ describe('SpinalRelationRef', () => {
       it("should return the relation's type", () => {
         const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
 
-        assert.strictEqual(rel.getType(), SPINAL_RELATION_TYPE);
+        expect(rel.getType()).toBe(SPINAL_RELATION_TYPE);
       });
     });
-  });
 
-  describe('How to add children', () => {
-    describe('How to use addChild', () => {
-      it('should add a child to the children of the relation', async () => {
-        const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+    describe('How to add children', () => {
+      describe('How to use addChild', () => {
+        it('should add a child to the children of the relation', async () => {
+          const rel = new SpinalRelationRef(
+            DEFAULT_NODE,
+            DEFAULT_RELATION_NAME
+          );
 
-        await rel.addChild(DEFAULT_NODE);
-        const children = await rel.getChildren();
-        assert.deepStrictEqual(children, [DEFAULT_NODE]);
-      });
-
-      it('should throw an error if you try to add the same node twice', async () => {
-        const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
-        let error;
-
-        await rel.addChild(DEFAULT_NODE);
-
-        try {
           await rel.addChild(DEFAULT_NODE);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
-      });
+          const children = await rel.getChildren();
+          expect(children).toEqual([DEFAULT_NODE]);
+        });
 
-      it('should throw an error when you pass it something that is not a model', async () => {
-        const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
-        let error;
+        it('should throw an error if you try to add the same node twice', async () => {
+          const rel = new SpinalRelationRef(
+            DEFAULT_NODE,
+            DEFAULT_RELATION_NAME
+          );
+          let error;
 
-        try {
-          const value: any = [];
-          await rel.addChild(value);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
-      });
+          await rel.addChild(DEFAULT_NODE);
 
-      it('should return the node added to the relation', async () => {
-        const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
-        const node = new SpinalNode();
-        const model = new Model();
+          try {
+            await rel.addChild(DEFAULT_NODE);
+          } catch (e) {
+            error = true;
+            expect(e instanceof Error).toBeTruthy();
+          }
+          expect(error).toBeTruthy();
+        });
 
-        const res1 = await rel.addChild(node);
+        it('should throw an error when you pass it something that is not a model', async () => {
+          const rel = new SpinalRelationRef(
+            DEFAULT_NODE,
+            DEFAULT_RELATION_NAME
+          );
+          let error;
 
-        assert.strictEqual(res1, node);
+          try {
+            const value: any = [];
+            await rel.addChild(value);
+          } catch (e) {
+            error = true;
+            expect(e instanceof Error).toBeTruthy();
+          }
+          expect(error).toBeTruthy();
+        });
 
-        const res2 = await rel.addChild(model);
-        const res2Elem = await res2.getElement();
+        it('should return the node added to the relation', async () => {
+          const rel = new SpinalRelationRef(
+            DEFAULT_NODE,
+            DEFAULT_RELATION_NAME
+          );
+          const node = new SpinalNode();
+          const model = new Model();
 
-        assert.strictEqual(res2Elem, model);
+          const res1 = await rel.addChild(node);
+
+          expect(res1).toBe(node);
+
+          const res2 = await rel.addChild(model);
+          const res2Elem = await res2.getElement();
+
+          expect(res2Elem).toBe(model);
+        });
       });
     });
-  });
 
-  describe('How to remove children', () => {
-    describe('How to use removeChild', () => {
-      it('should remove a child from the children of the relation', async () => {
-        const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+    describe('How to remove children', () => {
+      describe('How to use removeChild', () => {
+        it('should remove a child from the children of the relation', async () => {
+          const rel = new SpinalRelationRef(
+            DEFAULT_NODE,
+            DEFAULT_RELATION_NAME
+          );
 
-        await rel.addChild(DEFAULT_NODE);
-        await rel.removeChild(DEFAULT_NODE);
+          await rel.addChild(DEFAULT_NODE);
+          await rel.removeChild(DEFAULT_NODE);
 
-        const children = await rel.getChildren();
-        assert.deepStrictEqual(children, []);
-      });
+          const children = await rel.getChildren();
+          expect(children).toEqual([]);
+        });
 
-      it('should remove a child and update the children ids of the relation', async () => {
-        const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
+        it('should remove a child and update the children ids of the relation', async () => {
+          const rel = new SpinalRelationRef(
+            DEFAULT_NODE,
+            DEFAULT_RELATION_NAME
+          );
 
-        await rel.addChild(DEFAULT_NODE);
-        await rel.removeChild(DEFAULT_NODE);
+          await rel.addChild(DEFAULT_NODE);
+          await rel.removeChild(DEFAULT_NODE);
 
-        const ids = rel.getChildrenIds();
-        assert.deepStrictEqual(ids, []);
-      });
+          const ids = rel.getChildrenIds();
+          expect(ids).toEqual([]);
+        });
 
-      it("should remove a child and remove the relation the node's parents", async () => {
-        const parentNode = new SpinalNode();
-        const rel = parentNode._createRelation(
-          DEFAULT_RELATION_NAME,
-          SPINAL_RELATION_TYPE
-        );
-        const childNode = new SpinalNode();
+        it("should remove a child and remove the relation the node's parents", async () => {
+          const parentNode = new SpinalNode();
+          const rel = parentNode._createRelation(
+            DEFAULT_RELATION_NAME,
+            SPINAL_RELATION_TYPE
+          );
+          const childNode = new SpinalNode();
 
-        await rel.addChild(childNode);
-        await rel.removeChild(childNode);
-
-        const parents = await childNode.getParents();
-        assert.deepStrictEqual(parents, []);
-      });
-
-      it('should throw an error if the node is not a child', async () => {
-        const parentNode = new SpinalNode();
-        const rel = parentNode._createRelation(
-          DEFAULT_RELATION_NAME,
-          SPINAL_RELATION_TYPE
-        );
-        const childNode = new SpinalNode();
-        let error = false;
-
-        try {
+          await rel.addChild(childNode);
           await rel.removeChild(childNode);
-        } catch (e) {
-          error = true;
-          assert(e instanceof Error);
-        }
-        assert(error);
+
+          const parents = await childNode.getParents();
+          expect(parents).toEqual([]);
+        });
+
+        it('should throw an error if the node is not a child', async () => {
+          const parentNode = new SpinalNode();
+          const rel = parentNode._createRelation(
+            DEFAULT_RELATION_NAME,
+            SPINAL_RELATION_TYPE
+          );
+          const childNode = new SpinalNode();
+          let error = false;
+
+          try {
+            await rel.removeChild(childNode);
+          } catch (e) {
+            error = true;
+            expect(e instanceof Error).toBeTruthy();
+          }
+          expect(error).toBeTruthy();
+        });
       });
     });
 
@@ -374,17 +388,14 @@ describe('SpinalRelationRef', () => {
         const node1 = new SpinalNode();
         const node2 = new SpinalNode();
         const node3 = new SpinalNode();
-
         await Promise.all([
           rel.addChild(node1),
           rel.addChild(node2),
           rel.addChild(node3),
         ]);
-
         await rel.removeChildren();
-
-        const children = await rel.getChildren();
-        assert.deepStrictEqual(children, []);
+        const nbChildren = rel.getNbChildren();
+        expect(nbChildren).toBe(0);
       });
 
       it('should delete the given children', async () => {
@@ -402,7 +413,8 @@ describe('SpinalRelationRef', () => {
         await rel.removeChildren([node3, node1]);
 
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, [node2]);
+        expect(children).toContain(node2);
+        expect(rel.getNbChildren()).toBe(1);
       });
 
       it('should delete some of the given children', async () => {
@@ -423,12 +435,13 @@ describe('SpinalRelationRef', () => {
           await rel.removeChildren([node3, node4, node1]);
         } catch (e) {
           error = true;
-          assert(e instanceof Error);
+          expect(e instanceof Error).toBeTruthy();
         }
-        assert(error);
+        expect(error).toBeTruthy();
 
         const children = await rel.getChildren();
-        assert.deepStrictEqual(children, [node2]);
+        expect(children).toContain(node2);
+        expect(rel.getNbChildren()).toBe(1);
       });
     });
   });

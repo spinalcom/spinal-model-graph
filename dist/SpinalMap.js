@@ -1,11 +1,11 @@
 "use strict";
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -56,8 +56,11 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
      * @memberof SpinalMap
      */
     setElement(key, value) {
-        if (typeof key !== 'string' && typeof key !== 'number') {
-            throw TypeError('The key must be a string or a number');
+        if (typeof key !== 'string') {
+            throw TypeError('The key must be a string');
+        }
+        if (value === undefined) {
+            throw TypeError('The value must be defined');
         }
         this.rem_attr(key);
         const attribute = {
@@ -82,8 +85,8 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
      * @memberof SpinalMap
      */
     has(key) {
-        if (typeof key !== 'string' && typeof key !== 'number') {
-            throw TypeError('The key must be a string or a number');
+        if (typeof key !== 'string') {
+            throw TypeError('The key must be a string');
         }
         return this._attribute_names.includes(key);
     }

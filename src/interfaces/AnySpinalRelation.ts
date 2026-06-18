@@ -1,10 +1,10 @@
 /*
- * Copyright 2021 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -23,10 +23,12 @@
  */
 
 import type { SpinalRelationLstPtr } from '../Relations/SpinalRelationLstPtr';
+import type { SpinalRelationLstPtrLst } from '../Relations/SpinalRelationLstPtrLst';
 import type { SpinalRelationPtrLst } from '../Relations/SpinalRelationPtrLst';
 import type { SpinalRelationRef } from '../Relations/SpinalRelationRef';
 
 export type AnySpinalRelation =
   | SpinalRelationRef
   | SpinalRelationLstPtr
-  | SpinalRelationPtrLst;
+  | SpinalRelationPtrLst
+  | SpinalRelationLstPtrLst;

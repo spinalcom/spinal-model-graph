@@ -39,18 +39,18 @@ declare class SpinalRelationPtrLst extends BaseSpinalRelation {
     getNbChildren(): number;
     /**
      * Return all the children of the relation.
-     * @returns {Promise<SpinalNode<any>[]>} The children of the relation
+     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
      * @memberof SpinalRelationPtrLst
      */
-    getChildren(): Promise<SpinalNode<any>[]>;
+    getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown>;
     /**
      * Return all the children of the relation associated to a certain context.
      * @param {SpinalContext} context Context to use for the search
-     * @returns {Promise<Array<SpinalNode<any>>>} The children associated to the context
+     * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children associated to the context
      * @throws {TypeError} If the context is not a SpinalContext
      * @memberof SpinalRelationPtrLst
      */
-    getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
+    getChildrenInContextGen(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, unknown>;
     /**
      * Returns the type of the relation.
      * @returns {string} Type of the relation
@@ -78,7 +78,7 @@ declare class SpinalRelationPtrLst extends BaseSpinalRelation {
     /**
      * Removes children from the relation.
      * @override
-     * @param {SpinalNode<any>[]} [nodes=[]] Childs to remove
+     * @param {SpinalNode<any>[]} [nodes=[]] Childs to remove, if empty or missing all the children will be removed
      * @returns {Promise<void>} An empty promise
      * @throws {TypeError} If nodes is not an array or omitted
      * @throws {Error} If one of the nodes is not a child

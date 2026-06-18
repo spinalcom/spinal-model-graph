@@ -1,10 +1,10 @@
 /*
- * Copyright 2021 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -31,7 +31,8 @@ import type { SpinalRelationPtrLstNodePointerInfoModel } from './SpinalRelationP
  * @interface SpinalRelationPtrLstNodePointer
  * @extends {SpinalNodePointer<Lst<SpinalNode<any>>>}
  */
-export interface SpinalRelationPtrLstNodePointer
-  extends SpinalNodePointer<Lst<SpinalNode>> {
+export interface SpinalRelationPtrLstNodePointer extends SpinalNodePointer<
+  Lst<SpinalNode>
+> {
   info: SpinalRelationPtrLstNodePointerInfoModel;
 }

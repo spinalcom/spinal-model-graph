@@ -1,11 +1,11 @@
 "use strict";
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -30,6 +30,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
+};
+var __await = (this && this.__await) || function (v) { return this instanceof __await ? (this.v = v, this) : new __await(v); }
+var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _arguments, generator) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var g = generator.apply(thisArg, _arguments || []), i, q = [];
+    return i = Object.create((typeof AsyncIterator === "function" ? AsyncIterator : Object).prototype), verb("next"), verb("throw"), verb("return", awaitReturn), i[Symbol.asyncIterator] = function () { return this; }, i;
+    function awaitReturn(f) { return function (v) { return Promise.resolve(v).then(f, reject); }; }
+    function verb(n, f) { if (g[n]) { i[n] = function (v) { return new Promise(function (a, b) { q.push([n, v, a, b]) > 1 || resume(n, v); }); }; if (f) i[n] = f(i[n]); } }
+    function resume(n, v) { try { step(g[n](v)); } catch (e) { settle(q[0][3], e); } }
+    function step(r) { r.value instanceof __await ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r); }
+    function fulfill(value) { resume("next", value); }
+    function reject(value) { resume("throw", value); }
+    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpinalRelationRef = void 0;
@@ -88,35 +101,35 @@ class SpinalRelationRef extends BaseSpinalRelation_1.BaseSpinalRelation {
     }
     /**
      * Return all the children of the relation.
-     * @returns {Promise<Array<SpinalNode<any>>>} The children of the relation
+     * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation
      * @memberof SpinalRelationRef
      */
-    getChildren() {
-        const children = [];
-        for (let i = 0; i < this.children.length; i += 1) {
-            children.push(this.children[i]);
-        }
-        return Promise.resolve(children);
+    getChildrenGen() {
+        return __asyncGenerator(this, arguments, function* getChildrenGen_1() {
+            for (const child of this.children) {
+                yield yield __await(child);
+            }
+        });
     }
     /**
      * Return all the children of the relation associated to a certain context.
      * @param {SpinalContext} context The context to use for the search
-     * @returns {Promise<SpinalNode[]>} The children of the relation associated to the context
+     * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation associated to the context
      * @throws {TypeError} If the context is not a SpinalContext
      * @memberof SpinalRelationRef
      */
-    getChildrenInContext(context) {
-        const children = [];
-        if (!(context instanceof SpinalContext_1.SpinalContext)) {
-            return Promise.reject(TypeError('context must be a SpinalContext'));
-        }
-        for (let i = 0; i < this.children.length; i += 1) {
-            const child = this.children[i];
-            if (child.belongsToContext(context)) {
-                children.push(child);
+    getChildrenInContextGen(context) {
+        return __asyncGenerator(this, arguments, function* getChildrenInContextGen_1() {
+            if (!(context instanceof SpinalContext_1.SpinalContext)) {
+                return yield __await(Promise.reject(TypeError('context must be a SpinalContext')));
             }
-        }
-        return Promise.resolve(children);
+            for (let i = 0; i < this.children.length; i += 1) {
+                const child = this.children[i];
+                if (child.belongsToContext(context)) {
+                    yield yield __await(child);
+                }
+            }
+        });
     }
     /**
      * Returns the type of the relation.

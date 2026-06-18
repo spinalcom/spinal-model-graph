@@ -27,14 +27,13 @@ import {
   SpinalContext,
   SPINAL_RELATION_LST_PTR_TYPE,
 } from '../../src';
-import 'mocha';
+import { describe, it, expect } from 'vitest';
 
-import * as assert from 'assert';
 const DEFAULT_NODE = new SpinalNode();
 const DEFAULT_CONTEXT = new SpinalContext();
 const DEFAULT_RELATION_NAME = 'relationName';
 const DEFAULT_RELATION_TYPE = SPINAL_RELATION_LST_PTR_TYPE;
-const DEFAULT_FUN = (node) => node;
+const DEFAULT_FUN = (node: SpinalNode) => node;
 
 describe('How to use map', () => {
   describe('Error handling', () => {
@@ -45,21 +44,21 @@ describe('How to use map', () => {
         await DEFAULT_NODE.map(<any>1, DEFAULT_FUN);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should throw an error if the callback function is missing', async () => {
       let error = false;
 
       try {
-        await DEFAULT_NODE.map([], undefined);
+        await DEFAULT_NODE.map([], <any>undefined);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should throw an error if the callback function is not a function', async () => {
@@ -69,9 +68,9 @@ describe('How to use map', () => {
         await DEFAULT_NODE.map([], <any>256);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should not fall in infinite loops', async () => {
@@ -83,9 +82,9 @@ describe('How to use map', () => {
         node2.addChild(node1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
       ]);
 
-      const foundChild = await node1.map(undefined, DEFAULT_FUN);
+      const foundChild = await node1.map(<any>undefined, DEFAULT_FUN);
 
-      assert.deepStrictEqual(foundChild, [node1, node2]);
+      expect(foundChild).toEqual([node1, node2]);
     });
   });
 
@@ -102,11 +101,11 @@ describe('How to use map', () => {
         parent.addChild(child3, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
       ]);
 
-      const ids = await parent.map(undefined, (node) => {
+      const ids = await parent.map(<any>undefined, (node) => {
         return node.getId();
       });
 
-      assert.deepStrictEqual(ids, [
+      expect(ids).toEqual([
         parent.getId(),
         child1.getId(),
         child2.getId(),
@@ -144,14 +143,14 @@ describe('How to use map', () => {
         ),
       ]);
 
-      const secondGen = await root.map(undefined, (node) => {
+      const secondGen = await root.map(<any>undefined, (node) => {
         if (node.getType().get() === 'secondGen') {
           return node;
         }
         return undefined;
       });
 
-      assert.deepStrictEqual(secondGen, [
+      expect(secondGen).toEqual([
         undefined,
         undefined,
         undefined,
@@ -170,12 +169,12 @@ describe('How to use mapInContext', () => {
       let error = false;
 
       try {
-        await DEFAULT_NODE.mapInContext(undefined, DEFAULT_FUN);
+        await DEFAULT_NODE.mapInContext(<any>undefined, DEFAULT_FUN);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should throw an error if the context is not a SpinalContext', async () => {
@@ -186,9 +185,9 @@ describe('How to use mapInContext', () => {
         await DEFAULT_NODE.mapInContext(context, DEFAULT_FUN);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should throw an error if the callback is missing', async () => {
@@ -199,9 +198,9 @@ describe('How to use mapInContext', () => {
         await testNode.mapInContext(DEFAULT_CONTEXT);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should throw an error if the callback is not a function', async () => {
@@ -211,9 +210,9 @@ describe('How to use mapInContext', () => {
         await DEFAULT_NODE.mapInContext(DEFAULT_CONTEXT, <any>128);
       } catch (e) {
         error = true;
-        assert(e instanceof Error);
+        expect(e instanceof Error).toBeTruthy();
       }
-      assert(error);
+      expect(error).toBeTruthy();
     });
 
     it('should not fall in infinite loops', async () => {
@@ -236,7 +235,7 @@ describe('How to use mapInContext', () => {
 
       const foundChild = await node1.mapInContext(context, DEFAULT_FUN);
 
-      assert.deepStrictEqual(foundChild, [node1, node2]);
+      expect(foundChild).toEqual([node1, node2]);
     });
 
     describe('Basic callback manipulation', () => {
@@ -256,12 +255,7 @@ describe('How to use mapInContext', () => {
           return node.getName().get();
         });
 
-        assert.deepStrictEqual(names, [
-          'context',
-          'child1',
-          'child2',
-          'child3',
-        ]);
+        expect(names).toEqual(['context', 'child1', 'child2', 'child3']);
       });
     });
   });
@@ -319,11 +313,11 @@ describe('How to use mapInContext', () => {
 
       let foundChildren = await parent.mapInContext(context2, DEFAULT_FUN);
 
-      assert.deepStrictEqual(foundChildren, [parent, child2, child3, child4]);
+      expect(foundChildren).toEqual([parent, child2, child3, child4]);
 
       foundChildren = await parent.mapInContext(context1, DEFAULT_FUN);
 
-      assert.deepStrictEqual(foundChildren, [parent, child1]);
+      expect(foundChildren).toEqual([parent, child1]);
     });
   });
 });

@@ -1,5 +1,5 @@
 import type { Model } from 'spinal-core-connectorjs';
-import { RELATION_TYPE_LIST, SPINAL_RELATION_LST_PTR_TYPE, SPINAL_RELATION_PTR_LST_TYPE, SPINAL_RELATION_TYPE } from '../constants';
+import { RELATION_TYPE_LIST, SPINAL_RELATION_LST_PTR_TYPE, SPINAL_RELATION_PTR_LST_TYPE, SPINAL_RELATION_LST_PTR_LST_TYPE, SPINAL_RELATION_TYPE } from '../constants';
 import type { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalRelationLstPtr } from './SpinalRelationLstPtr';
 import { SpinalRelationPtrLst } from './SpinalRelationPtrLst';
@@ -20,4 +20,4 @@ declare class SpinalRelationFactory {
      */
     static getNewRelation(parent: SpinalNode<Model>, relationName: string, relationType: string): SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst;
 }
-export { SPINAL_RELATION_TYPE, SPINAL_RELATION_LST_PTR_TYPE, SPINAL_RELATION_PTR_LST_TYPE, RELATION_TYPE_LIST, SpinalRelationFactory, };
+export { SPINAL_RELATION_TYPE, SPINAL_RELATION_LST_PTR_TYPE, SPINAL_RELATION_PTR_LST_TYPE, SPINAL_RELATION_LST_PTR_LST_TYPE, RELATION_TYPE_LIST, SpinalRelationFactory, };

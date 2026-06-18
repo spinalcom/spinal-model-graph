@@ -5,4 +5,4 @@ import type { SpinalNode } from '../Nodes/SpinalNode';
  * @param {SpinalNode<any>} node
  * @returns {boolean}
  */
-export declare type SpinalNodeFindOnePredicateFunc = (node: SpinalNode<any>) => boolean;
+export type SpinalNodeFindOnePredicateFunc = (node: SpinalNode<any>) => boolean;

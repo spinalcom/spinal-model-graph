@@ -1,13 +1,11 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SpinalSet = exports.SpinalNodePointer = exports.SpinalMap = exports.SpinalRelationRef = exports.SpinalRelationPtrLst = exports.SpinalRelationLstPtr = exports.SPINAL_RELATION_TYPE = exports.SPINAL_RELATION_PTR_LST_TYPE = exports.SPINAL_RELATION_LST_PTR_TYPE = exports.SpinalRelationFactory = exports.SpinalNode = exports.DEFAULT_FIND_PREDICATE = exports.SpinalGraph = exports.SpinalContext = exports.REMOVE_CHILD_EVENT = exports.REMOVE_CHILDREN_EVENT = exports.ADD_CHILD_IN_CONTEXT_EVENT = exports.ADD_CHILD_EVENT = void 0;
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -24,6 +22,8 @@ exports.SpinalSet = exports.SpinalNodePointer = exports.SpinalMap = exports.Spin
  * with this file. If not, see
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.SpinalSet = exports.SpinalNodePointer = exports.SpinalMap = exports.SpinalRelationRef = exports.SpinalRelationLstPtrLst = exports.SpinalRelationPtrLst = exports.SpinalRelationLstPtr = exports.SPINAL_RELATION_TYPE = exports.SPINAL_RELATION_LST_PTR_LST_TYPE = exports.SPINAL_RELATION_PTR_LST_TYPE = exports.SPINAL_RELATION_LST_PTR_TYPE = exports.SpinalRelationFactory = exports.SpinalNode = exports.DEFAULT_FIND_PREDICATE = exports.SpinalGraph = exports.SpinalContext = exports.REMOVE_CHILD_EVENT = exports.REMOVE_CHILDREN_EVENT = exports.ADD_CHILD_IN_CONTEXT_EVENT = exports.ADD_CHILD_EVENT = void 0;
 var constants_1 = require("./constants");
 Object.defineProperty(exports, "ADD_CHILD_EVENT", { enumerable: true, get: function () { return constants_1.ADD_CHILD_EVENT; } });
 Object.defineProperty(exports, "ADD_CHILD_IN_CONTEXT_EVENT", { enumerable: true, get: function () { return constants_1.ADD_CHILD_IN_CONTEXT_EVENT; } });
@@ -40,11 +40,14 @@ var SpinalRelationFactory_1 = require("./Relations/SpinalRelationFactory");
 Object.defineProperty(exports, "SpinalRelationFactory", { enumerable: true, get: function () { return SpinalRelationFactory_1.SpinalRelationFactory; } });
 Object.defineProperty(exports, "SPINAL_RELATION_LST_PTR_TYPE", { enumerable: true, get: function () { return SpinalRelationFactory_1.SPINAL_RELATION_LST_PTR_TYPE; } });
 Object.defineProperty(exports, "SPINAL_RELATION_PTR_LST_TYPE", { enumerable: true, get: function () { return SpinalRelationFactory_1.SPINAL_RELATION_PTR_LST_TYPE; } });
+Object.defineProperty(exports, "SPINAL_RELATION_LST_PTR_LST_TYPE", { enumerable: true, get: function () { return SpinalRelationFactory_1.SPINAL_RELATION_LST_PTR_LST_TYPE; } });
 Object.defineProperty(exports, "SPINAL_RELATION_TYPE", { enumerable: true, get: function () { return SpinalRelationFactory_1.SPINAL_RELATION_TYPE; } });
 var SpinalRelationLstPtr_1 = require("./Relations/SpinalRelationLstPtr");
 Object.defineProperty(exports, "SpinalRelationLstPtr", { enumerable: true, get: function () { return SpinalRelationLstPtr_1.SpinalRelationLstPtr; } });
 var SpinalRelationPtrLst_1 = require("./Relations/SpinalRelationPtrLst");
 Object.defineProperty(exports, "SpinalRelationPtrLst", { enumerable: true, get: function () { return SpinalRelationPtrLst_1.SpinalRelationPtrLst; } });
+var SpinalRelationLstPtrLst_1 = require("./Relations/SpinalRelationLstPtrLst");
+Object.defineProperty(exports, "SpinalRelationLstPtrLst", { enumerable: true, get: function () { return SpinalRelationLstPtrLst_1.SpinalRelationLstPtrLst; } });
 var SpinalRelationRef_1 = require("./Relations/SpinalRelationRef");
 Object.defineProperty(exports, "SpinalRelationRef", { enumerable: true, get: function () { return SpinalRelationRef_1.SpinalRelationRef; } });
 var SpinalMap_1 = require("./SpinalMap");

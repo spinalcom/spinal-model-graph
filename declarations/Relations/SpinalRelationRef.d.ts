@@ -39,18 +39,18 @@ declare class SpinalRelationRef extends BaseSpinalRelation {
     getNbChildren(): number;
     /**
      * Return all the children of the relation.
-     * @returns {Promise<Array<SpinalNode<any>>>} The children of the relation
+     * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation
      * @memberof SpinalRelationRef
      */
-    getChildren(): Promise<SpinalNode<any>[]>;
+    getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown>;
     /**
      * Return all the children of the relation associated to a certain context.
      * @param {SpinalContext} context The context to use for the search
-     * @returns {Promise<SpinalNode[]>} The children of the relation associated to the context
+     * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation associated to the context
      * @throws {TypeError} If the context is not a SpinalContext
      * @memberof SpinalRelationRef
      */
-    getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
+    getChildrenInContextGen(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, unknown>;
     /**
      * Returns the type of the relation.
      * @returns {string} Type of the relation

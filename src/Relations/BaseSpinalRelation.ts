@@ -1,10 +1,10 @@
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -41,10 +41,10 @@ import { guid } from '../Utilities';
  * @extends {Model}
  */
 abstract class BaseSpinalRelation extends Model {
-  name: Str;
-  id: Str;
-  parent: SpinalNodePointer<SpinalNode<any>>;
-  contextIds: SpinalMap<Val>;
+  name!: Str;
+  id!: Str;
+  parent!: SpinalNodePointer<SpinalNode<any>>;
+  contextIds!: SpinalMap<Val>;
 
   /**
    * Constructor for the BaseSpinalRelation class.
@@ -59,7 +59,7 @@ abstract class BaseSpinalRelation extends Model {
     if (FileSystem._sig_server === false) return;
 
     // instanceof doesn't work here
-    if (!SpinalNode.prototype.isPrototypeOf(parent)) {
+    if (!SpinalNode.prototype.isPrototypeOf(parent!)) {
       throw TypeError('parent must be a node');
     }
 
@@ -70,7 +70,7 @@ abstract class BaseSpinalRelation extends Model {
     this.add_attr({
       name,
       id: guid(),
-      parent: new SpinalNodePointer(parent, true),
+      parent: new SpinalNodePointer(parent!, true),
       contextIds: new SpinalMap(),
     });
   }
@@ -180,16 +180,18 @@ abstract class BaseSpinalRelation extends Model {
     }
 
     if (nodes.length === 0) {
-      nodes = await this.getChildren();
+      for (const node of await this.getChildren()) {
+        promises.push(this.removeChild(node));
+      }
+    } else {
+      for (const node of nodes) {
+        promises.push(this.removeChild(node));
+      }
     }
 
-    for (const node of nodes) {
-      promises.push(this.removeChild(node));
-    }
-
-    try {
-      await Promise.all(promises);
-    } catch (error) {
+    const res = await Promise.allSettled(promises);
+    const rejected = res.filter((r) => r.status === 'rejected');
+    if (rejected.length > 0) {
       throw Error('Could not remove all nodes');
     }
   }
@@ -205,23 +207,56 @@ abstract class BaseSpinalRelation extends Model {
 
   /**
    * Return all the children of the relation.
-   * @abstract
    * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
    * @memberof BaseSpinalRelation
+   * @deprecated
    */
-  abstract getChildren(): Promise<SpinalNode<any>[]>;
+  async getChildren(): Promise<SpinalNode<any>[]> {
+    const results: SpinalNode<any>[] = [];
+    const gen = this.getChildrenGen();
+
+    for await (let node of gen) {
+      results.push(node);
+    }
+    return results;
+  }
+  /**
+   * Return an async generator that yields each children of the relation.
+   * @abstract
+   * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
+   * @memberof BaseSpinalRelation
+   */
+  abstract getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown>;
 
   /**
    * Return all the children of the relation associated to a certain context.
-   * @abstract
    * @param {SpinalContext<any>} context
    * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
    * @throws {TypeError} If the context is not a SpinalContext
    * @memberof BaseSpinalRelation
+   * @deprecated
    */
-  abstract getChildrenInContext(
+  async getChildrenInContext(
     context: SpinalContext<any>
-  ): Promise<SpinalNode<any>[]>;
+  ): Promise<SpinalNode<any>[]> {
+    const results: SpinalNode<any>[] = [];
+    const gen = this.getChildrenInContextGen(context);
+
+    for await (let node of gen) {
+      results.push(node);
+    }
+    return results;
+  }
+  /**
+   * Return an async generator that yields each children of the relation associated to a certain context.
+   * @abstract
+   * @param {SpinalContext<any>} context
+   * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
+   * @memberof BaseSpinalRelation
+   */
+  abstract getChildrenInContextGen(
+    context: SpinalContext<any>
+  ): AsyncGenerator<SpinalNode<any>, void, unknown>;
 
   /**
    * Returns the type of the relation.
@@ -263,15 +298,11 @@ abstract class BaseSpinalRelation extends Model {
    * @memberof BaseSpinalRelation
    */
   async _removeFromParent(): Promise<void> {
-    try {
-      const parent = await this.getParent();
-      const relationMap = parent._getChildrenType(this.getType());
+    const parent = await this.getParent();
+    const relationMap = parent._getChildrenType(this.getType());
 
-      relationMap.delete(this.getName().get());
-      this.parent.unset();
-    } catch (e) {
-      return undefined;
-    }
+    relationMap.delete(this.getName().get());
+    this.parent.unset();
   }
 }
 

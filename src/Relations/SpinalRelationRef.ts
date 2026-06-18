@@ -1,10 +1,10 @@
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -41,7 +41,7 @@ import { SPINAL_RELATION_TYPE } from './SpinalRelationFactory';
 class SpinalRelationRef extends BaseSpinalRelation {
   public _constructorName = 'SpinalRelationRef';
   public static _constructorName = 'SpinalRelationRef';
-  children: Lst<SpinalNode<any>>;
+  children!: Lst<SpinalNode<any>>;
   /**
    * Constructor for the SpinalRelationRef class.
    * @param {SpinalNode} parent Parent of the relation
@@ -85,30 +85,25 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
   /**
    * Return all the children of the relation.
-   * @returns {Promise<Array<SpinalNode<any>>>} The children of the relation
+   * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation
    * @memberof SpinalRelationRef
    */
-  getChildren(): Promise<SpinalNode<any>[]> {
-    const children: SpinalNode<any>[] = [];
-
-    for (let i: number = 0; i < this.children.length; i += 1) {
-      children.push(this.children[i]);
+  async *getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown> {
+    for (const child of this.children) {
+      yield child;
     }
-    return Promise.resolve(children);
   }
 
   /**
    * Return all the children of the relation associated to a certain context.
    * @param {SpinalContext} context The context to use for the search
-   * @returns {Promise<SpinalNode[]>} The children of the relation associated to the context
+   * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation associated to the context
    * @throws {TypeError} If the context is not a SpinalContext
    * @memberof SpinalRelationRef
    */
-  getChildrenInContext(
+  async *getChildrenInContextGen(
     context: SpinalContext<any>
-  ): Promise<SpinalNode<any>[]> {
-    const children: SpinalNode<any>[] = [];
-
+  ): AsyncGenerator<SpinalNode<any>, void, unknown> {
     if (!(context instanceof SpinalContext)) {
       return Promise.reject(TypeError('context must be a SpinalContext'));
     }
@@ -117,11 +112,9 @@ class SpinalRelationRef extends BaseSpinalRelation {
       const child: SpinalNode<any> = this.children[i];
 
       if (child.belongsToContext(context)) {
-        children.push(child);
+        yield child;
       }
     }
-
-    return Promise.resolve(children);
   }
 
   /**

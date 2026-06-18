@@ -1,10 +1,10 @@
 /*
- * Copyright 2018 SpinalCom - www.spinalcom.com
+ * Copyright 2026 SpinalCom - www.spinalcom.com
  *
  * This file is part of SpinalCore.
  *
  * Please read all of the following terms and conditions
- * of the Free Software license Agreement ("Agreement")
+ * of the Software license Agreement ("Agreement")
  * carefully.
  *
  * This Agreement is a legally binding contract between
@@ -49,7 +49,7 @@ import { SPINAL_RELATION_PTR_LST_TYPE } from './SpinalRelationFactory';
 class SpinalRelationPtrLst extends BaseSpinalRelation {
   public _constructorName = 'SpinalRelationPtrLst';
   public static _constructorName = 'SpinalRelationPtrLst';
-  children: SpinalRelationPtrLstNodePointer;
+  children!: SpinalRelationPtrLstNodePointer;
 
   /**
    * Constructor for the SpinalRelationPtrLst class.
@@ -97,32 +97,28 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
 
   /**
    * Return all the children of the relation.
-   * @returns {Promise<SpinalNode<any>[]>} The children of the relation
+   * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
    * @memberof SpinalRelationPtrLst
    */
-  async getChildren(): Promise<SpinalNode<any>[]> {
+  async *getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown> {
     const childrenLst: Lst<SpinalNode<any>> = await this.children.load();
-    const children: SpinalNode<any>[] = [];
 
     for (let i: number = 0; i < childrenLst.length; i += 1) {
-      children.push(childrenLst[i]);
+      yield childrenLst[i];
     }
-
-    return children;
   }
 
   /**
    * Return all the children of the relation associated to a certain context.
    * @param {SpinalContext} context Context to use for the search
-   * @returns {Promise<Array<SpinalNode<any>>>} The children associated to the context
+   * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children associated to the context
    * @throws {TypeError} If the context is not a SpinalContext
    * @memberof SpinalRelationPtrLst
    */
-  async getChildrenInContext(
+  async *getChildrenInContextGen(
     context: SpinalContext<any>
-  ): Promise<SpinalNode<any>[]> {
+  ): AsyncGenerator<SpinalNode<any>, void, unknown> {
     const childrenLst: Lst<SpinalNode<any>> = await this.children.load();
-    const children: SpinalNode<any>[] = [];
 
     if (!(context instanceof SpinalContext)) {
       throw TypeError('context must be a SpinalContext');
@@ -132,11 +128,9 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
       const child = childrenLst[i];
 
       if (child.belongsToContext(context)) {
-        children.push(child);
+        yield child;
       }
     }
-
-    return children;
   }
 
   /**
@@ -205,7 +199,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
   /**
    * Removes children from the relation.
    * @override
-   * @param {SpinalNode<any>[]} [nodes=[]] Childs to remove
+   * @param {SpinalNode<any>[]} [nodes=[]] Childs to remove, if empty or missing all the children will be removed
    * @returns {Promise<void>} An empty promise
    * @throws {TypeError} If nodes is not an array or omitted
    * @throws {Error} If one of the nodes is not a child
@@ -217,7 +211,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     }
 
     const childrenLst: Lst<SpinalNode<any>> = await this.children.load();
-    let error: boolean = false;
 
     if (nodes.length === 0) {
       for (let idx = 0; idx < childrenLst.length; idx++) {
@@ -229,14 +222,10 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     }
 
     for (const node of nodes) {
-      const index: number = childrenLst.indexOf(node);
+      // const index: number = childrenLst.indexOf(node);
       childrenLst.remove(node);
       this.children.info.ids.remove(node.getId());
       node._removeParent(this);
-    }
-
-    if (error) {
-      throw Error('Could not remove all nodes');
     }
   }
 }

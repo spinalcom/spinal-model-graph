@@ -39,17 +39,17 @@ declare class SpinalRelationLstPtr extends BaseSpinalRelation {
     getNbChildren(): number;
     /**
      * Return all the children of the relation.
-     * @returns {Promise<SpinalNode[]>} The children of the relation
+     * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation
      * @memberof SpinalRelationLstPtr
      */
-    getChildren(): Promise<SpinalNode<any>[]>;
+    getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown>;
     /**
      * Return all the children of the relation associated to a certain context.
-     * @returns {Promise<SpinalNode<any>[]>} The children of the relation
+     * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation
      * @throws {TypeError} If the context is not a SpinalContext
      * @memberof SpinalRelationLstPtr
      */
-    getChildrenInContext(context: SpinalContext<any>): Promise<SpinalNode<any>[]>;
+    getChildrenInContextGen(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, unknown>;
     /**
      * Returns the type of the relation.
      * @returns {string} Type of the relation
