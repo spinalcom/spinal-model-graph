@@ -1,8 +1,8 @@
-import { Lst, Model, type Val } from 'spinal-core-connectorjs';
-import { SpinalContext } from '../Nodes/SpinalContext';
+import { Lst, Model } from 'spinal-core-connectorjs';
 import { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalNodePointer } from '../SpinalNodePointer';
 import { BaseSpinalRelation } from './BaseSpinalRelation';
+import { SpinalContext } from '../Nodes/SpinalContext';
 /**
  * Relation where the children are in Lst of Ptr of Lst.
  * @extends BaseSpinalRelation
@@ -15,7 +15,6 @@ import { BaseSpinalRelation } from './BaseSpinalRelation';
 declare class SpinalRelationLstPtrLst extends BaseSpinalRelation {
     _constructorName: string;
     static _constructorName: string;
-    lastRestructure: Val;
     children: Lst<SpinalNodePointer<Lst<SpinalNode<any>>>>;
     private debouncedRestructureChildren;
     /**
@@ -47,18 +46,17 @@ declare class SpinalRelationLstPtrLst extends BaseSpinalRelation {
      */
     hasId(id: string): boolean;
     /**
-     * Generator that yields all the children of the relation one by one.
-     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
+     * Generator that yields the children of the relation one by one.
+     * @param {number} offset
+     * @param {boolean} reverse
+     * @param {SpinalContext} [context]
+     * @param {number} [counter=0]
+     * @return {*}
      * @memberof SpinalRelationLstPtrLst
      */
-    getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown>;
-    /**
-     * Return all the children of the relation associated to a certain context.
-     * @returns {Promise<SpinalNode<any>[]>} The children of the relation
-     * @throws {TypeError} If the context is not a SpinalContext
-     * @memberof SpinalRelationLstPtrLst
-     */
-    getChildrenInContextGen(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, unknown>;
+    getChildrenGen(offset: number, reverse: boolean, context?: SpinalContext, counter?: number): AsyncGenerator<SpinalNode<any>, void, unknown>;
+    private _getChildrenGen;
+    private _getChildrenInContext;
     /**
      * Returns the type of the relation.
      * @returns {string} Type of the relation
@@ -83,7 +81,7 @@ declare class SpinalRelationLstPtrLst extends BaseSpinalRelation {
      * @memberof SpinalRelationLstPtrLst
      */
     removeChild(node: SpinalNode<any>): Promise<void>;
-    restructureChildren(force?: boolean): Promise<void>;
+    restructureChildren(): Promise<void>;
 }
 export default SpinalRelationLstPtrLst;
 export { SpinalRelationLstPtrLst };

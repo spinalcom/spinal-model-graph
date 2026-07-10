@@ -1,7 +1,7 @@
 import { Lst, Model } from 'spinal-core-connectorjs';
-import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
 import { BaseSpinalRelation } from './BaseSpinalRelation';
+import { SpinalContext } from '../Nodes/SpinalContext';
 /**
  * Relation where the children are in a Lst.
  * @class SpinalRelationRef
@@ -39,18 +39,12 @@ declare class SpinalRelationRef extends BaseSpinalRelation {
     getNbChildren(): number;
     /**
      * Return all the children of the relation.
+     * @param {IGetChildrenGenOpt} options Options to filter the children
+     * @param {number} counter Counter to keep track of the number of children already processed in other relations
      * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation
      * @memberof SpinalRelationRef
      */
-    getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown>;
-    /**
-     * Return all the children of the relation associated to a certain context.
-     * @param {SpinalContext} context The context to use for the search
-     * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation associated to the context
-     * @throws {TypeError} If the context is not a SpinalContext
-     * @memberof SpinalRelationRef
-     */
-    getChildrenInContextGen(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, unknown>;
+    getChildrenGen(offset: number, reverse: boolean, context?: SpinalContext, counter?: number): AsyncGenerator<SpinalNode<any>, void, unknown>;
     /**
      * Returns the type of the relation.
      * @returns {string} Type of the relation

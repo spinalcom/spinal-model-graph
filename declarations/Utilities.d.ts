@@ -1,8 +1,10 @@
 import type { Model } from 'spinal-core-connectorjs';
 import type { AnySpinalRelation } from './interfaces/AnySpinalRelation';
-import type { SpinalContext } from './Nodes/SpinalContext';
+import { SpinalContext } from './Nodes/SpinalContext';
 import type SpinalNode from './Nodes/SpinalNode';
 import type { SpinalNodePointer } from './SpinalNodePointer';
+import type { IGetChildrenGenOpt } from './interfaces/IGetChildrenOpt';
+export { debounce } from 'lodash';
 /**
  * Creates a unique id based on a name.
  * @param {string} name Name from wich the id is generated
@@ -19,5 +21,4 @@ export declare function consumeBatch<T>(promises: Consumedfunction<T>[], batchSi
  * @return {*}  {RegExp}
  */
 export declare function toRegex(relationNames: string | RegExp | (string | RegExp)[]): RegExp;
-export declare function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => Promise<ReturnType<T>>;
-export {};
+export declare function validateGetChildrenOptions(options: Partial<IGetChildrenGenOpt>): IGetChildrenGenOpt;

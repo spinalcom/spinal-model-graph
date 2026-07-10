@@ -38,7 +38,8 @@ declare class SpinalContext<T extends Model = any> extends SpinalNode<T> {
      * @param {SpinalContext} context Context to update, usually unused
      * @returns {Promise<SpinalNode>} The child node in a promise
      */
-    addChildInContext<K extends Model>(child: K | SpinalNode<K>, relationName: string, _relationType?: string, context?: SpinalContext<T>): Promise<SpinalNode<K>>;
+    addChildInContext<K extends Model>(child: K | SpinalNode<K>, relationName: string, relationType: string, context?: SpinalContext<T>): Promise<SpinalNode<K>>;
+    addChildInContext<K extends Model>(child: K | SpinalNode<K>, relationName: string, context?: SpinalContext<T>): Promise<SpinalNode<K>>;
     /**
      * Return the children of the node that are registered in the context
      * @override

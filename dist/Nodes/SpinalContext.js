@@ -62,19 +62,8 @@ class SpinalContext extends SpinalNode_1.SpinalNode {
     addChild(child, relationName, _relationType = SpinalRelationFactory_1.SPINAL_RELATION_PTR_LST_TYPE) {
         return super.addChild(child, relationName, SpinalRelationFactory_1.SPINAL_RELATION_PTR_LST_TYPE);
     }
-    /**
-     * Adds a child with a SpinalRelationLstPtrType and notices
-     * the context if a new relation was created.
-     * @override
-     * @param {SpinalNode | Model} child Node to add as child
-     * @param {String} relationName Name of the relation
-     * @param {String} [relationType=SPINAL_RELATION_PTR_LST_TYPE]
-     * This parameter is here only to properly override the parent method
-     * @param {SpinalContext} context Context to update, usually unused
-     * @returns {Promise<SpinalNode>} The child node in a promise
-     */
-    addChildInContext(child, relationName, _relationType = SpinalRelationFactory_1.SPINAL_RELATION_PTR_LST_TYPE, context = this) {
-        return super.addChildInContext(child, relationName, SpinalRelationFactory_1.SPINAL_RELATION_PTR_LST_TYPE, context);
+    addChildInContext(child, relationName, relationTypeOrContext = SpinalRelationFactory_1.SPINAL_RELATION_PTR_LST_TYPE, context = this) {
+        return super.addChildInContext(child, relationName, relationTypeOrContext, context);
     }
     /**
      * Return the children of the node that are registered in the context

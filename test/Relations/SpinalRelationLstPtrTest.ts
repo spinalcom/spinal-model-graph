@@ -56,7 +56,8 @@ describe('SpinalRelationLstPtr', () => {
       const rel = new SpinalRelationLstPtr(parent, DEFAULT_RELATION_NAME);
 
       expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
-      expect(await rel.getParent()).toBe(parent);
+      const parentRetrieved = await rel.getParent();
+      expect(parentRetrieved.info.id.get()).toBe(parent.getId().get());
     });
 
     it('should create a new relation with a name and a graph parent', async () => {
@@ -64,7 +65,8 @@ describe('SpinalRelationLstPtr', () => {
       const rel = new SpinalRelationLstPtr(parent, DEFAULT_RELATION_NAME);
 
       expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
-      expect(await rel.getParent()).toBe(parent);
+      const parentRetrieved = await rel.getParent();
+      expect(parentRetrieved.info.id.get()).toBe(parent.getId().get());
     });
 
     it('should throw an error if the parent or the name is missing', async () => {
@@ -142,8 +144,10 @@ describe('SpinalRelationLstPtr', () => {
         );
 
         await rel.addChild(DEFAULT_NODE);
-        const children = await rel.getChildren();
-        expect(children).toEqual([DEFAULT_NODE]);
+        const children = await rel.getChildren(0, false);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          DEFAULT_NODE.getId().get(),
+        ]);
       });
 
       it("should return the relation's children", async () => {
@@ -161,8 +165,12 @@ describe('SpinalRelationLstPtr', () => {
           rel.addChild(node3),
         ]);
 
-        const children = await rel.getChildren();
-        expect(children).toEqual([node1, node2, node3]);
+        const children = await rel.getChildren(0, false);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          node1.getId().get(),
+          node2.getId().get(),
+          node3.getId().get(),
+        ]);
       });
 
       it('should return an empty array', async () => {
@@ -170,13 +178,56 @@ describe('SpinalRelationLstPtr', () => {
           DEFAULT_NODE,
           DEFAULT_RELATION_NAME
         );
-        const children = await rel.getChildren();
+        const children = await rel.getChildren(0, false);
+        expect(children.length).toEqual(0);
+      });
 
-        expect(children).toEqual([]);
+      it('should return the relation children in reverse order', async () => {
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
+        const node1 = new SpinalNode();
+        const node2 = new SpinalNode();
+        const node3 = new SpinalNode();
+
+        await Promise.all([
+          rel.addChild(node1),
+          rel.addChild(node2),
+          rel.addChild(node3),
+        ]);
+
+        const children = await rel.getChildren(0, true);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          node3.getId().get(),
+          node2.getId().get(),
+          node1.getId().get(),
+        ]);
+      });
+
+      it('should offset the children returned', async () => {
+        const rel = new SpinalRelationLstPtr(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
+        const node1 = new SpinalNode('name1');
+        const node2 = new SpinalNode('name2');
+        const node3 = new SpinalNode('name3');
+
+        await Promise.all([
+          rel.addChild(node1),
+          rel.addChild(node2),
+          rel.addChild(node3),
+        ]);
+
+        const children = await rel.getChildren(1, false);
+        expect(children.length).toEqual(2);
+        const names = children.map((child) => child.getName().get());
+        expect(names).toEqual(['name2', 'name3']);
       });
     });
 
-    describe('How to use getChildrenInContext', () => {
+    describe('How to use getChildren in Context', () => {
       it("should return the relation's child", async () => {
         const context = new SpinalContext();
         const relation = new SpinalRelationLstPtr(
@@ -188,8 +239,10 @@ describe('SpinalRelationLstPtr', () => {
         child.addContextId(context.getId().get());
         await relation.addChild(child);
 
-        const children = await relation.getChildrenInContext(context);
-        expect(children).toEqual([child]);
+        const children = await relation.getChildren(0, false, context);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          child.getId().get(),
+        ]);
       });
 
       it("should return the relation's children associated to the context", async () => {
@@ -210,24 +263,11 @@ describe('SpinalRelationLstPtr', () => {
           relation.addChild(child3),
         ]);
 
-        const children = await relation.getChildrenInContext(context);
-        expect(children).toEqual([child1, child3]);
-      });
-
-      it('should throw an error if the context is missing', async () => {
-        const relation: any = new SpinalRelationLstPtr(
-          DEFAULT_NODE,
-          DEFAULT_RELATION_NAME
-        );
-        let error = false;
-
-        try {
-          await relation.getChildrenInContext();
-        } catch (e) {
-          error = true;
-          expect(e instanceof Error).toBeTruthy();
-        }
-        expect(error).toBeTruthy();
+        const children = await relation.getChildren(0, false, context);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          child1.getId().get(),
+          child3.getId().get(),
+        ]);
       });
 
       it('should throw an error if context is not a SpinalContext', async () => {
@@ -239,7 +279,7 @@ describe('SpinalRelationLstPtr', () => {
         let error = false;
 
         try {
-          await relation.getChildrenInContext(context1);
+          await relation.getChildren(0, false, context1);
         } catch (e) {
           error = true;
           expect(e instanceof Error).toBeTruthy();
@@ -250,7 +290,7 @@ describe('SpinalRelationLstPtr', () => {
         error = false;
 
         try {
-          await relation.getChildrenInContext(context2);
+          await relation.getChildren(0, false, context2);
         } catch (e) {
           error = true;
           expect(e instanceof Error).toBeTruthy();
@@ -280,8 +320,10 @@ describe('SpinalRelationLstPtr', () => {
         );
 
         await rel.addChild(DEFAULT_NODE);
-        const children = await rel.getChildren();
-        expect(children).toEqual([DEFAULT_NODE]);
+        const children = await rel.getChildren(0, false);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          DEFAULT_NODE.getId().get(),
+        ]);
       });
 
       it('should throw an error if you try to add the same node twice', async () => {
@@ -328,12 +370,12 @@ describe('SpinalRelationLstPtr', () => {
 
         const res1 = await rel.addChild(node);
 
-        expect(res1).toBe(node);
+        expect(res1.info.id.get()).toBe(node.getId().get());
 
         const res2 = await rel.addChild(model);
         const res2Elem = await res2.getElement();
 
-        expect(res2Elem).toBe(model);
+        expect(res2Elem?.model_id).toBe(model.model_id);
       });
     });
   });
@@ -349,8 +391,8 @@ describe('SpinalRelationLstPtr', () => {
         await rel.addChild(DEFAULT_NODE);
         await rel.removeChild(DEFAULT_NODE);
 
-        const children = await rel.getChildren();
-        expect(children).toEqual([]);
+        const children = await rel.getChildren(0, false);
+        expect(children.length).toEqual(0);
       });
 
       it('should remove a child and update the children ids of the relation', async () => {
@@ -378,7 +420,7 @@ describe('SpinalRelationLstPtr', () => {
         await rel.removeChild(childNode);
 
         const parents = await childNode.getParents();
-        expect(parents).toEqual([]);
+        expect(parents.length).toEqual(0);
       });
 
       it('should throw an error if the node is not a child', async () => {
@@ -418,8 +460,8 @@ describe('SpinalRelationLstPtr', () => {
 
         await rel.removeChildren();
 
-        const children = await rel.getChildren();
-        expect(children).toEqual([]);
+        const children = await rel.getChildren(0, false);
+        expect(children.length).toEqual(0);
       });
 
       it('should delete the given children', async () => {
@@ -439,8 +481,10 @@ describe('SpinalRelationLstPtr', () => {
 
         await rel.removeChildren([node3, node1]);
 
-        const children = await rel.getChildren();
-        expect(children).toEqual([node2]);
+        const children = await rel.getChildren(0, false);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          node2.getId().get(),
+        ]);
       });
 
       it('should delete some of the given children', async () => {
@@ -468,8 +512,10 @@ describe('SpinalRelationLstPtr', () => {
         }
         expect(error).toBeTruthy();
 
-        const children = await rel.getChildren();
-        expect(children).toEqual([node2]);
+        const children = await rel.getChildren(0, false);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          node2.getId().get(),
+        ]);
       });
     });
   });

@@ -54,7 +54,7 @@ class SpinalSet extends spinal_core_connectorjs_1.Model {
      */
     add(value) {
         if (typeof value !== 'string') {
-            throw TypeError('The value must be a string');
+            throw new TypeError('The value must be a string');
         }
         this.mod_attr(value, 0);
     }
@@ -67,7 +67,7 @@ class SpinalSet extends spinal_core_connectorjs_1.Model {
      */
     has(value) {
         if (typeof value !== 'string') {
-            throw TypeError('The value must be a string');
+            throw new TypeError('The value must be a string');
         }
         return this.hasOwnProperty(value);
     }
@@ -117,7 +117,7 @@ class SpinalSet extends spinal_core_connectorjs_1.Model {
      */
     forEach(fun) {
         if (typeof fun !== 'function') {
-            throw TypeError('The callback must be a function');
+            throw new TypeError('The callback must be a function');
         }
         const values = this.values();
         for (let i = 0; i < this.size(); i += 1) {

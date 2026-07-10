@@ -60,11 +60,11 @@ abstract class BaseSpinalRelation extends Model {
 
     // instanceof doesn't work here
     if (!SpinalNode.prototype.isPrototypeOf(parent!)) {
-      throw TypeError('parent must be a node');
+      throw new TypeError('parent must be a node');
     }
 
     if (typeof name !== 'string') {
-      throw TypeError('name must be a string');
+      throw new TypeError('name must be a string');
     }
 
     this.add_attr({
@@ -115,7 +115,7 @@ abstract class BaseSpinalRelation extends Model {
    */
   addContextId(id: string): void {
     if (typeof id !== 'string') {
-      throw TypeError('id must be a string');
+      throw new TypeError('id must be a string');
     }
 
     if (!this.contextIds.has(id)) {
@@ -141,7 +141,7 @@ abstract class BaseSpinalRelation extends Model {
    */
   belongsToContext(context: SpinalContext<any>): boolean {
     if (!(context instanceof SpinalContext)) {
-      throw TypeError('context must be a SpinalContext');
+      throw new TypeError('context must be a SpinalContext');
     }
 
     return this.contextIds.has(context.getId().get());
@@ -155,7 +155,7 @@ abstract class BaseSpinalRelation extends Model {
    */
   removeContextId(id: string): void {
     if (typeof id !== 'string') {
-      throw TypeError('id must be a string');
+      throw new TypeError('id must be a string');
     }
 
     if (this.contextIds.has(id)) {
@@ -176,17 +176,14 @@ abstract class BaseSpinalRelation extends Model {
     const promises: Promise<void>[] = [];
 
     if (!Array.isArray(nodes)) {
-      throw TypeError('node must be an array');
+      throw new TypeError('node must be an array');
     }
 
     if (nodes.length === 0) {
-      for (const node of await this.getChildren()) {
-        promises.push(this.removeChild(node));
-      }
-    } else {
-      for (const node of nodes) {
-        promises.push(this.removeChild(node));
-      }
+      nodes = await this.getChildren(0, false);
+    }
+    for (const node of nodes) {
+      promises.push(this.removeChild(node));
     }
 
     const res = await Promise.allSettled(promises);
@@ -209,53 +206,37 @@ abstract class BaseSpinalRelation extends Model {
    * Return all the children of the relation.
    * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
    * @memberof BaseSpinalRelation
-   * @deprecated
    */
-  async getChildren(): Promise<SpinalNode<any>[]> {
+  async getChildren(
+    offset: number,
+    reverse: boolean,
+    context?: SpinalContext,
+    counter: number = 0
+  ): Promise<SpinalNode<any>[]> {
     const results: SpinalNode<any>[] = [];
-    const gen = this.getChildrenGen();
+    const gen = this.getChildrenGen(offset, reverse, context, counter);
 
     for await (let node of gen) {
       results.push(node);
     }
     return results;
   }
+
   /**
    * Return an async generator that yields each children of the relation.
    * @abstract
+   * @param {number} offset
+   * @param {boolean} reverse
+   * @param {SpinalContext} [context]
+   * @param {number} [counter]
    * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
    * @memberof BaseSpinalRelation
    */
-  abstract getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown>;
-
-  /**
-   * Return all the children of the relation associated to a certain context.
-   * @param {SpinalContext<any>} context
-   * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
-   * @throws {TypeError} If the context is not a SpinalContext
-   * @memberof BaseSpinalRelation
-   * @deprecated
-   */
-  async getChildrenInContext(
-    context: SpinalContext<any>
-  ): Promise<SpinalNode<any>[]> {
-    const results: SpinalNode<any>[] = [];
-    const gen = this.getChildrenInContextGen(context);
-
-    for await (let node of gen) {
-      results.push(node);
-    }
-    return results;
-  }
-  /**
-   * Return an async generator that yields each children of the relation associated to a certain context.
-   * @abstract
-   * @param {SpinalContext<any>} context
-   * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
-   * @memberof BaseSpinalRelation
-   */
-  abstract getChildrenInContextGen(
-    context: SpinalContext<any>
+  abstract getChildrenGen(
+    offset: number,
+    reverse: boolean,
+    context?: SpinalContext,
+    counter?: number
   ): AsyncGenerator<SpinalNode<any>, void, unknown>;
 
   /**

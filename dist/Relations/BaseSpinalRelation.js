@@ -71,10 +71,10 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
             return;
         // instanceof doesn't work here
         if (!SpinalNode_1.SpinalNode.prototype.isPrototypeOf(parent)) {
-            throw TypeError('parent must be a node');
+            throw new TypeError('parent must be a node');
         }
         if (typeof name !== 'string') {
-            throw TypeError('name must be a string');
+            throw new TypeError('name must be a string');
         }
         this.add_attr({
             name,
@@ -120,7 +120,7 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
      */
     addContextId(id) {
         if (typeof id !== 'string') {
-            throw TypeError('id must be a string');
+            throw new TypeError('id must be a string');
         }
         if (!this.contextIds.has(id)) {
             this.contextIds.setElement(id, new spinal_core_connectorjs_1.Val(0));
@@ -143,7 +143,7 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
      */
     belongsToContext(context) {
         if (!(context instanceof SpinalContext_1.SpinalContext)) {
-            throw TypeError('context must be a SpinalContext');
+            throw new TypeError('context must be a SpinalContext');
         }
         return this.contextIds.has(context.getId().get());
     }
@@ -155,7 +155,7 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
      */
     removeContextId(id) {
         if (typeof id !== 'string') {
-            throw TypeError('id must be a string');
+            throw new TypeError('id must be a string');
         }
         if (this.contextIds.has(id)) {
             this.contextIds.delete(id);
@@ -174,17 +174,13 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
             let nodes = nodesToDelete;
             const promises = [];
             if (!Array.isArray(nodes)) {
-                throw TypeError('node must be an array');
+                throw new TypeError('node must be an array');
             }
             if (nodes.length === 0) {
-                for (const node of yield this.getChildren()) {
-                    promises.push(this.removeChild(node));
-                }
+                nodes = yield this.getChildren(0, false);
             }
-            else {
-                for (const node of nodes) {
-                    promises.push(this.removeChild(node));
-                }
+            for (const node of nodes) {
+                promises.push(this.removeChild(node));
             }
             const res = yield Promise.allSettled(promises);
             const rejected = res.filter((r) => r.status === 'rejected');
@@ -197,13 +193,12 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
      * Return all the children of the relation.
      * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
      * @memberof BaseSpinalRelation
-     * @deprecated
      */
-    getChildren() {
-        return __awaiter(this, void 0, void 0, function* () {
+    getChildren(offset_1, reverse_1, context_1) {
+        return __awaiter(this, arguments, void 0, function* (offset, reverse, context, counter = 0) {
             var _a, e_1, _b, _c;
             const results = [];
-            const gen = this.getChildrenGen();
+            const gen = this.getChildrenGen(offset, reverse, context, counter);
             try {
                 for (var _d = true, gen_1 = __asyncValues(gen), gen_1_1; gen_1_1 = yield gen_1.next(), _a = gen_1_1.done, !_a; _d = true) {
                     _c = gen_1_1.value;
@@ -218,37 +213,6 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
                     if (!_d && !_a && (_b = gen_1.return)) yield _b.call(gen_1);
                 }
                 finally { if (e_1) throw e_1.error; }
-            }
-            return results;
-        });
-    }
-    /**
-     * Return all the children of the relation associated to a certain context.
-     * @param {SpinalContext<any>} context
-     * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
-     * @throws {TypeError} If the context is not a SpinalContext
-     * @memberof BaseSpinalRelation
-     * @deprecated
-     */
-    getChildrenInContext(context) {
-        return __awaiter(this, void 0, void 0, function* () {
-            var _a, e_2, _b, _c;
-            const results = [];
-            const gen = this.getChildrenInContextGen(context);
-            try {
-                for (var _d = true, gen_2 = __asyncValues(gen), gen_2_1; gen_2_1 = yield gen_2.next(), _a = gen_2_1.done, !_a; _d = true) {
-                    _c = gen_2_1.value;
-                    _d = false;
-                    let node = _c;
-                    results.push(node);
-                }
-            }
-            catch (e_2_1) { e_2 = { error: e_2_1 }; }
-            finally {
-                try {
-                    if (!_d && !_a && (_b = gen_2.return)) yield _b.call(gen_2);
-                }
-                finally { if (e_2) throw e_2.error; }
             }
             return results;
         });

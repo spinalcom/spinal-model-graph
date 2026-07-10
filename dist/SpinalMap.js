@@ -57,10 +57,10 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
      */
     setElement(key, value) {
         if (typeof key !== 'string') {
-            throw TypeError('The key must be a string');
+            throw new TypeError('The key must be a string');
         }
         if (value === undefined) {
-            throw TypeError('The value must be defined');
+            throw new TypeError('The value must be defined');
         }
         this.rem_attr(key);
         const attribute = {
@@ -86,7 +86,7 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
      */
     has(key) {
         if (typeof key !== 'string') {
-            throw TypeError('The key must be a string');
+            throw new TypeError('The key must be a string');
         }
         return this._attribute_names.includes(key);
     }
@@ -149,7 +149,7 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
      */
     forEach(fun) {
         if (typeof fun !== 'function') {
-            throw TypeError('The callback must be a function');
+            throw new TypeError('The callback must be a function');
         }
         for (const [key, value] of this) {
             fun(value, key);

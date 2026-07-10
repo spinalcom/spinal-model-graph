@@ -23,10 +23,10 @@
  */
 
 import { FileSystem, Lst, Model, spinalCore } from 'spinal-core-connectorjs';
-import { SpinalContext } from '../Nodes/SpinalContext';
 import { SpinalNode } from '../Nodes/SpinalNode';
 import { BaseSpinalRelation } from './BaseSpinalRelation';
 import { SPINAL_RELATION_TYPE } from './SpinalRelationFactory';
+import { SpinalContext } from '../Nodes/SpinalContext';
 
 /**
  * Relation where the children are in a Lst.
@@ -85,33 +85,43 @@ class SpinalRelationRef extends BaseSpinalRelation {
 
   /**
    * Return all the children of the relation.
+   * @param {IGetChildrenGenOpt} options Options to filter the children
+   * @param {number} counter Counter to keep track of the number of children already processed in other relations
    * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation
    * @memberof SpinalRelationRef
    */
-  async *getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown> {
-    for (const child of this.children) {
-      yield child;
-    }
-  }
-
-  /**
-   * Return all the children of the relation associated to a certain context.
-   * @param {SpinalContext} context The context to use for the search
-   * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation associated to the context
-   * @throws {TypeError} If the context is not a SpinalContext
-   * @memberof SpinalRelationRef
-   */
-  async *getChildrenInContextGen(
-    context: SpinalContext<any>
+  async *getChildrenGen(
+    offset: number,
+    reverse: boolean,
+    context?: SpinalContext,
+    counter: number = 0
   ): AsyncGenerator<SpinalNode<any>, void, unknown> {
-    if (!(context instanceof SpinalContext)) {
-      return Promise.reject(TypeError('context must be a SpinalContext'));
+    if (!(context instanceof SpinalContext) && context !== undefined) {
+      throw new TypeError('The context must be an instance of SpinalContext.');
+    }
+    const realOffset = Math.max(0, offset - counter);
+    if (realOffset >= this.children.length) {
+      return;
     }
 
-    for (let i: number = 0; i < this.children.length; i += 1) {
-      const child: SpinalNode<any> = this.children[i];
+    if (reverse) {
+      let i: number = this.children.length - 1 - realOffset;
+      for (; i >= 0; i -= 1) {
+        const child: SpinalNode<any> = this.children[i];
 
-      if (child.belongsToContext(context)) {
+        if (context && !child.belongsToContext(context)) {
+          continue;
+        }
+        yield child;
+      }
+    } else {
+      let i: number = realOffset;
+      for (; i < this.children.length; i += 1) {
+        const child: SpinalNode<any> = this.children[i];
+
+        if (context && !child.belongsToContext(context)) {
+          continue;
+        }
         yield child;
       }
     }

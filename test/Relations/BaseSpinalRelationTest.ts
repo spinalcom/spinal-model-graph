@@ -43,7 +43,8 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
       const rel = new SpinalRelationRef(parent, DEFAULT_RELATION_NAME);
 
       expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
-      expect(await rel.getParent()).toBe(parent);
+      const parentRetrieved = await rel.getParent();
+      expect(parentRetrieved.info.id.get()).toBe(parent.info.id.get());
       expect(rel.getId() instanceof Str).toBeTruthy();
     });
 
@@ -52,7 +53,8 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
       const rel = new SpinalRelationRef(parent, DEFAULT_RELATION_NAME);
 
       expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
-      expect(await rel.getParent()).toBe(parent);
+      const parentRetrieved = await rel.getParent();
+      expect(parentRetrieved.info.id.get()).toBe(parent.info.id.get());
       expect(rel.getId() instanceof Str).toBeTruthy();
     });
 
@@ -61,7 +63,8 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
       const rel = new SpinalRelationRef(parent, DEFAULT_RELATION_NAME);
 
       expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
-      expect(await rel.getParent()).toBe(parent);
+      const parentRetrieved = await rel.getParent();
+      expect(parentRetrieved.info.id.get()).toBe(parent.info.id.get());
       expect(rel.getId() instanceof Str).toBeTruthy();
     });
 
@@ -108,8 +111,8 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
     describe('How to use getParent', () => {
       it('should return the parent of the relation', async () => {
         const rel = new SpinalRelationRef(DEFAULT_NODE, DEFAULT_RELATION_NAME);
-
-        expect(await rel.getParent()).toBe(DEFAULT_NODE);
+        const parentRetrieved = await rel.getParent();
+        expect(parentRetrieved.info.id.get()).toBe(DEFAULT_NODE.info.id.get());
       });
     });
   });
@@ -289,8 +292,8 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
 
         await rel.removeChildren();
 
-        const children = await rel.getChildren();
-        expect(children).toEqual([]);
+        const children = await rel.getChildren(0, false);
+        expect(children.length).toEqual(0);
       });
 
       it('should delete the given children', async () => {
@@ -310,8 +313,10 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
 
         await rel.removeChildren([node3, node1]);
 
-        const children = await rel.getChildren();
-        expect(children).toEqual([node2]);
+        const children = await rel.getChildren(0, false);
+        expect(children.map((child) => child.info.id.get())).toEqual([
+          node2.info.id.get(),
+        ]);
       });
 
       it('should delete some of the given children', async () => {
@@ -339,8 +344,10 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
         }
         expect(error).toBeTruthy();
 
-        const children = await rel.getChildren();
-        expect(children).toEqual([node2]);
+        const children = await rel.getChildren(0, false);
+        expect(children.map((child) => child.info.id.get())).toEqual([
+          node2.info.id.get(),
+        ]);
       });
 
       it('should throw an error if nodes is not an array', async () => {
@@ -378,8 +385,8 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
 
         await rel.removeChildren();
 
-        const children = await rel.getChildren();
-        expect(children).toEqual([]);
+        const children = await rel.getChildren(0, false);
+        expect(children.length).toEqual(0);
       });
 
       it('should the relation from the parent pointer', async () => {
@@ -390,12 +397,7 @@ describe('BaseSpinalRelation with SpinalRelationRef', () => {
         );
 
         await rel.removeFromGraph();
-        expect(
-          parent.hasRelation(
-            DEFAULT_RELATION_NAME,
-            SPINAL_RELATION_LST_PTR_TYPE
-          )
-        ).toBeFalsy();
+        expect(parent.hasRelation(DEFAULT_RELATION_NAME)).toBeFalsy();
       });
     });
   });

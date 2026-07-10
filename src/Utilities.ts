@@ -24,9 +24,11 @@
 
 import type { Model } from 'spinal-core-connectorjs';
 import type { AnySpinalRelation } from './interfaces/AnySpinalRelation';
-import type { SpinalContext } from './Nodes/SpinalContext';
+import { SpinalContext } from './Nodes/SpinalContext';
 import type SpinalNode from './Nodes/SpinalNode';
 import type { SpinalNodePointer } from './SpinalNodePointer';
+import type { IGetChildrenGenOpt } from './interfaces/IGetChildrenOpt';
+export { debounce } from 'lodash';
 
 /**
  * Generates a random number and returns in a string.
@@ -113,32 +115,20 @@ export function toRegex(
   return new RegExp(`^(?:${sources.join('|')})$`);
 }
 
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => Promise<ReturnType<T>> {
-  let timeout: NodeJS.Timeout | null = null;
-  let resolveQueue: ((
-    value: ReturnType<T> | PromiseLike<ReturnType<T>>
-  ) => void)[] = [];
-
-  return (...args: Parameters<T>): Promise<ReturnType<T>> => {
-    return new Promise((resolve) => {
-      resolveQueue.push(resolve);
-
-      if (timeout) {
-        clearTimeout(timeout);
-      }
-
-      timeout = setTimeout(async () => {
-        const result = await func(...args);
-        resolveQueue.forEach((res) => res(result));
-        resolveQueue = [];
-      }, wait);
-    });
-  };
+export function validateGetChildrenOptions(
+  options: Partial<IGetChildrenGenOpt>
+): IGetChildrenGenOpt {
+  const offset = options.offset ?? 0;
+  const reverse = options.reverse ?? false;
+  const context = options.context ?? undefined;
+  if (typeof offset !== 'number' || offset < 0) {
+    throw new TypeError('offset must be a non-negative number');
+  }
+  if (typeof reverse !== 'boolean') {
+    throw new TypeError('reverse must be a boolean');
+  }
+  if (context !== undefined && !(context instanceof SpinalContext)) {
+    throw new TypeError('context must be a SpinalContext');
+  }
+  return context ? { offset, reverse, context } : { offset, reverse };
 }
-
-// export function sendEventFunc(eventName: string, parentNode: SpinalNode<any>, childNode: SpinalNode<any>, contextNode: SpinalContext<any>) {
-//   spinalEventEmitter.emit(eventName,);
-// }

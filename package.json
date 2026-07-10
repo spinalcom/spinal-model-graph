@@ -34,15 +34,18 @@
   "homepage": "https://github.com/spinalcom/spinal-model-graph#readme",
   "dependencies": {
     "axios": "^1.12.2",
-    "spinal-core-connectorjs": "git+https://github.com/spinalcom/spinal-core-connectorjs.git",
-    "spinal-env-viewer-plugin-event-emitter": "git+https://github.com/spinalcom/spinal-env-viewer-plugin-event-emitter.git"
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.24",
     "@types/node": "^20.0.0",
     "@vitest/coverage-v8": "^1.6.0",
-    "lodash": "^4.17.21",
     "typedoc": "^0.28.19",
     "typescript": "^5.9.3",
     "vitest": "^1.6.0"
+  },
+  "spinalDependencies": {
+    "spinal-core-connectorjs": "spinal-core-connectorjs",
+    "spinal-env-viewer-plugin-event-emitter": "spinal-env-viewer-plugin-event-emitter"
   }
 }

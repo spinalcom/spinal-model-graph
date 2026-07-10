@@ -84,7 +84,10 @@ describe('How to use map', () => {
 
       const foundChild = await node1.map(<any>undefined, DEFAULT_FUN);
 
-      expect(foundChild).toEqual([node1, node2]);
+      expect(foundChild.map((child) => child.info.id.get())).toEqual([
+        node1.info.id.get(),
+        node2.info.id.get(),
+      ]);
     });
   });
 
@@ -102,14 +105,14 @@ describe('How to use map', () => {
       ]);
 
       const ids = await parent.map(<any>undefined, (node) => {
-        return node.getId();
+        return node.getId().get();
       });
 
       expect(ids).toEqual([
-        parent.getId(),
-        child1.getId(),
-        child2.getId(),
-        child3.getId(),
+        parent.getId().get(),
+        child1.getId().get(),
+        child2.getId().get(),
+        child3.getId().get(),
       ]);
     });
 
@@ -145,7 +148,7 @@ describe('How to use map', () => {
 
       const secondGen = await root.map(<any>undefined, (node) => {
         if (node.getType().get() === 'secondGen') {
-          return node;
+          return node.info.id.get();
         }
         return undefined;
       });
@@ -155,8 +158,8 @@ describe('How to use map', () => {
         undefined,
         undefined,
         undefined,
-        secondGen1,
-        secondGen2,
+        secondGen1.info.id.get(),
+        secondGen2.info.id.get(),
         undefined,
       ]);
     });
@@ -235,7 +238,10 @@ describe('How to use mapInContext', () => {
 
       const foundChild = await node1.mapInContext(context, DEFAULT_FUN);
 
-      expect(foundChild).toEqual([node1, node2]);
+      expect(foundChild.map((child) => child.info.id.get())).toEqual([
+        node1.info.id.get(),
+        node2.info.id.get(),
+      ]);
     });
 
     describe('Basic callback manipulation', () => {
@@ -313,11 +319,19 @@ describe('How to use mapInContext', () => {
 
       let foundChildren = await parent.mapInContext(context2, DEFAULT_FUN);
 
-      expect(foundChildren).toEqual([parent, child2, child3, child4]);
+      expect(foundChildren.map((child) => child.info.id.get())).toEqual([
+        parent.info.id.get(),
+        child2.info.id.get(),
+        child3.info.id.get(),
+        child4.info.id.get(),
+      ]);
 
       foundChildren = await parent.mapInContext(context1, DEFAULT_FUN);
 
-      expect(foundChildren).toEqual([parent, child1]);
+      expect(foundChildren.map((child) => child.info.id.get())).toEqual([
+        parent.info.id.get(),
+        child1.info.id.get(),
+      ]);
     });
   });
 });

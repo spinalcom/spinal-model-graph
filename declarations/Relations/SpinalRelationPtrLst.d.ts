@@ -38,19 +38,15 @@ declare class SpinalRelationPtrLst extends BaseSpinalRelation {
      */
     getNbChildren(): number;
     /**
-     * Return all the children of the relation.
+     * Return the children of the relation.
+     * @param {number} offset
+     * @param {boolean} reverse
+     * @param {SpinalContext} [context]
+     * @param {number} [counter=0]
      * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
      * @memberof SpinalRelationPtrLst
      */
-    getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown>;
-    /**
-     * Return all the children of the relation associated to a certain context.
-     * @param {SpinalContext} context Context to use for the search
-     * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children associated to the context
-     * @throws {TypeError} If the context is not a SpinalContext
-     * @memberof SpinalRelationPtrLst
-     */
-    getChildrenInContextGen(context: SpinalContext<any>): AsyncGenerator<SpinalNode<any>, void, unknown>;
+    getChildrenGen(offset: number, reverse: boolean, context?: SpinalContext, counter?: number): AsyncGenerator<SpinalNode<any>, void, unknown>;
     /**
      * Returns the type of the relation.
      * @returns {string} Type of the relation

@@ -22,8 +22,8 @@
  * <http://resources.spinalcom.com/licenses.pdf>.
  */
 
-import { describe, it, expect } from 'vitest';
-import { loadParentRelation } from '../src/Utilities';
+import { describe, it, expect, vi } from 'vitest';
+import { debounce, loadParentRelation } from '../src/Utilities';
 import {
   SpinalNodePointer,
   SpinalContext,

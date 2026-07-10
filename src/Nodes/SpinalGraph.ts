@@ -80,7 +80,7 @@ class SpinalGraph<T extends Model = any> extends SpinalNode<T> {
    */
   async getContext(name: string) {
     if (typeof name !== 'string') {
-      throw TypeError('name must be string');
+      throw new TypeError('name must be string');
     }
 
     const children = await this.getChildren([HAS_CONTEXT_RELATION_NAME]);

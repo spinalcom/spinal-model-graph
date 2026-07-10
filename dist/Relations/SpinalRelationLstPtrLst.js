@@ -47,12 +47,12 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SpinalRelationLstPtrLst = void 0;
 const spinal_core_connectorjs_1 = require("spinal-core-connectorjs");
-const SpinalContext_1 = require("../Nodes/SpinalContext");
 const SpinalNode_1 = require("../Nodes/SpinalNode");
 const SpinalNodePointer_1 = require("../SpinalNodePointer");
 const BaseSpinalRelation_1 = require("./BaseSpinalRelation");
 const constants_1 = require("../constants");
 const Utilities_1 = require("../Utilities");
+const SpinalContext_1 = require("../Nodes/SpinalContext");
 /**
  * Relation where the children are in Lst of Ptr of Lst.
  * @extends BaseSpinalRelation
@@ -74,12 +74,11 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
     constructor(parent, name) {
         super(parent, name);
         this._constructorName = 'SpinalRelationLstPtrLst';
-        this.debouncedRestructureChildren = (0, Utilities_1.debounce)(() => this.restructureChildren(), 5000);
+        this.debouncedRestructureChildren = (0, Utilities_1.debounce)(() => this.restructureChildren(), 1000);
         if (spinal_core_connectorjs_1.FileSystem._sig_server === false)
             return;
         this.add_attr({
             children: new spinal_core_connectorjs_1.Lst(),
-            lastRestructure: Date.now(),
         });
     }
     /**
@@ -131,36 +130,100 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
         return false;
     }
     /**
-     * Generator that yields all the children of the relation one by one.
-     * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
+     * Generator that yields the children of the relation one by one.
+     * @param {number} offset
+     * @param {boolean} reverse
+     * @param {SpinalContext} [context]
+     * @param {number} [counter=0]
+     * @return {*}
      * @memberof SpinalRelationLstPtrLst
      */
-    getChildrenGen() {
-        return __asyncGenerator(this, arguments, function* getChildrenGen_1() {
-            for (let ptrLst of this.children) {
-                const lst = yield __await(ptrLst.load());
-                for (let node of lst) {
-                    yield yield __await(node);
+    getChildrenGen(offset, reverse, context, counter = 0) {
+        if (context) {
+            return this._getChildrenInContext(offset, reverse, context, counter);
+        }
+        else {
+            return this._getChildrenGen(offset, reverse, counter);
+        }
+    }
+    _getChildrenGen(offset, reverse, counter) {
+        return __asyncGenerator(this, arguments, function* _getChildrenGen_1() {
+            var _a, _b;
+            let realOffset = Math.max(0, offset - counter);
+            if (realOffset >= this.getNbChildren()) {
+                return yield __await(void 0);
+            }
+            if (!reverse) {
+                for (let i = 0; i < this.children.length; i++) {
+                    // if the realOffset is greater than the number of children in the current lstPtr, we can skip it
+                    const ptrLst = this.children[i];
+                    const nbrInPtr = ((_a = ptrLst.info.ids) === null || _a === void 0 ? void 0 : _a.length) || 0;
+                    if (realOffset >= nbrInPtr) {
+                        realOffset -= nbrInPtr;
+                        continue;
+                    }
+                    const lst = yield __await(ptrLst.load());
+                    let j = Math.max(0, realOffset);
+                    for (; j < lst.length; j++) {
+                        realOffset = 0;
+                        yield yield __await(lst[j]);
+                    }
+                }
+            }
+            else {
+                for (let i = this.children.length - 1; i >= 0; i--) {
+                    const ptrLst = this.children[i];
+                    const nbrInPtr = ((_b = ptrLst.info.ids) === null || _b === void 0 ? void 0 : _b.length) || 0;
+                    if (realOffset >= nbrInPtr) {
+                        realOffset -= nbrInPtr;
+                        continue;
+                    }
+                    const lst = yield __await(ptrLst.load());
+                    let j = lst.length - 1 - Math.max(0, realOffset);
+                    for (; j >= 0; j--) {
+                        realOffset = 0;
+                        yield yield __await(lst[j]);
+                    }
                 }
             }
         });
     }
-    /**
-     * Return all the children of the relation associated to a certain context.
-     * @returns {Promise<SpinalNode<any>[]>} The children of the relation
-     * @throws {TypeError} If the context is not a SpinalContext
-     * @memberof SpinalRelationLstPtrLst
-     */
-    getChildrenInContextGen(context) {
-        return __asyncGenerator(this, arguments, function* getChildrenInContextGen_1() {
+    _getChildrenInContext(offset, reverse, context, counter) {
+        return __asyncGenerator(this, arguments, function* _getChildrenInContext_1() {
             if (!(context instanceof SpinalContext_1.SpinalContext)) {
-                return yield __await(Promise.reject(TypeError('context must be a SpinalContext')));
+                throw new TypeError('context must be a SpinalContext');
             }
-            for (let ptrLst of this.children) {
-                const lst = yield __await(ptrLst.load());
-                for (let node of lst) {
-                    if (node.belongsToContext(context)) {
-                        yield yield __await(node);
+            let realOffset = Math.max(0, offset - counter);
+            if (realOffset >= this.getNbChildren()) {
+                return yield __await(void 0);
+            }
+            if (!reverse) {
+                for (let i = 0; i < this.children.length; i++) {
+                    const ptrLst = this.children[i];
+                    const lst = yield __await(ptrLst.load());
+                    for (let j = 0; j < lst.length; j++) {
+                        if (realOffset > 0) {
+                            realOffset -= 1;
+                            continue;
+                        }
+                        if (lst[j].belongsToContext(context)) {
+                            yield yield __await(lst[j]);
+                        }
+                    }
+                }
+            }
+            else {
+                for (let i = this.children.length - 1; i >= 0; i--) {
+                    const ptrLst = this.children[i];
+                    const lst = yield __await(ptrLst.load());
+                    for (let j = lst.length - 1; j >= 0; j--) {
+                        if (lst[j].belongsToContext(context)) {
+                            if (realOffset > 0) {
+                                realOffset -= 1;
+                                continue;
+                            }
+                            yield yield __await(lst[j]);
+                        }
                     }
                 }
             }
@@ -222,9 +285,7 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
                     lst = yield ptrLst.load();
                 }
             }
-            // ptrLst.info.ids?.push(tmpNodeCreate.info.id.get());
             lst.push(tmpNodeCreate);
-            this.debouncedRestructureChildren();
             return tmpNodeCreate;
         });
     }
@@ -247,8 +308,11 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
                     ptrLst.info.ids.remove(node.info.id.get());
                     const lst = yield ptrLst.load();
                     lst.remove(node);
-                    if (lst.length === 0) {
-                        this.children.remove(ptrLst);
+                    // if the list size is under LST_PTR_LST_COMPACT_TRIGGER and not the last list,
+                    // we can try to call debouncedRestructureChildren
+                    if (lst.length < constants_1.LST_PTR_LST_COMPACT_TRIGGER &&
+                        i < this.children.length - 1) {
+                        yield this.debouncedRestructureChildren();
                     }
                     break;
                 }
@@ -257,12 +321,12 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
                 return Promise.reject(Error('The node is not a child'));
             }
             node._removeParent(this);
-            this.debouncedRestructureChildren();
+            // this.debouncedRestructureChildren();
             return Promise.resolve();
         });
     }
     restructureChildren() {
-        return __awaiter(this, arguments, void 0, function* (force = false) {
+        return __awaiter(this, void 0, void 0, function* () {
             var _a, _b, _c;
             function set_or_push(lst, index, value) {
                 if (index < lst.length) {
@@ -272,37 +336,32 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
                     lst.push(value);
                 }
             }
-            const timeout = this.lastRestructure.get() + 20 * 24 * 60 * 60 * 1000; // 20 days
-            if (timeout < Date.now() || force === true) {
-                const startTime = Date.now();
-                // restructure the children
-                // 1 - get all the children in a single array
-                const allChildren = yield this.getChildren();
-                const ptrLstToRemove = [];
-                // 2 - restructure the children in Lst of Ptr of Lst
-                for (let i = 0; i < this.children.length; i += 1) {
-                    const normalizedChildren = allChildren.slice(i * constants_1.LST_PTR_LST_SIZE, (i + 1) * constants_1.LST_PTR_LST_SIZE);
-                    const ptrLst = this.children[i];
-                    if (normalizedChildren.length === 0) {
-                        ptrLstToRemove.push(ptrLst);
-                        continue;
-                    }
-                    const lst = yield ptrLst.load();
-                    for (let j = 0; j < normalizedChildren.length; j += 1) {
-                        const child = normalizedChildren[j];
-                        if (((_b = (_a = ptrLst.info.ids) === null || _a === void 0 ? void 0 : _a[j]) === null || _b === void 0 ? void 0 : _b.get()) !== child.info.id.get()) {
-                            set_or_push(ptrLst.info.ids, j, child.info.id.get());
-                            set_or_push(lst, j, child);
-                        }
-                    }
-                    lst.trim(normalizedChildren.length);
-                    (_c = ptrLst.info.ids) === null || _c === void 0 ? void 0 : _c.trim(normalizedChildren.length);
+            // restructure the children
+            // 1 - get all the children in a single array
+            const allChildren = yield this.getChildren(0, false);
+            const ptrLstToRemove = [];
+            // 2 - restructure the children in Lst of Ptr of Lst
+            for (let i = 0; i < this.children.length; i += 1) {
+                const normalizedChildren = allChildren.slice(i * constants_1.LST_PTR_LST_SIZE, (i + 1) * constants_1.LST_PTR_LST_SIZE);
+                const ptrLst = this.children[i];
+                if (normalizedChildren.length === 0) {
+                    ptrLstToRemove.push(ptrLst);
+                    continue;
                 }
-                // 3 - remove all empty ptrLst
-                for (const ptrLst of ptrLstToRemove) {
-                    this.children.remove(ptrLst);
+                const lst = yield ptrLst.load();
+                for (let j = 0; j < normalizedChildren.length; j += 1) {
+                    const child = normalizedChildren[j];
+                    if (((_b = (_a = ptrLst.info.ids) === null || _a === void 0 ? void 0 : _a[j]) === null || _b === void 0 ? void 0 : _b.get()) !== child.info.id.get()) {
+                        set_or_push(ptrLst.info.ids, j, child.info.id.get());
+                        set_or_push(lst, j, child);
+                    }
                 }
-                this.lastRestructure.set(startTime);
+                lst.trim(normalizedChildren.length);
+                (_c = ptrLst.info.ids) === null || _c === void 0 ? void 0 : _c.trim(normalizedChildren.length);
+            }
+            // 3 - remove all empty ptrLst
+            for (const ptrLst of ptrLstToRemove) {
+                this.children.remove(ptrLst);
             }
         });
     }

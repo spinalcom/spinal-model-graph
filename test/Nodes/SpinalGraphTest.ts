@@ -60,7 +60,9 @@ describe('SpinalGraph', () => {
       await graph.addContext(context);
 
       const children = await graph.getChildren([HAS_CONTEXT_RELATION_NAME]);
-      expect(children).toEqual([context]);
+      expect(children.map((child) => child.info.id.get())).toEqual([
+        context.info.id.get(),
+      ]);
     });
 
     it('should throw an error if the context is missing', async () => {
@@ -103,14 +105,14 @@ describe('SpinalGraph', () => {
       ]);
 
       const context = await graph.getContext(DEFAULT_SPINAL_CONTEXT_NAME2);
-      expect(context).toBe(context2);
+      expect(context?.info.id.get()).toBe(context2.info.id.get());
     });
 
     it("should return undefined if the context isn't found", async () => {
       const graph = new SpinalGraph();
       const context = await graph.getContext(DEFAULT_SPINAL_CONTEXT_NAME1);
 
-      expect(context).toBe(undefined);
+      expect(typeof context === 'undefined').toBeTruthy();
     });
 
     it('should throw an error if the name is missing', async () => {
@@ -131,7 +133,7 @@ describe('SpinalGraph', () => {
       let error = false;
 
       try {
-        await graph.getContext(1);
+        await graph.getContext(<any>1);
       } catch (e) {
         error = true;
         expect(e instanceof Error).toBeTruthy();
@@ -155,10 +157,14 @@ describe('SpinalGraph', () => {
       await graph.removeFromGraph();
 
       const children = await graph.getChildren();
-      expect(children).toEqual([context]);
+      expect(children.map((child) => child.info.id.get())).toEqual([
+        context.info.id.get(),
+      ]);
 
       const parents = await context.getParents();
-      expect(parents).toEqual([graph]);
+      expect(parents.map((parent) => parent.info.id.get())).toEqual([
+        graph.info.id.get(),
+      ]);
     });
   });
 });

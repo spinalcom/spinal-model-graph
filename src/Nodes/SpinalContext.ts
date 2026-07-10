@@ -23,7 +23,10 @@
  */
 
 import { FileSystem, Model, spinalCore } from 'spinal-core-connectorjs';
-import { SPINAL_RELATION_PTR_LST_TYPE } from '../Relations/SpinalRelationFactory';
+import {
+  SPINAL_RELATION_PTR_LST_TYPE,
+  type RELATION_TYPE_LIST,
+} from '../Relations/SpinalRelationFactory';
 import { guid } from '../Utilities';
 import { SpinalNode } from './SpinalNode';
 
@@ -85,13 +88,26 @@ class SpinalContext<T extends Model = any> extends SpinalNode<T> {
   addChildInContext<K extends Model>(
     child: K | SpinalNode<K>,
     relationName: string,
-    _relationType: string = SPINAL_RELATION_PTR_LST_TYPE,
+    relationType: string,
+    context?: SpinalContext<T>
+  ): Promise<SpinalNode<K>>;
+  addChildInContext<K extends Model>(
+    child: K | SpinalNode<K>,
+    relationName: string,
+    context?: SpinalContext<T>
+  ): Promise<SpinalNode<K>>;
+  addChildInContext<K extends Model>(
+    child: K | SpinalNode<K>,
+    relationName: string,
+    relationTypeOrContext:
+      | string
+      | SpinalContext<T> = SPINAL_RELATION_PTR_LST_TYPE,
     context: SpinalContext<T> = this
   ): Promise<SpinalNode<K>> {
     return super.addChildInContext(
       child,
       relationName,
-      SPINAL_RELATION_PTR_LST_TYPE,
+      relationTypeOrContext as string,
       context
     );
   }

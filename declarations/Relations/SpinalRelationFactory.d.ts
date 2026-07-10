@@ -4,6 +4,8 @@ import type { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalRelationLstPtr } from './SpinalRelationLstPtr';
 import { SpinalRelationPtrLst } from './SpinalRelationPtrLst';
 import { SpinalRelationRef } from './SpinalRelationRef';
+import { SpinalRelationLstPtrLst } from './SpinalRelationLstPtrLst';
+import type { AnySpinalRelation } from '../interfaces/AnySpinalRelation';
 /**
  * Namespace for general relation functions.
  * @abstract
@@ -19,5 +21,7 @@ declare class SpinalRelationFactory {
      * @memberof SpinalRelationFactory
      */
     static getNewRelation(parent: SpinalNode<Model>, relationName: string, relationType: string): SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst;
+    static canUpgradeRelation(relation: AnySpinalRelation): relation is (SpinalRelationLstPtr | SpinalRelationPtrLst) & boolean;
+    static upgradeRelationToLstPtrLst(relation: SpinalRelationLstPtr | SpinalRelationPtrLst, nodeParent: SpinalNode): Promise<SpinalRelationLstPtrLst>;
 }
 export { SPINAL_RELATION_TYPE, SPINAL_RELATION_LST_PTR_TYPE, SPINAL_RELATION_PTR_LST_TYPE, SPINAL_RELATION_LST_PTR_LST_TYPE, RELATION_TYPE_LIST, SpinalRelationFactory, };

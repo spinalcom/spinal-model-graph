@@ -29,11 +29,15 @@ import {
   SPINAL_RELATION_PTR_LST_TYPE,
   SPINAL_RELATION_LST_PTR_LST_TYPE,
   SPINAL_RELATION_TYPE,
+  SPINAL_RELATION_THAT_CAN_UPGRADE,
+  LST_PTR_LST_UPGRADE_SIZE,
 } from '../constants';
 import type { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalRelationLstPtr } from './SpinalRelationLstPtr';
 import { SpinalRelationPtrLst } from './SpinalRelationPtrLst';
 import { SpinalRelationRef } from './SpinalRelationRef';
+import { SpinalRelationLstPtrLst } from './SpinalRelationLstPtrLst';
+import type { AnySpinalRelation } from '../interfaces/AnySpinalRelation';
 /**
  * Namespace for general relation functions.
  * @abstract
@@ -65,6 +69,44 @@ class SpinalRelationFactory {
       default:
         throw new Error('Unknown relationType');
     }
+  }
+
+  static canUpgradeRelation(
+    relation: AnySpinalRelation
+  ): relation is (SpinalRelationLstPtr | SpinalRelationPtrLst) & boolean {
+    return (
+      SPINAL_RELATION_THAT_CAN_UPGRADE.includes(
+        relation._constructorName as any
+      ) && relation.getNbChildren() >= LST_PTR_LST_UPGRADE_SIZE
+    );
+  }
+
+  static async upgradeRelationToLstPtrLst(
+    relation: SpinalRelationLstPtr | SpinalRelationPtrLst,
+    nodeParent: SpinalNode
+  ): Promise<SpinalRelationLstPtrLst> {
+    if (
+      !(relation instanceof SpinalRelationLstPtr) &&
+      !(relation instanceof SpinalRelationPtrLst)
+    ) {
+      throw new Error('Cannot upgrade this type of relation');
+    }
+    const newRelation = nodeParent._createRelation(
+      relation.name.get(),
+      SPINAL_RELATION_LST_PTR_LST_TYPE
+    );
+    for (const contextId of relation.getContextIds()) {
+      newRelation.addContextId(contextId);
+    }
+
+    const promiseArray: Promise<any>[] = [];
+    // use getChildren an not getChidlrenGen because an interator may cause errors
+    for await (const child of relation.getChildrenGen(0, false)) {
+      promiseArray.push(newRelation.addChild(child));
+    }
+    promiseArray.push(relation.removeFromGraph());
+    await Promise.all(promiseArray);
+    return newRelation as SpinalRelationLstPtrLst;
   }
 }
 

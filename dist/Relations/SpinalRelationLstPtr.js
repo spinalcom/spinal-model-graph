@@ -104,38 +104,38 @@ class SpinalRelationLstPtr extends BaseSpinalRelation_1.BaseSpinalRelation {
      * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation
      * @memberof SpinalRelationLstPtr
      */
-    getChildrenGen() {
-        return __asyncGenerator(this, arguments, function* getChildrenGen_1() {
+    getChildrenGen(offset_1, reverse_1, context_1) {
+        return __asyncGenerator(this, arguments, function* getChildrenGen_1(offset, reverse, context, counter = 0) {
             const proms = [];
-            // We load all the children in parallel and then yield them one by one
-            // when they are all loaded to avoid multiple await in the loop
-            // which can cause performance issues
-            for (let i = 0; i < this.children.length; i += 1) {
-                proms.push(this.children[i].load());
+            if (context && !(context instanceof SpinalContext_1.SpinalContext)) {
+                throw new TypeError('context must be a SpinalContext');
+            }
+            const realOffset = Math.max(0, offset - counter);
+            if (realOffset >= this.children.length) {
+                return yield __await(void 0);
+            }
+            if (reverse) {
+                let i = this.children.length - 1 - realOffset;
+                for (; i >= 0; i -= 1) {
+                    const ptr = this.children[i];
+                    proms.push(ptr.load());
+                }
+            }
+            else {
+                let i = realOffset;
+                for (; i < this.children.length; i += 1) {
+                    const ptr = this.children[i];
+                    proms.push(ptr.load());
+                }
             }
             const children = yield __await(Promise.all(proms));
-            for (let child of children) {
-                yield yield __await(child);
-            }
-        });
-    }
-    /**
-     * Return all the children of the relation associated to a certain context.
-     * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children of the relation
-     * @throws {TypeError} If the context is not a SpinalContext
-     * @memberof SpinalRelationLstPtr
-     */
-    getChildrenInContextGen(context) {
-        return __asyncGenerator(this, arguments, function* getChildrenInContextGen_1() {
-            if (!(context instanceof SpinalContext_1.SpinalContext)) {
-                return yield __await(Promise.reject(TypeError('context must be a SpinalContext')));
-            }
-            for (let i = 0; i < this.children.length; i += 1) {
-                const ptr = this.children[i];
-                const child = yield __await(ptr.load());
-                if (child.belongsToContext(context)) {
-                    yield yield __await(child);
+            let i = 0;
+            for (; i < children.length; i += 1) {
+                const child = children[i];
+                if (context && !child.belongsToContext(context)) {
+                    continue;
                 }
+                yield yield __await(child);
             }
         });
     }

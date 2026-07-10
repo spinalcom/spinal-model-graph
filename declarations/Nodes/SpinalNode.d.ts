@@ -10,6 +10,7 @@ import { SpinalMap } from '../SpinalMap';
 import { SpinalNodePointer } from '../SpinalNodePointer';
 import { SpinalSet } from '../SpinalSet';
 import { SpinalContext } from './SpinalContext';
+import type { IGetChildrenGenOpt, IGetChildrenOpt } from '../interfaces/IGetChildrenOpt';
 export declare const DEFAULT_FIND_PREDICATE: SpinalNodeFindPredicateFunc;
 /**
  * Node of a graph.
@@ -122,23 +123,33 @@ declare class SpinalNode<T extends Model = any> extends Model {
     /**
      * Verify if the node contains the relation name.
      * @param {string} relationName Name of the relation
-     * @param {string} [relationType] Type of the relation
+     * @param {typeof RELATION_TYPE_LIST[number]} [relationType] Type of the relation
      * @returns {boolean} Return true is the relation is contained in the node and false otherwise.
      * @throws {TypeError} If the relation name is not a string
      * @throws {Error} If the relation type doesn't exist
      */
-    hasRelation(relationName: string, relationType?: string): boolean;
+    hasRelation(relationName: string): boolean;
+    /**
+     * Verify if the node contains the relation name.
+     * @deprecated Use relationType is not used anymore, use hasRelation(relationName) instead
+     */
+    hasRelation(relationName: string, relationType: string): boolean;
+    hasRelationInContext(relationName: string, context: SpinalContext): boolean;
     /**
      * Verify if the node contains all the relation names.
      * @param {string[]} relationNames Array containing all the relation name
-     * @param {string} relationType Type of the relations
      * @returns {boolean} Return true if the node contains
      * all the relations in relationNames,false otherwise.
      * @throws {TypeError} If the relation names are not in an array
      * @throws {TypeError} If one of the relation names is not a string
      * @throws {Error} If the relation type doesn't exist
      */
-    hasRelations(relationNames: string[], relationType?: string): boolean;
+    hasRelations(relationNames: string[]): boolean;
+    /**
+     * Verify if the node contains all the relation names.
+     * @deprecated Use relationType is not used anymore, use hasRelations(relationNames) instead
+     */
+    hasRelations(relationNames: string[], relationType: string): boolean;
     /**
      * Returns all the relation names of the node.
      * @returns {string[]} The names of the relations of the node
@@ -148,13 +159,14 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * Add the node as child of the relation.
      * @param {T|SpinalNode<T>} child Element to add as child
      * @param {string} relationName Name of the relation
-     * @param {string} relationType Type of the relation
+     * @param {string} [relationType=SPINAL_RELATION_PTR_LST_TYPE] Type of the relation
      * @returns {Promise<SpinalNode>} The child node in a promise
      * @throws {TypeError} If the child is not a model
      * @throws {TypeError} If the relation name is not a string
      * @throws {Error} If the relation type is invalid
+     * @throws {Error} If the child is itself
      */
-    addChild<K extends Model>(child: K | SpinalNode<K>, relationName: string, relationType: string): Promise<SpinalNode<K>>;
+    addChild<K extends Model>(child: K | SpinalNode<K>, relationName: string, relationType?: string | string): Promise<SpinalNode<K>>;
     /**
      * Adds a child and notices the context if a new relation was created.
      * @param {SpinalNode | Model} child Node to add as child
@@ -166,25 +178,38 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @throws {TypeError} If the relation name is not a string
      * @throws {TypeError} If the context is not a SpinalContext
      * @throws {Error} If the relation type is invalid
+     * @throws {Error} If the child is itself
      */
     addChildInContext<K extends Model>(child: K | SpinalNode<K>, relationName: string, relationType: string, context: SpinalContext<any>): Promise<SpinalNode<K>>;
+    /**
+     * @template K
+     * @param {(K | SpinalNode<K>)} child
+     * @param {string} relationName
+     * @param {SpinalContext<any>} context
+     * @return {*}  {Promise<SpinalNode<K>>}
+     * @memberof SpinalNode
+     */
+    addChildInContext<K extends Model>(child: K | SpinalNode<K>, relationName: string, context: SpinalContext<any>): Promise<SpinalNode<K>>;
     /**
      * Removes the node from the relation children.
      * @param {SpinalNode} node Node to remove
      * @param {string} relationName Name of the relation to wich the node belongs
-     * @param {string} relationType Type of the relation to wich the node belongs
      * @returns {Promise<void>} An empty promise
      * @throws {TypeError} If relation name is not a string
      * @throws {Error} If relation type is invalid
      * @throws {Error} If relation doesn't exist
      * @throws {Error} If the child doesn't exist
      */
+    removeChild(node: SpinalNode<any>, relationName: string): Promise<void>;
+    /**
+     * Removes the node from the relation children.
+     * @deprecated Use relationType is not used anymore, use removeChild(node, relationName) instead
+     */
     removeChild(node: SpinalNode<any>, relationName: string, relationType: string): Promise<void>;
     /**
      * Removes children in the given relation.
      * @param {SpinalNode[]} nodes Nodes to delete
      * @param {string} relationName Name of the relation
-     * @param {string} relationType Type of the relation
      * @returns {Promise<void>} An empty promise
      * @throws {TypeError} If nodes is not an array
      * @throws {TypeError} If an element of nodes is not a SpinalNode
@@ -193,15 +218,24 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @throws {Error} If the relation doesn't exist
      * @throws {Error} If one of the nodes is not a child
      */
+    removeChildren(nodes: SpinalNode<any>[], relationName: string): Promise<void>;
+    /**
+     * Removes children in the given relation.
+     * @deprecated Use relationType is not used anymore, use removeChildren(nodes, relationName) instead
+     */
     removeChildren(nodes: SpinalNode<any>[], relationName: string, relationType: string): Promise<void>;
     /**
      * Removes a child relation of the node.
      * @param {string} relationName Name of the relation to remove
-     * @param {string} relationType Type of the relation to remove
      * @returns {Promise<void>} An empty promise
      * @throws {TypeError} If the relationName is not a string
      * @throws {Error} If the relationType is invalid
      * @throws {Error} If the relation doesn't exist
+     */
+    removeRelation(relationName: string): Promise<void>;
+    /**
+     * Removes a child relation of the node.
+     * @deprecated Use relationType is not used anymore, use removeRelation(relationName) instead
      */
     removeRelation(relationName: string, relationType: string): Promise<void>;
     /**
@@ -217,7 +251,6 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @param {SpinalNodeFindPredicateFunc} predicate
      * Functions that takes a node and returns a boolean
      * @param {string} relationName Name of the relation
-     * @param {string} relationType Type of the relation
      * @returns {Promise<SpinalNode<any> | undefined>}
      * The first child for which the predicate is true, undefined if no child verify the predicate
      * @throws {TypeError} If predicate is not a function
@@ -225,7 +258,11 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @throws {Error} If relation type is invalid
      * @throws {Error} If relation doesn't exist
      */
-    getChild(predicate: SpinalNodeFindPredicateFunc, relationName: string, relationType: string): Promise<SpinalNode<any> | undefined>;
+    getChild(predicate: SpinalNodeFindPredicateFunc, relationName: string): Promise<SpinalNode<any> | undefined>;
+    /**
+     * Returns the first child in the given relation for which the predicate is true.
+     * @deprecated Use relationType is not used anymore, use getChild(predicate, relationName) instead
+     */ getChild(predicate: SpinalNodeFindPredicateFunc, relationName: string, relationType: string): Promise<SpinalNode<any> | undefined>;
     /**
      * Returns the children of the node for the relation names.
      * @param {string[]} [relationNames=[]]
@@ -234,16 +271,17 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @throws {TypeError} If relationNames is neither an array, a string or omitted
      * @throws {TypeError} If an element of relationNames is not a string
      */
-    getChildren(relationNames?: string | RegExp | (string | RegExp)[]): Promise<SpinalNode<any>[]>;
-    getChildrenGen(relationNames?: string | RegExp | (string | RegExp)[]): AsyncGenerator<SpinalNode<T>, void, void>;
+    getChildren(relationNames?: string | RegExp | (string | RegExp)[], options?: Partial<IGetChildrenOpt>): Promise<SpinalNode<any>[]>;
     /**
      * Return the children of the node that are registered in the context
      * @param {SpinalContext} context Context to use for the search
      * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Relation names to filter the children. If empty or undefined all the relations will be used
+     * @param {Partial<IGetChildrenGenOpt>} [options={}] Options to filter the children
      * @returns {Promise<SpinalNode[]>} The children that were found
      * @throws {TypeError} If the context is not a SpinalContext
      */
-    getChildrenInContext(context: SpinalContext<any>, relationNames?: string | RegExp | (string | RegExp)[]): Promise<SpinalNode<any>[]>;
+    getChildrenInContext(context: SpinalContext<any>, relationNames?: string | RegExp | (string | RegExp)[], options?: Partial<IGetChildrenOpt>): Promise<SpinalNode<any>[]>;
+    getChildrenGen(relationNames?: string | RegExp | (string | RegExp)[], options?: Partial<IGetChildrenGenOpt>): AsyncGenerator<SpinalNode<T>, void, void>;
     /**
      * Return all parents for the relation names no matter the type of relation
      * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Array containing the relation names of the desired parents
@@ -439,7 +477,7 @@ declare class SpinalNode<T extends Model = any> extends Model {
      * @returns {SpinalRelation} The relation corresponding
      * @protected
      */
-    _getRelation(relationName: string, relationType: string): AnySpinalRelation;
+    _getRelation(relationName: string): AnySpinalRelation | undefined;
     /**
      * Removes a parent relation of the node.
      * @param {AnySpinalRelation} relation Relation to remove
@@ -471,13 +509,15 @@ declare class SpinalNode<T extends Model = any> extends Model {
      */
     _removeFromChildren(): Promise<void>;
     /**
+     * Return all the children relations for the relation names no matter the type of relation
      * @private
-     * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]]
-     * @param {boolean} [getParent=false]
-     * @return {*}  {string[]}
+     * @param {RelationSearch} [relationNames=[]]
+     * @param {SpinalContext} [context] if provided, only relations belonging to this context will be returned
+     * @return {*}
      * @memberof SpinalNode
      */
-    private _getValidRelations;
+    private _getValidRelationsChildren;
+    private _getValidPtrRelationsParents;
     private sendEventFunc;
 }
 export default SpinalNode;

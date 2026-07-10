@@ -80,7 +80,7 @@ class SpinalGraph extends SpinalNode_1.SpinalNode {
     getContext(name) {
         return __awaiter(this, void 0, void 0, function* () {
             if (typeof name !== 'string') {
-                throw TypeError('name must be string');
+                throw new TypeError('name must be string');
             }
             const children = yield this.getChildren([constants_1.HAS_CONTEXT_RELATION_NAME]);
             return children.find((child) => child.info.name.get() === name);

@@ -96,38 +96,47 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
   }
 
   /**
-   * Return all the children of the relation.
+   * Return the children of the relation.
+   * @param {number} offset
+   * @param {boolean} reverse
+   * @param {SpinalContext} [context]
+   * @param {number} [counter=0]
    * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
    * @memberof SpinalRelationPtrLst
    */
-  async *getChildrenGen(): AsyncGenerator<SpinalNode<any>, void, unknown> {
-    const childrenLst: Lst<SpinalNode<any>> = await this.children.load();
-
-    for (let i: number = 0; i < childrenLst.length; i += 1) {
-      yield childrenLst[i];
-    }
-  }
-
-  /**
-   * Return all the children of the relation associated to a certain context.
-   * @param {SpinalContext} context Context to use for the search
-   * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children associated to the context
-   * @throws {TypeError} If the context is not a SpinalContext
-   * @memberof SpinalRelationPtrLst
-   */
-  async *getChildrenInContextGen(
-    context: SpinalContext<any>
+  async *getChildrenGen(
+    offset: number,
+    reverse: boolean,
+    context?: SpinalContext,
+    counter: number = 0
   ): AsyncGenerator<SpinalNode<any>, void, unknown> {
+    if (context && !(context instanceof SpinalContext)) {
+      throw new TypeError('context must be a SpinalContext');
+    }
+    const realOffset = Math.max(0, offset - counter);
+    if (realOffset >= this.getNbChildren()) {
+      return;
+    }
     const childrenLst: Lst<SpinalNode<any>> = await this.children.load();
 
-    if (!(context instanceof SpinalContext)) {
-      throw TypeError('context must be a SpinalContext');
-    }
+    if (reverse) {
+      let i: number = childrenLst.length - 1 - realOffset;
+      for (; i >= 0; i -= 1) {
+        const child: SpinalNode<any> = childrenLst[i];
 
-    for (let i: number = 0; i < childrenLst.length; i += 1) {
-      const child = childrenLst[i];
+        if (context && !child.belongsToContext(context)) {
+          continue;
+        }
+        yield child;
+      }
+    } else {
+      let i: number = realOffset;
+      for (; i < childrenLst.length; i += 1) {
+        const child: SpinalNode<any> = childrenLst[i];
 
-      if (child.belongsToContext(context)) {
+        if (context && !child.belongsToContext(context)) {
+          continue;
+        }
         yield child;
       }
     }
@@ -207,7 +216,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    */
   async removeChildren(nodes: SpinalNode<any>[] = []): Promise<void> {
     if (!Array.isArray(nodes)) {
-      throw TypeError('node must be an array');
+      throw new TypeError('node must be an array');
     }
 
     const childrenLst: Lst<SpinalNode<any>> = await this.children.load();

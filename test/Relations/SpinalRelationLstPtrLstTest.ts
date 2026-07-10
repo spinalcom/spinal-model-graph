@@ -63,7 +63,8 @@ describe('SpinalRelationLstPtrLst', () => {
       const rel = new SpinalRelationLstPtrLst(parent, DEFAULT_RELATION_NAME);
 
       expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
-      expect(await rel.getParent()).toBe(parent);
+      const parentRetrieved = await rel.getParent();
+      expect(parentRetrieved.info.id.get()).toBe(parent.getId().get());
     });
 
     it('should create a new relation with a name and a graph parent', async () => {
@@ -71,18 +72,17 @@ describe('SpinalRelationLstPtrLst', () => {
       const rel = new SpinalRelationLstPtrLst(parent, DEFAULT_RELATION_NAME);
 
       expect(rel.getName().get()).toBe(DEFAULT_RELATION_NAME);
-      expect(await rel.getParent()).toBe(parent);
+      const parentRetrieved = await rel.getParent();
+      expect(parentRetrieved.info.id.get()).toBe(parent.getId().get());
     });
 
     it('should throw an error if the parent or the name is missing', async () => {
       expect(() => {
         new SpinalRelationLstPtrLst();
       }).toThrow(TypeError);
-
       expect(() => {
         new SpinalRelationLstPtrLst(undefined, DEFAULT_RELATION_NAME);
       }).toThrow(TypeError);
-
       expect(() => {
         new SpinalRelationLstPtrLst(DEFAULT_NODE);
       }).toThrow(TypeError);
@@ -149,8 +149,10 @@ describe('SpinalRelationLstPtrLst', () => {
         );
 
         await rel.addChild(DEFAULT_NODE);
-        const children = await rel.getChildren();
-        expect(children).toEqual([DEFAULT_NODE]);
+        const children = await rel.getChildren(0, false);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          DEFAULT_NODE.getId().get(),
+        ]);
       });
 
       it("should return the relation's children", async () => {
@@ -168,8 +170,12 @@ describe('SpinalRelationLstPtrLst', () => {
           rel.addChild(node3),
         ]);
 
-        const children = await rel.getChildren();
-        expect(children).toEqual([node1, node2, node3]);
+        const children = await rel.getChildren(0, false);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          node1.getId().get(),
+          node2.getId().get(),
+          node3.getId().get(),
+        ]);
       });
 
       it('should return an empty array', async () => {
@@ -177,13 +183,120 @@ describe('SpinalRelationLstPtrLst', () => {
           DEFAULT_NODE,
           DEFAULT_RELATION_NAME
         );
-        const children = await rel.getChildren();
+        const children = await rel.getChildren(0, false);
 
         expect(children).toEqual([]);
       });
+
+      it('should return the relation children in reverse order', async () => {
+        const rel = new SpinalRelationLstPtrLst(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
+        const node1 = new SpinalNode();
+        const node2 = new SpinalNode();
+        const node3 = new SpinalNode();
+
+        await Promise.all([
+          rel.addChild(node1),
+          rel.addChild(node2),
+          rel.addChild(node3),
+        ]);
+
+        const children = await rel.getChildren(0, true);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          node3.getId().get(),
+          node2.getId().get(),
+          node1.getId().get(),
+        ]);
+      });
+
+      it('should offset the children returned', async () => {
+        const rel = new SpinalRelationLstPtrLst(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
+        const node1 = new SpinalNode();
+        const node2 = new SpinalNode();
+        const node3 = new SpinalNode();
+
+        await Promise.all([
+          rel.addChild(node1),
+          rel.addChild(node2),
+          rel.addChild(node3),
+        ]);
+
+        const children = await rel.getChildren(1, false);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          node2.getId().get(),
+          node3.getId().get(),
+        ]);
+      });
+      it('should offset with the counter the children returned', async () => {
+        const rel = new SpinalRelationLstPtrLst(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
+        const node1 = new SpinalNode();
+        const node2 = new SpinalNode();
+        const node3 = new SpinalNode();
+
+        await Promise.all([
+          rel.addChild(node1),
+          rel.addChild(node2),
+          rel.addChild(node3),
+        ]);
+
+        const children = await rel.getChildren(1, false, undefined, 50);
+        expect(children.length).toEqual(3);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          node1.getId().get(),
+          node2.getId().get(),
+          node3.getId().get(),
+        ]);
+      });
+      it('should not load the chunk if the offset is greater than the number of children in a chunk', async () => {
+        const rel = new SpinalRelationLstPtrLst(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
+        const proms = [];
+        while (rel.getNbChildren() < LST_PTR_LST_SIZE * 2) {
+          proms.push(rel.addChild(new SpinalNode()));
+        }
+        const children_pushed = await Promise.all(proms);
+
+        const children = await rel.getChildren(LST_PTR_LST_SIZE, false);
+        expect(children.map((child) => child.getId().get())).toEqual(
+          children_pushed
+            .slice(LST_PTR_LST_SIZE)
+            .map((child) => child.getId().get())
+        );
+      });
+      it('should not load the chunk if the offset is greater than the number of children in a chunk, also in reverse', async () => {
+        const rel = new SpinalRelationLstPtrLst(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
+        const proms = [];
+        let i = 0;
+        while (rel.getNbChildren() < LST_PTR_LST_SIZE * 2) {
+          proms.push(rel.addChild(new SpinalNode('name' + i)));
+          i++;
+        }
+        const children_pushed = await Promise.all(proms);
+
+        const children = await rel.getChildren(LST_PTR_LST_SIZE, true);
+        expect(children.map((child) => child.getId().get())).toEqual(
+          children_pushed
+            .slice(0, LST_PTR_LST_SIZE)
+            .reverse()
+            .map((child) => child.getId().get())
+        );
+      });
     });
 
-    describe('How to use getChildrenInContext', () => {
+    describe('How to use getChildren in Context', () => {
       it("should return the relation's child", async () => {
         const context = new SpinalContext();
         const relation = new SpinalRelationLstPtrLst(
@@ -195,8 +308,10 @@ describe('SpinalRelationLstPtrLst', () => {
         child.addContextId(context.getId().get());
         await relation.addChild(child);
 
-        const children = await relation.getChildrenInContext(context);
-        expect(children).toEqual([child]);
+        const children = await relation.getChildren(0, false, context);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          child.getId().get(),
+        ]);
       });
 
       it("should return the relation's children associated to the context", async () => {
@@ -217,8 +332,182 @@ describe('SpinalRelationLstPtrLst', () => {
           relation.addChild(child3),
         ]);
 
-        const children = await relation.getChildrenInContext(context);
-        expect(children).toEqual([child1, child3]);
+        const children = await relation.getChildren(0, false, context);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          child1.getId().get(),
+          child3.getId().get(),
+        ]);
+      });
+
+      it('should offset the children returned associated to the context', async () => {
+        const context = new SpinalContext();
+        const relation = new SpinalRelationLstPtrLst(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
+        const child1 = new SpinalNode();
+        const child2 = new SpinalNode();
+        const child3 = new SpinalNode();
+
+        child1.addContextId(context.getId().get());
+        child2.addContextId(context.getId().get());
+        child3.addContextId(context.getId().get());
+        await Promise.all([
+          relation.addChild(child1),
+          relation.addChild(child2),
+          relation.addChild(child3),
+        ]);
+
+        const children = await relation.getChildren(1, false, context);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          child2.getId().get(),
+          child3.getId().get(),
+        ]);
+      });
+      it('should offset with the counter the children returned associated to the context', async () => {
+        const context = new SpinalContext();
+        const relation = new SpinalRelationLstPtrLst(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
+        const child1 = new SpinalNode();
+        const child2 = new SpinalNode();
+        const child3 = new SpinalNode();
+
+        child1.addContextId(context.getId().get());
+        child2.addContextId(context.getId().get());
+        child3.addContextId(context.getId().get());
+        await Promise.all([
+          relation.addChild(child1),
+          relation.addChild(child2),
+          relation.addChild(child3),
+        ]);
+
+        const children = await relation.getChildren(1, false, context, 50);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          child1.getId().get(),
+          child2.getId().get(),
+          child3.getId().get(),
+        ]);
+      });
+
+      it('should return the reverse order of the children returned associated to the context', async () => {
+        const context = new SpinalContext();
+        const relation = new SpinalRelationLstPtrLst(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
+        const child1 = new SpinalNode();
+        const child2 = new SpinalNode();
+        const child3 = new SpinalNode();
+
+        child1.addContextId(context.getId().get());
+        child2.addContextId(context.getId().get());
+        child3.addContextId(context.getId().get());
+        await Promise.all([
+          relation.addChild(child1),
+          relation.addChild(child2),
+          relation.addChild(child3),
+        ]);
+
+        const children = await relation.getChildren(0, true, context);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          child3.getId().get(),
+          child2.getId().get(),
+          child1.getId().get(),
+        ]);
+      });
+
+      it('should return the reverse order of the children returned associated to the context with an offset', async () => {
+        const context = new SpinalContext();
+        const relation = new SpinalRelationLstPtrLst(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
+        const child1 = new SpinalNode();
+        const child2 = new SpinalNode();
+        const child3 = new SpinalNode();
+
+        child1.addContextId(context.getId().get());
+        child2.addContextId(context.getId().get());
+        child3.addContextId(context.getId().get());
+        await Promise.all([
+          relation.addChild(child1),
+          relation.addChild(child2),
+          relation.addChild(child3),
+        ]);
+
+        const children = await relation.getChildren(1, true, context);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          child2.getId().get(),
+          child1.getId().get(),
+        ]);
+      });
+
+      it('should return the reverse order of the children returned associated to the context with an offset and a counter', async () => {
+        const context = new SpinalContext();
+        const relation = new SpinalRelationLstPtrLst(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
+        const child1 = new SpinalNode();
+        const child2 = new SpinalNode();
+        const child3 = new SpinalNode();
+
+        child1.addContextId(context.getId().get());
+        child2.addContextId(context.getId().get());
+        child3.addContextId(context.getId().get());
+        await Promise.all([
+          relation.addChild(child1),
+          relation.addChild(child2),
+          relation.addChild(child3),
+        ]);
+
+        const children = await relation.getChildren(1, true, context, 1);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          child3.getId().get(),
+          child2.getId().get(),
+          child1.getId().get(),
+        ]);
+      });
+      it('should return the children in reverse order and in a context', async () => {
+        const rel = new SpinalRelationLstPtrLst(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME
+        );
+        const context = new SpinalContext();
+        const proms = [];
+        let i = 0;
+        while (rel.getNbChildren() < LST_PTR_LST_SIZE * 4) {
+          const child = new SpinalNode('name' + i);
+          proms.push(rel.addChild(child));
+          i++;
+        }
+        const children_pushed = await Promise.all(proms);
+        const children_in_context = children_pushed.slice(375, 475);
+        for (const child of children_in_context) {
+          child.addContextId(context.getId().get());
+        }
+
+        const children = await rel.getChildren(25, true, context);
+
+        console.log(
+          `children [${children.length}]: ${children.map((c) =>
+            c.getName().get()
+          )}`
+        );
+        console.log(
+          `children_in_context [${children_in_context.length}]: ${children_in_context.map(
+            (c) => c.getName().get()
+          )}`
+        );
+
+        expect(children.map((child) => child.getId().get())).toEqual(
+          children_in_context
+            .slice(0, 75)
+            .reverse()
+            .map((child) => child.getId().get())
+        );
       });
 
       it('should throw an error if the context is missing', async () => {
@@ -246,7 +535,7 @@ describe('SpinalRelationLstPtrLst', () => {
         let error = false;
 
         try {
-          await relation.getChildrenInContext(context1);
+          await relation.getChildren(0, false, context1);
         } catch (e) {
           error = true;
           expect(e instanceof Error).toBeTruthy();
@@ -257,7 +546,7 @@ describe('SpinalRelationLstPtrLst', () => {
         error = false;
 
         try {
-          await relation.getChildrenInContext(context2);
+          await relation.getChildren(0, false, context2);
         } catch (e) {
           error = true;
           expect(e instanceof Error).toBeTruthy();
@@ -287,8 +576,10 @@ describe('SpinalRelationLstPtrLst', () => {
         );
 
         await rel.addChild(DEFAULT_NODE);
-        const children = await rel.getChildren();
-        expect(children).toEqual([DEFAULT_NODE]);
+        const children = await rel.getChildren(0, false);
+        expect(children.map((child) => child.getId().get())).toEqual([
+          DEFAULT_NODE.getId().get(),
+        ]);
       });
 
       it('should throw an error if you try to add the same node twice', async () => {
@@ -335,12 +626,12 @@ describe('SpinalRelationLstPtrLst', () => {
 
         const res1 = await rel.addChild(node);
 
-        expect(res1).toBe(node);
+        expect(res1.info.id.get()).toBe(node.info.id.get());
 
         const res2 = await rel.addChild(model);
         const res2Elem = await res2.getElement();
 
-        expect(res2Elem).toBe(model);
+        expect(res2Elem?.model_id).toBe(model.model_id);
       });
     });
   });
@@ -356,8 +647,8 @@ describe('SpinalRelationLstPtrLst', () => {
         await rel.addChild(DEFAULT_NODE);
         await rel.removeChild(DEFAULT_NODE);
 
-        const children = await rel.getChildren();
-        expect(children).toEqual([]);
+        const children = await rel.getChildren(0, false);
+        expect(children.length).toEqual(0);
       });
 
       it('should remove a child and update the children ids of the relation', async () => {
@@ -370,7 +661,7 @@ describe('SpinalRelationLstPtrLst', () => {
         await rel.removeChild(DEFAULT_NODE);
 
         const ids = rel.getChildrenIds();
-        expect(ids).toEqual([]);
+        expect(ids.length).toEqual(0);
       });
 
       it("should remove a child and remove the relation the node's parents", async () => {
@@ -385,7 +676,7 @@ describe('SpinalRelationLstPtrLst', () => {
         await rel.removeChild(childNode);
 
         const parents = await childNode.getParents();
-        expect(parents).toEqual([]);
+        expect(parents.length).toEqual(0);
       });
 
       it('should throw an error if the node is not a child', async () => {
@@ -425,7 +716,7 @@ describe('SpinalRelationLstPtrLst', () => {
 
         await rel.removeChildren();
 
-        const children = await rel.getChildren();
+        const children = await rel.getChildren(0, false);
         expect(children.length).toEqual(0);
       });
 
@@ -446,8 +737,9 @@ describe('SpinalRelationLstPtrLst', () => {
 
         await rel.removeChildren([node3, node1]);
 
-        const children = await rel.getChildren();
-        expect(children).toEqual([node2]);
+        const children = await rel.getChildren(0, false);
+        expect(children.length).toEqual(1);
+        expect(children[0].info.id.get()).toBe(node2.info.id.get());
       });
 
       it('should delete some of the given children', async () => {
@@ -475,45 +767,67 @@ describe('SpinalRelationLstPtrLst', () => {
         }
         expect(error).toBeTruthy();
 
-        const children = await rel.getChildren();
-        expect(children).toEqual([node2]);
+        const children = await rel.getChildren(0, false);
+        expect(children.length).toEqual(1);
+        expect(children[0].info.id.get()).toBe(node2.info.id.get());
       });
     });
   });
-  describe('Test addChild split every LST_PTR_LST_SIZE', async () => {
+  describe('Test addChild split every LST_PTR_LST_SIZE (1.5s each test for the debounce trigger)', async () => {
     const rel = new SpinalRelationLstPtrLst(
       DEFAULT_NODE,
       DEFAULT_RELATION_NAME
     );
     const children: SpinalNode<any>[] = [];
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 1000; i++) {
       children.push(new SpinalNode(`node${i}`));
     }
     await Promise.all(children.map((child) => rel.addChild(child)));
 
-    it('should add 200 children to the relation in chunk of LST_PTR_LST_SIZE', () => {
+    it('should add 1000 children to the relation in chunk of LST_PTR_LST_SIZE', () => {
       const childrenIds = rel.getChildrenIds();
-      expect(childrenIds.length).toEqual(200);
+      expect(childrenIds.length).toEqual(1000);
       expect(childrenIds).toEqual(children.map((child) => child.getId().get()));
       for (let ptrLst of rel.children) {
         expect(ptrLst.info.ids?.length).toBeLessThanOrEqual(LST_PTR_LST_SIZE);
       }
     });
-    const childrenToRemove = children.slice(25, 126);
-    it('should remove the chunk a chunk if removeChild is called and the chunk becomes empty', async () => {
-      // remove children from 25 to 126
-      await rel.removeChildren(childrenToRemove);
-      expect(rel.children.length).toEqual(3);
-      expect(rel.children[0].info.ids?.length).toBe(25);
-      expect(rel.children[1].info.ids?.length).toBe(24);
-      expect(rel.children[2].info.ids?.length).toBe(50);
+    const childrenToRemoveLastChunk = children.slice(900, 1000);
+
+    it('should not restructure if the removed children is the last chunk', async () => {
+      await rel.removeChildren(childrenToRemoveLastChunk);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      expect(rel.children.length).toEqual(5);
+      expect(rel.children[0].info.ids?.length).toBe(200);
+      expect(rel.children[1].info.ids?.length).toBe(200);
+      expect(rel.children[2].info.ids?.length).toBe(200);
+      expect(rel.children[3].info.ids?.length).toBe(200);
+      expect(rel.children[4].info.ids?.length).toBe(100);
     });
 
-    it('should restructure the children if restructureChildren is called', async () => {
-      await rel.restructureChildren(true);
-      expect(rel.children.length).toEqual(2);
-      expect(rel.children[0].info.ids?.length).toBe(50);
-      expect(rel.children[1].info.ids?.length).toBe(49);
+    it('should remove the chunk a chunk if removeChild is called and the chunk becomes empty', async () => {
+      const childrenToRemove = children.slice(350, 450);
+      // remove children from 350 to 449
+      await rel.removeChildren(childrenToRemove);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      expect(rel.children.length).toEqual(5);
+      expect(rel.children[0].info.ids?.length).toBe(200);
+      expect(rel.children[1].info.ids?.length).toBe(150);
+      expect(rel.children[2].info.ids?.length).toBe(150);
+      expect(rel.children[3].info.ids?.length).toBe(200);
+      expect(rel.children[4].info.ids?.length).toBe(100);
+    });
+
+    it('should restructure the children if enough children are removed', async () => {
+      const childrenToRemove = children.slice(450, 600);
+      await rel.removeChildren(childrenToRemove);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      expect(rel.children.length).toEqual(4);
+      expect(rel.children[0].info.ids?.length).toBe(200);
+      expect(rel.children[1].info.ids?.length).toBe(200);
+      expect(rel.children[2].info.ids?.length).toBe(200);
+      expect(rel.children[3].info.ids?.length).toBe(50);
     });
   });
 });

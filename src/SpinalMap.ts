@@ -60,10 +60,10 @@ class SpinalMap<T extends Model = any> extends Model {
    */
   setElement(key: string, value: any): void {
     if (typeof key !== 'string') {
-      throw TypeError('The key must be a string');
+      throw new TypeError('The key must be a string');
     }
     if (value === undefined) {
-      throw TypeError('The value must be defined');
+      throw new TypeError('The value must be defined');
     }
 
     this.rem_attr(key);
@@ -92,7 +92,7 @@ class SpinalMap<T extends Model = any> extends Model {
    */
   has(key: string): boolean {
     if (typeof key !== 'string') {
-      throw TypeError('The key must be a string');
+      throw new TypeError('The key must be a string');
     }
 
     return this._attribute_names.includes(key);
@@ -166,7 +166,7 @@ class SpinalMap<T extends Model = any> extends Model {
    */
   forEach(fun: SpinalMapForEachFunc<T>): void {
     if (typeof fun !== 'function') {
-      throw TypeError('The callback must be a function');
+      throw new TypeError('The callback must be a function');
     }
 
     for (const [key, value] of this) {

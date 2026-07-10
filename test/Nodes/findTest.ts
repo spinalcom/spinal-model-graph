@@ -71,8 +71,10 @@ describe('How to use find', () => {
       ]);
 
       const foundChild = await node1.find();
-
-      expect(foundChild).toEqual([node1, node2]);
+      expect(Array.isArray(foundChild)).toBeTruthy();
+      expect(
+        foundChild.map((child: SpinalNode) => child.info.id.get())
+      ).toEqual([node1.info.id.get(), node2.info.id.get()]);
     });
   });
 
@@ -93,7 +95,11 @@ describe('How to use find', () => {
         return node.getType().get() === 'SpinalContext';
       });
 
-      expect(contexts).toEqual([context1, context2, context3]);
+      expect(contexts.map((context) => context.info.id.get())).toEqual([
+        context1.info.id.get(),
+        context2.info.id.get(),
+        context3.info.id.get(),
+      ]);
     });
 
     it('should return all contexts but not their nodes', async () => {
@@ -127,7 +133,11 @@ describe('How to use find', () => {
         return node.getType().get() === 'SpinalContext';
       });
 
-      expect(contexts).toEqual([context1, context2, context3]);
+      expect(contexts.map((context) => context.info.id.get())).toEqual([
+        context1.info.id.get(),
+        context2.info.id.get(),
+        context3.info.id.get(),
+      ]);
     });
 
     it('should return a node with a certain name', async () => {
@@ -146,13 +156,19 @@ describe('How to use find', () => {
         return node.getName().get() === `${DEFAULT_NODE_NAME}2`;
       });
 
-      expect(foundChild).toEqual([child2]);
+      expect(foundChild.map((child) => child.info.id.get())).toEqual([
+        child2.info.id.get(),
+      ]);
 
       foundChild = await parent.find(<any>undefined, (node) => {
         return node.getName().get() !== `${DEFAULT_NODE_NAME}2`;
       });
 
-      expect(foundChild).toEqual([parent, child1, child3]);
+      expect(foundChild.map((child) => child.info.id.get())).toEqual([
+        parent.info.id.get(),
+        child1.info.id.get(),
+        child3.info.id.get(),
+      ]);
     });
 
     it('should return nodes with a certain type', async () => {
@@ -177,13 +193,21 @@ describe('How to use find', () => {
         return node.getType().get() === 'type1';
       });
 
-      expect(foundChildren).toEqual([child1, child3, child4, child6]);
+      expect(foundChildren.map((child) => child.info.id.get())).toEqual([
+        child1.info.id.get(),
+        child3.info.id.get(),
+        child4.info.id.get(),
+        child6.info.id.get(),
+      ]);
 
       foundChildren = await parent.find(<any>undefined, (node) => {
         return node.getType().get() === 'type2';
       });
 
-      expect(foundChildren).toEqual([child2, child5]);
+      expect(foundChildren.map((child) => child.info.id.get())).toEqual([
+        child2.info.id.get(),
+        child5.info.id.get(),
+      ]);
     });
   });
 
@@ -232,11 +256,19 @@ describe('How to use find', () => {
 
       let foundChildren = await parent.find(`${DEFAULT_RELATION_NAME}2`);
 
-      expect(foundChildren).toEqual([parent, child2, child3, child4]);
+      expect(foundChildren.map((child) => child.info.id.get())).toEqual([
+        parent.info.id.get(),
+        child2.info.id.get(),
+        child3.info.id.get(),
+        child4.info.id.get(),
+      ]);
 
       foundChildren = await parent.find(`${DEFAULT_RELATION_NAME}1`);
 
-      expect(foundChildren).toEqual([parent, child1]);
+      expect(foundChildren.map((child) => child.info.id.get())).toEqual([
+        parent.info.id.get(),
+        child1.info.id.get(),
+      ]);
     });
   });
 });
@@ -303,7 +335,10 @@ describe('How to use findInContext', () => {
 
       const foundChild = await node1.findInContext(context);
 
-      expect(foundChild).toEqual([node1, node2]);
+      expect(foundChild.map((child) => child.info.id.get())).toEqual([
+        node1.info.id.get(),
+        node2.info.id.get(),
+      ]);
     });
   });
 
@@ -324,7 +359,11 @@ describe('How to use findInContext', () => {
         return node.getType().get() === 'SpinalNode';
       });
 
-      expect(contexts).toEqual([node1, node2, node3]);
+      expect(contexts.map((node) => node.info.id.get())).toEqual([
+        node1.info.id.get(),
+        node2.info.id.get(),
+        node3.info.id.get(),
+      ]);
     });
 
     it('should return all direct children', async () => {
@@ -370,7 +409,11 @@ describe('How to use findInContext', () => {
         return node.getType().get() === 'direct';
       });
 
-      expect(directs).toEqual([node1, node2, node3]);
+      expect(directs.map((node) => node.info.id.get())).toEqual([
+        node1.info.id.get(),
+        node2.info.id.get(),
+        node3.info.id.get(),
+      ]);
     });
 
     it('should return a node with a certain name', async () => {
@@ -389,13 +432,19 @@ describe('How to use findInContext', () => {
         return node.getName().get() === `${DEFAULT_NODE_NAME}2`;
       });
 
-      expect(foundChild).toEqual([child2]);
+      expect(foundChild.map((child) => child.info.id.get())).toEqual([
+        child2.info.id.get(),
+      ]);
 
       foundChild = await context.findInContext(context, (node) => {
         return node.getName().get() !== `${DEFAULT_NODE_NAME}2`;
       });
 
-      expect(foundChild).toEqual([context, child1, child3]);
+      expect(foundChild.map((child) => child.info.id.get())).toEqual([
+        context.info.id.get(),
+        child1.info.id.get(),
+        child3.info.id.get(),
+      ]);
     });
 
     it('should return nodes with a certain type', async () => {
@@ -435,13 +484,21 @@ describe('How to use findInContext', () => {
         return node.getType().get() === 'type1';
       });
 
-      expect(foundChildren).toEqual([child1, child3, child4, child6]);
+      expect(foundChildren.map((child) => child.info.id.get())).toEqual([
+        child1.info.id.get(),
+        child3.info.id.get(),
+        child4.info.id.get(),
+        child6.info.id.get(),
+      ]);
 
       foundChildren = await context.findInContext(context, (node) => {
         return node.getType().get() === 'type2';
       });
 
-      expect(foundChildren).toEqual([child2, child5]);
+      expect(foundChildren.map((child) => child.info.id.get())).toEqual([
+        child2.info.id.get(),
+        child5.info.id.get(),
+      ]);
     });
 
     it('should return be able to do a find one like', async () => {
@@ -467,7 +524,9 @@ describe('How to use findInContext', () => {
         }
       );
 
-      expect(foundChild).toEqual([child2]);
+      expect(foundChild.map((child) => child.info.id.get())).toEqual([
+        child2.info.id.get(),
+      ]);
     });
     it('should return be able to stop a search', async () => {
       const context = new SpinalContext();
@@ -489,7 +548,9 @@ describe('How to use findInContext', () => {
         }
       );
 
-      expect(foundChild).toEqual([context]);
+      expect(foundChild.map((child) => child.info.id.get())).toEqual([
+        context.info.id.get(),
+      ]);
     });
   });
 
@@ -546,11 +607,19 @@ describe('How to use findInContext', () => {
 
       let foundChildren = await parent.findInContext(context2);
 
-      expect(foundChildren).toEqual([parent, child2, child3, child4]);
+      expect(foundChildren.map((child) => child.info.id.get())).toEqual([
+        parent.info.id.get(),
+        child2.info.id.get(),
+        child3.info.id.get(),
+        child4.info.id.get(),
+      ]);
 
       foundChildren = await parent.findInContext(context1);
 
-      expect(foundChildren).toEqual([parent, child1]);
+      expect(foundChildren.map((child) => child.info.id.get())).toEqual([
+        parent.info.id.get(),
+        child1.info.id.get(),
+      ]);
     });
   });
 });

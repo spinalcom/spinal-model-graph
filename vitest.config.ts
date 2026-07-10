@@ -28,6 +28,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
+    fileParallelism: false, // run test files one after another
+    maxWorkers: 1, // single worker
     include: ['test/**/*.ts'],
     coverage: {
       provider: 'v8',

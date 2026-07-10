@@ -61,12 +61,7 @@ describe('SpinalContext', () => {
         const context = new SpinalContext();
 
         await context.addChild(DEFAULT_NODE, DEFAULT_RELATION_NAME);
-        assert(
-          context.hasRelation(
-            DEFAULT_RELATION_NAME,
-            SPINAL_RELATION_PTR_LST_TYPE
-          )
-        );
+        expect(context.hasRelation(DEFAULT_RELATION_NAME)).toBeTruthy();
       });
     });
 
@@ -75,12 +70,7 @@ describe('SpinalContext', () => {
         const context = new SpinalContext();
 
         await context.addChildInContext(DEFAULT_NODE, DEFAULT_RELATION_NAME);
-        assert(
-          context.hasRelation(
-            DEFAULT_RELATION_NAME,
-            SPINAL_RELATION_PTR_LST_TYPE
-          )
-        );
+        expect(context.hasRelation(DEFAULT_RELATION_NAME)).toBeTruthy();
       });
 
       it('should be associated to the node (has a context) by default', async () => {

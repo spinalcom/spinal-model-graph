@@ -32,11 +32,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.debounce = void 0;
 exports.guid = guid;
 exports.loadParentRelation = loadParentRelation;
 exports.consumeBatch = consumeBatch;
 exports.toRegex = toRegex;
-exports.debounce = debounce;
+exports.validateGetChildrenOptions = validateGetChildrenOptions;
+const SpinalContext_1 = require("./Nodes/SpinalContext");
+var lodash_1 = require("lodash");
+Object.defineProperty(exports, "debounce", { enumerable: true, get: function () { return lodash_1.debounce; } });
 /**
  * Generates a random number and returns in a string.
  * @returns {String} Random number in a string
@@ -111,24 +115,20 @@ function toRegex(relationNames) {
     // Combine into one big regex
     return new RegExp(`^(?:${sources.join('|')})$`);
 }
-function debounce(func, wait) {
-    let timeout = null;
-    let resolveQueue = [];
-    return (...args) => {
-        return new Promise((resolve) => {
-            resolveQueue.push(resolve);
-            if (timeout) {
-                clearTimeout(timeout);
-            }
-            timeout = setTimeout(() => __awaiter(this, void 0, void 0, function* () {
-                const result = yield func(...args);
-                resolveQueue.forEach((res) => res(result));
-                resolveQueue = [];
-            }), wait);
-        });
-    };
+function validateGetChildrenOptions(options) {
+    var _a, _b, _c;
+    const offset = (_a = options.offset) !== null && _a !== void 0 ? _a : 0;
+    const reverse = (_b = options.reverse) !== null && _b !== void 0 ? _b : false;
+    const context = (_c = options.context) !== null && _c !== void 0 ? _c : undefined;
+    if (typeof offset !== 'number' || offset < 0) {
+        throw new TypeError('offset must be a non-negative number');
+    }
+    if (typeof reverse !== 'boolean') {
+        throw new TypeError('reverse must be a boolean');
+    }
+    if (context !== undefined && !(context instanceof SpinalContext_1.SpinalContext)) {
+        throw new TypeError('context must be a SpinalContext');
+    }
+    return context ? { offset, reverse, context } : { offset, reverse };
 }
-// export function sendEventFunc(eventName: string, parentNode: SpinalNode<any>, childNode: SpinalNode<any>, contextNode: SpinalContext<any>) {
-//   spinalEventEmitter.emit(eventName,);
-// }
 //# sourceMappingURL=Utilities.js.map

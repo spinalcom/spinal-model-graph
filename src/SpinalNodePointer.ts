@@ -70,7 +70,7 @@ class SpinalNodePointer<T extends Model = any> extends Model {
    */
   setElement(element: T): void {
     if (!(element instanceof Model)) {
-      throw TypeError('The pointed value must be a Model');
+      throw new TypeError('The pointed value must be a Model');
     }
     if (
       element instanceof SpinalNode ||

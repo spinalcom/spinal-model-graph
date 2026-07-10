@@ -34,7 +34,7 @@ const DEFAULT_NODE = new SpinalNode();
 const DEFAULT_CONTEXT = new SpinalContext();
 const DEFAULT_RELATION_NAME = 'relationName';
 const DEFAULT_RELATION_TYPE = SPINAL_RELATION_LST_PTR_TYPE;
-const DEFAULT_FUN = (node) => {
+const DEFAULT_FUN = (node: SpinalNode) => {
   const type = node.getType();
 
   type.set(CUSTOM_TYPE);
@@ -58,7 +58,7 @@ describe('How to use forEach', () => {
       let error = false;
 
       try {
-        await DEFAULT_NODE.forEach([], undefined);
+        await DEFAULT_NODE.forEach([], <any>undefined);
       } catch (e) {
         error = true;
         expect(e instanceof Error).toBeTruthy();
@@ -85,7 +85,7 @@ describe('How to use forEach', () => {
       node1.addChild(node2, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE);
       node2.addChild(node1, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE);
 
-      await node1.forEach(undefined, DEFAULT_FUN);
+      await node1.forEach(<any>undefined, DEFAULT_FUN);
 
       expect(node1.getType().get()).toBe(CUSTOM_TYPE);
       expect(node2.getType().get()).toBe(CUSTOM_TYPE);
@@ -105,7 +105,7 @@ describe('How to use forEach', () => {
         parent.addChild(child3, DEFAULT_RELATION_NAME, DEFAULT_RELATION_TYPE),
       ]);
 
-      await parent.forEach(undefined, DEFAULT_FUN);
+      await parent.forEach(<any>undefined, DEFAULT_FUN);
 
       expect(parent.getType().get()).toBe(CUSTOM_TYPE);
       expect(child1.getType().get()).toBe(CUSTOM_TYPE);
@@ -121,7 +121,7 @@ describe('How to use forEachInContext', () => {
       let error = false;
 
       try {
-        await DEFAULT_NODE.forEachInContext(undefined, DEFAULT_FUN);
+        await DEFAULT_NODE.forEachInContext(<any>undefined, DEFAULT_FUN);
       } catch (e) {
         error = true;
         expect(e instanceof Error).toBeTruthy();
@@ -266,20 +266,28 @@ describe('How to use forEachInContext', () => {
         ),
       ]);
 
-      let foundChildren = [];
+      let foundChildren: SpinalNode[] = [];
 
       await parent.forEachInContext(context2, (node) =>
         foundChildren.push(node)
       );
 
-      expect(foundChildren).toEqual([parent, child2, child3, child4]);
+      expect(foundChildren.map((child) => child.info.id.get())).toEqual([
+        parent.info.id.get(),
+        child2.info.id.get(),
+        child3.info.id.get(),
+        child4.info.id.get(),
+      ]);
 
       foundChildren = [];
       await parent.forEachInContext(context1, (node) =>
         foundChildren.push(node)
       );
 
-      expect(foundChildren).toEqual([parent, child1]);
+      expect(foundChildren.map((child) => child.info.id.get())).toEqual([
+        parent.info.id.get(),
+        child1.info.id.get(),
+      ]);
     });
   });
 });

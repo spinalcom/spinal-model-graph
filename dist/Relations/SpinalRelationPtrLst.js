@@ -102,34 +102,41 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
         return this.children.info.ids.length;
     }
     /**
-     * Return all the children of the relation.
+     * Return the children of the relation.
+     * @param {number} offset
+     * @param {boolean} reverse
+     * @param {SpinalContext} [context]
+     * @param {number} [counter=0]
      * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
      * @memberof SpinalRelationPtrLst
      */
-    getChildrenGen() {
-        return __asyncGenerator(this, arguments, function* getChildrenGen_1() {
-            const childrenLst = yield __await(this.children.load());
-            for (let i = 0; i < childrenLst.length; i += 1) {
-                yield yield __await(childrenLst[i]);
+    getChildrenGen(offset_1, reverse_1, context_1) {
+        return __asyncGenerator(this, arguments, function* getChildrenGen_1(offset, reverse, context, counter = 0) {
+            if (context && !(context instanceof SpinalContext_1.SpinalContext)) {
+                throw new TypeError('context must be a SpinalContext');
             }
-        });
-    }
-    /**
-     * Return all the children of the relation associated to a certain context.
-     * @param {SpinalContext} context Context to use for the search
-     * @returns {AsyncGenerator<SpinalNode<any>, void, unknown>} The children associated to the context
-     * @throws {TypeError} If the context is not a SpinalContext
-     * @memberof SpinalRelationPtrLst
-     */
-    getChildrenInContextGen(context) {
-        return __asyncGenerator(this, arguments, function* getChildrenInContextGen_1() {
-            const childrenLst = yield __await(this.children.load());
-            if (!(context instanceof SpinalContext_1.SpinalContext)) {
-                throw TypeError('context must be a SpinalContext');
+            const realOffset = Math.max(0, offset - counter);
+            if (realOffset >= this.getNbChildren()) {
+                return yield __await(void 0);
             }
-            for (let i = 0; i < childrenLst.length; i += 1) {
-                const child = childrenLst[i];
-                if (child.belongsToContext(context)) {
+            const childrenLst = yield __await(this.children.load());
+            if (reverse) {
+                let i = childrenLst.length - 1 - realOffset;
+                for (; i >= 0; i -= 1) {
+                    const child = childrenLst[i];
+                    if (context && !child.belongsToContext(context)) {
+                        continue;
+                    }
+                    yield yield __await(child);
+                }
+            }
+            else {
+                let i = realOffset;
+                for (; i < childrenLst.length; i += 1) {
+                    const child = childrenLst[i];
+                    if (context && !child.belongsToContext(context)) {
+                        continue;
+                    }
                     yield yield __await(child);
                 }
             }
@@ -203,7 +210,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
     removeChildren() {
         return __awaiter(this, arguments, void 0, function* (nodes = []) {
             if (!Array.isArray(nodes)) {
-                throw TypeError('node must be an array');
+                throw new TypeError('node must be an array');
             }
             const childrenLst = yield this.children.load();
             if (nodes.length === 0) {
