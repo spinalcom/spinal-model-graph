@@ -327,15 +327,22 @@ class SpinalNode<T extends Model = any> extends Model {
         if (relname === relationName) return true;
       }
     }
-    this.hasRelation(relationName, "dsds");
-    this.hasRelation(relationName);
-
     return false;
   }
 
+  /**
+   * Verify if the node contains the relation name in the context.
+   * @param {string} relationName
+   * @param {SpinalContext} context
+   * @return {*}  {boolean}
+   * @memberof SpinalNode
+   */
   hasRelationInContext(relationName: string, context: SpinalContext): boolean {
     if (typeof relationName !== 'string') {
       throw new TypeError('the relation name must be a string');
+    }
+    if (!(context instanceof SpinalContext)) {
+      throw new TypeError('context must be a SpinalContext');
     }
     for (const [, relationMap] of this.children) {
       for (const [relname, rel] of relationMap) {
@@ -355,12 +362,12 @@ class SpinalNode<T extends Model = any> extends Model {
    * @throws {TypeError} If one of the relation names is not a string
    * @throws {Error} If the relation type doesn't exist
    */
-  hasRelations(relationNames: string[]): boolean
+  hasRelations(relationNames: string[]): boolean;
   /**
    * Verify if the node contains all the relation names.
    * @deprecated Use relationType is not used anymore, use hasRelations(relationNames) instead
    */
-  hasRelations(relationNames: string[], relationType: string): boolean
+  hasRelations(relationNames: string[], relationType: string): boolean;
   hasRelations(relationNames: string[]): boolean {
     if (!Array.isArray(relationNames)) {
       throw new TypeError('The relation names must be in an array');
@@ -1002,7 +1009,6 @@ class SpinalNode<T extends Model = any> extends Model {
           const resProm = [];
           for (const child of arr) {
             resProm.push(async (): Promise<void> => {
-              // @ts-ignore
               if (stop === true) return;
               const res = await predicate(child, stopFct);
               if (res) result.push(child);
@@ -1579,6 +1585,16 @@ class SpinalNode<T extends Model = any> extends Model {
     if (!Array.isArray(relationNames)) {
       relationNames = [relationNames];
     }
+    for (const searchRelation of relationNames) {
+      if (
+        typeof searchRelation !== 'string' &&
+        !(searchRelation instanceof RegExp)
+      ) {
+        throw new TypeError(
+          'The RelationNames must be string | RegExp | (string | RegExp)[]'
+        );
+      }
+    }
     const relations: Set<AnySpinalRelation> = new Set();
     for (const [, relationMap] of this.children) {
       for (const [name, relation] of relationMap) {
@@ -1588,13 +1604,13 @@ class SpinalNode<T extends Model = any> extends Model {
           relations.add(relation);
           continue;
         }
-
         // if relation names are provided,
         // check if the relation name matches any of them
         for (const searchRelation of relationNames) {
           if (typeof searchRelation === 'string') {
             if (name === searchRelation) {
-              if (context && !relation.belongsToContext(context)) continue;
+              if (context && !relation.belongsToContext(context))
+                continue;
               relations.add(relation);
             }
           } else if (searchRelation instanceof RegExp) {
@@ -1602,10 +1618,6 @@ class SpinalNode<T extends Model = any> extends Model {
               if (context && !relation.belongsToContext(context)) continue;
               relations.add(relation);
             }
-          } else {
-            throw new TypeError(
-              'The RelationNames must be string | RegExp | (string | RegExp)[]'
-            );
           }
         }
       }
@@ -1618,6 +1630,16 @@ class SpinalNode<T extends Model = any> extends Model {
   ) {
     if (!Array.isArray(relationNames)) {
       relationNames = [relationNames];
+    }
+    for (const searchRelation of relationNames) {
+      if (
+        typeof searchRelation !== 'string' &&
+        !(searchRelation instanceof RegExp)
+      ) {
+        throw new TypeError(
+          'The RelationNames must be string | RegExp | (string | RegExp)[]'
+        );
+      }
     }
     const ptrParents: Set<SpinalNodePointer<AnySpinalRelation>> = new Set();
     for (const [name, nodeRelationLst] of this.parents) {
@@ -1639,10 +1661,6 @@ class SpinalNode<T extends Model = any> extends Model {
                 ptrParents.add(nodeRelation);
               }
             }
-          } else {
-            throw new TypeError(
-              'The RelationNames must be string | RegExp | (string | RegExp)[]'
-            );
           }
         }
       }
@@ -1662,8 +1680,8 @@ class SpinalNode<T extends Model = any> extends Model {
           !Array.isArray(childNode) && { childId: childNode.getId().get() }),
         ...(childNode &&
           Array.isArray(childNode) && {
-          childrenIds: childNode.map((node) => node.getId().get()),
-        }),
+            childrenIds: childNode.map((node) => node.getId().get()),
+          }),
         contextId: contextNode && contextNode.getId().get(),
       };
       spinalEventEmitter.emit(eventName, data);

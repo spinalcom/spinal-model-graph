@@ -48,8 +48,8 @@ describe('SpinalNodePointer', () => {
     it('should create a SpinalNodePointer with correct default values if a node is given', () => {
       const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-      expect(ptr.getId()).toBe(DEFAULT_NODE.getId());
-      expect(ptr.getType()).toBe(DEFAULT_NODE.getType());
+      expect(ptr.getId().get()).toBe(DEFAULT_NODE.getId().get());
+      expect(ptr.getType().get()).toBe(DEFAULT_NODE.getType().get());
     });
 
     it('should throw an error if no element is given', () => {
@@ -65,8 +65,8 @@ describe('SpinalNodePointer', () => {
       it('should set an element and update pointedId and pointedType', async () => {
         const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-        expect(ptr.getId()).toBe(DEFAULT_NODE.getId());
-        expect(ptr.getType()).toBe(DEFAULT_NODE.getType());
+        expect(ptr.getId().get()).toBe(DEFAULT_NODE.getId().get());
+        expect(ptr.getType().get()).toBe(DEFAULT_NODE.getType().get());
 
         const elem = await ptr.load();
         expect(elem).toBe(DEFAULT_NODE);
@@ -96,8 +96,8 @@ describe('SpinalNodePointer', () => {
       it('should unset the pointer', () => {
         const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-        expect(ptr.getId()).toBe(DEFAULT_NODE.getId());
-        expect(ptr.getType()).toBe(DEFAULT_NODE.getType());
+        expect(ptr.getId().get()).toBe(DEFAULT_NODE.getId().get());
+        expect(ptr.getType().get()).toBe(DEFAULT_NODE.getType().get());
         ptr.unset();
         expect(typeof ptr.getId()).toBe('undefined');
         expect(typeof ptr.getType()).toBe('undefined');
@@ -113,7 +113,7 @@ describe('SpinalNodePointer', () => {
       it('should return the id of the pointed node', () => {
         const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-        expect(ptr.getId()).toBe(DEFAULT_NODE.getId());
+        expect(ptr.getId().get()).toBe(DEFAULT_NODE.getId().get());
       });
     });
 
@@ -121,7 +121,7 @@ describe('SpinalNodePointer', () => {
       it('should return the type of the pointed node', () => {
         const ptr = new SpinalNodePointer(DEFAULT_NODE);
 
-        expect(ptr.getType()).toBe(DEFAULT_NODE.getType());
+        expect(ptr.getType().get()).toBe(DEFAULT_NODE.getType().get());
       });
     });
   });

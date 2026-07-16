@@ -325,8 +325,8 @@ describe('SpinalNode', () => {
           DEFAULT_RELATION_NAME,
           SPINAL_RELATION_TYPE
         );
-        expect(node.hasRelation(DEFAULT_RELATION_NAME)).toBeTruthy();
-        expect(node.hasRelation(CUSTOM_RELATION_NAME1)).toBeFalsy();
+        expect(node.hasRelation(DEFAULT_RELATION_NAME, 'blabla')).toBeTruthy();
+        expect(node.hasRelation(CUSTOM_RELATION_NAME1, 'blabla')).toBeFalsy();
       });
 
       it('should throw an error if the relation name is missing', () => {
@@ -342,6 +342,113 @@ describe('SpinalNode', () => {
 
         expect(() => {
           node.hasRelation(<any>1);
+        }).toThrow(TypeError);
+      });
+    });
+
+    describe('How to use hasRelationInContext', () => {
+      it('should return true', async () => {
+        const context = new SpinalContext();
+        const node = new SpinalNode();
+        const childInContext = new SpinalNode();
+        const childNotInContext = new SpinalNode();
+
+        await node.addChildInContext(
+          childInContext,
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_TYPE,
+          context
+        );
+        await node.addChild(
+          childNotInContext,
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_TYPE
+        );
+
+        expect(
+          node.hasRelationInContext(DEFAULT_RELATION_NAME, context)
+        ).toBeTruthy();
+      });
+
+      it('should return true even if the child not in context is added first', async () => {
+        const context = new SpinalContext();
+        const node = new SpinalNode();
+        const childInContext = new SpinalNode();
+        const childNotInContext = new SpinalNode();
+        await node.addChild(
+          childNotInContext,
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_TYPE
+        );
+
+        await node.addChildInContext(
+          childInContext,
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_TYPE,
+          context
+        );
+
+        expect(
+          node.hasRelationInContext(DEFAULT_RELATION_NAME, context)
+        ).toBeTruthy();
+      });
+
+      it('should return false', async () => {
+        const node = new SpinalNode();
+        const context = new SpinalContext();
+        const childNotInContext = new SpinalNode();
+
+        await node.addChild(
+          childNotInContext,
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_TYPE
+        );
+        expect(
+          node.hasRelationInContext(DEFAULT_RELATION_NAME, context)
+        ).toBeFalsy();
+        const childInContext = new SpinalNode();
+        await node.addChildInContext(
+          childInContext,
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_TYPE,
+          context
+        );
+        expect(
+          node.hasRelationInContext(CUSTOM_RELATION_NAME1, context),
+          'test with an incorrect relation name'
+        ).toBeFalsy();
+        expect(
+          node.hasRelationInContext(DEFAULT_RELATION_NAME, context),
+          'should work even if the child not in context is added first (upgrade relation to context)'
+        ).toBeTruthy();
+      });
+
+      it('should throw an error if the relation name is missing', () => {
+        const node = new SpinalNode();
+
+        expect(() => {
+          node.hasRelationInContext(<any>undefined, new SpinalContext());
+        }).toThrow(TypeError);
+      });
+
+      it('should throw an error if the relation name is not a string', () => {
+        const node = new SpinalNode();
+
+        expect(() => {
+          node.hasRelationInContext(<any>1, new SpinalContext());
+        }).toThrow(TypeError);
+      });
+      it('should throw an error if the context is missing', () => {
+        const node = new SpinalNode();
+
+        expect(() => {
+          node.hasRelationInContext(DEFAULT_RELATION_NAME, <any>undefined);
+        }).toThrow(TypeError);
+      });
+      it('should throw an error if the context is not a SpinalContext', () => {
+        const node = new SpinalNode();
+        expect(() => {
+          node.hasRelationInContext(DEFAULT_RELATION_NAME, <any>node);
         }).toThrow(TypeError);
       });
     });
@@ -536,9 +643,10 @@ describe('SpinalNode', () => {
 
       it('should add a child to the node with a relation type SPINAL_RELATION_TYPE', async () => {
         const node = new SpinalNode();
+        const child = new SpinalNode();
 
-        node.addChild(
-          DEFAULT_NODE,
+        await node.addChild(
+          child,
           DEFAULT_RELATION_NAME,
           SPINAL_RELATION_PTR_LST_TYPE
         );
@@ -548,7 +656,7 @@ describe('SpinalNode', () => {
         const children = await node.getChildren([DEFAULT_RELATION_NAME]);
 
         expect(children.length).toBe(1);
-        expect(children[0].info.id.get()).toBe(DEFAULT_NODE.info.id.get());
+        expect(children[0].info.id.get()).toBe(child.info.id.get());
       });
 
       it('should add a child to the node with a relation type SPINAL_RELATION_LST_PTR_TYPE', async () => {
@@ -831,25 +939,6 @@ describe('SpinalNode', () => {
         expect(error).toBeTruthy();
       });
 
-      it('should throw an error if the relation type is missing', async () => {
-        const node = new SpinalNode();
-        const context = new SpinalContext();
-        let error = false;
-
-        try {
-          await node.addChildInContext(
-            DEFAULT_NODE,
-            DEFAULT_RELATION_NAME,
-            <any>undefined,
-            context
-          );
-        } catch (e) {
-          error = true;
-          expect(e instanceof Error).toBeTruthy();
-        }
-        expect(error).toBeTruthy();
-      });
-
       it('should throw an error if the relation type is invalid', async () => {
         const node = new SpinalNode();
         const context = new SpinalContext();
@@ -945,9 +1034,10 @@ describe('SpinalNode', () => {
     describe('How to use removeChild', () => {
       it('should remove the child', async () => {
         const node = new SpinalNode();
+        const node2 = new SpinalNode();
 
-        await node.addChild(node, DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE);
-        await node.removeChild(node, DEFAULT_RELATION_NAME);
+        await node.addChild(node2, DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE);
+        await node.removeChild(node2, DEFAULT_RELATION_NAME);
 
         const children = await node.getChildren([]);
         expect(children.length).toEqual(0);
@@ -1216,9 +1306,10 @@ describe('SpinalNode', () => {
 
       it("should throw if the relation doesn't exist", async () => {
         const node = new SpinalNode();
+        const node2 = new SpinalNode();
         let error = false;
 
-        await node.addChild(node, DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE);
+        await node.addChild(node2, DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE);
 
         try {
           await node.removeRelation(`${DEFAULT_RELATION_NAME}1`);
@@ -1230,7 +1321,7 @@ describe('SpinalNode', () => {
 
         const children = await node.getChildren([]);
         expect(children.length).toEqual(1);
-        expect(children[0].info.id.get()).toEqual(node.info.id.get());
+        expect(children[0].info.id.get()).toEqual(node2.info.id.get());
       });
 
       describe('remove relation + check child parent', () => {
@@ -1381,7 +1472,7 @@ describe('SpinalNode', () => {
 
         const res = await parent.getChild(() => true, DEFAULT_RELATION_NAME);
 
-        expect(res?.info.id.get()).toBe(child3.info.id.get());
+        expect(res?.info.id.get()).toBe(child1.info.id.get());
       });
 
       it("should return undefined if the child doesn't exist", async () => {
@@ -1432,26 +1523,6 @@ describe('SpinalNode', () => {
 
         try {
           await parent.getChild(() => true, <any>1);
-        } catch (e) {
-          error = true;
-          expect(e instanceof Error).toBeTruthy();
-        }
-        expect(error).toBeTruthy();
-      });
-
-      it('should throw if the relation type is missing', async () => {
-        const parent = new SpinalNode();
-        const child = new SpinalNode();
-        let error = false;
-
-        await parent.addChild(
-          child,
-          DEFAULT_RELATION_NAME,
-          SPINAL_RELATION_TYPE
-        );
-
-        try {
-          await parent.getChild(() => true, DEFAULT_RELATION_NAME);
         } catch (e) {
           error = true;
           expect(e instanceof Error).toBeTruthy();
@@ -1667,6 +1738,117 @@ describe('SpinalNode', () => {
         }
         expect(error).toBeTruthy();
       });
+
+      describe('should throw if the option are not valid', async () => {
+        const node = new SpinalNode();
+        await node.addChild(
+          DEFAULT_NODE,
+          DEFAULT_RELATION_NAME,
+          SPINAL_RELATION_TYPE
+        );
+        it('should throw if the offset is not a number', async () => {
+          let error = false;
+          try {
+            await node.getChildren(DEFAULT_RELATION_NAME, {
+              offset: '45' as any,
+            });
+          } catch (e) {
+            error = true;
+            expect(e instanceof Error).toBeTruthy();
+          }
+          expect(error).toBeTruthy();
+        });
+        it('should throw if the offset is a negative number', async () => {
+          let error = false;
+          try {
+            await node.getChildren(DEFAULT_RELATION_NAME, {
+              offset: -45,
+            });
+          } catch (e) {
+            error = true;
+            expect(e instanceof Error).toBeTruthy();
+          }
+          expect(error).toBeTruthy();
+        });
+        it('should throw if the reverse is not a boolean', async () => {
+          let error = false;
+          try {
+            await node.getChildren(DEFAULT_RELATION_NAME, {
+              reverse: 'true' as any,
+            });
+          } catch (e) {
+            error = true;
+            expect(e instanceof Error).toBeTruthy();
+          }
+          expect(error).toBeTruthy();
+        });
+        it('should throw if the context is not a SpinalContext', async () => {
+          let error = false;
+          try {
+            await node.getChildren(DEFAULT_RELATION_NAME, {
+              context: 'not-a-context' as any,
+            });
+          } catch (e) {
+            error = true;
+            expect(e instanceof Error).toBeTruthy();
+          }
+          expect(error).toBeTruthy();
+        });
+      });
+
+      describe('should return children with options', async () => {
+        // create a parent node and 200 children nodes
+        const parent = new SpinalNode();
+        const children = Array.from({ length: 200 }, () => new SpinalNode());
+        await Promise.all(
+          children.map((child) =>
+            parent.addChild(child, DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE)
+          )
+        );
+
+        it('should return children with offset', async () => {
+          const res = await parent.getChildren(DEFAULT_RELATION_NAME, {
+            offset: 100,
+          });
+          expect(res.length).toBe(100);
+          expect(res[0].info.id.get()).toBe(children[100].info.id.get());
+        });
+
+        it('should return children with reverse', async () => {
+          const res = await parent.getChildren(DEFAULT_RELATION_NAME, {
+            reverse: true,
+          });
+          expect(res.length).toBe(200);
+          expect(res[0].info.id.get()).toBe(children[199].info.id.get());
+        });
+        it('should return children with offset and reverse', async () => {
+          const res = await parent.getChildren(DEFAULT_RELATION_NAME, {
+            offset: 100,
+            reverse: true,
+          });
+          expect(res.length).toBe(100);
+          expect(res[0].info.id.get()).toBe(children[99].info.id.get());
+        });
+        it('should return children with option maxNbrChildren', async () => {
+          const res = await parent.getChildren(DEFAULT_RELATION_NAME, {
+            maxNbrChildren: 50,
+          });
+          expect(res.length).toBe(50);
+          expect(res[0].info.id.get()).toBe(children[0].info.id.get());
+        });
+        it('should trhow children with an option maxNbrChildren not', async () => {
+          let error = false;
+          try {
+            await parent.getChildren(DEFAULT_RELATION_NAME, {
+              maxNbrChildren: '50' as any,
+            });
+          } catch (e) {
+            error = true;
+            expect(e instanceof Error).toBeTruthy();
+          }
+          expect(error).toBeTruthy();
+        });
+      });
     });
 
     describe('How to use getChildrenInContext', () => {
@@ -1861,24 +2043,6 @@ describe('SpinalNode', () => {
         }
         expect(error).toBeTruthy();
       });
-
-      // it('should throw an error if an element of relationNames is not a string', async () => {
-      //   const parent = new SpinalNode();
-      //   const child = new SpinalNode();
-      //   let error = false;
-
-      //   await Promise.all([
-      //     parent.addChild(child, DEFAULT_RELATION_NAME, SPINAL_RELATION_TYPE),
-      //   ]);
-
-      //   try {
-      //     await child.getParents([`${DEFAULT_RELATION_NAME}1`, <any>1]);
-      //   } catch (e) {
-      //     error = true;
-      //     expect(e instanceof Error).toBeTruthy();
-      //   }
-      //   expect(error).toBeTruthy();
-      // });
     });
   });
 
@@ -1967,6 +2131,7 @@ describe('SpinalNode', () => {
 
       const res = node.getDirectModificationDate().get();
       expect(res).toEqual(date.getTime());
+      expect(node.info.directModificationDate.get()).toEqual(date.getTime());
     });
 
     it('should throw an error if the date is not a a number', async () => {
@@ -1974,6 +2139,20 @@ describe('SpinalNode', () => {
       expect(() => node.setDirectModificationDate(<any>'abc')).toThrow(
         TypeError
       );
+    });
+    it('should create the attr if not present (upgrade from old nodes)', async () => {
+      const node = new SpinalNode();
+      node.info.rem_attr('directModificationDate');
+      const res = node.getDirectModificationDate();
+      expect(res).toBeDefined();
+    });
+    it('should create the attr if not present (upgrade from old nodes)', async () => {
+      const node = new SpinalNode();
+      node.info.rem_attr('directModificationDate');
+      node.setDirectModificationDate(42);
+      const res = node.getDirectModificationDate();
+      expect(res).toBeDefined();
+      expect(res.get()).toEqual(42);
     });
   });
 
@@ -1986,6 +2165,7 @@ describe('SpinalNode', () => {
 
       const res = node.getIndirectModificationDate().get();
       expect(res).toEqual(date.getTime());
+      expect(node.info.indirectModificationDate.get()).toEqual(date.getTime());
     });
 
     it('should throw an error if the date is not a a number', async () => {
@@ -1993,6 +2173,20 @@ describe('SpinalNode', () => {
       expect(() => node.setIndirectModificationDate(<any>'abc')).toThrow(
         TypeError
       );
+    });
+    it('should create the attr if not present (upgrade from old nodes)', async () => {
+      const node = new SpinalNode();
+      node.info.rem_attr('indirectModificationDate');
+      const res = node.getIndirectModificationDate();
+      expect(res).toBeDefined();
+    });
+    it('should create the attr if not present (upgrade from old nodes)', async () => {
+      const node = new SpinalNode();
+      node.info.rem_attr('indirectModificationDate');
+      node.setIndirectModificationDate(42);
+      const res = node.getIndirectModificationDate();
+      expect(res).toBeDefined();
+      expect(res.get()).toEqual(42);
     });
   });
   describe('How to browse the a graph', async () => {
@@ -2414,6 +2608,82 @@ describe('SpinalNode', () => {
 
         await node_test.removeChildren([child_test], DEFAULT_RELATION_NAME);
       });
+    });
+  });
+  describe('should upgrade relation to LstPtrLst when nbr children is more than 200', () => {
+    function testUpgradeRelationToLstPtrLst(relationType: string) {
+      it(`should upgrade relation to LstPtrLst when nbr children is more than 200 for ${relationType}`, async () => {
+        const node = new SpinalNode();
+        const children = Array.from({ length: 401 }, () => new SpinalNode());
+        await Promise.all(
+          children.map((child) =>
+            node.addChild(child, DEFAULT_RELATION_NAME, relationType)
+          )
+        );
+        const relation = node._getRelation(DEFAULT_RELATION_NAME);
+        expect(relation?.getType()).toBe(SPINAL_RELATION_LST_PTR_LST_TYPE);
+        const childrenInRelation = await node.getChildren(
+          DEFAULT_RELATION_NAME
+        );
+        expect(childrenInRelation.length).toBe(401);
+        expect(childrenInRelation.map((child) => child.info.id.get())).toEqual(
+          children.map((child) => child.info.id.get())
+        );
+      });
+    }
+    // testUpgradeRelationToLstPtrLst(SPINAL_RELATION_TYPE);
+    testUpgradeRelationToLstPtrLst(SPINAL_RELATION_LST_PTR_TYPE);
+    testUpgradeRelationToLstPtrLst(SPINAL_RELATION_PTR_LST_TYPE);
+    testUpgradeRelationToLstPtrLst(SPINAL_RELATION_LST_PTR_LST_TYPE);
+  });
+  describe('test _getValidRelationsChildren', async () => {
+    const context = new SpinalContext();
+    const node = new SpinalNode();
+    const child1 = new SpinalNode();
+    const child2 = new SpinalNode();
+    const child3 = new SpinalNode();
+    const child4 = new SpinalNode();
+    const child5 = new SpinalNode();
+    const child6 = new SpinalNode();
+
+    await Promise.all([
+      node.addChild(child6, 'test2', SPINAL_RELATION_LST_PTR_TYPE),
+      node.addChildInContext(
+        child1,
+        DEFAULT_RELATION_NAME,
+        SPINAL_RELATION_TYPE,
+        context
+      ),
+      node.addChildInContext(
+        child2,
+        DEFAULT_RELATION_NAME,
+        SPINAL_RELATION_TYPE,
+        context
+      ),
+      node.addChildInContext(
+        child3,
+        'test',
+        SPINAL_RELATION_LST_PTR_TYPE,
+        context
+      ),
+      node.addChildInContext(
+        child4,
+        'test',
+        SPINAL_RELATION_LST_PTR_TYPE,
+        context
+      ),
+      node.addChildInContext(
+        child5,
+        'test',
+        SPINAL_RELATION_LST_PTR_TYPE,
+        context
+      ),
+    ]);
+    it('should return valid relations children', async () => {
+      // @ts-ignore
+      const res = node._getValidRelationsChildren('test2', context);
+      expect(res).toBeDefined();
+      expect(Array.isArray(res)).toBeTruthy();
     });
   });
 });

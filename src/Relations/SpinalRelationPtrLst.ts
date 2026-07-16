@@ -35,6 +35,7 @@ import { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalNodePointer } from '../SpinalNodePointer';
 import { BaseSpinalRelation } from './BaseSpinalRelation';
 import { SPINAL_RELATION_PTR_LST_TYPE } from './SpinalRelationFactory';
+import type SpinalRelationLstPtrLst from './SpinalRelationLstPtrLst';
 
 /**
  * Relation where the children are in Ptr to a Lst.
@@ -50,6 +51,7 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
   public _constructorName = 'SpinalRelationPtrLst';
   public static _constructorName = 'SpinalRelationPtrLst';
   children!: SpinalRelationPtrLstNodePointer;
+  isInUpgradeProcess?: Promise<SpinalRelationLstPtrLst>;
 
   /**
    * Constructor for the SpinalRelationPtrLst class.
@@ -176,12 +178,10 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
     if (this.getChildrenIds().indexOf(tmpNodeCreate.getId().get()) !== -1) {
       throw new Error('Cannot add a child twice to the same relation.');
     }
-
-    await this.children.load().then((children) => {
-      this.children.info.ids.push(tmpNodeCreate.getId());
-      tmpNodeCreate._addParent(this);
-      children.push(tmpNodeCreate);
-    });
+    this.children.info.ids.push(tmpNodeCreate.getId());
+    const children = await this.children.load();
+    tmpNodeCreate._addParent(this);
+    children.push(tmpNodeCreate);
 
     return tmpNodeCreate;
   }

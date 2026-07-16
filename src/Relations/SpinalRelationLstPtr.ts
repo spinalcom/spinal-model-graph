@@ -28,6 +28,7 @@ import { SpinalNode } from '../Nodes/SpinalNode';
 import { SpinalNodePointer } from '../SpinalNodePointer';
 import { BaseSpinalRelation } from './BaseSpinalRelation';
 import { SPINAL_RELATION_LST_PTR_TYPE } from './SpinalRelationFactory';
+import type { SpinalRelationLstPtrLst } from './SpinalRelationLstPtrLst';
 
 /**
  * Relation where the children are in Lst of Ptr.
@@ -42,6 +43,7 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
   public _constructorName = 'SpinalRelationLstPtr';
   public static _constructorName = 'SpinalRelationLstPtr';
   children!: Lst<SpinalNodePointer<SpinalNode<any>>>;
+  isInUpgradeProcess?: Promise<SpinalRelationLstPtrLst>;
 
   /**
    * Constructor for the SpinalRelationLstPtr class.
@@ -126,8 +128,6 @@ class SpinalRelationLstPtr extends BaseSpinalRelation {
       yield child;
     }
   }
-
-
 
   /**
    * Returns the type of the relation.

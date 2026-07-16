@@ -185,7 +185,7 @@ describe('SpinalRelationLstPtrLst', () => {
         );
         const children = await rel.getChildren(0, false);
 
-        expect(children).toEqual([]);
+        expect(children.length).toEqual(0);
       });
 
       it('should return the relation children in reverse order', async () => {
@@ -490,17 +490,6 @@ describe('SpinalRelationLstPtrLst', () => {
         }
 
         const children = await rel.getChildren(25, true, context);
-
-        console.log(
-          `children [${children.length}]: ${children.map((c) =>
-            c.getName().get()
-          )}`
-        );
-        console.log(
-          `children_in_context [${children_in_context.length}]: ${children_in_context.map(
-            (c) => c.getName().get()
-          )}`
-        );
 
         expect(children.map((child) => child.getId().get())).toEqual(
           children_in_context

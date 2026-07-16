@@ -48,7 +48,7 @@ class SpinalRelationFactory {
    * @param {SpinalNode} parent Parent of the relation
    * @param {string} relationName Name of the relation
    * @param {string} relationType Type of the relation
-   * @returns {SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst} A new SpinalRelation
+   * @returns {SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst | SpinalRelationLstPtrLst} A new SpinalRelation
    * @static
    * @memberof SpinalRelationFactory
    */
@@ -56,14 +56,18 @@ class SpinalRelationFactory {
     parent: SpinalNode<Model>,
     relationName: string,
     relationType: string
-  ): SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst {
+  ):
+    | SpinalRelationRef
+    | SpinalRelationLstPtr
+    | SpinalRelationPtrLst
+    | SpinalRelationLstPtrLst {
     switch (relationType) {
       case SPINAL_RELATION_TYPE:
         return new SpinalRelationRef(parent, relationName);
       case SPINAL_RELATION_LST_PTR_TYPE:
         return new SpinalRelationLstPtr(parent, relationName);
       case SPINAL_RELATION_LST_PTR_LST_TYPE:
-        return new SpinalRelationLstPtr(parent, relationName);
+        return new SpinalRelationLstPtrLst(parent, relationName);
       case SPINAL_RELATION_PTR_LST_TYPE:
         return new SpinalRelationPtrLst(parent, relationName);
       default:
@@ -74,11 +78,12 @@ class SpinalRelationFactory {
   static canUpgradeRelation(
     relation: AnySpinalRelation
   ): relation is (SpinalRelationLstPtr | SpinalRelationPtrLst) & boolean {
-    return (
-      SPINAL_RELATION_THAT_CAN_UPGRADE.includes(
-        relation._constructorName as any
-      ) && relation.getNbChildren() >= LST_PTR_LST_UPGRADE_SIZE
+    const canUpgrade = SPINAL_RELATION_THAT_CAN_UPGRADE.includes(
+      relation.getType() as any
     );
+    const hasEnoughChildren =
+      relation.getNbChildren() >= LST_PTR_LST_UPGRADE_SIZE;
+    return canUpgrade && hasEnoughChildren;
   }
 
   static async upgradeRelationToLstPtrLst(
@@ -91,6 +96,18 @@ class SpinalRelationFactory {
     ) {
       throw new Error('Cannot upgrade this type of relation');
     }
+    if (typeof relation.isInUpgradeProcess !== 'undefined') {
+      return relation.isInUpgradeProcess;
+    }
+    relation.isInUpgradeProcess =
+      SpinalRelationFactory._upgradeRelationToLstPtrLst(relation, nodeParent);
+    return relation.isInUpgradeProcess;
+  }
+
+  private static async _upgradeRelationToLstPtrLst(
+    relation: SpinalRelationLstPtr | SpinalRelationPtrLst,
+    nodeParent: SpinalNode
+  ): Promise<SpinalRelationLstPtrLst> {
     const newRelation = nodeParent._createRelation(
       relation.name.get(),
       SPINAL_RELATION_LST_PTR_LST_TYPE
