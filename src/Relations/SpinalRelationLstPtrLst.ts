@@ -59,7 +59,6 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation {
    * @param {string} name Name of the relation
    * @throws {TypeError} If the parent is not a node
    * @throws {TypeError} If the name is not a string
-   * @memberof SpinalRelationLstPtrLst
    */
   constructor(parent?: SpinalNode<any>, name?: string) {
     super(parent, name);
@@ -73,7 +72,6 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation {
   /**
    * Retrieves all the ids of the children of the relation and return them inside an array.
    * @returns {string[]} Array containing all the children ids of the relation
-   * @memberof SpinalRelationLstPtrLst
    */
   getChildrenIds(): string[] {
     const res: string[] = [];
@@ -90,7 +88,6 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation {
   /**
    * returns the number of children of the relation.
    * @returns {number}
-   * @memberof SpinalRelationLstPtrLst
    */
   getNbChildren(): number {
     let counter = 0;
@@ -107,7 +104,6 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation {
    * Checks if the relation has a child with a certain id.
    * @param {string} id Id to check
    * @returns {boolean} True if the relation has a child with the given id, false otherwise
-   * @memberof SpinalRelationLstPtrLst
    */
   hasId(id: string): boolean {
     for (let lstPtr of this.children) {
@@ -126,7 +122,6 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation {
    * @param {SpinalContext} [context]
    * @param {number} [counter=0]
    * @return {*}
-   * @memberof SpinalRelationLstPtrLst
    */
   getChildrenGen(
     offset: number,
@@ -236,7 +231,6 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation {
   /**
    * Returns the type of the relation.
    * @returns {string} Type of the relation
-   * @memberof SpinalRelationLstPtrLst
    */
   getType(): string {
     return SPINAL_RELATION_LST_PTR_LST_TYPE;
@@ -249,7 +243,6 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation {
    * @throws {TypeError} If the node is not a Model
    * @throws {Error} If the node is already a child of the relation
    * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
-   * @memberof SpinalRelationLstPtrLst
    */
   async addChild<T extends Model>(
     node: T | SpinalNode<T>
@@ -299,7 +292,6 @@ class SpinalRelationLstPtrLst extends BaseSpinalRelation {
    * @param {SpinalNode<any>} node Child to remove
    * @returns {Promise<void>} An empty promise
    * @throws {Error} If the given node is not a child
-   * @memberof SpinalRelationLstPtrLst
    */
   async removeChild(node: SpinalNode<any>): Promise<void> {
     let found: boolean = false;

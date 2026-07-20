@@ -49,6 +49,7 @@ Object.defineProperty(exports, "SPINAL_RELATION_TYPE", { enumerable: true, get: 
 const SpinalRelationLstPtr_1 = require("./SpinalRelationLstPtr");
 const SpinalRelationPtrLst_1 = require("./SpinalRelationPtrLst");
 const SpinalRelationRef_1 = require("./SpinalRelationRef");
+const SpinalRelationLstPtrLst_1 = require("./SpinalRelationLstPtrLst");
 /**
  * Namespace for general relation functions.
  * @abstract
@@ -59,9 +60,7 @@ class SpinalRelationFactory {
      * @param {SpinalNode} parent Parent of the relation
      * @param {string} relationName Name of the relation
      * @param {string} relationType Type of the relation
-     * @returns {SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst} A new SpinalRelation
-     * @static
-     * @memberof SpinalRelationFactory
+     * @returns {SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst | SpinalRelationLstPtrLst} A new SpinalRelation
      */
     static getNewRelation(parent, relationName, relationType) {
         switch (relationType) {
@@ -70,23 +69,44 @@ class SpinalRelationFactory {
             case constants_1.SPINAL_RELATION_LST_PTR_TYPE:
                 return new SpinalRelationLstPtr_1.SpinalRelationLstPtr(parent, relationName);
             case constants_1.SPINAL_RELATION_LST_PTR_LST_TYPE:
-                return new SpinalRelationLstPtr_1.SpinalRelationLstPtr(parent, relationName);
+                return new SpinalRelationLstPtrLst_1.SpinalRelationLstPtrLst(parent, relationName);
             case constants_1.SPINAL_RELATION_PTR_LST_TYPE:
                 return new SpinalRelationPtrLst_1.SpinalRelationPtrLst(parent, relationName);
             default:
                 throw new Error('Unknown relationType');
         }
     }
+    /**
+     * @param {AnySpinalRelation} relation
+     * @return {*}  {(relation is (SpinalRelationLstPtr | SpinalRelationPtrLst) & boolean)}
+     */
     static canUpgradeRelation(relation) {
-        return (constants_1.SPINAL_RELATION_THAT_CAN_UPGRADE.includes(relation._constructorName) && relation.getNbChildren() >= constants_1.LST_PTR_LST_UPGRADE_SIZE);
+        const canUpgrade = constants_1.SPINAL_RELATION_THAT_CAN_UPGRADE.includes(relation.getType());
+        const hasEnoughChildren = relation.getNbChildren() >= constants_1.LST_PTR_LST_UPGRADE_SIZE;
+        return canUpgrade && hasEnoughChildren;
     }
+    /**
+     * @param {(SpinalRelationLstPtr | SpinalRelationPtrLst)} relation
+     * @param {SpinalNode} nodeParent
+     * @return {*}  {Promise<SpinalRelationLstPtrLst>}
+     */
     static upgradeRelationToLstPtrLst(relation, nodeParent) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a, e_1, _b, _c;
             if (!(relation instanceof SpinalRelationLstPtr_1.SpinalRelationLstPtr) &&
                 !(relation instanceof SpinalRelationPtrLst_1.SpinalRelationPtrLst)) {
                 throw new Error('Cannot upgrade this type of relation');
             }
+            if (typeof relation.isInUpgradeProcess !== 'undefined') {
+                return relation.isInUpgradeProcess;
+            }
+            relation.isInUpgradeProcess =
+                SpinalRelationFactory._upgradeRelationToLstPtrLst(relation, nodeParent);
+            return relation.isInUpgradeProcess;
+        });
+    }
+    static _upgradeRelationToLstPtrLst(relation, nodeParent) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a, e_1, _b, _c;
             const newRelation = nodeParent._createRelation(relation.name.get(), constants_1.SPINAL_RELATION_LST_PTR_LST_TYPE);
             for (const contextId of relation.getContextIds()) {
                 newRelation.addContextId(contextId);

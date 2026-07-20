@@ -49,8 +49,6 @@ class SpinalRelationFactory {
    * @param {string} relationName Name of the relation
    * @param {string} relationType Type of the relation
    * @returns {SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst | SpinalRelationLstPtrLst} A new SpinalRelation
-   * @static
-   * @memberof SpinalRelationFactory
    */
   static getNewRelation(
     parent: SpinalNode<Model>,
@@ -75,6 +73,10 @@ class SpinalRelationFactory {
     }
   }
 
+  /**
+   * @param {AnySpinalRelation} relation
+   * @return {*}  {(relation is (SpinalRelationLstPtr | SpinalRelationPtrLst) & boolean)}
+   */
   static canUpgradeRelation(
     relation: AnySpinalRelation
   ): relation is (SpinalRelationLstPtr | SpinalRelationPtrLst) & boolean {
@@ -86,6 +88,11 @@ class SpinalRelationFactory {
     return canUpgrade && hasEnoughChildren;
   }
 
+  /**
+   * @param {(SpinalRelationLstPtr | SpinalRelationPtrLst)} relation
+   * @param {SpinalNode} nodeParent
+   * @return {*}  {Promise<SpinalRelationLstPtrLst>}
+   */
   static async upgradeRelationToLstPtrLst(
     relation: SpinalRelationLstPtr | SpinalRelationPtrLst,
     nodeParent: SpinalNode

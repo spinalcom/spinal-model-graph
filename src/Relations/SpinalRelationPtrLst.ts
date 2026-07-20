@@ -75,7 +75,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
   /**
    * Retrieves all the ids of the children of the relation and return them inside an array.
    * @returns {String[]} Array containing all the children ids of the relation
-   * @memberof SpinalRelationPtrLst
    */
   getChildrenIds(): string[] {
     const idLst: Lst<Str> = this.children.info.ids;
@@ -91,7 +90,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
   /**
    * returns the number of children of the relation.
    * @returns {number}
-   * @memberof SpinalRelationPtrLst
    */
   getNbChildren(): number {
     return this.children.info.ids.length;
@@ -104,7 +102,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * @param {SpinalContext} [context]
    * @param {number} [counter=0]
    * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
-   * @memberof SpinalRelationPtrLst
    */
   async *getChildrenGen(
     offset: number,
@@ -147,7 +144,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
   /**
    * Returns the type of the relation.
    * @returns {string} Type of the relation
-   * @memberof SpinalRelationPtrLst
    */
   getType(): string {
     return SPINAL_RELATION_PTR_LST_TYPE;
@@ -160,7 +156,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * @throws {TypeError} If the node is not a Model
    * @throws {Error} If the node is already a child of the relation
    * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
-   * @memberof SpinalRelationPtrLst
    */
   async addChild<T extends Model>(
     node: T | SpinalNode<T>
@@ -191,7 +186,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * @param {SpinalNode<any>} node Child to remove
    * @returns {Promise<void>} An empty promise
    * @throws {Error} If the given node is not a child
-   * @memberof SpinalRelationPtrLst
    */
   async removeChild(node: SpinalNode<any>): Promise<void> {
     const childrenLst: Lst<SpinalNode<any>> = await this.children.load();
@@ -212,7 +206,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation {
    * @returns {Promise<void>} An empty promise
    * @throws {TypeError} If nodes is not an array or omitted
    * @throws {Error} If one of the nodes is not a child
-   * @memberof SpinalRelationPtrLst
    */
   async removeChildren(nodes: SpinalNode<any>[] = []): Promise<void> {
     if (!Array.isArray(nodes)) {

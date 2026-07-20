@@ -23,26 +23,22 @@ declare class SpinalRelationLstPtrLst extends BaseSpinalRelation {
      * @param {string} name Name of the relation
      * @throws {TypeError} If the parent is not a node
      * @throws {TypeError} If the name is not a string
-     * @memberof SpinalRelationLstPtrLst
      */
     constructor(parent?: SpinalNode<any>, name?: string);
     /**
      * Retrieves all the ids of the children of the relation and return them inside an array.
      * @returns {string[]} Array containing all the children ids of the relation
-     * @memberof SpinalRelationLstPtrLst
      */
     getChildrenIds(): string[];
     /**
      * returns the number of children of the relation.
      * @returns {number}
-     * @memberof SpinalRelationLstPtrLst
      */
     getNbChildren(): number;
     /**
      * Checks if the relation has a child with a certain id.
      * @param {string} id Id to check
      * @returns {boolean} True if the relation has a child with the given id, false otherwise
-     * @memberof SpinalRelationLstPtrLst
      */
     hasId(id: string): boolean;
     /**
@@ -52,7 +48,6 @@ declare class SpinalRelationLstPtrLst extends BaseSpinalRelation {
      * @param {SpinalContext} [context]
      * @param {number} [counter=0]
      * @return {*}
-     * @memberof SpinalRelationLstPtrLst
      */
     getChildrenGen(offset: number, reverse: boolean, context?: SpinalContext, counter?: number): AsyncGenerator<SpinalNode<any>, void, unknown>;
     private _getChildrenGen;
@@ -60,7 +55,6 @@ declare class SpinalRelationLstPtrLst extends BaseSpinalRelation {
     /**
      * Returns the type of the relation.
      * @returns {string} Type of the relation
-     * @memberof SpinalRelationLstPtrLst
      */
     getType(): string;
     /**
@@ -70,7 +64,6 @@ declare class SpinalRelationLstPtrLst extends BaseSpinalRelation {
      * @throws {TypeError} If the node is not a Model
      * @throws {Error} If the node is already a child of the relation
      * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
-     * @memberof SpinalRelationLstPtrLst
      */
     addChild<T extends Model>(node: T | SpinalNode<T>): Promise<SpinalNode<T>>;
     /**
@@ -78,7 +71,6 @@ declare class SpinalRelationLstPtrLst extends BaseSpinalRelation {
      * @param {SpinalNode<any>} node Child to remove
      * @returns {Promise<void>} An empty promise
      * @throws {Error} If the given node is not a child
-     * @memberof SpinalRelationLstPtrLst
      */
     removeChild(node: SpinalNode<any>): Promise<void>;
     restructureChildren(): Promise<void>;

@@ -16,12 +16,20 @@ declare class SpinalRelationFactory {
      * @param {SpinalNode} parent Parent of the relation
      * @param {string} relationName Name of the relation
      * @param {string} relationType Type of the relation
-     * @returns {SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst} A new SpinalRelation
-     * @static
-     * @memberof SpinalRelationFactory
+     * @returns {SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst | SpinalRelationLstPtrLst} A new SpinalRelation
      */
-    static getNewRelation(parent: SpinalNode<Model>, relationName: string, relationType: string): SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst;
+    static getNewRelation(parent: SpinalNode<Model>, relationName: string, relationType: string): SpinalRelationRef | SpinalRelationLstPtr | SpinalRelationPtrLst | SpinalRelationLstPtrLst;
+    /**
+     * @param {AnySpinalRelation} relation
+     * @return {*}  {(relation is (SpinalRelationLstPtr | SpinalRelationPtrLst) & boolean)}
+     */
     static canUpgradeRelation(relation: AnySpinalRelation): relation is (SpinalRelationLstPtr | SpinalRelationPtrLst) & boolean;
+    /**
+     * @param {(SpinalRelationLstPtr | SpinalRelationPtrLst)} relation
+     * @param {SpinalNode} nodeParent
+     * @return {*}  {Promise<SpinalRelationLstPtrLst>}
+     */
     static upgradeRelationToLstPtrLst(relation: SpinalRelationLstPtr | SpinalRelationPtrLst, nodeParent: SpinalNode): Promise<SpinalRelationLstPtrLst>;
+    private static _upgradeRelationToLstPtrLst;
 }
 export { SPINAL_RELATION_TYPE, SPINAL_RELATION_LST_PTR_TYPE, SPINAL_RELATION_PTR_LST_TYPE, SPINAL_RELATION_LST_PTR_LST_TYPE, RELATION_TYPE_LIST, SpinalRelationFactory, };

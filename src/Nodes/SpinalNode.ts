@@ -79,8 +79,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * Constructor for the SpinalNode class.
    * @param {string} [name="undefined"] Name of the node
    * @param {string} [type="undefined"] Type of the node
-   * @param {date} [directModificationDate="undefined"] Type of the node
-   * @param {date} [indirectModificationDate="undefined"] Type of the node
    * @param {Model} [element] Element of the node
    * @throws {TypeError} If the element is not a Model
    */
@@ -155,7 +153,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * Sets the value corresponding to the key.
    * @param {Date} date Key to the value
    * @throws {TypeError} If the date is not of type Date
-   * @memberof SpinalNode
    */
   setIndirectModificationDate(date: number = Date.now()): void {
     if (typeof date !== 'number') {
@@ -169,7 +166,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * Sets the value corresponding to the key.
    * @param {Date} date Key to the value
    * @throws {TypeError} If the date is not of type Date
-   * @memberof SpinalNode
    */
   setDirectModificationDate(date: number = Date.now()): void {
     if (typeof date !== 'number') {
@@ -185,7 +181,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * Returns the element. if noCreate is true and the element is not present, it will not create one
    * @param {boolean} [noCreate=false] if true will not create a element and if element doesn't exist will return undefined
    * @returns {Promise<T> | undefined} A promise where the parameter of the resolve method is the element
-   * @memberof SpinalNode
    */
   async getElement(noCreate = false): Promise<T | undefined> {
     if (this.element === undefined) {
@@ -252,7 +247,6 @@ class SpinalNode<T extends Model = any> extends Model {
   /**
    * Remove an id to the context ids of the node.
    * @param {string} id
-   * @memberof SpinalNode
    */
   removeContextId(id: string): void {
     if (typeof id !== 'string') {
@@ -277,7 +271,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * Returns true if the node has the context id.
    * @param {string} id
    * @return {*}  {boolean}
-   * @memberof SpinalNode
    */
   hasContextId(id: string): boolean {
     if (typeof id !== 'string') {
@@ -307,7 +300,6 @@ class SpinalNode<T extends Model = any> extends Model {
   /**
    * Verify if the node contains the relation name.
    * @param {string} relationName Name of the relation
-   * @param {typeof RELATION_TYPE_LIST[number]} [relationType] Type of the relation
    * @returns {boolean} Return true is the relation is contained in the node and false otherwise.
    * @throws {TypeError} If the relation name is not a string
    * @throws {Error} If the relation type doesn't exist
@@ -335,7 +327,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * @param {string} relationName
    * @param {SpinalContext} context
    * @return {*}  {boolean}
-   * @memberof SpinalNode
    */
   hasRelationInContext(relationName: string, context: SpinalContext): boolean {
     if (typeof relationName !== 'string') {
@@ -467,7 +458,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * @param {string} relationName
    * @param {SpinalContext<any>} context
    * @return {*}  {Promise<SpinalNode<K>>}
-   * @memberof SpinalNode
    */
   async addChildInContext<K extends Model>(
     child: K | SpinalNode<K>,
@@ -778,7 +768,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * @returns {Promise<Array<SpinalNode<any>>>} Promise containing the parents that were found
    * @throws {TypeError} If the relationNames are neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
-   * @memberof SpinalNode
    */
   public async getParents(
     relationNames: string | RegExp | (string | RegExp)[] = []
@@ -840,7 +829,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * @param {(string | RegExp | (string | RegExp)[])} [relationNames=[]] Arry of relation
    * @param {SpinalNodeFindPredicateFunc} [predicate=DEFAULT_FIND_PREDICATE]
    * @return {*}  {Promise<SpinalNode<any>[]>}
-   * @memberof SpinalNode
    */
   public async findParents(
     relationNames: string | RegExp | (string | RegExp)[] = [],
@@ -924,7 +912,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * @param {RelationSearch} relations
    * @param {(node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>} predicate
    * @return {*}  {Promise<SpinalNode<any>[]>}
-   * @memberof SpinalNode
    */
   async findAsyncPredicate(
     relations: RelationSearch,
@@ -982,7 +969,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * @param {SpinalContext<any>} context
    * @param {(node: SpinalNode<any>, stopFct?: () => void) => Promise<boolean>} predicate
    * @return {*}  {Promise<SpinalNode<any>[]>}
-   * @memberof SpinalNode
    */
   async findInContextAsyncPredicate(
     context: SpinalContext<any>,
@@ -1058,7 +1044,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * @throws {TypeError} If the relationNames are neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the predicate is not a function
-   * @memberof SpinalNode
    */
   async browseAndClassifyByType(
     relationNames: string | string[]
@@ -1231,7 +1216,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * @throws {TypeError} If the relationNames are neither an array, a string or omitted
    * @throws {TypeError} If an element of relationNames is not a string
    * @throws {TypeError} If the callback is not a function
-   * @memberof SpinalNode
    */
   async map<T>(
     relationNames: string | string[],
@@ -1260,7 +1244,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * @returns {Promise<Array<*>>} The results of the callback for each node
    * @throws {TypeError} If context is not a SpinalContext
    * @throws {TypeError} If the callback is not a function
-   * @memberof SpinalNode
    */
   async mapInContext<T>(
     context: SpinalContext<any>,
@@ -1283,7 +1266,6 @@ class SpinalNode<T extends Model = any> extends Model {
   /**
    * @param {RelationSearch} relationNames
    * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
-   * @memberof SpinalNode
    */
   async *visitParents(
     relationNames: RelationSearch
@@ -1319,7 +1301,6 @@ class SpinalNode<T extends Model = any> extends Model {
   /**
    * @param {SpinalContext<any>} context
    * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
-   * @memberof SpinalNode
    */
   async *visitParentsInContext(
     context: SpinalContext<any>,
@@ -1356,7 +1337,6 @@ class SpinalNode<T extends Model = any> extends Model {
   /**
    * @param {RelationSearch} relationNames
    * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
-   * @memberof SpinalNode
    */
   async *visitChildren(
     relationNames: RelationSearch
@@ -1397,7 +1377,6 @@ class SpinalNode<T extends Model = any> extends Model {
   /**
    * @param {SpinalContext<any>} context
    * @return {*}  {AsyncGenerator<SpinalNode<any>, void, void>}
-   * @memberof SpinalNode
    */
   async *visitChildrenInContext(
     context: SpinalContext<any>,
@@ -1453,7 +1432,6 @@ class SpinalNode<T extends Model = any> extends Model {
   /**
    * Return the relation corresponding.
    * @param {string} relationName Name of the relation
-   * @param {string} relationType Type of the relation
    * @returns {SpinalRelation} The relation corresponding
    * @protected
    */
@@ -1576,7 +1554,6 @@ class SpinalNode<T extends Model = any> extends Model {
    * @param {RelationSearch} [relationNames=[]]
    * @param {SpinalContext} [context] if provided, only relations belonging to this context will be returned
    * @return {*}
-   * @memberof SpinalNode
    */
   private _getValidRelationsChildren(
     relationNames: RelationSearch = [],
@@ -1609,8 +1586,7 @@ class SpinalNode<T extends Model = any> extends Model {
         for (const searchRelation of relationNames) {
           if (typeof searchRelation === 'string') {
             if (name === searchRelation) {
-              if (context && !relation.belongsToContext(context))
-                continue;
+              if (context && !relation.belongsToContext(context)) continue;
               relations.add(relation);
             }
           } else if (searchRelation instanceof RegExp) {

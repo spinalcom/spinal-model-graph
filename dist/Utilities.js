@@ -36,7 +36,6 @@ exports.debounce = void 0;
 exports.guid = guid;
 exports.loadParentRelation = loadParentRelation;
 exports.consumeBatch = consumeBatch;
-exports.toRegex = toRegex;
 exports.validateGetChildrenOptions = validateGetChildrenOptions;
 const SpinalContext_1 = require("./Nodes/SpinalContext");
 var lodash_1 = require("lodash");
@@ -96,24 +95,6 @@ function consumeBatch(promises_1) {
         }
         return result;
     });
-}
-/**
- * Converts a string, regex or an array of strings/regex to a single regex ( big Regex joining array elements with OR ).
- *
- * @param {(string | RegExp | (string | RegExp)[])} relationNames
- * @return {*}  {RegExp}
- */
-function toRegex(relationNames) {
-    const arr = Array.isArray(relationNames) ? relationNames : [relationNames];
-    const sources = arr.map((item) => {
-        if (item instanceof RegExp) {
-            return item.source;
-        }
-        // Escape regex special characters in strings
-        return item.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    });
-    // Combine into one big regex
-    return new RegExp(`^(?:${sources.join('|')})$`);
 }
 function validateGetChildrenOptions(options) {
     var _a, _b, _c;

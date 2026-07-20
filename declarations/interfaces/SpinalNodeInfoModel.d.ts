@@ -1,6 +1,5 @@
 import type { Model, Str, Val } from 'spinal-core-connectorjs';
 /**
- * @export
  * @interface SpinalNodeInfoModel
  * @extends {Model}
  */

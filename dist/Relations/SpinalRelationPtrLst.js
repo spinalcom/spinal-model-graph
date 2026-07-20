@@ -83,7 +83,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
     /**
      * Retrieves all the ids of the children of the relation and return them inside an array.
      * @returns {String[]} Array containing all the children ids of the relation
-     * @memberof SpinalRelationPtrLst
      */
     getChildrenIds() {
         const idLst = this.children.info.ids;
@@ -96,7 +95,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
     /**
      * returns the number of children of the relation.
      * @returns {number}
-     * @memberof SpinalRelationPtrLst
      */
     getNbChildren() {
         return this.children.info.ids.length;
@@ -108,7 +106,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
      * @param {SpinalContext} [context]
      * @param {number} [counter=0]
      * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
-     * @memberof SpinalRelationPtrLst
      */
     getChildrenGen(offset_1, reverse_1, context_1) {
         return __asyncGenerator(this, arguments, function* getChildrenGen_1(offset, reverse, context, counter = 0) {
@@ -145,7 +142,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
     /**
      * Returns the type of the relation.
      * @returns {string} Type of the relation
-     * @memberof SpinalRelationPtrLst
      */
     getType() {
         return SpinalRelationFactory_1.SPINAL_RELATION_PTR_LST_TYPE;
@@ -157,7 +153,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
      * @throws {TypeError} If the node is not a Model
      * @throws {Error} If the node is already a child of the relation
      * @returns {Promise<SpinalNode<T>>} Promise containing the node that was added
-     * @memberof SpinalRelationPtrLst
      */
     addChild(node) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -172,11 +167,10 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
             if (this.getChildrenIds().indexOf(tmpNodeCreate.getId().get()) !== -1) {
                 throw new Error('Cannot add a child twice to the same relation.');
             }
-            yield this.children.load().then((children) => {
-                this.children.info.ids.push(tmpNodeCreate.getId());
-                tmpNodeCreate._addParent(this);
-                children.push(tmpNodeCreate);
-            });
+            this.children.info.ids.push(tmpNodeCreate.getId());
+            const children = yield this.children.load();
+            tmpNodeCreate._addParent(this);
+            children.push(tmpNodeCreate);
             return tmpNodeCreate;
         });
     }
@@ -185,7 +179,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
      * @param {SpinalNode<any>} node Child to remove
      * @returns {Promise<void>} An empty promise
      * @throws {Error} If the given node is not a child
-     * @memberof SpinalRelationPtrLst
      */
     removeChild(node) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -205,7 +198,6 @@ class SpinalRelationPtrLst extends BaseSpinalRelation_1.BaseSpinalRelation {
      * @returns {Promise<void>} An empty promise
      * @throws {TypeError} If nodes is not an array or omitted
      * @throws {Error} If one of the nodes is not a child
-     * @memberof SpinalRelationPtrLst
      */
     removeChildren() {
         return __awaiter(this, arguments, void 0, function* (nodes = []) {

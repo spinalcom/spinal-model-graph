@@ -36,7 +36,6 @@ class SpinalSet extends spinal_core_connectorjs_1.Model {
      * @throws {TypeError} If init is not iterable
      * @throws {TypeError} If init[Symbol.iterator] doesn't return iterators
      * @throws {TypeError} If the values of the iterators are not strings
-     * @memberof SpinalSet
      */
     constructor(init) {
         super();
@@ -50,7 +49,6 @@ class SpinalSet extends spinal_core_connectorjs_1.Model {
      * Appends a new element with the given value to the set.
      * @param {String} value Value to store in the set
      * @throws {TypeError} If the value is not a string
-     * @memberof SpinalSet
      */
     add(value) {
         if (typeof value !== 'string') {
@@ -63,7 +61,6 @@ class SpinalSet extends spinal_core_connectorjs_1.Model {
      * @param {string} value Value
      * @returns {boolean} Return true if the value exists
      * @throws {TypeError} If the value is not a string
-     * @memberof SpinalSet
      */
     has(value) {
         if (typeof value !== 'string') {
@@ -74,7 +71,6 @@ class SpinalSet extends spinal_core_connectorjs_1.Model {
     /**
      * Returns an array that contains all the values of the set.
      * @returns {string[]} Array containing all the values in the set
-     * @memberof SpinalSet
      */
     values() {
         return this._attribute_names;
@@ -84,7 +80,6 @@ class SpinalSet extends spinal_core_connectorjs_1.Model {
      * @param {string} value Value to delete
      * @throws {TypeError} If the value is not a string
      * @throws {Error} If the value is not in the map
-     * @memberof SpinalSet
      */
     delete(value) {
         if (!this.has(value)) {
@@ -94,7 +89,6 @@ class SpinalSet extends spinal_core_connectorjs_1.Model {
     }
     /**
      * Deletes all values in the set.
-     * @memberof SpinalSet
      */
     clear() {
         const values = this.values();
@@ -105,7 +99,6 @@ class SpinalSet extends spinal_core_connectorjs_1.Model {
     /**
      * Returns the number of values in the set.
      * @returns {number} Number of values in the set
-     * @memberof SpinalSet
      */
     size() {
         return this._attribute_names.length;
@@ -113,7 +106,6 @@ class SpinalSet extends spinal_core_connectorjs_1.Model {
     /**
      * Applies a function to each of the values in the set.
      * @param {SpinalSetForEachFunc} fun Funcion to apply
-     * @memberof SpinalSet
      */
     forEach(fun) {
         if (typeof fun !== 'function') {
@@ -127,7 +119,6 @@ class SpinalSet extends spinal_core_connectorjs_1.Model {
     /**
      * Function to iterate over the set object.
      * @returns {IterableIterator<string>}
-     * @memberof SpinalSet
      */
     *[Symbol.iterator]() {
         const values = this._attribute_names;

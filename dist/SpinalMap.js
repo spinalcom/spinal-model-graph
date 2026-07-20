@@ -38,7 +38,6 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
      * @throws {TypeError} If init[Symbol.iterator] doesn't return iterators
      * @throws {TypeError} If the values of the iterators are not arrays of key values
      * @throws {TypeError} If the keys of the values of the iterators are not strings
-     * @memberof SpinalMap
      */
     constructor(init) {
         super();
@@ -53,7 +52,6 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
      * @param {string} key Key to the value
      * @param {T} value New value
      * @throws {TypeError} If the key is not a string
-     * @memberof SpinalMap
      */
     setElement(key, value) {
         if (typeof key !== 'string') {
@@ -72,7 +70,6 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
      * Returns the value associated to the key, or undefined if there is none.
      * @param {string} key Key to the value
      * @returns {T} Value corresponding to the key
-     * @memberof SpinalMap
      */
     getElement(key) {
         return this[key];
@@ -82,7 +79,6 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
      * @param {string} key
      * @returns {boolean} Return true if the key exists
      * @throws {TypeError} If the key is not a string
-     * @memberof SpinalMap
      */
     has(key) {
         if (typeof key !== 'string') {
@@ -93,7 +89,6 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
     /**
      * Returns a boolean asserting whether the map contains any key.
      * @returns {boolean} Return true if the map contains at least one key
-     * @memberof SpinalMap
      */
     hasKey() {
         return this._attribute_names.length > 0;
@@ -101,7 +96,6 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
     /**
      * Returns an array that contains the keys for each element in the map in insertion order.
      * @returns {string[]} Array containing all the keys in the map
-     * @memberof SpinalMap
      */
     keys() {
         return this._attribute_names;
@@ -110,7 +104,6 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
      * Returns an array that contains the keys and the values
      * for each element in the map in insertion order.
      * @returns {Array<Array<string,T>>} Array containing all the keys and values in the map
-     * @memberof SpinalMap
      */
     entries() {
         const arr = [];
@@ -124,7 +117,6 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
      * @param {string} key Key of the element
      * @throws {TypeError} If the key is not a string
      * @throws {Error} If the key is not in the map
-     * @memberof SpinalMap
      */
     delete(key) {
         if (!this.has(key)) {
@@ -134,7 +126,6 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
     }
     /**
      * Deletes all elements.
-     * @memberof SpinalMap
      */
     clear() {
         const keys = this.keys();
@@ -145,7 +136,6 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
     /**
      * Applies a function to each of the values in the map.
      * @param {SpinalMapForEachFunc<T>} fun Funcion to apply
-     * @memberof SpinalMap
      */
     forEach(fun) {
         if (typeof fun !== 'function') {
@@ -158,7 +148,6 @@ class SpinalMap extends spinal_core_connectorjs_1.Model {
     /**
      * Function to iterate over the map object.
      * @returns {IterableIterator<T>}
-     * @memberof SpinalMap
      */
     *[Symbol.iterator]() {
         const keys = this.keys();

@@ -78,7 +78,6 @@ abstract class BaseSpinalRelation extends Model {
   /**
    * Shortcut to id.
    * @returns {Str} Id of the relation
-   * @memberof BaseSpinalRelation
    */
   getId(): Str {
     return this.id;
@@ -87,7 +86,6 @@ abstract class BaseSpinalRelation extends Model {
   /**
    * Returns the name of the relation.
    * @returns {Str} Name of the relation
-   * @memberof BaseSpinalRelation
    */
   getName(): Str {
     return this.name;
@@ -95,13 +93,11 @@ abstract class BaseSpinalRelation extends Model {
 
   // /**
   //  * @returns {Promise<SpinalNode<Model>>} Returns a promise where the resolve is the parent
-  //  * @memberof BaseSpinalRelation
   //  */
   /**
    * Returns the parent of the relation.
    * @template T
    * @return {*}  {Promise<SpinalNode<T>>} Returns a promise where the resolve is the parent
-   * @memberof BaseSpinalRelation
    */
   getParent<T extends Model>(): Promise<SpinalNode<T>> {
     return this.parent.load();
@@ -111,7 +107,6 @@ abstract class BaseSpinalRelation extends Model {
    * Adds an id to the context ids of the relation.
    * @param {string} id Id of the context
    * @throws {TypeError} If the id is not a string
-   * @memberof BaseSpinalRelation
    */
   addContextId(id: string): void {
     if (typeof id !== 'string') {
@@ -126,7 +121,6 @@ abstract class BaseSpinalRelation extends Model {
   /**
    * Returns a list of the contexts the relation is associated to.
    * @returns {Array<string>} A list of ids of the associated contexts
-   * @memberof BaseSpinalRelation
    */
   getContextIds(): string[] {
     return this.contextIds.keys();
@@ -137,7 +131,6 @@ abstract class BaseSpinalRelation extends Model {
    * @param {SpinalContext<T>} context The context that might own the node
    * @returns {boolean} A boolean
    * @throws {TypeError} If the context is not a SpinalContext
-   * @memberof BaseSpinalRelation
    */
   belongsToContext(context: SpinalContext<any>): boolean {
     if (!(context instanceof SpinalContext)) {
@@ -151,7 +144,6 @@ abstract class BaseSpinalRelation extends Model {
    * Remove an id to the context ids of the relation.
    * @param {string} id Id of the context
    * @throws {TypeError} If the id is not a string
-   * @memberof BaseSpinalRelation
    */
   removeContextId(id: string): void {
     if (typeof id !== 'string') {
@@ -169,7 +161,6 @@ abstract class BaseSpinalRelation extends Model {
    * @returns {Promise<void>} An empty promise
    * @throws {TypeError} If nodes is not an array or omitted
    * @throws {Error} If one of the nodes is not a child
-   * @memberof BaseSpinalRelation
    */
   async removeChildren(nodesToDelete: SpinalNode<any>[] = []): Promise<void> {
     let nodes: SpinalNode<any>[] = nodesToDelete;
@@ -198,14 +189,12 @@ abstract class BaseSpinalRelation extends Model {
    * @abstract
    * @param {SpinalNode<any>} node Child to remove
    * @return {*}  {Promise<void>} An empty promise
-   * @memberof BaseSpinalRelation
    */
   abstract removeChild(node: SpinalNode<any>): Promise<void>;
 
   /**
    * Return all the children of the relation.
    * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
-   * @memberof BaseSpinalRelation
    */
   async getChildren(
     offset: number,
@@ -230,7 +219,6 @@ abstract class BaseSpinalRelation extends Model {
    * @param {SpinalContext} [context]
    * @param {number} [counter]
    * @return {*}  {AsyncGenerator<SpinalNode<any>, void, unknown>}
-   * @memberof BaseSpinalRelation
    */
   abstract getChildrenGen(
     offset: number,
@@ -243,7 +231,6 @@ abstract class BaseSpinalRelation extends Model {
    * Returns the type of the relation.
    * @abstract
    * @return {*}  {string} Type of the relation
-   * @memberof BaseSpinalRelation
    */
   abstract getType(): string;
 
@@ -251,7 +238,6 @@ abstract class BaseSpinalRelation extends Model {
    * returns the number of children of the relation.
    * @abstract
    * @return {*}  {number}
-   * @memberof BaseSpinalRelation
    */
   abstract getNbChildren(): number;
 
@@ -259,14 +245,12 @@ abstract class BaseSpinalRelation extends Model {
    * Retrieves all the ids of the children of the relation and return them inside an array.
    * @abstract
    * @return {*}  {string[]} Array containing all the children ids of the relation
-   * @memberof BaseSpinalRelation
    */
   abstract getChildrenIds(): string[];
 
   /**
    * Removes the relation from the graph.
    * @returns {Promise<void>} An empty promise
-   * @memberof BaseSpinalRelation
    */
   async removeFromGraph(): Promise<void> {
     await Promise.all([this._removeFromParent(), this.removeChildren()]);
@@ -276,7 +260,6 @@ abstract class BaseSpinalRelation extends Model {
    * Removes the relation from the parent.
    * @returns {Promise<void>} An empty promise
    * @private
-   * @memberof BaseSpinalRelation
    */
   async _removeFromParent(): Promise<void> {
     const parent = await this.getParent();

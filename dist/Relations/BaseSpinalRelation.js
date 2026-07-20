@@ -86,7 +86,6 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
     /**
      * Shortcut to id.
      * @returns {Str} Id of the relation
-     * @memberof BaseSpinalRelation
      */
     getId() {
         return this.id;
@@ -94,20 +93,17 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
     /**
      * Returns the name of the relation.
      * @returns {Str} Name of the relation
-     * @memberof BaseSpinalRelation
      */
     getName() {
         return this.name;
     }
     // /**
     //  * @returns {Promise<SpinalNode<Model>>} Returns a promise where the resolve is the parent
-    //  * @memberof BaseSpinalRelation
     //  */
     /**
      * Returns the parent of the relation.
      * @template T
      * @return {*}  {Promise<SpinalNode<T>>} Returns a promise where the resolve is the parent
-     * @memberof BaseSpinalRelation
      */
     getParent() {
         return this.parent.load();
@@ -116,7 +112,6 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
      * Adds an id to the context ids of the relation.
      * @param {string} id Id of the context
      * @throws {TypeError} If the id is not a string
-     * @memberof BaseSpinalRelation
      */
     addContextId(id) {
         if (typeof id !== 'string') {
@@ -129,7 +124,6 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
     /**
      * Returns a list of the contexts the relation is associated to.
      * @returns {Array<string>} A list of ids of the associated contexts
-     * @memberof BaseSpinalRelation
      */
     getContextIds() {
         return this.contextIds.keys();
@@ -139,7 +133,6 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
      * @param {SpinalContext<T>} context The context that might own the node
      * @returns {boolean} A boolean
      * @throws {TypeError} If the context is not a SpinalContext
-     * @memberof BaseSpinalRelation
      */
     belongsToContext(context) {
         if (!(context instanceof SpinalContext_1.SpinalContext)) {
@@ -151,7 +144,6 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
      * Remove an id to the context ids of the relation.
      * @param {string} id Id of the context
      * @throws {TypeError} If the id is not a string
-     * @memberof BaseSpinalRelation
      */
     removeContextId(id) {
         if (typeof id !== 'string') {
@@ -167,7 +159,6 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
      * @returns {Promise<void>} An empty promise
      * @throws {TypeError} If nodes is not an array or omitted
      * @throws {Error} If one of the nodes is not a child
-     * @memberof BaseSpinalRelation
      */
     removeChildren() {
         return __awaiter(this, arguments, void 0, function* (nodesToDelete = []) {
@@ -192,7 +183,6 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
     /**
      * Return all the children of the relation.
      * @return {*}  {Promise<SpinalNode<any>[]>} The children of the relation
-     * @memberof BaseSpinalRelation
      */
     getChildren(offset_1, reverse_1, context_1) {
         return __awaiter(this, arguments, void 0, function* (offset, reverse, context, counter = 0) {
@@ -220,7 +210,6 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
     /**
      * Removes the relation from the graph.
      * @returns {Promise<void>} An empty promise
-     * @memberof BaseSpinalRelation
      */
     removeFromGraph() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -231,7 +220,6 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
      * Removes the relation from the parent.
      * @returns {Promise<void>} An empty promise
      * @private
-     * @memberof BaseSpinalRelation
      */
     _removeFromParent() {
         return __awaiter(this, void 0, void 0, function* () {
