@@ -355,7 +355,8 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
                 relation = this._createRelation(relationName, relationType);
                 this.setDirectModificationDate();
             }
-            if (SpinalRelationFactory_1.SpinalRelationFactory.canUpgradeRelation(relation)) {
+            if (SpinalNode.DISABLE_UPGRADE_TO_LST_PTR_LST === false &&
+                SpinalRelationFactory_1.SpinalRelationFactory.canUpgradeRelation(relation)) {
                 relation = yield SpinalRelationFactory_1.SpinalRelationFactory.upgradeRelationToLstPtrLst(relation, this);
             }
             const res = yield relation.addChild(child);
@@ -1452,6 +1453,14 @@ class SpinalNode extends spinal_core_connectorjs_1.Model {
     }
 }
 exports.SpinalNode = SpinalNode;
+/**
+ * use this static variable to disable the upgrade of relations to LstPtrLst when adding a child.
+ * This is useful for performance reasons when adding many children to a node
+ * or when the organ using the graph is supposed to only read it.
+ * @static
+ * @type {boolean}
+ */
+SpinalNode.DISABLE_UPGRADE_TO_LST_PTR_LST = false;
 spinal_core_connectorjs_1.spinalCore.register_models([SpinalNode]);
 exports.default = SpinalNode;
 //# sourceMappingURL=SpinalNode.js.map

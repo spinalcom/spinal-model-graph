@@ -24,6 +24,14 @@ declare class SpinalNode<T extends Model = any> extends Model {
     element?: SpinalNodePointer<T>;
     contextIds: SpinalSet;
     /**
+     * use this static variable to disable the upgrade of relations to LstPtrLst when adding a child.
+     * This is useful for performance reasons when adding many children to a node
+     * or when the organ using the graph is supposed to only read it.
+     * @static
+     * @type {boolean}
+     */
+    static DISABLE_UPGRADE_TO_LST_PTR_LST: boolean;
+    /**
      * Constructor for the SpinalNode class.
      * @param {string} [name="undefined"] Name of the node
      * @param {string} [type="undefined"] Type of the node
