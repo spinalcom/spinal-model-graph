@@ -46,6 +46,14 @@ declare class SpinalContext<T extends Model = any> extends SpinalNode<T> {
      * @returns {Promise<Array<SpinalNode>>} The children that were found
      */
     getChildrenInContext<K extends Model>(context?: SpinalContext<T>): Promise<SpinalNode<K>[]>;
+    /**
+     * Checks if the context is the same as the current one or if it is a parent context.
+     * @override
+     * @param {SpinalContext<any>} context
+     * @return {*}  {boolean}
+     * @memberof SpinalContext
+     */
+    belongsToContext(context: SpinalContext<any>): boolean;
 }
 export default SpinalContext;
 export { SpinalContext };
