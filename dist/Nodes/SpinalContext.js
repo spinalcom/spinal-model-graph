@@ -74,6 +74,17 @@ class SpinalContext extends SpinalNode_1.SpinalNode {
     getChildrenInContext(context = this) {
         return super.getChildrenInContext(context);
     }
+    /**
+     * Checks if the current context belongs to the given context.
+     * @override
+     * @param {SpinalContext} context
+     * @return {*}  {boolean}
+     */
+    belongsToContext(context) {
+        if (this === context)
+            return true;
+        return super.belongsToContext(context);
+    }
 }
 exports.SpinalContext = SpinalContext;
 spinal_core_connectorjs_1.spinalCore.register_models([SpinalContext]);

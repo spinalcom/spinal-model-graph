@@ -123,6 +123,17 @@ class SpinalContext<T extends Model = any> extends SpinalNode<T> {
   ): Promise<SpinalNode<K>[]> {
     return super.getChildrenInContext(context);
   }
+
+  /**
+   * Checks if the current context belongs to the given context.
+   * @override
+   * @param {SpinalContext} context
+   * @return {*}  {boolean}
+   */
+  belongsToContext(context: SpinalContext): boolean {
+    if (this === context) return true;
+    return super.belongsToContext(context);
+  }
 }
 
 spinalCore.register_models([SpinalContext]);

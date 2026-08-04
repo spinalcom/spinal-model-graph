@@ -31,6 +31,9 @@ import {
   SPINAL_RELATION_TYPE,
   SPINAL_RELATION_PTR_LST_TYPE,
   SpinalRelationFactory,
+  SpinalRelationLstPtrLst,
+  SPINAL_RELATION_LST_PTR_LST_TYPE,
+  SpinalContext,
 } from '../../src';
 import { describe, it, expect } from 'vitest';
 
@@ -78,5 +81,57 @@ describe('SpinalRelationFactory', () => {
         );
       }).toThrow(Error);
     });
+  });
+  describe('How to use upgradeRelationToLstPtrLst', () => {
+    it('should upgrade a SpinalRelationLstPtr to a SpinalRelationLstPtrLst', async () => {
+      const node = new SpinalNode();
+      const node2 = new SpinalNode();
+      await node.addChild(node2, DEFAULT_RELATION_NAME, SPINAL_RELATION_LST_PTR_TYPE);
+      const rel = node._getRelation(DEFAULT_RELATION_NAME);
+
+      const upgradedRel = await SpinalRelationFactory.upgradeRelationToLstPtrLst(<any>rel, node);
+
+      expect(upgradedRel instanceof SpinalRelationLstPtrLst).toBeTruthy();
+    });
+    it('should upgrade a SpinalRelationPtrLst to a SpinalRelationLstPtrLst', async () => {
+      const node = new SpinalNode();
+      const node2 = new SpinalNode();
+      await node.addChild(node2, DEFAULT_RELATION_NAME, SPINAL_RELATION_PTR_LST_TYPE);
+      const rel = node._getRelation(DEFAULT_RELATION_NAME);
+
+      const upgradedRel = await SpinalRelationFactory.upgradeRelationToLstPtrLst(<any>rel, node);
+      expect(upgradedRel instanceof SpinalRelationLstPtrLst).toBeTruthy();
+    });
+    it('should keep the context of the relation after upgrade', async () => {
+      const node = new SpinalNode();
+      const node2 = new SpinalNode();
+      const context = new SpinalContext();
+      await node.addChildInContext(node2, DEFAULT_RELATION_NAME, context);
+      const rel = node._getRelation(DEFAULT_RELATION_NAME);
+      const upgradedRel = await SpinalRelationFactory.upgradeRelationToLstPtrLst(<any>rel, node);
+      expect(upgradedRel.getContextIds()).toEqual([context.getId().get()]);
+    });
+    it('should throw an error if the relation type cannot be upgraded', async () => {
+      const node = new SpinalNode();
+      const rel = SpinalRelationFactory.getNewRelation(
+        node,
+        DEFAULT_RELATION_NAME,
+        SPINAL_RELATION_TYPE
+      );
+
+      await expect(async () => {
+        await SpinalRelationFactory.upgradeRelationToLstPtrLst(<any>rel, node);
+      }).rejects.toThrow(Error);
+      const rel2 = SpinalRelationFactory.getNewRelation(
+        node,
+        DEFAULT_RELATION_NAME,
+        SPINAL_RELATION_LST_PTR_LST_TYPE
+      );
+      await expect(async () => {
+        await SpinalRelationFactory.upgradeRelationToLstPtrLst(<any>rel2, node);
+      }).rejects.toThrow(Error);
+    });
+
+
   });
 });

@@ -225,7 +225,7 @@ class BaseSpinalRelation extends spinal_core_connectorjs_1.Model {
         return __awaiter(this, void 0, void 0, function* () {
             const parent = yield this.getParent();
             const relationMap = parent._getChildrenType(this.getType());
-            relationMap.delete(this.getName().get());
+            relationMap === null || relationMap === void 0 ? void 0 : relationMap.delete(this.getName().get());
             this.parent.unset();
         });
     }

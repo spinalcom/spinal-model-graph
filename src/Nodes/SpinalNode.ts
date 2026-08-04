@@ -191,7 +191,7 @@ class SpinalNode<T extends Model = any> extends Model {
    * @param {boolean} [noCreate=false] if true will not create a element and if element doesn't exist will return undefined
    * @returns {Promise<T> | undefined} A promise where the parameter of the resolve method is the element
    */
-  async getElement(noCreate = false): Promise<T | undefined> {
+  async getElement(noCreate: boolean = false): Promise<T | undefined> {
     if (this.element === undefined) {
       if (noCreate === true) return undefined;
       const model = new Model();
@@ -1570,7 +1570,7 @@ class SpinalNode<T extends Model = any> extends Model {
   private _getValidRelationsChildren(
     relationNames: RelationSearch = [],
     context?: SpinalContext
-  ) {
+  ): AnySpinalRelation[] {
     if (!Array.isArray(relationNames)) {
       relationNames = [relationNames];
     }
@@ -1668,8 +1668,8 @@ class SpinalNode<T extends Model = any> extends Model {
           !Array.isArray(childNode) && { childId: childNode.getId().get() }),
         ...(childNode &&
           Array.isArray(childNode) && {
-            childrenIds: childNode.map((node) => node.getId().get()),
-          }),
+          childrenIds: childNode.map((node) => node.getId().get()),
+        }),
         contextId: contextNode && contextNode.getId().get(),
       };
       spinalEventEmitter.emit(eventName, data);

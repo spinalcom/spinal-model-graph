@@ -102,4 +102,29 @@ describe('SpinalContext', () => {
       expect(children).toEqual([node1, node2]);
     });
   });
+
+  describe('How to use belongsToContext', () => {
+    it('should return true if the context is the same', () => {
+      const context = new SpinalContext();
+
+      expect(context.belongsToContext(context)).toBeTruthy();
+    });
+
+    it('should return true if the context is a parent of the node', async () => {
+      const context1 = new SpinalContext();
+      const node = new SpinalNode();
+
+      await context1.addChildInContext(node, DEFAULT_RELATION_NAME);
+      expect(node.belongsToContext(context1)).toBeTruthy();
+      const parentContexts = node.getParentsInContext(context1);
+      expect((await parentContexts).length).toEqual(1);
+      expect((await parentContexts)[0].info.id.get()).toBe(context1.info.id.get());
+    });
+
+    it('should return false if the context is not the same', async () => {
+      const context1 = new SpinalContext();
+      const context2 = new SpinalContext();
+      expect(context1.belongsToContext(context2)).toBeFalsy();
+    });
+  });
 });

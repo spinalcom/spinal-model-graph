@@ -265,7 +265,7 @@ abstract class BaseSpinalRelation extends Model {
     const parent = await this.getParent();
     const relationMap = parent._getChildrenType(this.getType());
 
-    relationMap.delete(this.getName().get());
+    relationMap?.delete(this.getName().get());
     this.parent.unset();
   }
 }

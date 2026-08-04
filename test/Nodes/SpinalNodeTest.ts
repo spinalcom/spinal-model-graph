@@ -136,6 +136,23 @@ describe('SpinalNode', () => {
         const elt = await node.getElement();
         expect(elt?.model_id).toBe(DEFAULT_ELEMENT.model_id);
       });
+      it('should create and return a new Model if noCreate is set to false', async () => {
+        const node = new SpinalNode(
+          CUSTOM_SPINAL_NODE_NAME,
+          CUSTOM_SPINAL_NODE_TYPE,
+        );
+        const elt = await node.getElement(false);
+        expect(typeof elt === 'undefined').toBeFalsy();
+        expect(elt instanceof Model).toBeTruthy();
+      });
+      it('should return undefined if the element is not set and nocreate set to true', async () => {
+        const node = new SpinalNode(
+          CUSTOM_SPINAL_NODE_NAME,
+          CUSTOM_SPINAL_NODE_TYPE
+        );
+        const elt = await node.getElement(true);
+        expect(typeof elt === 'undefined').toBeTruthy();
+      });
     });
 
     describe('How to use getChildrenIds', () => {
@@ -596,7 +613,7 @@ describe('SpinalNode', () => {
 
       it(
         "shouldn't return duplicates if there are different " +
-          'relation with the same names but different types',
+        'relation with the same names but different types',
         async () => {
           const node = new SpinalNode();
           const child1 = new SpinalNode();
